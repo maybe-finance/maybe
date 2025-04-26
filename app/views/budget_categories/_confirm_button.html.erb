@@ -4,6 +4,7 @@
     variant: "primary",
     full_width: true,
     href: budget_path(budget),
+    method: :get,
     disabled: !budget.allocations_valid?
   ) %>
 </div>

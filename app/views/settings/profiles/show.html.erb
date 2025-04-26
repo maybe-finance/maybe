@@ -57,12 +57,12 @@
                 href: settings_profile_path(user_id: user),
                 method: :delete,
                 data: {
-                  turbo_confirm: {
+                  turbo_confirm: custom_turbo_confirm(
                     title: t(".confirm_remove_member.title"),
                     body: t(".confirm_remove_member.body", name: user.display_name),
-                    confirmText: t(".remove_member"),
-                    variant: "destructive"
-                  }
+                    btn_text: t(".remove_member"),
+                    btn_variant: "destructive"
+                  )
                 }
               ) %>
             </div>
@@ -111,12 +111,12 @@
                   href: invitation_path(invitation),
                   method: :delete,
                   data: {
-                    turbo_confirm: {
+                    turbo_confirm: custom_turbo_confirm(
                       title: t(".confirm_remove_invitation.title"),
                       body: t(".confirm_remove_invitation.body", email: invitation.email),
-                      confirmText: t(".remove_invitation"),
-                      variant: "outline-destructive"
-                    }
+                      btn_text: t(".remove_invitation"),
+                      btn_variant: "outline-destructive"
+                    )
                   }
                 ) %>
               <% end %>
@@ -151,12 +151,12 @@
           href: reset_user_path(@user),
           method: :delete,
           data: {
-            turbo_confirm: {
+            turbo_confirm: custom_turbo_confirm(
               title: t(".confirm_reset.title"),
               body: t(".confirm_reset.body"),
-              confirmText: t(".reset_account"),
-              variant: "destructive"
-            }
+              btn_text: t(".reset_account"),
+              btn_variant: "destructive"
+            )
           }
         ) %>
       </div>
@@ -173,12 +173,12 @@
         href: user_path(@user),
         method: :delete,
         data: {
-          turbo_confirm: {
+          turbo_confirm: custom_turbo_confirm(
             title: t(".confirm_delete.title"),
             body: t(".confirm_delete.body"),
-            confirmText: t(".delete_account"),
-            variant: "destructive"
-          }
+            btn_text: t(".delete_account"),
+            btn_variant: "destructive"
+          )
         }
       ) %>
     </div>

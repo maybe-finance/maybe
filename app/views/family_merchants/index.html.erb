@@ -1,10 +1,11 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Merchants</h1>
 
-  <%= render ButtonComponent.new(
+  <%= render LinkComponent.new(
     text: "New merchant",
+    variant: "primary",
     href: new_family_merchant_path,
-    data: { turbo_frame: "modal" }
+    open_in: :modal
   ) %>
 </header>
 

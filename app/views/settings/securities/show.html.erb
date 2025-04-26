@@ -27,18 +27,19 @@
             href: disable_mfa_path,
             method: :delete,
             data: {
-              turbo_confirm: {
+              turbo_confirm: custom_turbo_confirm(
                 title: t(".disable_mfa_confirm"),
                 body: t(".disable_mfa_confirm"),
-                confirmText: t(".disable_mfa"),
-                variant: "outline-destructive"
-              }
+                btn_text: t(".disable_mfa"),
+                btn_variant: "outline-destructive"
+              )
             }
           ) %>
         <% else %>
-          <%= render ButtonComponent.new(
-              text: t(".enable_mfa"),
-              href: new_mfa_path
+          <%= render LinkComponent.new(
+            text: t(".enable_mfa"),
+            variant: "primary",
+            href: new_mfa_path
           ) %>
         <% end %>
       </div>

@@ -133,7 +133,7 @@
               <% end %>
             </ul>
 
-            <%= render ButtonComponent.new(
+            <%= render LinkComponent.new(
               text: "View all category transactions",
               variant: "outline",
               full_width: true,
@@ -142,7 +142,7 @@
                 start_date: @budget.start_date,
                 end_date: @budget.end_date
               }),
-              data: { turbo_frame: :_top }
+              open_in: :_top
             ) %>
           <% else %>
             <p class="text-secondary text-sm mb-4">

@@ -5,12 +5,11 @@
       <p class="text-gray-500">Here's what's happening with your finances</p>
     </div>
 
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       variant: "icon-inverse",
       icon: "plus",
       href: new_account_path(step: "method_select", classification: "asset"),
-      data: { turbo_frame: "modal" },
-      class: "rounded-full! md:hidden"
+      open_in: :modal
     ) %>
   </div>
 <% end %>

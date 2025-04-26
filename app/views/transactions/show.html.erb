@@ -125,12 +125,12 @@
             <p class="text-secondary">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
           </div>
 
-          <%= render ButtonComponent.new(
+          <%= render LinkComponent.new(
             text: "Open matcher",
-            leading_icon: "arrow-left-right",
+            icon: "arrow-left-right",
             variant: "outline",
             href: new_transaction_transfer_match_path(@entry),
-            data: { turbo_frame: :modal }
+            open_in: :modal
           ) %>
         </div>
 

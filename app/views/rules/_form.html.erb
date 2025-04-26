@@ -37,8 +37,8 @@
     </ul>
 
     <div class="flex items-center gap-2">
-      <%= render ButtonComponent.new(text: "Add condition", leading_icon: "plus", variant: "ghost", data: { action: "rules#addCondition" }) %>
-      <%= render ButtonComponent.new(text: "Add condition group", leading_icon: "boxes", variant: "ghost", data: { action: "rules#addConditionGroup" }) %>
+      <%= render ButtonComponent.new(text: "Add condition", icon: "plus", variant: "ghost", data: { action: "rules#addCondition" }) %>
+      <%= render ButtonComponent.new(text: "Add condition group", icon: "boxes", variant: "ghost", data: { action: "rules#addConditionGroup" }) %>
     </div>
   </section>
 
@@ -58,7 +58,7 @@
       <% end %>
     </ul>
 
-    <%= render ButtonComponent.new(text: "Add action", leading_icon: "plus", variant: "ghost", data: { action: "rules#addAction" }) %>
+    <%= render ButtonComponent.new(text: "Add action", icon: "plus", variant: "ghost", data: { action: "rules#addAction" }) %>
   </section>
 
   <section class="space-y-4">

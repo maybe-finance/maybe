@@ -54,10 +54,10 @@
         <h2 class="text-lg font-medium">Categories</h2>
 
         <% if @budget.initialized? %>
-          <%= render ButtonComponent.new(
+          <%= render LinkComponent.new(
             text: "Edit",
             variant: "secondary",
-            leading_icon: "settings-2",
+            icon: "settings-2",
             href: budget_budget_categories_path(@budget)
           ) %>
         <% end %>

@@ -6,6 +6,14 @@
   }
 }
 
+@utility text-inverse {
+  @apply text-white;
+
+  @variant theme-dark {
+    @apply text-gray-900;
+  }
+}
+
 @utility text-secondary {
   @apply text-gray-500;
 

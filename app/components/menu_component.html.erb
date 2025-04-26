@@ -1,12 +1,12 @@
-<%= tag.div data: merged_data do %>
-  <% if @variant == :icon %>
-    <%= render ButtonComponent.new(variant: "icon", icon: @icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
-  <% elsif @variant == :button %>
+<%= tag.div data: { controller: "menu", menu_placement_value: placement, menu_offset_value: offset } do %>
+  <% if variant == :icon %>
+    <%= render ButtonComponent.new(variant: "icon", icon: icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
+  <% elsif variant == :button %>
     <%= button %>
-  <% elsif @variant == :avatar %>
+  <% elsif variant == :avatar %>
     <button data-menu-target="button">
       <div class="w-9 h-9 cursor-pointer">
-        <%= render "settings/user_avatar", avatar_url: @avatar_url %>
+        <%= render "settings/user_avatar", avatar_url: avatar_url %>
       </div>
     </button>
   <% end %>

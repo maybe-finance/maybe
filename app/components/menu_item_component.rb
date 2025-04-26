@@ -1,34 +1,27 @@
 class MenuItemComponent < ViewComponent::Base
-  erb_template <<~ERB
-    <% if @variant == :divider %>
-      <hr class="border-tertiary my-1">
-    <% else %>
-      <div class="px-1">
-        <%= wrapper do %>
-          <% if @icon %>
-            <%= render IconComponent.new(@icon, variant: destructive? ? "destructive" : "default") %>
-          <% end %>
-          <%= tag.span(@text, class: text_classes) %>
-        <% end %>
-      </div>
-    <% end %>
-  ERB
+  VARIANTS = %i[link button divider].freeze
 
-  def initialize(variant: "default", text: nil, href: nil, method: :get, icon: nil, destructive: false, data: {})
+  attr_reader :variant, :text, :icon, :href, :method, :destructive, :opts
+
+  def initialize(variant:, text: nil, icon: nil, href: nil, method: :post, destructive: false, **opts)
     @variant = variant.to_sym
     @text = text
     @icon = icon
     @href = href
     @method = method.to_sym
-    @data = data
     @destructive = destructive
+    @opts = opts
+
+    raise ArgumentError, "Invalid variant: #{@variant}" unless VARIANTS.include?(@variant)
   end
 
   def wrapper(&block)
-    if @method.in?([ :post, :patch, :delete ])
-      button_to @href, method: @method, data: @data, class: container_classes, &block
+    if variant == :button
+      button_to href, method: method, class: container_classes, **opts, &block
+    elsif variant == :link
+      link_to href, class: container_classes, **opts, &block
     else
-      link_to @href, data: @data, class: container_classes, &block
+      nil
     end
   end
 
@@ -40,7 +33,7 @@ class MenuItemComponent < ViewComponent::Base
   end
 
   def destructive?
-    @method == :delete || @destructive
+    method == :delete || destructive
   end
 
   private

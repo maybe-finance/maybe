@@ -11,8 +11,9 @@
       <p class="text-sm text-secondary">Your imported data has been successfully added to the app and is now ready for use.</p>
     </div>
 
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: "Back to dashboard",
+      variant: "primary",
       full_width: true,
       href: root_path
     ) %>

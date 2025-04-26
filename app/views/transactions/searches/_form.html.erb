@@ -19,9 +19,10 @@
     <div data-controller="menu" class="relative">
       <%= render ButtonComponent.new(
         text: "Filter",
-        leading_icon: "list-filter",
+        icon: "list-filter",
         variant: "outline",
         id: "transaction-filters-button",
+        type: "button",
         data: { menu_target: "button" }
       ) %>
 

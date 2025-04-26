@@ -1,19 +1,44 @@
 class MenuComponentPreview < ViewComponent::Preview
-  # @param variant select {{ MenuComponent::VARIANTS.keys }}
-  def default(variant: "icon")
-    if variant == "icon"
-      render MenuComponent.new(variant: variant) do |menu|
-        menu.with_item(text: "Menu item 1", href: "#", icon: "plus")
-        menu.with_item(text: "Menu item 2", href: "#", icon: "circle")
-        menu.with_item(text: "Destructive", href: "#", method: :delete, icon: "circle")
-      end
-    else
-      render MenuComponent.new(variant: variant) do |menu|
-        menu.with_button(text: "New", icon: "plus")
-        menu.with_item(text: "Menu item 1", href: "#", icon: "plus")
-        menu.with_item(text: "Menu item 2", href: "#", icon: "circle")
-        menu.with_item(text: "Destructive", href: "#", method: :delete, icon: "circle")
-      end
+  def icon
+    render MenuComponent.new(variant: "icon") do |menu|
+      menu_contents(menu)
     end
   end
+
+  def button
+    render MenuComponent.new(variant: "button") do |menu|
+      menu.with_button(text: "Open menu", variant: "secondary")
+      menu_contents(menu)
+    end
+  end
+
+  def avatar
+    render MenuComponent.new(variant: "avatar") do |menu|
+      menu_contents(menu)
+    end
+  end
+
+  private
+    def menu_contents(menu)
+      menu.with_header do
+        content_tag(:div, class: "p-3") do
+          content_tag(:h3, "Menu header", class: "font-medium text-gray-900")
+        end
+      end
+
+      menu.with_item(variant: "link", text: "Link", href: "#", icon: "plus")
+      menu.with_item(variant: "button", text: "Action", href: "#", method: :post, icon: "circle")
+      menu.with_item(variant: "button", text: "Action destructive", href: "#", method: :delete, icon: "circle")
+
+      menu.with_item(variant: "divider")
+
+      menu.with_custom_content do
+        content_tag(:div, class: "p-4") do
+          safe_join([
+            content_tag(:h3, "Custom content header", class: "font-medium text-gray-900"),
+            content_tag(:p, "Some custom content", class: "text-sm text-gray-500")
+          ])
+        end
+      end
+    end
 end

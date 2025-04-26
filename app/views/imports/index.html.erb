@@ -1,11 +1,12 @@
 <div class="flex items-center justify-between">
   <h1 class="text-xl font-medium text-primary"><%= t(".title") %></h1>
 
-  <%= render ButtonComponent.new(
+  <%= render LinkComponent.new(
     text: "New import",
     href: new_import_path,
-    leading_icon: "plus",
-    data: { turbo_frame: :modal }
+    icon: "plus",
+    variant: "primary",
+    open_in: :modal
   ) %>
 </div>
 

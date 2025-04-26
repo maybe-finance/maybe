@@ -25,7 +25,7 @@
   <% end %>
 
   <%= render MenuComponent.new do |menu| %>
-    <% menu.with_item(text: t(".edit"), icon: "pencil-line", href: edit_category_path(category), data: { turbo_frame: :modal }) %>
-    <% menu.with_item(text: t(".delete"), icon: "trash-2", href: new_category_deletion_path(category), data: { turbo_frame: :modal }, destructive: true) %>
+    <% menu.with_item(variant: "link", text: t(".edit"), icon: "pencil-line", href: edit_category_path(category), data: { turbo_frame: :modal }) %>
+    <% menu.with_item(variant: "link", text: t(".delete"), icon: "trash-2", href: new_category_deletion_path(category), data: { turbo_frame: :modal }, destructive: true) %>
   <% end %>
 <% end %>

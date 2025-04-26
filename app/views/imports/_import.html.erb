@@ -37,24 +37,27 @@
   </div>
 
   <%= render MenuComponent.new do |menu| %>
-    <% menu.with_item(text: t(".view"), href: import_path(import), icon: "eye") %>
+    <% menu.with_item(variant: "link", text: t(".view"), href: import_path(import), icon: "eye") %>
 
     <% if import.complete? || import.revert_failed? %>
       <% menu.with_item(
+        variant: "button",
         text: t(".revert"),
         href: revert_import_path(import),
         icon: "rotate-ccw",
         method: :put,
         data: {
-          turbo_confirm: {
+          turbo_confirm: custom_turbo_confirm(
             title: "Revert import?",
             body: "This will delete transactions that were imported, but you will still be able to review and re-import your data at any time.",
-            accept: "Revert"
-          }
+            btn_text: "Revert",
+            btn_variant: "outline-destructive"
+          )
         }) %>
 
     <% else %>
       <% menu.with_item(
+        variant: "button",
         text: t(".delete"),
         href: import_path(import),
         icon: "trash-2",
@@ -63,7 +66,8 @@
           turbo_confirm: {
             title: "Delete import?",
             body: "This will delete the import and is not reversible.",
-            variant: "outline-destructive"
+            btn_text: "Delete import",
+            btn_variant: "outline-destructive"
           }
         }) %>
     <% end %>

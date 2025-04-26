@@ -7,11 +7,11 @@
       <p class="text-secondary"><%= t(".no_account_subtitle") %></p>
     </div>
 
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: t(".new_account"),
       href: new_account_path,
-      leading_icon: "plus",
-      data: { turbo_frame: "modal" }
+      icon: "plus",
+      open_in: :modal
     ) %>
   </div>
 </div>

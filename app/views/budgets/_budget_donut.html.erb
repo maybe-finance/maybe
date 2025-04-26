@@ -12,10 +12,11 @@
           <%= format_money(budget.actual_spending_money) %>
         </div>
 
-        <%= render ButtonComponent.new(
+        <%= render LinkComponent.new(
           text: "of #{budget.budgeted_spending_money.format}",
           variant: "secondary",
-          trailing_icon: "pencil",
+          icon: "pencil",
+          icon_position: "right",
           size: "sm",
           href: edit_budget_path(budget)
         ) %>
@@ -24,10 +25,10 @@
           <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
         </div>
 
-        <%= render ButtonComponent.new(
+        <%= render LinkComponent.new(
           text: "New budget",
           size: "sm",
-          leading_icon: "plus",
+          icon: "plus",
           href: edit_budget_path(budget)
         ) %>
       <% end %>
@@ -45,10 +46,11 @@
             <%= format_money(bc.actual_spending_money) %>
           </p>
 
-          <%= render ButtonComponent.new(
+          <%= render LinkComponent.new(
             text: "of #{bc.budgeted_spending_money.format(precision: 0)}",
             variant: "secondary",
-            trailing_icon: "pencil",
+            icon: "pencil",
+            icon_position: "right",
             size: "sm",
             href: budget_budget_categories_path(budget)
           ) %>

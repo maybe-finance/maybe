@@ -8,15 +8,15 @@
         method: :post,
         variant: "outline",
         disabled: Current.family.syncing?,
-        leading_icon: "refresh-cw"
+        icon: "refresh-cw"
       ) %>
 
-      <%= render ButtonComponent.new(
+      <%= render LinkComponent.new(
         text: "New account",
         href: new_account_path(return_to: accounts_path),
         variant: "primary",
-        leading_icon: "plus",
-        data: { turbo_frame: "modal" }
+        icon: "plus",
+        open_in: "modal"
       ) %>
     </div>
   </div>

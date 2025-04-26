@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class MenuComponent < ViewComponent::Base
-  renders_one :button, ->(**options, &block) do
-    options_with_target = options.merge(data: { menu_target: "button" })
+  attr_reader :variant, :avatar_url, :placement, :offset, :icon_vertical
+
+  renders_one :button, ->(**button_options, &block) do
+    options_with_target = button_options.merge(data: { menu_target: "button" })
 
     if block
       content_tag(:button, **options_with_target, &block)
@@ -19,26 +21,15 @@ class MenuComponent < ViewComponent::Base
 
   renders_many :items, MenuItemComponent
 
-  VARIANTS = {
-    icon: {},
-    button: {},
-    avatar: {}
-  }
+  VARIANTS = %i[icon button avatar].freeze
 
-  def initialize(variant: "icon", avatar_url: nil, placement: "bottom-end", offset: 12, icon_vertical: false, data: {})
+  def initialize(variant: "icon", avatar_url: nil, placement: "bottom-end", offset: 12, icon_vertical: false)
     @variant = variant.to_sym
     @avatar_url = avatar_url
     @placement = placement
     @offset = offset
     @icon_vertical = icon_vertical
-    @data = data
-  end
 
-  def merged_data
-    {
-      controller: "menu",
-      menu_placement_value: @placement,
-      menu_offset_value: @offset
-    }.merge(@data)
+    raise ArgumentError, "Invalid variant: #{@variant}" unless VARIANTS.include?(@variant)
   end
 end

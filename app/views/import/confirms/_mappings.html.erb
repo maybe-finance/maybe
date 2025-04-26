@@ -11,7 +11,12 @@
           <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".no_accounts"), class: "text-sm" %>
 
-            <%= render ButtonComponent.new(text: "Create account", href: new_account_path(return_to: import_confirm_path(import)), data: { turbo_frame: :modal }) %>
+            <%= render LinkComponent.new(
+              text: "Create account",
+              variant: "primary",
+              href: new_account_path(return_to: import_confirm_path(import)),
+              open_in: :modal
+            ) %>
           </div>
         </div>
       </div>
@@ -20,7 +25,12 @@
         <div class="overflow-x-auto">
           <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".unassigned_account"), class: "text-sm" %>
-            <%= render ButtonComponent.new(text: t(".create_account"), href: new_account_path(return_to: import_confirm_path(import)), data: { turbo_frame: :modal }) %>
+            <%= render LinkComponent.new(
+              text: t(".create_account"),
+              variant: "primary",
+              href: new_account_path(return_to: import_confirm_path(import)),
+              open_in: :modal
+            ) %>
           </div>
         </div>
       </div>
@@ -49,7 +59,14 @@
     </div>
 
     <div class="flex justify-center w-full">
-      <%= render ButtonComponent.new(text: "Next", href: is_last_step ? import_path(import) : url_for(step: step_idx + 2), trailing_icon: "arrow-right", class: "w-full md:w-auto") %>
+      <%= render LinkComponent.new(
+        text: "Next",
+        variant: "primary",
+        href: is_last_step ? import_path(import) : url_for(step: step_idx + 2),
+        icon: "arrow-right",
+        icon_position: "right",
+        class: "w-full md:w-auto"
+      ) %>
     </div>
   </div>
 </div>

@@ -1,12 +1,12 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium"><%= t(".tags") %></h1>
 
-  <%= render ButtonComponent.new(
+  <%= render LinkComponent.new(
     text: t(".new"),
     variant: "primary",
     href: new_tag_path,
-    leading_icon: "plus",
-    data: { turbo_frame: :modal }
+    icon: "plus",
+    open_in: :modal
   ) %>
 </header>
 

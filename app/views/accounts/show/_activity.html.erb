@@ -2,20 +2,23 @@
 
 <%= turbo_frame_tag dom_id(account, "entries") do %>
   <div class="bg-container p-5 shadow-border-xs rounded-xl" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
       <% unless @account.plaid_account_id.present? %>
-        <%= render MenuComponent.new(variant: "button", data: { testid: "activity-menu" }) do |menu| %>
-          <% menu.with_button(text: "New", variant: "secondary", leading_icon: "plus") %>
+        <%= render MenuComponent.new(variant: "button") do |menu| %>
+          <% menu.with_button(text: "New", variant: "secondary", icon: "plus") %>
 
           <% menu.with_item(
+              variant: "link",
               text: "New balance",
               icon: "circle-dollar-sign",
-              href: new_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }) %>
+              href: new_valuation_path(account_id: @account.id),
+              data: { turbo_frame: :modal }) %>
 
           <% unless @account.crypto? %>
             <% href = @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id) %>
             <% menu.with_item(
+                variant: "link",
                 text: "New transaction",
                 icon: "credit-card",
                 href: href,

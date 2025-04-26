@@ -8,7 +8,6 @@
           variant: "icon",
           icon: "x",
           value: "cancel",
-          type: "submit"
         ) %>
       </div>
 
@@ -18,15 +17,14 @@
     <div>
       <% ["primary", "outline-destructive", "destructive"].each do |variant| %>
         <%= render ButtonComponent.new(
-        text: "Confirm",
-        variant: variant,
-        autofocus: true,
-        full_width: true,
-        value: "confirm",
-        data: { variant: variant, confirm_dialog_target: "confirmButton" },
-        hidden: true,
-        type: "submit"
-      ) %>
+          text: "Confirm",
+          variant: variant,
+          autofocus: true,
+          full_width: true,
+          value: "confirm",
+          data: { variant: variant, confirm_dialog_target: "confirmButton" },
+          hidden: true,
+        ) %>
       <% end %>
     </div>
   </form>

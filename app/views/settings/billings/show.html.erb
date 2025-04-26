@@ -19,9 +19,24 @@
       </div>
 
       <% if @user.family.subscribed? || subscription_pending? %>
-        <%= render ButtonComponent.new(text: "Manage", trailing_icon: "external-link", href: subscription_path, target: "_blank", rel: "noopener") %>
+        <%= render LinkComponent.new(
+          text: "Manage",
+          icon: "external-link",
+          variant: "primary",
+          icon_position: "right",
+          href: subscription_path,
+          target: "_blank",
+          rel: "noopener"
+        ) %>
       <% else %>
-        <%= render ButtonComponent.new(text: "Subscribe", trailing_icon: "external-link", href: new_subscription_path, target: "_blank", rel: "noopener") %>
+        <%= render LinkComponent.new(
+          text: "Subscribe",
+          variant: "primary",
+          icon: "external-link",
+          icon_position: "right",
+          href: new_subscription_path,
+          target: "_blank",
+          rel: "noopener") %>
       <% end %>
     </div>
 

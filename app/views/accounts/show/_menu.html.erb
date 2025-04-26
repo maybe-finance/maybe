@@ -1,10 +1,11 @@
 <%# locals: (account:) %>
 
 <%= render MenuComponent.new do |menu| %>
-  <% menu.with_item(text: "Edit", href: edit_account_path(account), icon: "pencil-line", data: { turbo_frame: :modal }) %>
+  <% menu.with_item(variant: "link", text: "Edit", href: edit_account_path(account), icon: "pencil-line", data: { turbo_frame: :modal }) %>
 
   <% unless account.crypto? %>
     <% menu.with_item(
+      variant: "link",
       text: "Import transactions",
       href: imports_path({ import: { type: account.investment? ? "TradeImport" : "TransactionImport", account_id: account.id } }),
       icon: "download",
@@ -13,14 +14,19 @@
   <% end %>
 
   <% menu.with_item(
+    variant: "button",
     text: "Delete account",
     href: account_path(account),
     method: :delete,
     icon: "trash-2",
-    data: { turbo_frame: :_top, turbo_confirm: {
-      title: t(".confirm_title"),
-      body: t(".confirm_body_html"),
-      accept: t(".confirm_accept", name: account.name)
-    }}
+    data: {
+      turbo_frame: :_top,
+      turbo_confirm: custom_turbo_confirm(
+        title: t(".confirm_title"),
+        body: t(".confirm_body_html"),
+        btn_text: t(".confirm_accept", name: account.name),
+        btn_variant: "destructive"
+      )
+    }
   ) %>
 <% end %>

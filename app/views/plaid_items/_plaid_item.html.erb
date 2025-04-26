@@ -53,7 +53,7 @@
 
             <%= render ButtonComponent.new(
               text: t(".update"),
-              leading_icon: "refresh-cw",
+              icon: "refresh-cw",
               variant: "secondary",
               data: {
                 controller: "plaid",
@@ -76,21 +76,23 @@
               <div class="flex items-center gap-2">
                 <%= render ButtonComponent.new(
                   text: t(".delete"),
-                  leading_icon: "trash-2",
+                  icon: "trash-2",
                   variant: "destructive",
+                  href: plaid_item_path(plaid_item),
                   method: :delete,
                   data: {
-                    turbo_confirm: {
+                    turbo_confirm: custom_turbo_confirm(
                       title: t(".confirm_title"),
                       body: t(".confirm_body"),
-                      accept: t(".confirm_accept")
-                    }
+                      btn_text: t(".confirm_accept"),
+                      btn_variant: "destructive"
+                    )
                   }
                 ) %>
 
-                <%= render ButtonComponent.new(
+                <%= render LinkComponent.new(
                   text: t(".add_new"),
-                  leading_icon: "plus",
+                  icon: "plus",
                   variant: "secondary",
                   href: new_account_path
                 ) %>
@@ -102,18 +104,23 @@
             variant: "icon",
             icon: "refresh-cw",
             href: sync_plaid_item_path(plaid_item),
-            method: :post,
             disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
           ) %>
         <% end %>
 
         <%= render MenuComponent.new do |menu| %>
-          <% menu.with_item text: t(".delete"), icon: "trash-2", href: plaid_item_path(plaid_item), method: :delete, data: { turbo_confirm: {
-            title: t(".confirm_title"),
-            body: t(".confirm_body"),
-            accept: t(".confirm_accept"),
-            variant: "destructive"
-          } } %>
+          <% menu.with_item(
+            variant: "button",
+            text: t(".delete"),
+            icon: "trash-2",
+            href: plaid_item_path(plaid_item),
+            method: :delete,
+            data: { turbo_confirm: custom_turbo_confirm(
+              title: t(".confirm_title"),
+              body: t(".confirm_body"),
+              btn_text: t(".confirm_accept"),
+              btn_variant: "destructive") }
+          ) %>
         <% end %>
       </div>
     </summary>

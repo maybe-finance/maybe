@@ -16,12 +16,21 @@
   </div>
   <div class="justify-self-end">
     <%= render MenuComponent.new do |menu| %>
-      <% menu.with_item(text: "Edit", href: edit_family_merchant_path(family_merchant), icon: "pencil", data: { turbo_frame: "modal" }) %>
-      <% menu.with_item(text: "Delete", href: family_merchant_path(family_merchant), icon: "trash-2", method: :delete, data: { turbo_confirm: {
-          title: "Delete #{family_merchant.name}?",
-          body: "This will remove this merchant from all transactions it has been assigned to.",
-          variant: "outline-destructive"
-        } }) %>
+      <% menu.with_item(variant: "link", text: "Edit", href: edit_family_merchant_path(family_merchant), icon: "pencil", data: { turbo_frame: "modal" }) %>
+      <% menu.with_item(
+        variant: "button",
+        text: "Delete",
+        href: family_merchant_path(family_merchant),
+        icon: "trash-2",
+        method: :delete,
+        data: {
+          turbo_confirm: custom_turbo_confirm(
+            title: "Delete #{family_merchant.name}?",
+            body: "This will remove this merchant from all transactions it has been assigned to.",
+            btn_text: "Delete #{family_merchant.name}",
+            btn_variant: "outline-destructive"
+          )
+        }) %>
     <% end %>
   </div>
 </div>

@@ -4,11 +4,12 @@
   <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-red-500" %>
   <p class="text-secondary text-sm text-center">You have over-allocated your budget.  Please fix your allocations.</p>
 
-  <%= render ButtonComponent.new(
+  <%= render LinkComponent.new(
     text: "Fix allocations",
     variant: "secondary",
     size: "sm",
-    trailing_icon: "pencil",
+    icon: "pencil",
+    icon_position: "right",
     href: budget_budget_categories_path(budget)
   ) %>
 </div>

@@ -19,9 +19,10 @@
         <% end %>
       </div>
 
-      <%= render ButtonComponent.new(
+      <%= render LinkComponent.new(
         text: t(".continue"),
         href: settings_security_path,
+        variant: "primary",
         full_width: true
       ) %>
     </div>

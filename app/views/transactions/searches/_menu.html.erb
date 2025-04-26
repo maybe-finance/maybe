@@ -32,7 +32,7 @@
     <div class="flex justify-between items-center gap-2 bg-container p-3">
       <div>
         <% if @q.present? %>
-          <%= render ButtonComponent.new(
+          <%= render LinkComponent.new(
             text: t(".clear_filters"),
             variant: "ghost",
             href: transactions_path(clear_filters: true),
@@ -41,8 +41,8 @@
       </div>
 
       <div>
-        <%= render ButtonComponent.new(text: t(".cancel"), variant: "ghost", data: { action: "menu#close" }) %>
-        <%= render ButtonComponent.new(text: t(".apply"), type: "submit") %>
+        <%= render ButtonComponent.new(text: t(".cancel"), type: "button", variant: "ghost", data: { action: "menu#close" }) %>
+        <%= render ButtonComponent.new(text: t(".apply")) %>
       </div>
     </div>
   </div>

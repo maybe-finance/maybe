@@ -42,14 +42,14 @@
   </div>
 
   <div data-tabs-target="tab" id="assets-tab">
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: "New asset",
       variant: "ghost",
-      full_width: true,
-      left_align: true,
       href: new_account_path(step: "method_select", classification: "asset"),
-      leading_icon: "plus",
-      data: { turbo_frame: "modal" }
+      icon: "plus",
+      open_in: "modal",
+      full_width: true,
+      class: "justify-start"
     ) %>
 
     <div class="space-y-2">
@@ -60,14 +60,14 @@
   </div>
 
   <div data-tabs-target="tab" id="debts-tab" class="hidden">
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: "New debt",
       variant: "ghost",
-      full_width: true,
-      left_align: true,
       href: new_account_path(step: "method_select", classification: "liability"),
-      leading_icon: "plus",
-      data: { turbo_frame: "modal" }
+      icon: "plus",
+      open_in: "modal",
+      full_width: true,
+      class: "justify-start"
     ) %>
 
     <div class="space-y-2">
@@ -78,14 +78,14 @@
   </div>
 
   <div data-tabs-target="tab" id="all-tab" class="hidden">
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: "New account",
       variant: "ghost",
       full_width: true,
-      left_align: true,
       href: new_account_path(step: "method_select"),
-      leading_icon: "plus",
-      data: { turbo_frame: "modal" }
+      icon: "plus",
+      open_in: "modal",
+      class: "justify-start"
     ) %>
 
     <div class="space-y-2">

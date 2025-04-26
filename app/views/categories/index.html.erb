@@ -4,26 +4,28 @@
   <div class="flex items-center gap-2">
     <%= render MenuComponent.new do |menu| %>
       <% menu.with_item(
+        variant: "button",
         text: "Delete all",
         href: destroy_all_categories_path,
         method: :delete,
         icon: "trash-2",
         data: {
-          turbo_confirm: {
+          turbo_confirm: custom_turbo_confirm(
             title: "Delete all categories?",
             body: "All of your transactions will become uncategorized and this cannot be undone.",
-            accept: "Delete all categories",
-          }
+            btn_text: "Delete all categories",
+            btn_variant: "destructive"
+          )
         }
       ) %>
     <% end %>
 
-    <%= render ButtonComponent.new(
+    <%= render LinkComponent.new(
       text: t(".new"),
       variant: "primary",
-      leading_icon: "plus",
+      icon: "plus",
       href: new_category_path,
-      data: { turbo_frame: :modal }
+      open_in: :modal
     ) %>
   </div>
 </header>
@@ -47,15 +49,14 @@
           <%= render ButtonComponent.new(
             text: t(".bootstrap"),
             href: bootstrap_categories_path,
-            method: :post
           ) %>
 
-          <%= render ButtonComponent.new(
+          <%= render LinkComponent.new(
             text: t(".new"),
             variant: "outline",
-            leading_icon: "plus",
+            icon: "plus",
             href: new_category_path,
-            data: { turbo_frame: :modal }
+            open_in: :modal
           ) %>
         </div>
       </div>

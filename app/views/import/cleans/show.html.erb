@@ -17,10 +17,11 @@
         <p class="text-green-500 text-sm md:text-base">Your data has been cleaned</p>
       </div>
 
-      <%= render ButtonComponent.new(
+      <%= render LinkComponent.new(
         text: "Next step",
+        variant: "primary",
         href: import_confirm_path(@import),
-        data: { turbo_frame: :_top },
+        open_in: :_top,
         class: "w-full md:w-auto"
       ) %>
     </div>

@@ -1,6 +1,15 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def custom_turbo_confirm(title: "Are you sure?", body: "This action cannot be undone.", btn_text: "Confirm", btn_variant: "primary")
+    {
+      title: title,
+      body: body,
+      confirmText: btn_text,
+      variant: btn_variant
+    }
+  end
+
   def icon(key, size: "md", color: "current")
     render partial: "shared/icon", locals: { key:, size:, color: }
   end

@@ -4,40 +4,45 @@
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
         <%= render MenuComponent.new do |menu| %>
-          <% menu.with_item(text: "Dev only: Sync all", href: sync_all_accounts_path, method: :post, icon: "refresh-cw") %>
-          <% menu.with_item(text: "New rule", href: new_rule_path(resource_type: "transaction"), icon: "plus", data: { turbo_frame: :modal }) %>
-          <% menu.with_item(text: "Edit rules", href: rules_path, icon: "git-branch", data: { turbo_frame: :_top }) %>
-          <% menu.with_item(text: "Edit categories", href: categories_path, icon: "shapes", data: { turbo_frame: :_top }) %>
-          <% menu.with_item(text: "Edit tags", href: tags_path, icon: "tags", data: { turbo_frame: :_top }) %>
-          <% menu.with_item(text: "Edit merchants", href: family_merchants_path, icon: "store", data: { turbo_frame: :_top }) %>
-          <% menu.with_item(text: "Edit imports", href: imports_path, icon: "hard-drive-upload", data: { turbo_frame: :_top }) %>
-          <% menu.with_item(text: "Import", href: new_import_path, icon: "download", data: { turbo_frame: "modal", class_name: "md:!hidden" }) %>
+          <% menu.with_item(variant: "button", text: "Dev only: Sync all", href: sync_all_accounts_path, method: :post, icon: "refresh-cw") %>
+          <% menu.with_item(variant: "link", text: "New rule", href: new_rule_path(resource_type: "transaction"), icon: "plus", data: { turbo_frame: :modal }) %>
+          <% menu.with_item(variant: "link", text: "Edit rules", href: rules_path, icon: "git-branch", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit categories", href: categories_path, icon: "shapes", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit tags", href: tags_path, icon: "tags", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit merchants", href: family_merchants_path, icon: "store", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit imports", href: imports_path, icon: "hard-drive-upload", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Import", href: new_import_path, icon: "download", data: { turbo_frame: "modal", class_name: "md:!hidden" }) %>
         <% end %>
 
-        <%= render ButtonComponent.new(
-          text: t(".import"),
-          leading_icon: "download",
-          variant: "outline",
-          href: new_import_path,
-          data: { turbo_frame: :modal },
-          class: "hidden md:flex"
-        ) %>
+        <div class="hidden md:flex">
+          <%= render LinkComponent.new(
+            text: t(".import"),
+            icon: "download",
+            variant: "outline",
+            href: new_import_path,
+            open_in: :modal,
+          ) %>
+        </div>
 
-        <%= render ButtonComponent.new(
-          text: "New transaction",
-          leading_icon: "plus",
-          href: new_transaction_path,
-          data: { turbo_frame: :modal },
-          class: "hidden md:flex"
-        ) %>
+        <div class="hidden md:flex">
+          <%= render LinkComponent.new(
+            text: "New transaction",
+            icon: "plus",
+            variant: "primary",
+            href: new_transaction_path,
+            open_in: :modal,
+          ) %>
+        </div>
 
-        <%= render ButtonComponent.new(
-          icon: "plus",
-          variant: "icon-inverse",
-          href: new_transaction_path,
-          data: { turbo_frame: :modal },
-          class: "md:hidden !rounded-full"
-        ) %>
+        <div class="md:hidden">
+          <%= render LinkComponent.new(
+            icon: "plus",
+            variant: "icon-inverse",
+            href: new_transaction_path,
+            open_in: :modal,
+            rounded: true
+          ) %>
+        </div>
       </div>
     </div>
   </header>

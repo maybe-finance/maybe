@@ -16,10 +16,11 @@
               <p>To continue using the app, please subscribe. In this early beta testing phase, we require that you upgrade within one hour to claim your spot.</p>
             </div>
 
-            <%= render ButtonComponent.new(
+            <%= render LinkComponent.new(
               text: "Upgrade to Maybe+",
               href: new_subscription_path,
-              class: "w-full"
+              variant: "primary",
+              full_width: true
             ) %>
           </div>
         </div>
