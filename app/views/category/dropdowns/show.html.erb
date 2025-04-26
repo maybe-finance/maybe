@@ -24,9 +24,9 @@
             <p class="text-sm text-secondary font-normal mb-4"><%= t(".empty") %></p>
 
             <%= render ButtonComponent.new(
-              text: t(".bootstrap"), 
-              variant: "outline", 
-              href: bootstrap_categories_path, 
+              text: t(".bootstrap"),
+              variant: "outline",
+              href: bootstrap_categories_path,
               method: :post,
               data: { turbo_frame: :_top }) %>
           </div>

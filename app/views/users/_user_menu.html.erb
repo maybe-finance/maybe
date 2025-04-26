@@ -1,6 +1,6 @@
 <%# locals: (user:, placement: "right-start", offset: 16) %>
 
-<%= render MenuComponent.new(variant: "avatar", avatar_url: user.profile_image&.variant(:small)&.url, placement: placement, offset: offset) do |menu| %>
+<%= render MenuComponent.new(variant: "avatar", avatar_url: user.profile_image&.variant(:small)&.url, placement: placement, offset: offset, data: { testid: "user-menu" }) do |menu| %>
   <%= menu.with_header do %>
     <div class="px-4 py-3 flex items-center gap-3">
       <div class="w-9 h-9 shrink-0">

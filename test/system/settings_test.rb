@@ -56,7 +56,9 @@ class SettingsTest < ApplicationSystemTestCase
   private
 
     def open_settings_from_sidebar
-      find("#user-menu").click
+      within "div[data-testid=user-menu]" do
+        find("button").click
+      end
       click_link "Settings"
     end
 end

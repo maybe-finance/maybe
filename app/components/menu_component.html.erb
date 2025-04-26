@@ -1,4 +1,4 @@
-<div data-controller="menu" data-menu-placement-value="<%= @placement %>" data-menu-offset-value="<%= @offset %>">
+<%= tag.div data: merged_data do %>
   <% if @variant == :icon %>
     <%= render ButtonComponent.new(variant: "icon", icon: @icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
   <% elsif @variant == :button %>
@@ -22,4 +22,4 @@
       <%= custom_content %>
     </div>
   </div>
-</div>
+<% end %>

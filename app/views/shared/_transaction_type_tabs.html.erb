@@ -1,14 +1,14 @@
 <fieldset class="bg-gray-50 rounded-lg p-1 grid grid-flow-col justify-stretch gap-x-2">
-  <% active_tab = local_assigns[:active_tab] || 'expense' %>
+  <% active_tab = local_assigns[:active_tab] || "expense" %>
 
-  <%= link_to new_transaction_path(nature: 'outflow'),
+  <%= link_to new_transaction_path(nature: "outflow"),
               data: { turbo_frame: :modal },
               class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-sm md:text-normal text-subdued #{active_tab == 'expense' ? 'bg-container text-gray-800 shadow-sm' : 'hover:bg-container hover:text-gray-800 hover:shadow-sm'}" do %>
     <%= lucide_icon "minus-circle", class: "w-4 h-4 md:w-5 md:h-5" %>
     <%= tag.span t("shared.transaction_tabs.expense") %>
   <% end %>
 
-  <%= link_to new_transaction_path(nature: 'inflow'),
+  <%= link_to new_transaction_path(nature: "inflow"),
               data: { turbo_frame: :modal },
               class: "flex px-4 py-1 rounded-lg items-center space-x-2 justify-center text-sm md:text-normal text-subdued #{active_tab == 'income' ? 'bg-container text-gray-800 shadow-sm' : 'hover:bg-container hover:text-gray-800 hover:shadow-sm'}" do %>
     <%= lucide_icon "plus-circle", class: "w-4 h-4 md:w-5 md:h-5" %>

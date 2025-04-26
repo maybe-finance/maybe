@@ -25,11 +25,20 @@ class MenuComponent < ViewComponent::Base
     avatar: {}
   }
 
-  def initialize(variant: "icon", avatar_url: nil, placement: "bottom-end", offset: 12, icon_vertical: false)
+  def initialize(variant: "icon", avatar_url: nil, placement: "bottom-end", offset: 12, icon_vertical: false, data: {})
     @variant = variant.to_sym
     @avatar_url = avatar_url
     @placement = placement
     @offset = offset
     @icon_vertical = icon_vertical
+    @data = data
+  end
+
+  def merged_data
+    {
+      controller: "menu",
+      menu_placement_value: @placement,
+      menu_offset_value: @offset
+    }.merge(@data)
   end
 end

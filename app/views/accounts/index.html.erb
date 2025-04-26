@@ -3,18 +3,18 @@
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
       <%= render ButtonComponent.new(
-        text: "Sync all", 
-        href: sync_all_accounts_path, 
+        text: "Sync all",
+        href: sync_all_accounts_path,
         method: :post,
-        variant: "outline", 
+        variant: "outline",
         disabled: Current.family.syncing?,
         leading_icon: "refresh-cw"
       ) %>
 
       <%= render ButtonComponent.new(
-        text: "New account", 
-        href: new_account_path(return_to: accounts_path), 
-        variant: "primary", 
+        text: "New account",
+        href: new_account_path(return_to: accounts_path),
+        variant: "primary",
         leading_icon: "plus",
         data: { turbo_frame: "modal" }
       ) %>

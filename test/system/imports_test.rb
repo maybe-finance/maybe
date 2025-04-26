@@ -19,7 +19,9 @@ class ImportsTest < ApplicationSystemTestCase
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/transactions.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "Date", from: "import[date_col_label]"
     select "YYYY-MM-DD", from: "import[date_format]"
@@ -65,7 +67,9 @@ class ImportsTest < ApplicationSystemTestCase
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/trades.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "date", from: "import[date_col_label]"
     select "YYYY-MM-DD", from: "import[date_format]"
@@ -103,7 +107,9 @@ class ImportsTest < ApplicationSystemTestCase
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/accounts.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "type", from: "import[entity_type_col_label]"
     select "name", from: "import[name_col_label]"
@@ -147,7 +153,9 @@ class ImportsTest < ApplicationSystemTestCase
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/mint.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     click_on "Apply configuration"
 
