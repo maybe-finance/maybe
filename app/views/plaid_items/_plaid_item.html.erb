@@ -80,14 +80,7 @@
                   variant: "destructive",
                   href: plaid_item_path(plaid_item),
                   method: :delete,
-                  data: {
-                    turbo_confirm: custom_turbo_confirm(
-                      title: t(".confirm_title"),
-                      body: t(".confirm_body"),
-                      btn_text: t(".confirm_accept"),
-                      btn_variant: "destructive"
-                    )
-                  }
+                  confirm: CustomConfirm.for_resource_deletion(plaid_item.name, high_severity: true)
                 ) %>
 
                 <%= render LinkComponent.new(
@@ -115,11 +108,7 @@
             icon: "trash-2",
             href: plaid_item_path(plaid_item),
             method: :delete,
-            data: { turbo_confirm: custom_turbo_confirm(
-              title: t(".confirm_title"),
-              body: t(".confirm_body"),
-              btn_text: t(".confirm_accept"),
-              btn_variant: "destructive") }
+            confirm: CustomConfirm.for_resource_deletion(plaid_item.name, high_severity: true)
           ) %>
         <% end %>
       </div>

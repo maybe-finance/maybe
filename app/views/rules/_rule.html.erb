@@ -53,14 +53,7 @@
         href: rule_path(rule),
         icon: "trash-2",
         method: :delete,
-        data: {
-          turbo_confirm: custom_turbo_confirm(
-            title: "Delete rule?",
-            body: "Are you sure you want to delete this rule? Data affected by this rule will no longer be automatically updated. This action cannot be undone.",
-            btn_text: "Delete rule",
-            btn_variant: "outline-destructive"
-          )
-        }) %>
+        confirm: CustomConfirm.for_resource_deletion("Rule")) %>
     <% end %>
   </div>
 </div>

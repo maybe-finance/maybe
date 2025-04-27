@@ -19,14 +19,7 @@
     href: account_path(account),
     method: :delete,
     icon: "trash-2",
-    data: {
-      turbo_frame: :_top,
-      turbo_confirm: custom_turbo_confirm(
-        title: t(".confirm_title"),
-        body: t(".confirm_body_html"),
-        btn_text: t(".confirm_accept", name: account.name),
-        btn_variant: "destructive"
-      )
-    }
+    confirm: CustomConfirm.for_resource_deletion("Account", high_severity: true),
+    data: { turbo_frame: :_top }
   ) %>
 <% end %>

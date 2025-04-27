@@ -23,13 +23,7 @@
         href: merchant_path(merchant),
         icon: "trash-2",
         method: :delete,
-        data: { turbo_confirm: custom_turbo_confirm(
-          title: t(".confirm_title"),
-          body: t(".confirm_body"),
-          btn_text: t(".confirm_accept"),
-          btn_variant: "outline-destructive"
-        )
-      }) %>
+        confirm: CustomConfirm.for_resource_deletion(merchant.name)) %>
     <% end %>
   </div>
 </div>

@@ -29,13 +29,7 @@
         href: chat_path(chat),
         icon: "trash-2",
         method: :delete,
-        data: {
-          turbo_confirm: custom_turbo_confirm(
-            title: "Are you sure you want to delete this chat?",
-            btn_text: "Delete chat",
-            btn_variant: "outline-destructive"
-          )
-        }) %>
+        confirm: CustomConfirm.for_resource_deletion("Chat")) %>
     <% end %>
   <% end %>
 </nav>

@@ -4,20 +4,12 @@
   <div class="flex items-center gap-2">
     <%= render MenuComponent.new do |menu| %>
       <% menu.with_item(
-        variant: "button",
-        text: "Delete all",
-        href: destroy_all_categories_path,
-        method: :delete,
-        icon: "trash-2",
-        data: {
-          turbo_confirm: custom_turbo_confirm(
-            title: "Delete all categories?",
-            body: "All of your transactions will become uncategorized and this cannot be undone.",
-            btn_text: "Delete all categories",
-            btn_variant: "destructive"
-          )
-        }
-      ) %>
+          variant: "button",
+          text: "Delete all",
+          href: destroy_all_categories_path,
+          method: :delete,
+          icon: "trash-2",
+          confirm: CustomConfirm.for_resource_deletion("All categories", high_severity: true)) %>
     <% end %>
 
     <%= render LinkComponent.new(

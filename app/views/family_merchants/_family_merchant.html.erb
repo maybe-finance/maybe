@@ -23,14 +23,7 @@
         href: family_merchant_path(family_merchant),
         icon: "trash-2",
         method: :delete,
-        data: {
-          turbo_confirm: custom_turbo_confirm(
-            title: "Delete #{family_merchant.name}?",
-            body: "This will remove this merchant from all transactions it has been assigned to.",
-            btn_text: "Delete #{family_merchant.name}",
-            btn_variant: "outline-destructive"
-          )
-        }) %>
+        confirm: CustomConfirm.for_resource_deletion(family_merchant.name)) %>
     <% end %>
   </div>
 </div>

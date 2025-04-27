@@ -26,14 +26,12 @@
             variant: "secondary",
             href: disable_mfa_path,
             method: :delete,
-            data: {
-              turbo_confirm: custom_turbo_confirm(
-                title: t(".disable_mfa_confirm"),
-                body: t(".disable_mfa_confirm"),
-                btn_text: t(".disable_mfa"),
-                btn_variant: "outline-destructive"
-              )
-            }
+            confirm: CustomConfirm.new(
+              title: t(".disable_mfa_confirm"),
+              body: t(".disable_mfa_confirm"),
+              btn_text: t(".disable_mfa"),
+              destructive: true
+            )
           ) %>
         <% else %>
           <%= render LinkComponent.new(
