@@ -48,6 +48,31 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     }
   end
 
+  # A custom styled "toggle" switch input.  Underlying input is a `check_box` (uses same API)
+  def toggle(method, options = {}, checked_value = "1", unchecked_value = "0")
+    if object
+      id = "#{object.id}_#{object_name}_#{method}"
+      name = "#{object_name}[#{method}]"
+      checked = object.send(method)
+    else
+      id = "#{method}_toggle_id"
+      name = method
+      checked = options[:checked]
+    end
+
+    @template.render(
+      ToggleComponent.new(
+        id: id,
+        name: name,
+        checked: checked,
+        disabled: options[:disabled],
+        checked_value: checked_value,
+        unchecked_value: unchecked_value,
+        **options
+      )
+    )
+  end
+
   def submit(value = nil, options = {})
     # Rails superclass logic to extract the submit text
     value, options = nil, value if value.is_a?(Hash)

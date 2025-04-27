@@ -1,3 +1,5 @@
+# An extension to `link_to` helper.  All options are passed through to the `link_to` helper with some additional
+# options available.
 class LinkComponent < ButtonishComponent
   attr_reader :frame
 

@@ -391,19 +391,6 @@
     }
   }
 
-  /* Switches */
-  .switch {
-    @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
-    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full;
-    @apply after:transition-transform after:duration-300 after:ease-in-out;
-    @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
-    @apply transition-colors duration-300;
-
-    @variant theme-dark {
-      background-color: var(--color-gray-700);
-    }
-  }
-
   /* Tooltips */
   .tooltip {
     @apply hidden absolute;

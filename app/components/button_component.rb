@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# An extension to `button_to` helper.  All options are passed through to the `button_to` helper with some additional
+# options available.
 class ButtonComponent < ButtonishComponent
   attr_reader :confirm
 

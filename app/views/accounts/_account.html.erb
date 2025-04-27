@@ -35,7 +35,9 @@
       </p>
 
       <% unless account.scheduled_for_deletion? %>
-        <%= render "shared/toggle_form", model: account, attribute: :is_active, turbo_frame: "_top" %>
+        <%= styled_form_with model: account, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
+          <%= f.toggle :is_active, { data: { auto_submit_form_target: "auto" } } %>
+        <% end %>
       <% end %>
     </div>
   </div>

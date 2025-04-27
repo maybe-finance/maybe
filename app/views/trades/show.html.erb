@@ -72,13 +72,7 @@
               <p class="text-secondary"><%= t(".exclude_subtitle") %></p>
             </div>
 
-            <div class="relative inline-block select-none">
-              <%= f.check_box :excluded,
-                      class: "sr-only peer",
-                      "data-auto-submit-form-target": "auto" %>
-              <label for="entry_excluded"
-                         class="switch"></label>
-            </div>
+            <%= f.toggle :excluded, { data: { auto_submit_form_target: "auto" } } %>
           </div>
         <% end %>
 

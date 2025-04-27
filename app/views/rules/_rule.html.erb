@@ -42,7 +42,9 @@
   </div>
 
   <div class="flex items-center gap-4">
-    <%= render "shared/toggle_form", model: rule, attribute: :active %>
+    <%= styled_form_with model: rule, data: { controller: "auto-submit-form" } do |f| %>
+      <%= f.toggle :active, { data: { auto_submit_form_target: "auto" } } %>
+    <% end %>
 
     <%= render MenuComponent.new do |menu| %>
       <% menu.with_item(variant: "link", text: "Edit", href: edit_rule_path(rule), icon: "pencil", data: { turbo_frame: "modal" }) %>
