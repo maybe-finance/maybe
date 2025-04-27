@@ -10,7 +10,7 @@
   </div>
 
   <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
-    <% menu.with_item(variant: "link", text: "Edit chat", href: edit_chat_path(chat), icon: "pencil", open_in: dom_id(chat, "title")) %>
+    <% menu.with_item(variant: "link", text: "Edit chat", href: edit_chat_path(chat), icon: "pencil", frame: dom_id(chat, "title")) %>
     <% menu.with_item(
       variant: "button",
       text: "Delete chat",

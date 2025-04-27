@@ -8,7 +8,8 @@
         method: :post,
         variant: "outline",
         disabled: Current.family.syncing?,
-        icon: "refresh-cw"
+        icon: "refresh-cw",
+        class: ""
       ) %>
 
       <%= render LinkComponent.new(
@@ -16,7 +17,7 @@
         href: new_account_path(return_to: accounts_path),
         variant: "primary",
         icon: "plus",
-        open_in: "modal"
+        frame: :modal
       ) %>
     </div>
   </div>

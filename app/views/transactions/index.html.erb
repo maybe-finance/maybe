@@ -20,29 +20,26 @@
             icon: "download",
             variant: "outline",
             href: new_import_path,
-            open_in: :modal,
+            frame: :modal,
           ) %>
         </div>
 
-        <div class="hidden md:flex">
-          <%= render LinkComponent.new(
+        <%= render LinkComponent.new(
             text: "New transaction",
             icon: "plus",
             variant: "primary",
             href: new_transaction_path,
-            open_in: :modal,
+            frame: :modal,
+            class: "hidden md:inline-flex"
           ) %>
-        </div>
 
-        <div class="md:hidden">
-          <%= render LinkComponent.new(
+        <%= render LinkComponent.new(
             icon: "plus",
             variant: "icon-inverse",
             href: new_transaction_path,
-            open_in: :modal,
-            rounded: true
+            frame: :modal,
+            class: "rounded-full md:hidden"
           ) %>
-        </div>
       </div>
     </div>
   </header>

@@ -1,4 +1,4 @@
-module ButtonStylable
+class ButtonishComponent < ViewComponent::Base
   VARIANTS = {
     primary: {
       container_classes: "text-inverse bg-inverse hover:bg-inverse-hover disabled:bg-gray-500 theme-dark:disabled:bg-gray-400",
@@ -36,44 +36,59 @@ module ButtonStylable
 
   SIZES = {
     sm: {
-      padding_classes: "px-2 py-1",
-      icon_padding_classes: "p-2",
+      container_classes: "px-2 py-1",
+      icon_container_classes: "inline-flex items-center justify-center w-8 h-8",
       radius_classes: "rounded-md",
       text_classes: "text-sm",
       icon_classes: "w-4 h-4"
     },
     md: {
-      padding_classes: "px-3 py-2",
-      icon_padding_classes: "p-2",
+      container_classes: "px-3 py-2",
+      icon_container_classes: "inline-flex items-center justify-center w-9 h-9",
       radius_classes: "rounded-lg",
       text_classes: "text-sm",
       icon_classes: "w-5 h-5"
     },
     lg: {
-      padding_classes: "px-4 py-3",
-      icon_padding_classes: "p-2",
+      container_classes: "px-4 py-3",
+      icon_container_classes: "inline-flex items-center justify-center w-10 h-10",
       radius_classes: "rounded-xl",
       text_classes: "text-base",
       icon_classes: "w-6 h-6"
     }
   }.freeze
 
-  attr_reader :variant, :size, :extra_classes
+  attr_reader :variant, :size, :href, :icon, :icon_position, :text, :full_width, :extra_classes, :opts
 
-  def initialize(opts = {})
-    @variant = opts.delete(:variant) || :primary
-    @size = opts.delete(:size) || :md
+  def initialize(variant: :primary, size: :md, href: nil, text: nil, icon: nil, icon_position: :left, full_width: false, **opts)
+    @variant = variant.to_s.underscore.to_sym
+    @size = size.to_sym
+    @href = href
+    @icon = icon
+    @icon_position = icon_position.to_sym
+    @text = text
+    @full_width = full_width
     @extra_classes = opts.delete(:class)
+    @opts = opts
+  end
+
+  def call
+    raise NotImplementedError, "ButtonishComponent is an abstract class and cannot be instantiated directly."
   end
 
   def container_classes(override_classes = nil)
     class_names(
-      "inline-flex items-center gap-1 font-medium whitespace-nowrap",
-      icon_only? ? size_data.dig(:icon_padding_classes) : size_data.dig(:padding_classes),
-      size_data.dig(:radius_classes),
+      "font-medium whitespace-nowrap",
+      merged_base_classes,
+      full_width ? "w-full justify-center" : nil,
+      container_size_classes,
       size_data.dig(:text_classes),
       variant_data.dig(:container_classes)
     )
+  end
+
+  def container_size_classes
+    icon_only? ? size_data.dig(:icon_container_classes) : size_data.dig(:container_classes)
   end
 
   def icon_classes
@@ -89,14 +104,44 @@ module ButtonStylable
 
   private
     def variant_data
-      self.class::VARIANTS.dig(variant.to_s.underscore.to_sym)
+      self.class::VARIANTS.dig(variant)
     end
 
     def size_data
-      self.class::SIZES.dig(size.to_sym)
+      self.class::SIZES.dig(size)
     end
 
-    def known_override_classes
-      [ "hidden", "rounded-full", "w-full", "justify-center", "justify-start" ]
+    # Make sure that user can override common classes like `hidden`
+    def merged_base_classes
+      base_display_classes = "inline-flex items-center gap-1"
+      base_radius_classes = size_data.dig(:radius_classes)
+
+      extra_classes_list = (extra_classes || "").split
+
+      has_display_override = extra_classes_list.any? { |c| permitted_display_override_classes.include?(c) }
+      has_radius_override = extra_classes_list.any? { |c| permitted_radius_override_classes.include?(c) }
+
+      base_classes = []
+
+      unless has_display_override
+        base_classes << base_display_classes
+      end
+
+      unless has_radius_override
+        base_classes << base_radius_classes
+      end
+
+      class_names(
+        base_classes,
+        extra_classes
+      )
+    end
+
+    def permitted_radius_override_classes
+      [ "rounded-full" ]
+    end
+
+    def permitted_display_override_classes
+      [ "hidden", "flex" ]
     end
 end

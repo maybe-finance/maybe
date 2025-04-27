@@ -11,8 +11,7 @@ class LinkComponentPreview < ViewComponent::Preview
   # @param icon select ["", "plus", "arrow-right"]
   # @param icon_position select ["left", "right"]
   # @param full_width toggle
-  # @param rounded toggle
-  def default(variant: "default", size: "md", icon: "plus", icon_position: "left", full_width: false, rounded: false)
+  def default(variant: "default", size: "md", icon: "plus", icon_position: "left", full_width: false)
     render LinkComponent.new(
       href: "#",
       text: "Preview link",
@@ -20,8 +19,7 @@ class LinkComponentPreview < ViewComponent::Preview
       size: size,
       icon: icon,
       icon_position: icon_position,
-      full_width: full_width,
-      rounded: rounded
+      full_width: full_width
     )
   end
 end

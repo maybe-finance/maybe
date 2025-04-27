@@ -56,14 +56,13 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     @template.render(
       ButtonComponent.new(
         text: value,
-        full_width: true,
-        data: { turbo_submits_with: "Submitting..." }
+        data: { turbo_submits_with: "Submitting..." },
+        full_width: true
       )
     )
   end
 
   private
-
     def build_styled_field(label, field, options, remove_padding_right: false)
       if options[:inline]
         label + field
