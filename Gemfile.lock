@@ -299,7 +299,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.6-x86_64-linux-musl)
       racc (~> 1.4)
-    octokit (9.2.0)
+    octokit (10.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     pagy (9.3.4)
