@@ -11,8 +11,13 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <%= render TabsComponent.new(active_tab: "csv-upload", url_param_key: "tab") do |container| %>
-      <% container.with_tab(id: "csv-upload", label: "Upload CSV") do %>
+    <%= render TabsComponent.new(active_tab: params[:tab] || "csv-upload", url_param_key: "tab", testid: "import-tabs") do |tabs| %>
+      <% tabs.with_nav do |nav| %>
+        <% nav.with_btn(id: "csv-upload", label: "Upload CSV") %>
+        <% nav.with_btn(id: "csv-paste", label: "Copy & Paste") %>
+      <% end %>
+
+      <% tabs.with_panel(tab_id: "csv-upload") do %>
         <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
           <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 
@@ -42,7 +47,7 @@
         <% end %>
       <% end %>
 
-      <% container.with_tab(id: "csv-paste", label: "Copy & Paste") do %>
+      <% tabs.with_panel(tab_id: "csv-paste") do %>
         <%= styled_form_with model: @import, scope: :import, url: import_upload_path(@import), multipart: true, class: "space-y-2" do |form| %>
           <%= form.select :col_sep, Import::SEPARATORS, label: true %>
 

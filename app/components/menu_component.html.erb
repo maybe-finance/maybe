@@ -1,4 +1,4 @@
-<%= tag.div data: { controller: "menu", menu_placement_value: placement, menu_offset_value: offset } do %>
+<%= tag.div data: { controller: "menu", menu_placement_value: placement, menu_offset_value: offset, testid: testid } do %>
   <% if variant == :icon %>
     <%= render ButtonComponent.new(variant: "icon", icon: icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
   <% elsif variant == :button %>
@@ -11,15 +11,17 @@
     </button>
   <% end %>
 
-  <div data-menu-target="content" class="hidden min-w-[200px] z-50 shadow-border-xs bg-container rounded-lg">
-    <%= header %>
+  <div data-menu-target="content" class="px-2 lg:px-0 max-w-full hidden z-50">
+    <div class="mx-auto min-w-[200px] shadow-border-xs bg-container rounded-lg">
+      <%= header %>
 
-    <div class="py-1">
-      <% items.each do |item| %>
-        <%= item %>
+      <%= tag.div class: class_names("py-1" => !no_padding) do %>
+        <% items.each do |item| %>
+          <%= item %>
+        <% end %>
+
+        <%= custom_content %>
       <% end %>
-
-      <%= custom_content %>
     </div>
   </div>
 <% end %>

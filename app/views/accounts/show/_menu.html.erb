@@ -1,6 +1,6 @@
 <%# locals: (account:) %>
 
-<%= render MenuComponent.new do |menu| %>
+<%= render MenuComponent.new(testid: "account-menu") do |menu| %>
   <% menu.with_item(variant: "link", text: "Edit", href: edit_account_path(account), icon: "pencil-line", data: { turbo_frame: :modal }) %>
 
   <% unless account.crypto? %>

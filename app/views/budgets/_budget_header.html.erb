@@ -19,16 +19,16 @@
     <% end %>
   </div>
 
-  <div data-controller="menu" data-menu-placement-value="bottom-start">
-    <%= tag.button data: { menu_target: "button" }, class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2" do %>
+  <%= render MenuComponent.new(variant: "button") do |menu| %>
+    <% menu.with_button class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2"  do %>
       <span class="text-primary font-medium text-3xl md:text-base"><%= @budget.name %></span>
       <%= lucide_icon "chevron-down", class: "w-5 h-5 shrink-0 text-secondary" %>
     <% end %>
 
-    <div data-menu-target="content" class="hidden z-10">
+    <% menu.with_custom_content do %>
       <%= render "budgets/picker", family: Current.family, year: budget.start_date.year %>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 
   <div class="ml-auto">
     <%= render LinkComponent.new(

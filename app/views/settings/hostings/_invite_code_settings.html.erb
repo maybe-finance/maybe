@@ -5,9 +5,9 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <%= styled_form_with model: Setting.new, 
-                         url: settings_hosting_path, 
-                         method: :patch, 
+    <%= styled_form_with model: Setting.new,
+                         url: settings_hosting_path,
+                         method: :patch,
                          data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "change" } do |form| %>
       <%= form.toggle :require_invite_for_signup, { data: { auto_submit_form_target: "auto" } } %>
     <% end %>

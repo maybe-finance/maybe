@@ -16,17 +16,20 @@
                             "data-auto-submit-form-target": "auto" %>
       </div>
     </div>
-    <div data-controller="menu" class="relative">
-      <%= render ButtonComponent.new(
-        text: "Filter",
-        icon: "list-filter",
-        variant: "outline",
+
+    <%= render MenuComponent.new(variant: "button", no_padding: true) do |menu| %>
+      <% menu.with_button(
         id: "transaction-filters-button",
         type: "button",
+        text: "Filter",
+        variant: "outline",
+        icon: "list-filter",
         data: { menu_target: "button" }
       ) %>
 
-      <%= render "transactions/searches/menu", form: form %>
-    </div>
+      <% menu.with_custom_content do %>
+        <%= render "transactions/searches/menu", form: form %>
+      <% end %>
+    <% end %>
   </div>
 <% end %>
