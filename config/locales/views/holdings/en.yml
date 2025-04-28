@@ -9,13 +9,13 @@ en:
       per_share: per share
       shares: "%{qty} shares"
     index:
-      cost: cost
+      average_cost: Average cost
       holdings: Holdings
-      name: name
+      name: Name
       new_holding: New transaction
       no_holdings: No holdings to show.
-      return: total return
-      weight: weight
+      return: Total return
+      weight: Weight
     missing_price_tooltip:
       description: This investment has missing values and we could not calculate
         its returns or value.
@@ -33,5 +33,5 @@ en:
       settings: Settings
       ticker_label: Ticker
       trade_history_entry: "%{qty} shares of %{security} at %{price}"
-      trend_label: Trend
+      total_return_label: Total Return
       unknown: Unknown

@@ -4,6 +4,9 @@ en:
     changelog:
       title: What's new
     dashboard:
+      net_worth_chart:
+        data_not_available: Data not available for the selected period
+        title: Net Worth
       no_account_empty_state:
         new_account: New account
         no_account_subtitle: Since no accounts have been added, there's no data to

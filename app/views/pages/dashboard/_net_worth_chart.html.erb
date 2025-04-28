@@ -3,19 +3,14 @@
 <div class="flex justify-between gap-4 px-4">
   <div class="space-y-2">
     <div class="space-y-2">
-      <p class="text-sm text-secondary font-medium">Net Worth</p>
+      <p class="text-sm text-secondary font-medium"><%= t(".title") %></p>
       <p class="text-primary -space-x-0.5 text-3xl font-medium">
         <%= series.current.format %>
       </p>
       <% if series.trend.nil? %>
-        <p class="text-sm text-secondary">Data not available for the selected period</p>
-      <% elsif series.trend.direction.flat? %>
-        <p class="text-sm text-secondary">No change vs. prior period</p>
+        <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
       <% else %>
-        <div class="flex items-center gap-2">
-          <%= render partial: "shared/trend_change", locals: { trend: series.trend } %>
-          <span class="text-sm text-secondary"><%= period.comparison_label %></span>
-        </div>
+        <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
       <% end %>
     </div>
   </div>
@@ -32,6 +27,6 @@
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
 <% else %>
   <div class="w-full h-full flex items-center justify-center">
-    <p class="text-secondary text-sm">No data available for the selected period.</p>
+    <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
   </div>
 <% end %>
