@@ -83,6 +83,7 @@ class Sync < ApplicationRecord
 
       Sentry.capture_exception(error) do |scope|
         scope.set_context("sync", { id: id, syncable_type: syncable_type, syncable_id: syncable_id })
+        scope.set_tags(sync_id: id)
       end
 
       update!(
