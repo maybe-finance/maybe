@@ -322,7 +322,7 @@ export default class extends Controller {
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
           .attr("cy", this._d3YScale(this._getDatumValue(d)))
-          .attr("r", 8)
+          .attr("r", 10)
           .attr("fill", this._trendColor)
           .attr("fill-opacity", "0.1")
           .attr("pointer-events", "none");
@@ -333,7 +333,7 @@ export default class extends Controller {
           .attr("class", "data-point-circle")
           .attr("cx", this._d3XScale(d.date))
           .attr("cy", this._d3YScale(this._getDatumValue(d)))
-          .attr("r", 3)
+          .attr("r", 5)
           .attr("fill", this._trendColor)
           .attr("pointer-events", "none");
 
@@ -364,19 +364,17 @@ export default class extends Controller {
       <div style="margin-bottom: 4px; color: var(--color-gray-500);">
         ${datum.date_formatted}
       </div>
-
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <svg width="10" height="10">
-            <circle
-              cx="5"
-              cy="5"
-              r="4"
-              stroke="${datum.trend.color}"
-              fill="transparent"
-              stroke-width="1"></circle>
-          </svg>
-
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 0px;">
+        <div style="display: flex; align-items: center; gap: 8px; color: var(--color-black);">
+          <div style="display: flex; align-items: center; justify-content: center; height: 16px; width: 16px;">
+            ${datum.trend.previous.amount === datum.trend.current.amount ? `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus-icon lucide-minus"><path d="M5 12h14"/></svg>
+            ` : Number(datum.trend.previous.amount) < Number(datum.trend.current.amount) ? `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            ` : `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right-icon lucide-arrow-down-right"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
+              `}
+          </div>
           ${this._extractFormattedValue(datum.trend.current)}
         </div>
 

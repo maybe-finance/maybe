@@ -38,7 +38,7 @@
           </div>
 
           <div class="flex items-center justify-between text-sm">
-            <dt class="text-secondary"><%= t(".trend_label") %></dt>
+            <dt class="text-secondary"><%= t(".total_return_label") %></dt>
             <dd style="color: <%= @holding.trend&.color %>;">
               <%= @holding.trend ? render("shared/trend_change", trend: @holding.trend) : t(".unknown") %>
             </dd>

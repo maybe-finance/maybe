@@ -3,16 +3,7 @@
 
 <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
   <div class="px-4">
-    <% if trend.direction.flat? %>
-      <%= tag.span t(".no_change"), class: "text-secondary" %>
-    <% else %>
-      <%= tag.span "#{trend.value.positive? ? "+" : ""}#{format_money(trend.value)}", style: "color: #{trend.color}" %>
-      <% unless trend.percent.infinite? %>
-        <%= tag.span "(#{trend.percent}%)", style: "color: #{trend.color}" %>
-      <% end %>
-    <% end %>
-
-    <%= tag.span @period.comparison_label, class: "text-secondary" %>
+    <%= render partial: "shared/trend_change", locals: { trend: trend, comparison_label: @period.comparison_label } %>
   </div>
 
   <div class="h-64 pb-4">
@@ -24,7 +15,7 @@
         data-time-series-chart-data-value="<%= series.to_json %>"></div>
     <% else %>
       <div class="w-full h-full flex items-center justify-center">
-        <p class="text-secondary text-sm">No data available for the selected period.</p>
+        <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
       </div>
     <% end %>
   </div>
