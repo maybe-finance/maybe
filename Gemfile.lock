@@ -394,10 +394,10 @@ GEM
       io-console (~> 0.5)
     rexml (3.4.1)
     rotp (6.3.0)
-    rqrcode (2.2.0)
+    rqrcode (3.0.0)
       chunky_png (~> 1.0)
-      rqrcode_core (~> 1.0)
-    rqrcode_core (1.2.0)
+      rqrcode_core (~> 2.0)
+    rqrcode_core (2.0.0)
     rubocop (1.74.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -578,7 +578,7 @@ DEPENDENCIES
   redcarpet
   redis (~> 5.4)
   rotp (~> 6.3)
-  rqrcode (~> 2.2)
+  rqrcode (~> 3.0)
   rubocop-rails-omakase
   ruby-lsp-rails
   ruby-openai
