@@ -1,0 +1,22 @@
+<%= tag.div class: "space-y-4", data: {
+  controller: "tabs",
+  tabs_url_param_key_value: url_param_key,
+  tabs_nav_btn_active_class: nav_btn_active_classes,
+  tabs_nav_btn_inactive_class: nav_btn_inactive_classes
+} do %>
+  <nav class="flex bg-surface-inset p-1 rounded-lg">
+    <% tabs.each do |tab| %>
+      <%= tag.button class: nav_btn_classes(active: tab.id == active_tab), data: { id: tab.id, action: "tabs#show", tabs_target: "navBtn" } do %>
+        <%= tab.label %>
+      <% end %>
+    <% end %>
+  </nav>
+
+  <div>
+    <% tabs.each do |tab| %>
+      <%= tag.div class: class_names("hidden" => tab.id != active_tab), data: { id: tab.id, tabs_target: "panel" } do %>
+        <%= tab %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

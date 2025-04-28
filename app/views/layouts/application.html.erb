@@ -23,7 +23,7 @@
                 <%= icon("x", color: "gray") %>
               </button>
             </div>
-            <%= render "accounts/account_sidebar_tabs", family: Current.family %>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
           </div>
         <% end %>
 
@@ -67,7 +67,7 @@
           <%= yield :sidebar %>
         <% else %>
           <div id="account-sidebar-tabs" data-turbo-permanent>
-            <%= render "accounts/account_sidebar_tabs", family: Current.family %>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
           </div>
         <% end %>
       <% end %>

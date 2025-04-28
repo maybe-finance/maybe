@@ -2,9 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="tabs"
 export default class extends Controller {
-  static classes = ["active", "inactive"];
-  static targets = ["btn", "tab"];
-  static values = { defaultTab: String, localStorageKey: String };
+  static classes = ["active", "inactive", "navBtnActive", "navBtnInactive"];
+  static targets = ["btn", "tab", "panel", "navBtn"];
+  static values = {
+    defaultTab: String,
+    localStorageKey: String,
+    urlParamKey: String,
+  };
 
   connect() {
     const selectedTab = this.hasLocalStorageKeyValue
@@ -27,6 +31,35 @@ export default class extends Controller {
       if (this.hasLocalStorageKeyValue) {
         this.storeTab(selectedId);
       }
+    }
+  }
+
+  show(e) {
+    const selectedTabId = e.target.dataset.id;
+
+    this.navBtnTargets.forEach((navBtn) => {
+      if (navBtn.dataset.id === selectedTabId) {
+        navBtn.classList.add(...this.navBtnActiveClasses);
+        navBtn.classList.remove(...this.navBtnInactiveClasses);
+      } else {
+        navBtn.classList.add(...this.navBtnInactiveClasses);
+        navBtn.classList.remove(...this.navBtnActiveClasses);
+      }
+    });
+
+    this.panelTargets.forEach((panel) => {
+      if (panel.dataset.id === selectedTabId) {
+        panel.classList.remove("hidden");
+      } else {
+        panel.classList.add("hidden");
+      }
+    });
+
+    // Update URL with the selected tab
+    if (this.urlParamKeyValue) {
+      const url = new URL(window.location.href);
+      url.searchParams.set(this.urlParamKeyValue, selectedTabId);
+      window.history.replaceState({}, "", url);
     }
   }
 

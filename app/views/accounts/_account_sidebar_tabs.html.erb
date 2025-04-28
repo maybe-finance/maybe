@@ -1,48 +1,29 @@
-<%# locals: (family:) %>
+<%# locals: (family:, active_account_group_tab:) %>
 
-<% if family.requires_data_provider? && Provider::Registry.get_provider(:synth).nil? %>
-  <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
-    <summary class="flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <%= icon "triangle-alert", size: "sm" %>
-        <p class="font-medium">Missing historical data</p>
+<div>
+  <% if family.requires_data_provider? && Provider::Registry.get_provider(:synth).nil? %>
+    <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
+      <summary class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <%= icon "triangle-alert", size: "sm" %>
+          <p class="font-medium">Missing historical data</p>
+        </div>
+
+        <%= lucide_icon "chevron-down", class: "text-yellow-600 group-open:transform group-open:rotate-180 w-5" %>
+      </summary>
+      <div class="text-xs py-2 space-y-2">
+        <p>Maybe uses Synth API to fetch historical exchange rates, security prices, and more.  This data is required to calculate accurate historical account balances.</p>
+
+        <p>
+          <%= link_to "Add your Synth API key here.", settings_hosting_path, class: "text-yellow-600 underline" %>
+        </p>
       </div>
+    </details>
+  <% end %>
 
-      <%= lucide_icon "chevron-down", class: "text-yellow-600 group-open:transform group-open:rotate-180 w-5" %>
-    </summary>
-    <div class="text-xs py-2 space-y-2">
-      <p>Maybe uses Synth API to fetch historical exchange rates, security prices, and more.  This data is required to calculate accurate historical account balances.</p>
-
-      <p>
-        <%= link_to "Add your Synth API key here.", settings_hosting_path, class: "text-yellow-600 underline" %>
-      </p>
-    </div>
-  </details>
-<% end %>
-
-<div
-  class="space-y-3"
-  data-controller="tabs"
-  data-tabs-local-storage-key-value="account-sidebar-tabs"
-  data-tabs-active-class="bg-surface shadow-sm text-primary"
-  data-tabs-inactive-class="text-secondary"
-  data-tabs-default-tab-value="assets-tab">
-  <div class="bg-surface-inset rounded-lg p-1 flex">
-    <button type="button" data-id="assets-tab" class="w-1/3 px-2 py-1 rounded-md text-sm text-secondary font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      Assets
-    </button>
-
-    <button type="button" data-id="debts-tab" class="w-1/3 px-2 py-1 rounded-md text-secondary text-sm font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      Debts
-    </button>
-
-    <button type="button" data-id="all-tab" class="w-1/3 px-2 py-1 rounded-md text-secondary text-sm font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      All
-    </button>
-  </div>
-
-  <div data-tabs-target="tab" id="assets-tab">
-    <%= render LinkComponent.new(
+  <%= render TabsComponent.new(active_tab: active_account_group_tab, url_param_key: "account_group_tab") do |container| %>
+    <% container.with_tab(id: "assets", label: "Assets") do %>
+      <%= render LinkComponent.new(
       text: "New asset",
       variant: "ghost",
       href: new_account_path(step: "method_select", classification: "asset"),
@@ -52,15 +33,15 @@
       class: "justify-start"
     ) %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups("asset").each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+      <div class="space-y-2">
+        <% family.balance_sheet.account_groups("asset").each do |group| %>
+          <%= render "accounts/accountable_group", account_group: group %>
+        <% end %>
+      </div>
+    <% end %>
 
-  <div data-tabs-target="tab" id="debts-tab" class="hidden">
-    <%= render LinkComponent.new(
+    <% container.with_tab(id: "debts", label: "Debts") do %>
+      <%= render LinkComponent.new(
       text: "New debt",
       variant: "ghost",
       href: new_account_path(step: "method_select", classification: "liability"),
@@ -70,15 +51,15 @@
       class: "justify-start"
     ) %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups("liability").each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+      <div class="space-y-2">
+        <% family.balance_sheet.account_groups("liability").each do |group| %>
+          <%= render "accounts/accountable_group", account_group: group %>
+        <% end %>
+      </div>
+    <% end %>
 
-  <div data-tabs-target="tab" id="all-tab" class="hidden">
-    <%= render LinkComponent.new(
+    <% container.with_tab(id: "all", label: "All") do %>
+      <%= render LinkComponent.new(
       text: "New account",
       variant: "ghost",
       full_width: true,
@@ -88,10 +69,11 @@
       class: "justify-start"
     ) %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups.each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+      <div class="space-y-2">
+        <% family.balance_sheet.account_groups.each do |group| %>
+          <%= render "accounts/accountable_group", account_group: group %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

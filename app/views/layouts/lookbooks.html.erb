@@ -8,7 +8,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="p-4 bg-container">
+  <body class="p-4 bg-container <%= params.dig(:lookbook, :display, :container_classes) %>">
     <%= yield %>
   </body>
 </html>
