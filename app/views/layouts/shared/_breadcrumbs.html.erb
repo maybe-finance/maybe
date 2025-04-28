@@ -2,7 +2,7 @@
 
 <nav class="items-center gap-2 mb-6 hidden md:flex">
   <% if sidebar_toggle_enabled %>
-    <%= render ButtonComponent.new(variant: "icon", icon: "panel-left", data: { action: "sidebar#toggleLeftPanel" }) %>
+    <%= icon("panel-left", as_button: true, data: { action: "sidebar#toggleLeftPanel" }) %>
   <% end %>
 
   <div class="py-2 flex items-center gap-2">
@@ -23,7 +23,7 @@
 
   <% if sidebar_toggle_enabled %>
     <div class="ml-auto">
-      <%= render ButtonComponent.new(variant: "icon", icon: "panel-right", data: { action: "sidebar#toggleRightPanel" }, title: "Toggle AI Assistant") %>
+      <%= icon("panel-right", as_button: true, data: { action: "sidebar#toggleRightPanel" }, title: "Toggle AI assistant") %>
     </div>
   <% end %>
 </nav>

@@ -22,8 +22,8 @@
 
     <% if Rails.env.development? %>
       <div class="fixed bottom-10 left-2">
-        <%= render ButtonComponent.new(variant: "icon", icon: "eclipse", data: { action: "theme#toDark" }) %>
-        <%= render ButtonComponent.new(variant: "icon", icon: "sun", data: { action: "theme#toLight" }) %>
+        <%= icon("eclipse", as_button: true, data: { action: "theme#toDark" }) %>
+        <%= icon("sun", as_button: true, data: { action: "theme#toLight" }) %>
       </div>
     <% end %>
 

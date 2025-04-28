@@ -58,9 +58,9 @@ class ButtonishComponent < ViewComponent::Base
     }
   }.freeze
 
-  attr_reader :variant, :size, :href, :icon, :icon_position, :text, :full_width, :extra_classes, :opts
+  attr_reader :variant, :size, :href, :icon, :icon_position, :text, :full_width, :extra_classes, :frame, :opts
 
-  def initialize(variant: :primary, size: :md, href: nil, text: nil, icon: nil, icon_position: :left, full_width: false, **opts)
+  def initialize(variant: :primary, size: :md, href: nil, text: nil, icon: nil, icon_position: :left, full_width: false, frame: nil, **opts)
     @variant = variant.to_s.underscore.to_sym
     @size = size.to_sym
     @href = href
@@ -69,6 +69,7 @@ class ButtonishComponent < ViewComponent::Base
     @text = text
     @full_width = full_width
     @extra_classes = opts.delete(:class)
+    @frame = frame
     @opts = opts
   end
 

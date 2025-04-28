@@ -29,6 +29,10 @@ class ButtonComponent < ButtonishComponent
         data = data.merge(turbo_confirm: confirm.to_data_attribute)
       end
 
+      if frame.present?
+        data = data.merge(turbo_frame: frame)
+      end
+
       merged_opts.merge(
         class: class_names(container_classes, extra_classes),
         data: data

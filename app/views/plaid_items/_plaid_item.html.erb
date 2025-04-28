@@ -93,10 +93,10 @@
             </div>
           <% end %>
         <% else %>
-          <%= render ButtonComponent.new(
-            variant: "icon",
-            icon: "refresh-cw",
-            href: sync_plaid_item_path(plaid_item),
+          <%= icon(
+            "refresh-cw", 
+            as_button: true, 
+            href: sync_plaid_item_path(plaid_item), 
             disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
           ) %>
         <% end %>

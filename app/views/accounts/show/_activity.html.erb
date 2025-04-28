@@ -37,7 +37,7 @@
         <div class="flex gap-2 mb-4">
           <div class="grow">
             <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
-              <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
+              <%= icon("search") %>
               <%= hidden_field_tag :account_id, @account.id %>
               <%= form.search_field :search,
                             placeholder: "Search entries by name",

@@ -19,11 +19,11 @@
       <div class="items-center gap-1 hidden lg:flex">
         <%# These are disabled for now, but in the future, will all open specific menus with their own context and search %>
         <% ["plus", "command", "at-sign", "mouse-pointer-click"].each do |icon| %>
-          <%= render ButtonComponent.new(variant: "icon", icon: icon, disabled: true, class: "cursor-not-allowed", title: "Coming soon") %>
+          <%= icon(icon, as_button: true, disabled: true, class: "cursor-not-allowed", title: "Coming soon") %>
         <% end %>
       </div>
 
-      <%= render ButtonComponent.new(variant: "icon", icon: "arrow-up", type: "submit") %>
+      <%= icon("arrow-up", as_button: true, type: "submit") %>
     </div>
   <% end %>
 

@@ -19,10 +19,10 @@
       <p class="text-sm text-secondary">of the following conditions</p>
     </div>
 
-    <%= render ButtonComponent.new(
-      icon: "trash-2",
-      variant: "icon",
+    <%= icon(
+      "trash-2",
       size: "sm",
+      as_button: true,
       data: { action: "element-removal#remove" }
     ) %>
   </div>

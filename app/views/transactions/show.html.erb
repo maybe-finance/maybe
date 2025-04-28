@@ -135,12 +135,14 @@
             <p class="text-secondary"><%= t(".delete_subtitle") %></p>
           </div>
 
-          <%= button_to t(".delete"),
-                  entry_path(@entry),
-                  method: :delete,
-                  class:  "rounded-lg px-3 py-2 text-red-500 text-sm
-                           font-medium border border-secondary",
-                  data:   { turbo_confirm: true, turbo_frame: "_top" } %>
+          <%= render ButtonComponent.new(
+            text: t(".delete"),
+            variant: "outline-destructive",
+            href: entry_path(@entry),
+            method: :delete,
+            confirm: CustomConfirm.for_resource_deletion("transaction"),
+            frame: "_top"
+          ) %>
         </div>
       </div>
     <% end %>

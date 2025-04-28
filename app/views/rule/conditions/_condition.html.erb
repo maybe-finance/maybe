@@ -32,9 +32,9 @@
     </div>
   </div>
 
-  <%= render ButtonComponent.new(
-    icon: "trash-2",
-    variant: "icon",
+  <%= icon(
+    "trash-2",
+    as_button: true,
     size: "sm",
     data: { action: "rule--conditions#remove", rule__conditions_destroy_param: condition.persisted? }
   ) %>

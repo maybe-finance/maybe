@@ -10,11 +10,6 @@ class LinkComponent < ButtonishComponent
     }
   ).freeze
 
-  def initialize(frame: nil, **opts)
-    super(**opts)
-    @frame = frame
-  end
-
   def merged_opts
     merged_opts = opts.dup || {}
     data = merged_opts.delete(:data) || {}

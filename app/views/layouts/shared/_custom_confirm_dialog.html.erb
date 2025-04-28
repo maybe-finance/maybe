@@ -3,12 +3,7 @@
     <div class="space-y-2">
       <div class="flex items-center justify-between gap-2">
         <h3 class="font-medium text-primary" data-confirm-dialog-target="title">Are you sure?</h3>
-
-        <%= render ButtonComponent.new(
-          variant: "icon",
-          icon: "x",
-          value: "cancel",
-        ) %>
+        <%= icon("x", as_button: true, value: "cancel") %>
       </div>
 
       <p class="text-sm text-secondary" data-confirm-dialog-target="subtitle">This action cannot be undone.</p>

@@ -25,7 +25,7 @@
 
       <% unless account.scheduled_for_deletion? %>
         <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
-          <%= lucide_icon "pencil-line", class: "w-4 h-4 text-secondary" %>
+          <%= icon("pencil-line", size: "sm") %>
         <% end %>
       <% end %>
     </div>
