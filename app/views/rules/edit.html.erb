@@ -1,5 +1,5 @@
 <%= link_to "Back to rules", rules_path %>
 
-<%= modal_form_wrapper title: "Edit #{@rule.resource_type} rule" do %>
+<%= modal_form_wrapper title: @rule.name.present? ? "Edit #{@rule.resource_type} rule \"#{@rule.name}\"" : "Edit #{@rule.resource_type} rule" do %>
   <%= render "rules/form", rule: @rule %>
 <% end %>

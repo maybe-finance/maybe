@@ -10,6 +10,16 @@
   <% end %>
 
   <section class="space-y-4">
+    <h3 class="text-sm font-medium text-primary flex items-center gap-1">
+      <%= lucide_icon("tag", class: "w-4 h-4") %>
+      Rule name (optional)
+    </h3>
+    <div class="flex items-center gap-2">
+      <%= f.text_field :name, placeholder: "Enter a name for this rule", class: "form-field__input" %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
     <h3 class="text-sm font-medium text-primary">If <%= rule.resource_type %></h3>
 
     <%# Condition template, used by Stimulus controller to add new conditions dynamically %>

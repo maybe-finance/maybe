@@ -2,6 +2,9 @@
 
 <div class="flex justify-between items-center gap-4 bg-white shadow-border-xs rounded-md p-4">
   <div class="text-sm space-y-1.5">
+    <% if rule.name.present? %>
+      <h3 class="font-medium text-lg text-primary"><%= rule.name %></h3>
+    <% end %>
     <% if rule.conditions.any? %>
       <p class="flex items-center flex-wrap gap-1.5">
         <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
