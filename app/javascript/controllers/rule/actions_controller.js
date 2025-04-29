@@ -19,10 +19,13 @@ export default class extends Controller {
     );
 
     if (actionExecutor.type === "select") {
-      this.#updateValueSelectFor(actionExecutor);
-      this.#showAndEnableValueSelect();
+      this.#convertToSelect(actionExecutor);
+      this.#showActionValue();
+    } else if (actionExecutor.type === "text") {
+      this.#convertToTextInput();
+      this.#showActionValue();
     } else {
-      this.#hideAndDisableValueSelect();
+      this.#hideActionValue();
     }
   }
 
@@ -30,26 +33,62 @@ export default class extends Controller {
     return this.actionValueTarget.querySelector("select");
   }
 
-  #showAndEnableValueSelect() {
+  get valueInputEl() {
+    return this.actionValueTarget.querySelector("input");
+  }
+
+  #showActionValue() {
     this.actionValueTarget.classList.remove("hidden");
-    this.valueSelectEl.disabled = false;
   }
 
-  #hideAndDisableValueSelect() {
+  #hideActionValue() {
     this.actionValueTarget.classList.add("hidden");
-    this.valueSelectEl.disabled = true;
   }
 
-  #updateValueSelectFor(actionExecutor) {
-    // Clear existing options
-    this.valueSelectEl.innerHTML = "";
 
-    // Add new options
+  #convertToTextInput() {
+    // If we already have a text input, do nothing
+    if (this.valueInputEl && this.valueInputEl.type === "text") {
+      return;
+    }
+
+    // Convert select to text input
+    const valueField = this.valueSelectEl || this.valueInputEl;
+
+    if (valueField) {
+      const textInput = document.createElement("input");
+      textInput.type = "text";
+      textInput.name = valueField.name;
+      textInput.id = valueField.id;
+      textInput.placeholder = "Enter a value";
+      textInput.className = "form-field__input";
+
+      valueField.replaceWith(textInput);
+    }
+  }
+
+  // Converts a field to a select with new options based on the action executor
+  // This includes a current select with different options
+  #convertToSelect(actionExecutor) {
+    const valueField = this.valueInputEl || this.valueSelectEl;
+
+    if (!valueField) {
+      return;
+    }
+
+    const selectInput = document.createElement("select");
+    selectInput.name = valueField.name;
+    selectInput.id = valueField.id;
+    selectInput.className = "form-field__input";
+
+    // Add options
     for (const option of actionExecutor.options) {
       const optionEl = document.createElement("option");
       optionEl.value = option[1];
       optionEl.textContent = option[0];
-      this.valueSelectEl.appendChild(optionEl);
+      selectInput.appendChild(optionEl);
     }
+
+    valueField.replaceWith(selectInput);
   }
 }
