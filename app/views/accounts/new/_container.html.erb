@@ -1,7 +1,7 @@
 <%# locals: (title:, back_path: nil) %>
 
-<%= modal do %>
-  <div class="flex flex-col w-screen max-w-xl relative" data-controller="list-keyboard-navigation">
+<%= render DialogComponent.new(open_on_load: true) do |dialog| %>
+  <div class="flex flex-col relative" data-controller="list-keyboard-navigation">
     <div class="border-b border-tertiary md:border-alpha-black-25 p-4 text-gray-800 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <% if back_path %>
@@ -16,7 +16,7 @@
         <span class="text-primary"><%= title %></span>
       </div>
 
-      <%= icon("x", as_button: true, size: "lg", data: { action: "modal#close" }) %>
+      <%= icon("x", as_button: true, size: "lg", data: { action: "dialog#close" }) %>
     </div>
 
     <div class="p-2 text-subdued">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <button data-action="modal#close">Close</button>
+        <button data-action="dialog#close">Close</button>
         <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>

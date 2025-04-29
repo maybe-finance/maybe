@@ -44,32 +44,6 @@ module ApplicationHelper
     turbo_stream_from Current.family if Current.family
   end
 
-  ##
-  # Helper to open a centered and overlayed modal with custom contents
-  #
-  # @example Basic usage
-  #   <%= modal classes: "custom-class" do %>
-  #     <div>Content here</div>
-  #   <% end %>
-  #
-  def modal(reload_on_close: false, overflow_visible: false, &block)
-    content = capture &block
-    render partial: "shared/modal", locals: { content:, reload_on_close:, overflow_visible: }
-  end
-
-  ##
-  # Helper to open a drawer on the right side of the screen with custom contents
-  #
-  # @example Basic usage
-  #   <%= drawer do %>
-  #     <div>Content here</div>
-  #   <% end %>
-  #
-  def drawer(reload_on_close: false, &block)
-    content = capture &block
-    render partial: "shared/drawer", locals: { content:, reload_on_close: }
-  end
-
   def page_active?(path)
     current_page?(path) || (request.path.start_with?(path) && path != "/")
   end

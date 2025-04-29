@@ -31,7 +31,7 @@
     <%= turbo_frame_tag "drawer" %>
 
     <%# Custom overrides for browser's confirm API  %>
-    <%= render "layouts/shared/custom_confirm_dialog" %>
+    <%= render "layouts/shared/confirm_dialog" %>
 
     <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? && show_super_admin_bar? %>
     <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>

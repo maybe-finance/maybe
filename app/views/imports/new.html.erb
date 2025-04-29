@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center">
         <h2 class="font-medium text-primary"><%= t(".title") %></h2>
 
-        <%= icon("x", as_button: true, data: { action: "mousedown->modal#close" }, tabindex: "-1") %>
+        <%= icon("x", as_button: true, data: { action: "mousedown->dialog#close" }, tabindex: "-1") %>
       </div>
 
       <p class="text-secondary text-sm"><%= t(".description") %></p>

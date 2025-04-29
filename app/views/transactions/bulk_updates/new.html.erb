@@ -1,55 +1,25 @@
-<%= turbo_frame_tag "bulk_transaction_edit_drawer" do %>
-  <dialog data-controller="modal"
-          data-action="mousedown->modal#clickOutside"
-    class="bg-container shadow-border-xs rounded-2xl max-h-[calc(100vh-32px)] h-full max-w-[480px] w-full mt-4 mr-4 ml-auto">
+<%= render DialogComponent.new(variant: "drawer", frame: "bulk_transaction_edit_drawer", open_on_load: true) do |dialog| %>
+  <% dialog.with_header(title: "Edit transactions", data: { bulk_select_target: "bulkEditDrawerHeader" }) %>
+
+  <% dialog.with_body do %>
     <%= styled_form_with url: transactions_bulk_update_path, scope: "bulk_update", class: "h-full", data: { turbo_frame: "_top" } do |form| %>
-      <div class="flex h-full flex-col justify-between p-4 gap-4">
-        <div>
-          <div class="flex h-9 items-center justify-end">
-            <%= icon("x", as_button: true, data: { action: "mousedown->modal#close" }) %>
-          </div>
-
-          <div class="flex flex-col overflow-scroll">
-            <div>
-              <header class="mb-4 space-y-1">
-                <h3 class="text-2xl font-medium" data-bulk-select-target="bulkEditDrawerTitle">
-                  Edit transactions
-                </h3>
-              </header>
-
-              <div class="space-y-2">
-                <%= render DisclosureComponent.new(title: "Overview", open: true) do %>
-                  <div class="pb-6 space-y-2">
-                    <%= form.date_field :date, label: "Date", max: Date.current %>
-                  </div>
-                <% end %>
-
-                <%= render DisclosureComponent.new(title: "Details", open: true) do %>
-                  <div class="space-y-2">
-                    <%= form.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: "Select a category", label: "Category", class: "text-subdued" } %>
-                    <%= form.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { prompt: "Select a merchant", label: "Merchant", class: "text-subdued" } %>
-                    <%= form.select :tag_ids, Current.family.tags.alphabetically.pluck(:name, :id), { include_blank: "None", multiple: true, label: "Tags", container_class: "h-40" } %>
-                    <%= form.text_area :notes, label: "Notes", placeholder: "Enter a note that will be applied to selected transactions", rows: 5 %>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
+      <% dialog.with_section(title: "Overview", open: true) do %>
+        <div class="pb-6 space-y-2">
+          <%= form.date_field :date, label: "Date", max: Date.current %>
         </div>
+      <% end %>
 
-        <div class="flex justify-end items-center gap-2">
-          <%= render LinkComponent.new(
-            text: "Cancel",
-            variant: "ghost",
-            href: transactions_path
-          ) %>
-
-          <%= render ButtonComponent.new(
-            text: "Save",
-            data: { "bulk-select-scope-param": "bulk_update", action: "bulk-select#submitBulkRequest" }
-          ) %>
+      <% dialog.with_section(title: "Transactions", open: true) do %>
+        <div class="space-y-2">
+          <%= form.collection_select :category_id, Current.family.categories.alphabetically, :id, :name, { prompt: "Select a category", label: "Category", class: "text-subdued" } %>
+          <%= form.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { prompt: "Select a merchant", label: "Merchant", class: "text-subdued" } %>
+          <%= form.select :tag_ids, Current.family.tags.alphabetically.pluck(:name, :id), { include_blank: "None", multiple: true, label: "Tags", container_class: "h-40" } %>
+          <%= form.text_area :notes, label: "Notes", placeholder: "Enter a note that will be applied to selected transactions", rows: 5 %>
         </div>
-      </div>
+      <% end %>
     <% end %>
-  </dialog>
+  <% end %>
+
+  <% dialog.with_action(cancel_action: true, text: "Cancel", variant: "ghost") %>
+  <% dialog.with_action(text: "Save", data: { bulk_select_scope_param: "bulk_update", action: "bulk-select#submitBulkRequest" }) %>
 <% end %>

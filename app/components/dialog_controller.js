@@ -1,14 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="modal"
+// Connects to data-controller="dialog"
 export default class extends Controller {
   static values = {
+    openOnLoad: { type: Boolean, default: true },
     reloadOnClose: { type: Boolean, default: false },
   };
 
   connect() {
     if (this.element.open) return;
-    this.element.showModal();
+    if (this.openOnLoadValue) {
+      this.element.showModal();
+    }
   }
 
   // Hide the dialog when the user clicks outside of it

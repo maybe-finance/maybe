@@ -1,0 +1,93 @@
+class DialogComponent < ViewComponent::Base
+  renders_one :header, ->(title: nil, subtitle: nil, hide_close_icon: false, **opts, &block) do 
+    content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do 
+      title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do 
+        title = content_tag(:h2, title, class: class_names("font-medium text-primary", drawer? ? "text-lg" : "")) if title
+        close_icon = render ButtonComponent.new(variant: "icon", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
+        safe_join([title, close_icon].compact)
+      end
+
+      subtitle = content_tag(:p, subtitle, class: "text-sm text-secondary") if subtitle
+
+      block_content = capture(&block) if block
+
+      safe_join([title_div, subtitle, block_content].compact)
+    end
+  end
+
+  renders_one :body
+  
+  renders_many :actions, ->(cancel_action: false, **button_opts) do 
+    merged_opts = if cancel_action
+      button_opts.merge(type: "button", data: { action: "modal#close" })
+    else
+      button_opts
+    end
+    
+    render ButtonComponent.new(**merged_opts) 
+  end
+
+  renders_many :sections, ->(title:, **disclosure_opts, &block) do 
+    render DisclosureComponent.new(title: title, align: :right, **disclosure_opts) do 
+      block.call
+    end
+  end
+
+  attr_reader :variant, :open_on_load, :reload_on_close, :opts
+
+  VARIANTS = %w[modal drawer].freeze
+
+  def initialize(variant: "modal", open_on_load: false, reload_on_close: false, frame: nil, **opts)
+    @variant = variant.to_sym
+    @open_on_load = open_on_load
+    @reload_on_close = reload_on_close
+    @frame = frame
+    @opts = opts
+  end
+
+  def frame
+    @frame || variant
+  end
+
+  def dialog_outer_classes
+    variant_classes = if drawer?
+      "items-end justify-end"
+    else
+      "items-center justify-center"
+    end
+    
+    class_names(
+      "flex h-full w-full",
+      variant_classes
+    )
+  end
+
+  def dialog_inner_classes
+    variant_classes = if drawer?
+      "lg:w-[480px] h-full"
+    else
+      "max-w-lg max-h-full"
+    end
+
+    class_names(
+      "flex flex-col bg-container lg:rounded-xl lg:shadow-border-xs w-full overflow-hidden",
+      variant_classes
+    )
+  end
+
+  def merged_opts 
+    merged_opts = opts.dup
+    data = merged_opts.delete(:data) || {}
+
+    data[:controller] = ["dialog", data[:controller]].compact.join(" ") 
+    data[:dialog_open_on_load_value] = open_on_load
+    data[:dialog_reload_on_close_value] = reload_on_close
+    merged_opts[:data] = data
+
+    merged_opts
+  end
+
+  def drawer?
+    variant == :drawer
+  end
+end

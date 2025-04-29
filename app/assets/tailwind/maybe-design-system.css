@@ -259,6 +259,12 @@
     @apply text-gray-200;
   }
 
+  /* We control the sizing through DialogComponent, so reset this value */
+  dialog:modal {
+    max-width: 100dvw;
+    max-height: 100dvh;
+  }
+
   details>summary::-webkit-details-marker {
     @apply hidden;
   }
