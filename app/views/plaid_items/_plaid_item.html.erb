@@ -94,9 +94,9 @@
           <% end %>
         <% else %>
           <%= icon(
-            "refresh-cw", 
-            as_button: true, 
-            href: sync_plaid_item_path(plaid_item), 
+            "refresh-cw",
+            as_button: true,
+            href: sync_plaid_item_path(plaid_item),
             disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
           ) %>
         <% end %>

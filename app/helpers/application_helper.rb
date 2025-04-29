@@ -13,7 +13,7 @@ module ApplicationHelper
       extra_classes
     )
 
-    if custom 
+    if custom
       inline_svg_tag("#{key}.svg", class: icon_classes, **opts)
     elsif as_button
       render ButtonComponent.new(variant: "icon", class: extra_classes, icon: key, size: size, type: "button", **opts)
