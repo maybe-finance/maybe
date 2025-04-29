@@ -1,7 +1,7 @@
 <header class="flex justify-between items-center p-4 pt-safe">
   <%= image_tag "logo.svg", class: "h-[22px]" %>
   <div class="flex items-center gap-2">
-    <%= lucide_icon "log-in", class: "w-5 h-5 shrink-0 text-secondary gap-2" %>
+    <%= icon("log-in", color: "secondary") %>
     <%= button_to t(".sign_out"), session_path(Current.session), method: :delete, class: "text-sm text-primary font-medium" %>
   </div>
 </header>

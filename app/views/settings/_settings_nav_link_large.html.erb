@@ -1,18 +1,14 @@
 <%# locals: path, direction, title %>
 <%= link_to path, class: "hidden md:flex w-full bg-container hover:bg-container-inset rounded-xl border border-alpha-black-25 shadow-xs p-4 items-center justify-between" do %>
   <% if direction == 'previous' %>
-    <div class="w-5 h-5 text-secondary">
-      <%= lucide_icon("arrow-left") %>
-    </div>
+    <%= icon("arrow-left") %>
   <% end %>
   <div class="<%= "grow" if direction == "next" %> <%= "text-right" if direction == "previous" %>">
     <span class="block text-sm text-secondary"><%= t(".#{direction}") %></span>
     <span class="block text-sm font-medium text-primary"><%= title %></span>
   </div>
   <% if direction == 'next' %>
-    <div class="w-5 h-5 text-secondary">
-      <%= lucide_icon("arrow-right") %>
-    </div>
+    <%= icon("arrow-right") %>
   <% end %>
 <% end %>
 
@@ -21,9 +17,7 @@
   <div class="flex items-center justify-between">
     <% if direction == 'previous' %>
       <div class="flex items-center gap-3">
-        <div class="w-5 h-5 text-secondary">
-          <%= lucide_icon("arrow-left") %>
-        </div>
+        <%= icon("arrow-left") %>
         <span class="text-sm text-secondary">Back</span>
       </div>
       <div>
@@ -35,9 +29,7 @@
       </div>
       <div class="flex items-center gap-3">
         <span class="text-sm font-medium text-primary"><%= title %></span>
-        <div class="w-5 h-5 text-secondary">
-          <%= lucide_icon("arrow-right") %>
-        </div>
+        <%= icon("arrow-right") %>
       </div>
     <% end %>
   </div>

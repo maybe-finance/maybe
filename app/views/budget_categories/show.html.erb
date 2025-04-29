@@ -30,8 +30,7 @@
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
                      text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
         <h4>Overview</h4>
-        <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
+        <%= icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
       </summary>
 
       <div class="pb-4">
@@ -49,20 +48,20 @@
             <div class="flex items-center justify-between text-sm">
               <dt class="text-secondary">Status</dt>
               <% if @budget_category.available_to_spend.negative? %>
-                <dd class="text-red-500 flex items-center gap-1 text-red-500 font-medium">
-                  <%= lucide_icon "alert-circle", class: "shrink-0 w-4 h-4 text-red-500" %>
+                <dd class="flex items-center gap-1 text-red-500 font-medium">
+                  <%= icon "alert-circle", size: "sm", color: "destructive" %>
                   <%= format_money @budget_category.available_to_spend_money.abs %>
                   <span>overspent</span>
                 </dd>
               <% elsif @budget_category.available_to_spend.zero? %>
-                <dd class="text-orange-500 flex items-center gap-1 text-orange-500 font-medium">
-                  <%= lucide_icon "x-circle", class: "shrink-0 w-4 h-4 text-orange-500" %>
+                <dd class="flex items-center gap-1 text-orange-500 font-medium">
+                  <%= icon "x-circle", size: "sm", color: "warning" %>
                   <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
               <% else %>
                 <dd class="text-primary flex items-center gap-1 text-green-500 font-medium">
-                  <%= lucide_icon "check-circle-2", class: "shrink-0 w-4 h-4 text-green-500" %>
+                  <%= icon "check-circle", size: "sm", color: "success" %>
                   <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
@@ -98,8 +97,7 @@
       <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
                      text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
         <h4>Recent Transactions</h4>
-        <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
+        <%= icon "chevron-down", size: "sm", class: "group-open:transform group-open:rotate-180" %>
       </summary>
 
       <div class="space-y-2">

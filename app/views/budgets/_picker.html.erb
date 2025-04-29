@@ -7,11 +7,11 @@
 
       <% if Budget.budget_date_valid?(last_month_of_previous_year, family: family) %>
         <%= link_to picker_budgets_path(year: year - 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
-          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-secondary" %>
+          <%= icon "chevron-left" %>
         <% end %>
       <% else %>
-        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
-          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-subdued" %>
+        <span class="p-2 flex items-center justify-center text-subdued rounded-md">
+          <%= icon "chevron-left", color: "current" %>
         </span>
       <% end %>
 
@@ -23,11 +23,11 @@
 
       <% if Budget.budget_date_valid?(first_month_of_next_year, family: family) %>
         <%= link_to picker_budgets_path(year: year + 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
-          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-secondary" %>
+          <%= icon "chevron-right" %>
         <% end %>
       <% else %>
-        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
-          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-subdued" %>
+        <span class="p-2 flex items-center justify-center text-subdued rounded-md">
+          <%= icon "chevron-right", color: "current" %>
         </span>
       <% end %>
     </div>

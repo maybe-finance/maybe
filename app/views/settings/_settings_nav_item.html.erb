@@ -4,6 +4,6 @@
   "flex items-center gap-2 whitespace-nowrap px-3 py-2 rounded-lg text-sm",
   page_active?(path) ? "text-primary bg-container shadow-border-xs" : "text-secondary hover:bg-surface-hover border-transparent"
 ), aria: { current: ("page" if page_active?(path)) } do %>
-  <%= lucide_icon(icon, class: "w-5 h-5") if icon %>
+  <%= icon(icon) if icon %>
   <%= name %>
 <% end %>

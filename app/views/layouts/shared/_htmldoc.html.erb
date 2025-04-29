@@ -21,7 +21,7 @@
     <%= family_stream %>
 
     <% if Rails.env.development? %>
-      <div class="fixed bottom-10 left-2">
+      <div class="fixed bottom-20 left-2 flex flex-col gap-1">
         <%= icon("eclipse", as_button: true, data: { action: "theme#toDark" }) %>
         <%= icon("sun", as_button: true, data: { action: "theme#toLight" }) %>
       </div>

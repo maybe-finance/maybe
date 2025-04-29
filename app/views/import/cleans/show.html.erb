@@ -13,8 +13,8 @@
   <% if @import.cleaned? %>
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "check-circle", class: "w-4 h-4 text-green-500" %>
-        <p class="text-green-500 text-sm md:text-base">Your data has been cleaned</p>
+        <%= icon "check-circle", size: "sm", color: "success" %>
+        <p class="text-success text-sm md:text-base">Your data has been cleaned</p>
       </div>
 
       <%= render LinkComponent.new(
@@ -28,9 +28,9 @@
   <% else %>
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500 flex-shrink-0" %>
-        <p class="text-red-500 text-sm hidden md:block"><%= t(".errors_notice") %></p>
-        <p class="text-red-500 text-sm md:hidden"><%= t(".errors_notice_mobile") %></p>
+        <%= icon "alert-triangle", size: "sm", color: "destructive" %>
+        <p class="text-destructive text-sm hidden md:block"><%= t(".errors_notice") %></p>
+        <p class="text-destructive text-sm md:hidden"><%= t(".errors_notice_mobile") %></p>
       </div>
 
       <div class="flex justify-center w-full md:w-auto">

@@ -19,7 +19,7 @@
       </div>
 
       <div class="flex justify-end mt-4">
-        <%= form.submit t(".save"), class: "md:w-auto w-full" %>
+        <%= render ButtonComponent.new(text: t(".save"), class: "md:w-auto w-full justify-center") %>
       </div>
     </div>
   <% end %>
@@ -88,10 +88,10 @@
                              class="text-sm bg-gray-50 px-2 py-1 rounded border border-secondary w-72">
                   <button data-action="clipboard#copy" class="text-secondary hover:text-gray-700">
                     <span data-clipboard-target="iconDefault">
-                      <%= lucide_icon "copy", class: "w-5 h-5" %>
+                      <%= icon "copy" %>
                     </span>
                     <span class="hidden" data-clipboard-target="iconSuccess">
-                      <%= lucide_icon "check", class: "w-5 h-5" %>
+                      <%= icon "check" %>
                     </span>
                   </button>
                 </div>
@@ -114,7 +114,7 @@
         <%= link_to new_invitation_path,
                 class: "bg-container-inset flex items-center justify-center gap-2 text-secondary mt-1 hover:bg-container-inset-hover rounded-lg px-4 py-2 w-full text-center",
                 data: { turbo_frame: :modal } do %>
-          <%= lucide_icon("plus", class: "w-5 h-5 text-secondary") %>
+          <%= icon("plus") %>
           <%= t(".invite_member") %>
         <% end %>
       <% end %>

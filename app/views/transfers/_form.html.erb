@@ -1,7 +1,7 @@
 <%= styled_form_with model: transfer, class: "space-y-4", data: { turbo_frame: "_top", controller: "transfer-form" } do |f| %>
   <% if transfer.errors.present? %>
-    <div class="text-red-600 flex items-center gap-2">
-      <%= lucide_icon "circle-alert", class: "w-5 h-5" %>
+    <div class="text-destructive flex items-center gap-2">
+      <%= icon "circle-alert", size: "sm" %>
       <p class="text-sm"><%= @transfer.errors.full_messages.to_sentence %></p>
     </div>
   <% end %>

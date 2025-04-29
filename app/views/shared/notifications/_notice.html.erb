@@ -7,7 +7,7 @@
             } do %>
   <div class="h-5 w-5 shrink-0 p-px text-primary">
     <div class="flex h-full items-center justify-center rounded-full bg-success">
-      <%= lucide_icon "check", class: "w-3 h-3" %>
+      <%= icon "check", size: "xs" %>
     </div>
   </div>
 
@@ -31,6 +31,6 @@
   </div>
 
   <div class="absolute -top-2 -right-2">
-    <%= lucide_icon "x", class: "w-5 h-5 p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-subdued cursor-pointer", data: { action: "click->element-removal#remove" } %>
+    <%= icon "x", class: "p-0.5 hidden group-hover:inline-block border border-alpha-black-50 border-solid rounded-lg bg-white text-subdued cursor-pointer", data: { action: "click->element-removal#remove" } %>
   </div>
 <% end %>

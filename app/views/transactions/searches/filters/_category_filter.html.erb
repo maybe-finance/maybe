@@ -2,7 +2,7 @@
 <div data-controller="list-filter">
   <div class="relative">
     <input type="search" autocomplete="off" placeholder="Filter category" data-list-filter-target="input" data-action="input->list-filter#filter" class="block w-full bg-container border border-secondary rounded-md py-2 pl-10 pr-3 focus:ring-gray-500 sm:text-sm">
-    <%= lucide_icon("search", class: "w-5 h-5 text-secondary absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
+    <%= icon("search", class: "absolute inset-y-0 left-2 top-1/2 transform -translate-y-1/2") %>
   </div>
   <div class="my-2" id="list" data-list-filter-target="list">
     <% family_categories.each do |category| %>

@@ -3,26 +3,34 @@
 <div class="flex items-center gap-1 mb-4">
   <div class="flex items-center gap-2">
     <% if budget.previous_budget_param %>
-      <%= link_to budget_path(budget.previous_budget_param) do %>
-        <%= lucide_icon "chevron-left" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "chevron-left",
+        href: budget_path(budget.previous_budget_param),
+      ) %>
     <% else %>
-      <%= lucide_icon "chevron-left", class: "text-subdued" %>
+      <span class="text-subdued">
+        <%= icon "chevron-left", color: "current" %>
+      </span>
     <% end %>
 
     <% if budget.next_budget_param %>
-      <%= link_to budget_path(budget.next_budget_param) do %>
-        <%= lucide_icon "chevron-right" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "chevron-right",
+        href: budget_path(budget.next_budget_param),
+      ) %>
     <% else %>
-      <%= lucide_icon "chevron-right", class: "text-subdued" %>
+      <span class="text-subdued">
+        <%= icon "chevron-right", color: "current" %>
+      </span>
     <% end %>
   </div>
 
   <%= render MenuComponent.new(variant: "button") do |menu| %>
     <% menu.with_button class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2"  do %>
       <span class="text-primary font-medium text-3xl md:text-base"><%= @budget.name %></span>
-      <%= lucide_icon "chevron-down", class: "w-5 h-5 shrink-0 text-secondary" %>
+      <%= icon("chevron-down") %>
     <% end %>
 
     <% menu.with_custom_content do %>

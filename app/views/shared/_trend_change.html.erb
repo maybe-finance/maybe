@@ -8,7 +8,7 @@
       <%= trend.value.is_a?(Money) ? format_money(trend.value) : trend.value.round(2) %>
     </span>
     <% unless trend.percent.infinite? %>
-      <span class="font-mono">(<%= lucide_icon(trend.icon, class: "w-4 h-4 align-text-bottom inline") %><%= trend.percent_formatted %>)</span>
+      <span class="font-mono">(<%= icon(trend.icon, size: "sm", color: "current", class: "mb-0.5 inline") %><%= trend.percent_formatted %>)</span>
     <% end %>
     <span class="text-secondary">
       <%= " #{comparison_label}" if defined?(comparison_label) && comparison_label.present? %>

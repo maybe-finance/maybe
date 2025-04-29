@@ -103,7 +103,7 @@
         <% if Current.user.ai_enabled? %>
           <%= turbo_frame_tag chat_frame, src: chat_view_path(@chat), loading: "lazy", class: "h-full" do %>
             <div class="flex justify-center items-center h-full">
-              <%= lucide_icon("loader-circle", class: "w-5 h-5 text-secondary animate-spin") %>
+              <%= icon("loader-circle", class: "animate-spin") %>
             </div>
           <% end %>
         <% else %>

@@ -10,7 +10,7 @@
     <%= tabs.with_nav(classes: "shrink-0 flex w-full md:w-44 flex-row md:flex-col items-start p-3 text-sm font-medium text-secondary border-b md:border-b-0 md:border-r border-secondary overflow-x-auto md:overflow-x-visible") do |nav| %>
       <% transaction_search_filters.each do |filter| %>
         <%= nav.with_btn(id: filter[:key], label: filter[:label], classes: "w-full px-3 py-2 flex gap-2 items-center rounded-md") do %>
-          <%= lucide_icon(filter[:icon], class: "w-5 h-5 fg-gray") %>
+          <%= icon(filter[:icon]) %>
           <%= tag.span(filter[:label], class: "text-sm font-medium") %>
         <% end %>
       <% end %>

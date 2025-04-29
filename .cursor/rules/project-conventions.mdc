@@ -53,6 +53,7 @@ This codebase adopts a "skinny controller, fat models" convention.  Furthermore,
 - Use Turbo streams to enhance functionality, but do not solely depend on it
 - Format currencies, numbers, dates, and other values server-side, then pass to Stimulus controllers for display only
 - Keep client-side code for where it truly shines.  For example, @bulk_select_controller.js is a case where server-side solutions would degrade the user experience significantly.  When bulk-selecting entries, client-side solutions are the way to go and Stimulus provides the right toolset to achieve this.
+- Always use the `icon` helper in [application_helper.rb](mdc:app/helpers/application_helper.rb) for icons.  NEVER use `lucide_icon` helper directly.
 
 The Hotwire suite (Turbo/Stimulus) works very well with these native elements and we optimize for this.
 

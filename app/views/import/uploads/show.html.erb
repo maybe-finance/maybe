@@ -28,15 +28,17 @@
           <div class="flex flex-col items-center justify-center w-full h-64 border border-secondary border-dashed rounded-xl cursor-pointer" data-controller="file-upload" data-action="click->file-upload#triggerFileInput" data-file-upload-target="uploadArea">
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <div data-file-upload-target="uploadText" class="flex flex-col items-center">
-                <%= lucide_icon("plus", class: "w-6 h-6 mb-4 text-secondary mx-auto") %>
+                <%= icon("plus", size: "lg", class: "mb-4 mx-auto") %>
                 <p class="mb-2 text-md text-gray text-center">
                   <span class="font-medium text-primary">Browse</span> to add your CSV file here
                 </p>
               </div>
 
-              <div class="flex flex-col items-center hidden" data-file-upload-target="fileName">
-                <%= lucide_icon("file-text", class: "w-6 h-6 mb-4 text-primary") %>
-                <p class="mb-2 text-md font-medium text-primary"></p>
+              <div class="flex flex-col gap-4 items-center hidden mb-2" data-file-upload-target="fileName">
+                <span class="text-primary">
+                  <%= icon("file-text", size: "lg", color: "current") %>
+                </span>
+                <p class="text-md font-medium text-primary"></p>
               </div>
 
               <%= form.file_field :csv_file, class: "hidden", "data-auto-submit-form-target": "auto", "data-file-upload-target": "input" %>

@@ -4,9 +4,9 @@
   <details open class="group bg-container p-4 shadow-border-xs rounded-xl">
     <summary class="flex items-center justify-between gap-2 focus-visible:outline-hidden">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-secondary w-5" %>
+        <%= icon "chevron-right", class: "group-open:transform group-open:rotate-90" %>
 
-        <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full bg-black/5">
+        <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full">
           <% if plaid_item.logo.attached? %>
             <%= image_tag plaid_item.logo, class: "rounded-full h-full w-full", loading: "lazy" %>
           <% else %>
@@ -20,23 +20,23 @@
           <div class="flex items-center gap-2">
             <%= tag.p plaid_item.name, class: "font-medium text-primary" %>
             <% if plaid_item.scheduled_for_deletion? %>
-              <p class="text-red-500 text-sm animate-pulse">(deletion in progress...)</p>
+              <p class="text-destructive text-sm animate-pulse">(deletion in progress...)</p>
             <% end %>
           </div>
           <% if plaid_item.syncing? %>
             <div class="text-secondary flex items-center gap-1">
-              <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
+              <%= icon "loader", size: "sm", class: "animate-pulse" %>
               <%= tag.span t(".syncing") %>
             </div>
           <% elsif plaid_item.requires_update? %>
-            <div class="text-amber-500 flex items-center gap-1">
-              <%= lucide_icon "alert-triangle", class: "w-4 h-4" %>
+            <div class="text-warning flex items-center gap-1">
+              <%= icon "alert-triangle", size: "sm" %>
               <%= tag.span t(".requires_update") %>
             </div>
           <% elsif plaid_item.sync_error.present? %>
             <div class="text-secondary flex items-center gap-1">
-              <%= lucide_icon "alert-circle", class: "w-4 h-4 text-red-500" %>
-              <%= tag.span t(".error"), class: "text-red-500" %>
+              <%= icon "alert-circle", size: "sm", color: "destructive" %>
+              <%= tag.span t(".error"), class: "text-destructive" %>
             </div>
           <% else %>
             <p class="text-secondary">
@@ -66,8 +66,8 @@
             ) %>
             <% rescue PlaidItem::PlaidConnectionLostError %>
             <div class="flex flex-col gap-2">
-              <div class="text-amber-500 flex items-center gap-1">
-                <%= lucide_icon "alert-triangle", class: "w-4 h-4" %>
+              <div class="text-warning flex items-center gap-1">
+                <%= icon "alert-triangle", size: "sm", color: "warning" %>
                 <%= tag.span t(".connection_lost") %>
               </div>
 

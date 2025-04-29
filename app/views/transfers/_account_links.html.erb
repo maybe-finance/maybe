@@ -2,6 +2,6 @@
 <div class="flex items-center gap-1">
   <% first_account, second_account = is_inflow ? [transfer.to_account, transfer.from_account] : [transfer.from_account, transfer.to_account] %>
   <%= link_to first_account.name, account_path(first_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
-  <%= lucide_icon is_inflow ? "arrow-left" : "arrow-right", class: "w-4 h-4 shrink-0" %>
+  <%= icon(is_inflow ? "arrow-left" : "arrow-right", size: "sm") %>
   <%= link_to second_account.name, account_path(second_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
 </div>

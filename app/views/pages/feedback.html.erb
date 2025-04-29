@@ -14,8 +14,8 @@
         <span class="text-sm font-medium text-primary text-center">File a bug report</span>
       <% end %>
     <% else %>
-      <%= link_to "mailto:hello@maybefinance.com", class: "w-full md:w-1/3 flex flex-col items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-container-hover", onclick: "Intercom('showNewMessage'); return false;" do %>
-        <%= lucide_icon "bug", class: "w-8 h-8 mb-2" %>
+      <%= link_to "mailto:hello@maybefinance.com", class: "w-full md:w-1/3 flex flex-col gap-2 items-center p-4 border border-alpha-black-25 rounded-xl hover:bg-container-hover", onclick: "Intercom('showNewMessage'); return false;" do %>
+        <%= image_tag "github-icon.svg", class: "w-8 h-8 mb-2" %>
         <span class="text-sm font-medium text-primary text-center">File a bug report</span>
       <% end %>
     <% end %>

@@ -41,7 +41,7 @@
               <details class="group rounded-lg open:bg-surface font-medium text-sm">
                 <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
                   <div class="items-center gap-4 hidden md:flex">
-                    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
+                    <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
                     <p><%= account_group.name %></p>
                   </div>
@@ -116,7 +116,7 @@
 
       <% else %>
         <div class="py-20 flex flex-col items-center">
-          <%= lucide_icon classification_group.icon, class: "w-6 h-6 shrink-0 text-secondary" %>
+          <%= icon(classification_group.icon) %>
           <p class="text-primary text-sm font-medium mb-1 mt-4">No <%= classification_group.display_name %></p>
           <p class="text-secondary text-sm max-w-xs text-center"><%= "You have no #{classification_group.display_name}" %></p>
         </div>

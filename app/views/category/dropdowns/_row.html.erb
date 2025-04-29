@@ -15,12 +15,12 @@
       method: :patch,
       class: "flex w-full items-center gap-1.5 cursor-pointer focus:outline-none" do %>
 
-    <span class="w-5 h-5">
-      <%= lucide_icon("check", class: "w-5 h-5 text-secondary") if is_selected %>
-    </span>
+    <%= icon("check") if is_selected %>
+
     <% if category.subcategory? %>
-      <%= lucide_icon "corner-down-right", class: "shrink-0 w-5 h-5 text-subdued" %>
+      <%= icon("corner-down-right", size: "sm") %>
     <% end %>
+
     <%= render partial: "categories/badge", locals: { category: category } %>
   <% end %>
 

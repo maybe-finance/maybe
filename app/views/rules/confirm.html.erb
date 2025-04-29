@@ -3,9 +3,7 @@
     <div>
       <div class="flex justify-between mb-2 gap-4">
         <h3 class="font-medium text-md">Confirm changes</h3>
-        <button data-action="mousedown->modal#close">
-          <%= lucide_icon("x", class: "w-5 h-5 shrink-0 text-secondary") %>
-        </button>
+        <%= icon("x", as_button: true, data: { action: "mousedown->modal#close" }) %>
       </div>
       <div class="text-secondary text-sm">
         <p>

@@ -45,8 +45,8 @@
                       ) %>
 
                   <% if entry.excluded %>
-                    <span title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
-                      <%= lucide_icon "asterisk", class: "w-4 h-4 shrink-0 text-orange-500" %>
+                    <span class="text-orange-500" title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
+                      <%= icon "asterisk", size: "sm", color: "current" %>
                     </span>
                   <% end %>
 

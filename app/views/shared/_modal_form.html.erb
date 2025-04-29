@@ -5,7 +5,7 @@
     <div class="space-y-2">
       <header class="flex justify-between items-center">
         <h2 class="font-medium text-primary"><%= title %></h2>
-        <%= lucide_icon("x", class: "cursor-pointer w-6 h-6 md:w-5 md:w-5 text-secondary", data: { action: "mousedown->modal#close" }) %>
+        <%= icon("x", as_button: true, data: { action: "mousedown->modal#close" }) %>
       </header>
 
       <% if subtitle.present? %>

@@ -31,7 +31,7 @@
               <div class="flex gap-2 items-center w-full">
                 <div class="w-6 h-6 p-4 rounded-full cursor-pointer" style="background-color: <%= category.color %>" data-category-target="colorPreview"></div>
                 <%= f.text_field :color , data: { category_target: "colorInput"}, inline: true %>
-                <%= lucide_icon "palette", class: "w-8 h-8 cursor-pointer hover:bg-gray-100 p-1", data: { action: "click->category#toggleSections" } %>
+                <%= icon "palette", size: "2xl", data: { action: "click->category#toggleSections" } %>
               </div>
               <div data-category-target="validationMessage" class="hidden self-start flex gap-1 items-center text-xs text-destructive ">
                 <span>Poor contrast, choose darker color or</span>
@@ -47,7 +47,7 @@
                 <label class="relative">
                   <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->category#handleIconChange change->category#handleIconColorChange", category_target:"icon" } %>
                   <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent">
-                    <%= lucide_icon icon, class: "w-6 h-6 p-1" %>
+                    <%= icon(icon, size: "sm", color: "current") %>
                   </div>
                 </label>
               <% end %>

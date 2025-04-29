@@ -7,9 +7,7 @@
     data-modal-reload-on-close-value="<%= reload_on_close %>">
     <div class="flex flex-col h-full gap-4">
       <div class="flex justify-end items-center p-4">
-        <div data-action="mousedown->modal#close" class="cursor-pointer p-2">
-          <%= lucide_icon("x", class: "w-5 h-5 shrink-0") %>
-        </div>
+        <%= icon("x", as_button: true, data: { action: "mousedown->modal#close" }) %>
       </div>
       <div class="flex-1 overflow-y-auto px-4 pb-4">
         <%= content %>
