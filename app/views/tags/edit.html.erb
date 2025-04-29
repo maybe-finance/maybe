@@ -1,3 +1,6 @@
-<%= modal_form_wrapper title: t(".edit") do %>
-  <%= render "form", tag: @tag %>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".edit")) %>
+  <% dialog.with_body do %>
+    <%= render "form", tag: @tag %>
+  <% end %>
 <% end %>

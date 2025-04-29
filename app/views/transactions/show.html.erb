@@ -1,9 +1,10 @@
-<%= drawer do %>
-  <%= render "transactions/header", entry: @entry %>
+<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+  <% dialog.with_header do %>
+    <%= render "transactions/header", entry: @entry %>
+  <% end %>
 
-  <div class="space-y-2">
-    <!-- Overview Section -->
-    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: transaction_path(@entry),
@@ -47,8 +48,7 @@
       </div>
     <% end %>
 
-    <!-- Details Section -->
-    <%= render DisclosureComponent.new(title: t(".details")) do %>
+    <% dialog.with_section(title: t(".details")) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: transaction_path(@entry),
@@ -95,8 +95,7 @@
       </div>
     <% end %>
 
-    <!-- Settings Section -->
-    <%= render DisclosureComponent.new(title: t(".settings")) do %>
+    <% dialog.with_section(title: t(".settings")) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: transaction_path(@entry),
@@ -145,5 +144,5 @@
         </div>
       </div>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

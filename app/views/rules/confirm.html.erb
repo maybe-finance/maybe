@@ -1,18 +1,12 @@
-<%= modal(reload_on_close: true) do %>
-  <div class="space-y-4 p-4 max-w-[400px]">
-    <div>
-      <div class="flex justify-between mb-2 gap-4">
-        <h3 class="font-medium text-md">Confirm changes</h3>
-        <%= icon("x", as_button: true, data: { action: "mousedown->dialog#close" }) %>
-      </div>
-      <div class="text-secondary text-sm">
-        <p>
-          You are about to apply this rule to
-          <span class="text-primary font-medium"><%= @rule.affected_resource_count %> <%= @rule.resource_type.pluralize %></span>
-          that meet the specified rule criteria.  Please confirm if you wish to proceed with this change.
-        </p>
-      </div>
-    </div>
+<%= render DialogComponent.new(reload_on_close: true) do |dialog| %>
+  <% dialog.with_header(title: "Confirm changes") %>
+
+  <% dialog.with_body do %>
+    <p class="text-secondary text-sm mb-4">
+      You are about to apply this rule to
+      <span class="text-primary font-medium"><%= @rule.affected_resource_count %> <%= @rule.resource_type.pluralize %></span>
+      that meet the specified rule criteria.  Please confirm if you wish to proceed with this change.
+    </p>
 
     <%= render ButtonComponent.new(
       text: "Confirm changes",
@@ -20,5 +14,5 @@
       method: :post,
       full_width: true,
       data: { turbo_frame: "_top" }) %>
-  </div>
+  <% end %>
 <% end %>

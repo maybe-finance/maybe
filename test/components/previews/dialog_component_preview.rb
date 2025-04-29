@@ -1,7 +1,7 @@
 class DialogComponentPreview < ViewComponent::Preview
   # @param show_overflow toggle
   def modal(show_overflow: false)
-    render DialogComponent.new(variant: "modal", open_on_load: true) do |dialog|
+    render DialogComponent.new(variant: "modal") do |dialog|
       dialog.with_header(title: "Sample modal title")
 
       dialog.with_body do 
@@ -21,7 +21,7 @@ class DialogComponentPreview < ViewComponent::Preview
 
   # @param show_overflow toggle
   def drawer(show_overflow: false)
-    render DialogComponent.new(variant: "drawer", open_on_load: true) do |dialog| 
+    render DialogComponent.new(variant: "drawer") do |dialog| 
       dialog.with_header(title: "Drawer title")
 
       dialog.with_body do 

@@ -1,11 +1,12 @@
 <% entry, account = @entry, @entry.account %>
 
-<%= drawer do %>
-  <%= render "valuations/header", entry: %>
+<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+  <% dialog.with_header do %>
+    <%= render "valuations/header", entry: @entry %>
+  <% end %>
 
-  <div class="space-y-2">
-    <!-- Overview Section -->
-    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
               url: entry_path(entry),
@@ -29,8 +30,7 @@
       </div>
     <% end %>
 
-    <!-- Details Section -->
-    <%= render DisclosureComponent.new(title: t(".details")) do %>
+    <% dialog.with_section(title: t(".details")) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
               url: entry_path(entry),
@@ -45,8 +45,7 @@
       </div>
     <% end %>
 
-    <!-- Settings Section -->
-    <%= render DisclosureComponent.new(title: t(".settings")) do %>
+    <% dialog.with_section(title: t(".settings")) do %>
       <div class="pb-4">
         <!-- Delete Valuation Form -->
         <div class="flex items-center justify-between gap-2 p-3">
@@ -63,5 +62,5 @@
         </div>
       </div>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

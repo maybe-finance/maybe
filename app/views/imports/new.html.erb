@@ -1,15 +1,7 @@
-<%= modal do %>
-  <div class="p-4 space-y-4 max-w-[420px]">
-    <div class="space-y-2">
-      <div class="flex justify-between items-center">
-        <h2 class="font-medium text-primary"><%= t(".title") %></h2>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".title"), subtitle: t(".description")) %>
 
-        <%= icon("x", as_button: true, data: { action: "mousedown->dialog#close" }, tabindex: "-1") %>
-      </div>
-
-      <p class="text-secondary text-sm"><%= t(".description") %></p>
-    </div>
-
+  <% dialog.with_body do %>
     <div class="rounded-xl bg-container-inset p-1">
       <h3 class="uppercase text-secondary text-xs font-medium px-3 py-1.5"><%= t(".sources") %></h3>
       <ul class="bg-container shadow-border-xs rounded-lg">
@@ -120,5 +112,5 @@
         <% end %>
       </ul>
     </div>
-  </div>
+  <% end %>
 <% end %>

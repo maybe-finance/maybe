@@ -1,15 +1,17 @@
-<%= drawer do %>
-  <div class="space-y-4">
-    <header class="flex justify-between">
+<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+  <% dialog.with_header do %>
+    <div class="flex items-center justify-between">
       <div>
         <%= tag.h3 @holding.name, class: "text-2xl font-medium text-primary" %>
         <%= tag.p @holding.ticker, class: "text-sm text-secondary" %>
       </div>
 
       <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", loading: "lazy", class: "w-9 h-9 rounded-full" %>
-    </header>
+    </div>
+  <% end %>
 
-    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
@@ -42,7 +44,7 @@
       </div>
     <% end %>
 
-    <%= render DisclosureComponent.new(title: t(".history"), open: true) do %>
+    <% dialog.with_section(title: t(".history"), open: true) do %>
       <div class="space-y-2">
         <div class="px-3 py-4">
           <% if @holding.trades.any? %>
@@ -78,7 +80,7 @@
     <% end %>
 
     <% unless @holding.account.plaid_account_id.present? %>
-      <%= render DisclosureComponent.new(title: t(".settings"), open: true) do %>
+      <% dialog.with_section(title: t(".settings"), open: true) do %>
         <div class="pb-4">
           <div class="flex items-center justify-between gap-2 p-3">
             <div class="text-sm space-y-1">
@@ -95,5 +97,5 @@
         </div>
       <% end %>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

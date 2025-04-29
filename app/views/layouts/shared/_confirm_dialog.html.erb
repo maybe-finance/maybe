@@ -1,6 +1,6 @@
 <%# This dialog is used as an override to the browser's confirm API when submitting forms with data-turbo-confirm %>
 <%# See confirm_dialog_controller.js and _htmldoc.html.erb  %>
-<%= render DialogComponent.new(id: "confirm-dialog", data: { controller: "confirm-dialog" }) do %>
+<%= render DialogComponent.new(id: "confirm-dialog", auto_open: false, data: { controller: "confirm-dialog" }) do %>
   <form method="dialog" class="p-4 space-y-4">
     <div class="space-y-2">
       <div class="flex items-center justify-between gap-2">

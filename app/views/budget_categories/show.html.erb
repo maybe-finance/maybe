@@ -1,32 +1,32 @@
-<%= drawer do %>
-  <div class="space-y-4">
-    <header class="flex justify-between">
-      <div>
-        <p class="text-sm text-secondary">Category</p>
-        <h3 class="text-2xl font-medium text-primary">
-          <%= @budget_category.name %>
-        </h3>
-
-        <% if @budget_category.budget.initialized? %>
-          <p class="text-sm text-secondary">
-            <span class="text-primary">
-              <%= format_money(@budget_category.actual_spending_money) %>
-            </span>
-            <span>/</span>
-            <span><%= format_money(@budget_category.budgeted_spending_money) %></span>
-          </p>
-        <% end %>
-      </div>
+<%= render DialogComponent.new(variant: :drawer) do |dialog| %>
+  <% dialog.with_header do %>
+    <div>
+      <p class="text-sm text-secondary">Category</p>
+      <h3 class="text-2xl font-medium text-primary">
+        <%= @budget_category.name %>
+      </h3>
 
       <% if @budget_category.budget.initialized? %>
-        <div class="ml-auto w-10 h-10">
-          <%= render "budget_categories/budget_category_donut",
-                    budget_category: @budget_category %>
-        </div>
+        <p class="text-sm text-secondary">
+          <span class="text-primary">
+            <%= format_money(@budget_category.actual_spending_money) %>
+          </span>
+          <span>/</span>
+          <span><%= format_money(@budget_category.budgeted_spending_money) %></span>
+        </p>
       <% end %>
-    </header>
+    </div>
 
-    <%= render DisclosureComponent.new(title: "Overview", open: true) do %>
+    <% if @budget_category.budget.initialized? %>
+      <div class="ml-auto w-10 h-10">
+        <%= render "budget_categories/budget_category_donut",
+                    budget_category: @budget_category %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: "Overview", open: true) do %>
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
@@ -87,7 +87,7 @@
       </div>
     <% end %>
 
-    <%= render DisclosureComponent.new(title: "Recent Transactions", open: true) do %>
+    <% dialog.with_section(title: "Recent Transactions", open: true) do %>
       <div class="space-y-2">
         <div class="px-3 py-4 space-y-2">
           <% if @recent_transactions.any? %>
@@ -138,5 +138,5 @@
         </div>
       </div>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

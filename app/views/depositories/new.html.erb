@@ -1,7 +1,10 @@
 <% if params[:step] == "method_select" %>
   <%= render "accounts/new/method_selector", path: new_depository_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
 <% else %>
-  <%= modal_form_wrapper title: t(".title") do %>
-    <%= render "depositories/form", account: @account, url: depositories_path %>
+  <%= render DialogComponent.new do |dialog| %>
+    <% dialog.with_header(title: t(".title")) %>
+    <% dialog.with_body do %>
+      <%= render "depositories/form", account: @account, url: depositories_path %>
+    <% end %>
   <% end %>
 <% end %>

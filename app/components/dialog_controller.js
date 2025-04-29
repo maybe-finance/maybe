@@ -2,21 +2,23 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="dialog"
 export default class extends Controller {
+  static targets = ["content"]
+
   static values = {
-    openOnLoad: { type: Boolean, default: true },
+    autoOpen: { type: Boolean, default: false },
     reloadOnClose: { type: Boolean, default: false },
   };
 
   connect() {
     if (this.element.open) return;
-    if (this.openOnLoadValue) {
+    if (this.autoOpenValue) {
       this.element.showModal();
     }
   }
-
-  // Hide the dialog when the user clicks outside of it
+  
+  // If the user clicks anywhere outside of the visible content, close the dialog
   clickOutside(e) {
-    if (e.target === this.element) {
+    if (!this.contentTarget.contains(e.target)) {
       this.close();
     }
   }

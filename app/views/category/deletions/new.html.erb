@@ -1,4 +1,4 @@
-<%= render DialogComponent.new(open_on_load: true) do |dialog| %>
+<%= render DialogComponent.new do |dialog| %>
   <% dialog.with_header(title: t(".delete_category"), subtitle: t(".explanation", category_name: @category.name)) %>
 
   <% dialog.with_body do %>

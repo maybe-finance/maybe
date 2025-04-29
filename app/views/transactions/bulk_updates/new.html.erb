@@ -1,4 +1,4 @@
-<%= render DialogComponent.new(variant: "drawer", frame: "bulk_transaction_edit_drawer", open_on_load: true) do |dialog| %>
+<%= render DialogComponent.new(variant: "drawer", frame: "bulk_transaction_edit_drawer") do |dialog| %>
   <% dialog.with_header(title: "Edit transactions", data: { bulk_select_target: "bulkEditDrawerHeader" }) %>
 
   <% dialog.with_body do %>

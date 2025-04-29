@@ -3,7 +3,7 @@ class DialogComponent < ViewComponent::Base
     content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do 
       title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do 
         title = content_tag(:h2, title, class: class_names("font-medium text-primary", drawer? ? "text-lg" : "")) if title
-        close_icon = render ButtonComponent.new(variant: "icon", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
+        close_icon = render ButtonComponent.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
         safe_join([title, close_icon].compact)
       end
 
@@ -33,13 +33,13 @@ class DialogComponent < ViewComponent::Base
     end
   end
 
-  attr_reader :variant, :open_on_load, :reload_on_close, :opts
+  attr_reader :variant, :auto_open, :reload_on_close, :opts
 
   VARIANTS = %w[modal drawer].freeze
 
-  def initialize(variant: "modal", open_on_load: false, reload_on_close: false, frame: nil, **opts)
+  def initialize(variant: "modal", auto_open: true, reload_on_close: false, frame: nil, **opts)
     @variant = variant.to_sym
-    @open_on_load = open_on_load
+    @auto_open = auto_open
     @reload_on_close = reload_on_close
     @frame = frame
     @opts = opts
@@ -64,7 +64,7 @@ class DialogComponent < ViewComponent::Base
 
   def dialog_inner_classes
     variant_classes = if drawer?
-      "lg:w-[480px] h-full"
+      "lg:w-[550px] h-full"
     else
       "max-w-lg max-h-full"
     end
@@ -79,9 +79,11 @@ class DialogComponent < ViewComponent::Base
     merged_opts = opts.dup
     data = merged_opts.delete(:data) || {}
 
-    data[:controller] = ["dialog", data[:controller]].compact.join(" ") 
-    data[:dialog_open_on_load_value] = open_on_load
+    data[:controller] = ["dialog", "hotkey", data[:controller]].compact.join(" ") 
+    data[:dialog_auto_open_value] = auto_open
     data[:dialog_reload_on_close_value] = reload_on_close
+    data[:action] = ["mousedown->dialog#clickOutside", data[:action]].compact.join(" ")
+    data[:hotkey] = "esc:dialog#close"
     merged_opts[:data] = data
 
     merged_opts

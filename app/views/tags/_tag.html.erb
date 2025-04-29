@@ -11,14 +11,24 @@
     <%= render MenuComponent.new do |menu| %>
       <% menu.with_item(variant: "link", text: t(".edit"), href: edit_tag_path(tag), icon: "pencil", data: { turbo_frame: "modal" }) %>
 
-      <% menu.with_item(
-        variant: "button",
-        text: t(".delete"),
-        href: tag_path(tag),
-        icon: "trash-2",
-        method: :delete,
-        confirm: CustomConfirm.for_resource_deletion(tag.name)
-      ) %>
+      <% if tag.transactions.any? %>
+        <% menu.with_item(
+          variant: "link",
+          text: t(".delete"),
+          href: new_tag_deletion_path(tag),
+          icon: "trash-2",
+          frame: :modal
+        ) %>
+      <% else %>
+        <% menu.with_item(
+          variant: "button",
+          text: t(".delete"),
+          href: tag_path(tag),
+          icon: "trash-2",
+          method: :delete,
+          confirm: CustomConfirm.for_resource_deletion(tag.name)
+        ) %>
+      <% end %>
     <% end %>
   </div>
 </div>
