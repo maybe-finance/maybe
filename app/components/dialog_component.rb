@@ -1,34 +1,34 @@
 class DialogComponent < ViewComponent::Base
-  renders_one :header, ->(title: nil, subtitle: nil, hide_close_icon: false, **opts, &block) do 
-    content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do 
-      title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do 
+  renders_one :header, ->(title: nil, subtitle: nil, hide_close_icon: false, **opts, &block) do
+    content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do
+      title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do
         title = content_tag(:h2, title, class: class_names("font-medium text-primary", drawer? ? "text-lg" : "")) if title
         close_icon = render ButtonComponent.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
-        safe_join([title, close_icon].compact)
+        safe_join([ title, close_icon ].compact)
       end
 
       subtitle = content_tag(:p, subtitle, class: "text-sm text-secondary") if subtitle
 
       block_content = capture(&block) if block
 
-      safe_join([title_div, subtitle, block_content].compact)
+      safe_join([ title_div, subtitle, block_content ].compact)
     end
   end
 
   renders_one :body
-  
-  renders_many :actions, ->(cancel_action: false, **button_opts) do 
+
+  renders_many :actions, ->(cancel_action: false, **button_opts) do
     merged_opts = if cancel_action
       button_opts.merge(type: "button", data: { action: "modal#close" })
     else
       button_opts
     end
-    
-    render ButtonComponent.new(**merged_opts) 
+
+    render ButtonComponent.new(**merged_opts)
   end
 
-  renders_many :sections, ->(title:, **disclosure_opts, &block) do 
-    render DisclosureComponent.new(title: title, align: :right, **disclosure_opts) do 
+  renders_many :sections, ->(title:, **disclosure_opts, &block) do
+    render DisclosureComponent.new(title: title, align: :right, **disclosure_opts) do
       block.call
     end
   end
@@ -55,7 +55,7 @@ class DialogComponent < ViewComponent::Base
     else
       "items-center justify-center"
     end
-    
+
     class_names(
       "flex h-full w-full",
       variant_classes
@@ -75,14 +75,14 @@ class DialogComponent < ViewComponent::Base
     )
   end
 
-  def merged_opts 
+  def merged_opts
     merged_opts = opts.dup
     data = merged_opts.delete(:data) || {}
 
-    data[:controller] = ["dialog", "hotkey", data[:controller]].compact.join(" ") 
+    data[:controller] = [ "dialog", "hotkey", data[:controller] ].compact.join(" ")
     data[:dialog_auto_open_value] = auto_open
     data[:dialog_reload_on_close_value] = reload_on_close
-    data[:action] = ["mousedown->dialog#clickOutside", data[:action]].compact.join(" ")
+    data[:action] = [ "mousedown->dialog#clickOutside", data[:action] ].compact.join(" ")
     data[:hotkey] = "esc:dialog#close"
     merged_opts[:data] = data
 

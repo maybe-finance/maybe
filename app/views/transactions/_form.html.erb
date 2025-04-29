@@ -1,4 +1,6 @@
-<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4 text-subdued", data: { controller: "transaction-form" } do |f| %>
+<%# locals: (entry:, income_categories:, expense_categories:) %>
+
+<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4 text-subdued", data: { controller: "transaction-form" } do |f| %>
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>
@@ -21,7 +23,7 @@
 
     <%= f.money_field :amount, label: t(".amount"), required: true %>
     <%= f.fields_for :entryable do |ef| %>
-      <% categories = params[:nature] == "inflow" ? @income_categories : @expense_categories %>
+      <% categories = params[:nature] == "inflow" ? income_categories : expense_categories %>
       <%= ef.collection_select :category_id, categories, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
     <% end %>
     <%= f.date_field :date, label: t(".date"), required: true, min: Entry.min_supported_date, max: Date.current, value: Date.current %>
