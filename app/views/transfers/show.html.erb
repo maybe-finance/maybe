@@ -21,7 +21,7 @@
 
   <div class="space-y-2">
     <!-- Overview Section -->
-    <%= disclosure t(".overview") do %>
+    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
       <div class="pb-4 px-3 pt-2 text-sm space-y-3 text-primary">
         <div class="space-y-3">
           <dl class="flex items-center gap-2 justify-between">
@@ -68,7 +68,7 @@
     <% end %>
 
     <!-- Details Section -->
-    <%= disclosure t(".details") do %>
+    <%= render DisclosureComponent.new(title: t(".details")) do %>
       <%= styled_form_with model: @transfer,
               data: { controller: "auto-submit-form" }, class: "space-y-2" do |f| %>
         <% if @transfer.categorizable? %>
@@ -84,7 +84,7 @@
     <% end %>
 
     <!-- Settings Section -->
-    <%= disclosure t(".settings") do %>
+    <%= render DisclosureComponent.new(title: t(".settings")) do %>
       <div class="pb-4">
         <div class="flex items-center justify-between gap-2 p-3">
           <div class="text-sm space-y-1">

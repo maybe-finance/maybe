@@ -5,7 +5,7 @@
 
   <div class="space-y-2">
     <!-- Details Section -->
-    <%= disclosure t(".details") do %>
+    <%= render DisclosureComponent.new(title: t(".details")) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: trade_path(@entry),
@@ -43,7 +43,7 @@
     <% end %>
 
     <!-- Additional Section -->
-    <%= disclosure t(".additional") do %>
+    <%= render DisclosureComponent.new(title: t(".additional")) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: trade_path(@entry),
@@ -59,7 +59,7 @@
     <% end %>
 
     <!-- Settings Section -->
-    <%= disclosure t(".settings") do %>
+    <%= render DisclosureComponent.new(title: t(".settings")) do %>
       <div class="pb-4">
         <!-- Exclude Trade Form -->
         <%= styled_form_with model: @entry,

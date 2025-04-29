@@ -27,7 +27,7 @@
     <%= f.date_field :date, label: t(".date"), required: true, min: Entry.min_supported_date, max: Date.current, value: Date.current %>
   </section>
 
-  <%= disclosure t(".details"), default_open: false do %>
+  <%= render DisclosureComponent.new(title: t(".details")) do %>
     <%= f.fields_for :entryable do |ef| %>
       <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),

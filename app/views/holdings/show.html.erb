@@ -9,12 +9,7 @@
       <%= image_tag "https://logo.synthfinance.com/ticker/#{@holding.ticker}", loading: "lazy", class: "w-9 h-9 rounded-full" %>
     </header>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4><%= t(".overview") %></h4>
-        <%= icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
-      </summary>
-
+    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
@@ -45,14 +40,9 @@
           </div>
         </dl>
       </div>
-    </details>
+    <% end %>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4><%= t(".history") %></h4>
-        <%= icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
-      </summary>
-
+    <%= render DisclosureComponent.new(title: t(".history"), open: true) do %>
       <div class="space-y-2">
         <div class="px-3 py-4">
           <% if @holding.trades.any? %>
@@ -85,15 +75,10 @@
           <% end %>
         </div>
       </div>
-    </details>
+    <% end %>
 
     <% unless @holding.account.plaid_account_id.present? %>
-      <details class="group space-y-2" open>
-        <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2 text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-          <h4><%= t(".settings") %></h4>
-          <%= icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
-        </summary>
-
+      <%= render DisclosureComponent.new(title: t(".settings"), open: true) do %>
         <div class="pb-4">
           <div class="flex items-center justify-between gap-2 p-3">
             <div class="text-sm space-y-1">
@@ -108,7 +93,7 @@
                 data: { turbo_confirm: true } %>
           </div>
         </div>
-      </details>
+      <% end %>
     <% end %>
   </div>
 <% end %>

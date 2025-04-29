@@ -1,11 +1,7 @@
 <%# locals: (account_group:) %>
 
-<details class="group" data-controller="account-collapse" data-account-collapse-type-value="<%= account_group.key %>">
-  <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10 mb-1">
-    <%= icon("chevron-right", class: "group-open:rotate-90") %>
-
-    <%= tag.p account_group.name, class: "text-sm font-medium" %>
-
+<%= render DisclosureComponent.new(title: account_group.name, align: :left) do |disclosure| %>
+  <% disclosure.with_summary_content do %>
     <div class="ml-auto text-right grow">
       <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
 
@@ -15,7 +11,7 @@
         </div>
       <% end %>
     </div>
-  </summary>
+  <% end %>
 
   <div class="space-y-1">
     <% account_group.accounts.each do |account| %>
@@ -49,4 +45,4 @@
     frame: :modal,
     class: "justify-start"
   ) %>
-</details>
+<% end %>

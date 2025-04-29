@@ -70,11 +70,6 @@ module ApplicationHelper
     render partial: "shared/drawer", locals: { content:, reload_on_close: }
   end
 
-  def disclosure(title, default_open: true, &block)
-    content = capture &block
-    render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
-  end
-
   def page_active?(path)
     current_page?(path) || (request.path.start_with?(path) && path != "/")
   end

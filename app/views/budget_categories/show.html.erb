@@ -26,13 +26,7 @@
       <% end %>
     </header>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4>Overview</h4>
-        <%= icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
-      </summary>
-
+    <%= render DisclosureComponent.new(title: "Overview", open: true) do %>
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
@@ -91,15 +85,9 @@
           </div>
         </dl>
       </div>
-    </details>
+    <% end %>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4>Recent Transactions</h4>
-        <%= icon "chevron-down", size: "sm", class: "group-open:transform group-open:rotate-180" %>
-      </summary>
-
+    <%= render DisclosureComponent.new(title: "Recent Transactions", open: true) do %>
       <div class="space-y-2">
         <div class="px-3 py-4 space-y-2">
           <% if @recent_transactions.any? %>
@@ -149,6 +137,6 @@
           <% end %>
         </div>
       </div>
-    </details>
+    <% end %>
   </div>
 <% end %>

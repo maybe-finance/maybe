@@ -5,7 +5,7 @@
 
   <div class="space-y-2">
     <!-- Overview Section -->
-    <%= disclosure t(".overview") do %>
+    <%= render DisclosureComponent.new(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
               url: entry_path(entry),
@@ -30,7 +30,7 @@
     <% end %>
 
     <!-- Details Section -->
-    <%= disclosure t(".details") do %>
+    <%= render DisclosureComponent.new(title: t(".details")) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
               url: entry_path(entry),
@@ -46,7 +46,7 @@
     <% end %>
 
     <!-- Settings Section -->
-    <%= disclosure t(".settings") do %>
+    <%= render DisclosureComponent.new(title: t(".settings")) do %>
       <div class="pb-4">
         <!-- Delete Valuation Form -->
         <div class="flex items-center justify-between gap-2 p-3">

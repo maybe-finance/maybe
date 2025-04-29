@@ -40,7 +40,7 @@
         class: "justify-start"
       ) %>
 
-        <div class="space-y-2">
+        <div>
           <% family.balance_sheet.account_groups("asset").each do |group| %>
             <%= render "accounts/accountable_group", account_group: group %>
           <% end %>
@@ -60,7 +60,7 @@
         class: "justify-start"
       ) %>
 
-        <div class="space-y-2">
+        <div>
           <% family.balance_sheet.account_groups("liability").each do |group| %>
             <%= render "accounts/accountable_group", account_group: group %>
           <% end %>
@@ -80,7 +80,7 @@
         class: "justify-start"
       ) %>
 
-        <div class="space-y-2">
+        <div>
           <% family.balance_sheet.account_groups.each do |group| %>
             <%= render "accounts/accountable_group", account_group: group %>
           <% end %>

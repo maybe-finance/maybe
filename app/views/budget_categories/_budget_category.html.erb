@@ -10,7 +10,7 @@
     <% else %>
       <div class="w-8 h-8 group-hover:scale-105 transition-all duration-300 rounded-full flex justify-center items-center" style="<%= mixed_hex_styles(budget_category.category.color) %>">
         <% if budget_category.category.lucide_icon %>
-          <%= icon(budget_category.category.lucide_icon) %>
+          <%= icon(budget_category.category.lucide_icon, color: "current") %>
         <% else %>
           <%= render "shared/circle_logo", name: budget_category.category.name, hex: budget_category.category.color %>
         <% end %>
