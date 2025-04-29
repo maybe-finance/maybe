@@ -5,43 +5,62 @@
     <% if rule.name.present? %>
       <h3 class="font-medium text-lg text-primary"><%= rule.name %></h3>
     <% end %>
-    <% if rule.conditions.any? %>
-      <p class="flex items-center flex-wrap gap-1.5">
-        <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
-          <% if rule.conditions.first.compound? %>
-            If <%= rule.conditions.first.sub_conditions.first.filter.label %> <%= rule.conditions.first.sub_conditions.first.operator %> <%= rule.conditions.first.sub_conditions.first.value_display %>
-          <% else %>
-            If <%= rule.conditions.first.filter.label %> <%= rule.conditions.first.operator %> <%= rule.conditions.first.value_display %>
-          <% end %>
-        </span>
 
-        <% if rule.conditions.count > 1 %>
-          and <%= rule.conditions.count - 1 %> more <%= rule.conditions.count - 1 == 1 ? "condition" : "conditions" %>
-        <% end %>
-      </p>
+    <% if rule.conditions.any? %>
+      <div class="flex items-center gap-2 mt-1">
+        <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
+          <%= lucide_icon "help-circle", class: "w-4 h-4 shrink-0" %>
+          <span class="font-mono text-xs">IF</span>
+        </div>
+        <p class="flex items-center flex-wrap gap-1.5 m-0">
+          <span class="px-2 py-1 border border-secondary rounded-full">
+            <% if rule.conditions.first.compound? %>
+              <%= rule.conditions.first.sub_conditions.first.filter.label %> <%= rule.conditions.first.sub_conditions.first.operator %> <%= rule.conditions.first.sub_conditions.first.value_display %>
+            <% else %>
+              <%= rule.conditions.first.filter.label %> <%= rule.conditions.first.operator %> <%= rule.conditions.first.value_display %>
+            <% end %>
+          </span>
+          <% if rule.conditions.count > 1 %>
+            and <%= rule.conditions.count - 1 %> more <%= rule.conditions.count - 1 == 1 ? "condition" : "conditions" %>
+          <% end %>
+        </p>
+      </div>
     <% end %>
 
-    <p class="flex items-center flex-wrap gap-1.5">
-      <span class="px-2 py-1 border border-alpha-black-200 rounded-full">
-        <% if rule.actions.first.value && rule.actions.first.options %>
-          <%= rule.actions.first.executor.label %> to <%= rule.actions.first.value_display %>
-        <% else %>
-          <%= rule.actions.first.executor.label %>
+    <div class="flex items-center gap-2 mt-1">
+      <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
+        <%= lucide_icon "arrow-right", class: "w-4 h-4 shrink-0" %>
+        <span class="font-mono text-xs">THEN</span>
+      </div>
+      <p class="flex items-center flex-wrap gap-1.5 m-0">
+        <span class="px-2 py-1 border border-secondary rounded-full">
+          <% if rule.actions.first.value && rule.actions.first.options %>
+            <%= rule.actions.first.executor.label %> to <%= rule.actions.first.value_display %>
+          <% else %>
+            <%= rule.actions.first.executor.label %>
+          <% end %>
+        </span>
+        <% if rule.actions.count > 1 %>
+          and <%= rule.actions.count - 1 %> more <%= rule.actions.count - 1 == 1 ? "action" : "actions" %>
         <% end %>
-      </span>
+      </p>
+    </div>
 
-      <% if rule.actions.count > 1 %>
-        and <%= rule.actions.count - 1 %> more <%= rule.actions.count - 1 == 1 ? "action" : "actions" %>
-      <% end %>
-    </p>
-
-    <p class="flex items-center flex-wrap gap-1.5">
-      <% if rule.effective_date.nil? %>
-        To all past and future <%= rule.resource_type.pluralize %>
-      <% else %>
-        To all <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date %>
-      <% end %>
-    </p>
+    <div class="flex items-center gap-2 mt-1">
+      <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
+        <%= lucide_icon "calendar", class: "w-4 h-4 shrink-0" %>
+        <span class="font-mono text-xs">FOR</span>
+      </div>
+      <p class="flex items-center flex-wrap gap-1.5 m-0">
+        <span class="px-2 py-1 border border-secondary rounded-full">
+          <% if rule.effective_date.nil? %>
+            All past and future <%= rule.resource_type.pluralize %>
+          <% else %>
+            <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date.strftime('%b %-d, %Y') %>
+          <% end %>
+        </span>
+      </p>
+    </div>
   </div>
 
   <div class="flex items-center gap-4">
