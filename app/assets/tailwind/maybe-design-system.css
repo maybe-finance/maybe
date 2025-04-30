@@ -250,11 +250,11 @@
     --color-destructive: var(--color-red-400);
     --color-shadow: --alpha(#000000 / 8%);
 
-    --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 6%);
-    --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 6%);
-    --shadow-md: 0px 4px 8px -2px --alpha(var(--color-white) / 6%);
-    --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-white) / 6%);
-    --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-white) / 6%);
+    --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 8%);
+    --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 8%);
+    --shadow-md: 0px 4px 8px -2px --alpha(var(--color-white) / 8%);
+    --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-white) / 8%);
+    --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-white) / 8%);
   }
 
   button {

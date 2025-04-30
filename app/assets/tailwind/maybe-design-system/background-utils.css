@@ -10,7 +10,7 @@
   @apply bg-gray-100;
 
   @variant theme-dark {
-    @apply bg-gray-800;
+    @apply bg-gray-900;
   }
 }
 

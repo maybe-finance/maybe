@@ -1,7 +1,7 @@
 class FilledIconComponent < ViewComponent::Base
   attr_reader :icon, :text, :hex_color, :size, :rounded, :variant
 
-  VARIANTS = %i[default text surface].freeze
+  VARIANTS = %i[default text surface container].freeze
 
   SIZES = {
     sm: {
@@ -38,7 +38,7 @@ class FilledIconComponent < ViewComponent::Base
       "flex justify-center items-center",
       size_classes,
       radius_classes,
-      variant == :surface ? "bg-surface-inset fg-gray" : "border"
+      transparent? ? "border" : solid_bg_class
     )
   end
 
@@ -62,6 +62,19 @@ class FilledIconComponent < ViewComponent::Base
   end
 
   private
+    def solid_bg_class
+      case variant
+      when :surface
+        "bg-surface-inset"
+      when :container
+        "bg-container-inset"
+      end
+    end
+
+    def transparent?
+      variant.in?(%i[default text])
+    end
+
     def size_classes
       SIZES[size][:container_size]
     end
