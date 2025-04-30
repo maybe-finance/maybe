@@ -1,0 +1,25 @@
+<details class="group" <%= "open" if open %>>
+  <%= tag.summary class: class_names(
+    "px-3 py-2 rounded-xl cursor-pointer flex items-center justify-between bg-surface"
+  ) do %>
+    <div class="flex items-center gap-3">
+      <% if align == :left %>
+        <%= lucide_icon "chevron-right", class: "fg-gray w-5 h-5 group-open:transform group-open:rotate-90" %>
+      <% end %>
+
+      <%= tag.span class: class_names("font-medium", align == :left ? "text-sm text-primary" : "text-xs uppercase text-secondary") do %>
+        <%= title %>
+      <% end %>
+    </div>
+
+    <% if align == :right %>
+      <%= lucide_icon "chevron-down", class: "fg-gray w-5 h-5 group-open:transform group-open:rotate-180" %>
+    <% elsif summary_content? %>
+      <%= summary_content %>
+    <% end %>
+  <% end %>
+
+  <div class="mt-2">
+    <%= content %>
+  </div>
+</details>

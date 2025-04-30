@@ -10,7 +10,7 @@
           <% if content_for?(:breadcrumbs) %>
             <%= yield :breadcrumbs %>
           <% else %>
-            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs, sidebar_toggle_enabled: false %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
           <% end %>
 
           <% if content_for?(:page_title) %>

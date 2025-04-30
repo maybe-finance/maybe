@@ -4,7 +4,7 @@
     <%= render @invite_codes %>
   <% else %>
     <div class="flex flex-col items-center w-full h-64 bg-container text-center justify-center">
-      <%= lucide_icon "binary", class: "w-6 h-6 text-sm text-secondary" %>
+      <%= icon "binary", size: "lg" %>
       <p class="text-base pt-4"><%= t(".no_invite_codes") %></p>
       <p class="text-sm text-secondary pt-2 w-2/3"><%= t(".invite_code_description") %></p>
     </div>

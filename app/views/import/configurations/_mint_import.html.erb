@@ -1,7 +1,9 @@
 <%# locals: (import:) %>
 
 <div class="flex items-center justify-between border border-secondary rounded-lg bg-green-500/5 p-5 gap-4 mb-4">
-  <%= lucide_icon("check-circle", class: "w-5 h-5 shrink-0 text-green-500") %>
+  <span class="text-green-500">
+    <%= icon("check-circle", color: "current") %>
+  </span>
   <p class="text-sm text-primary italic">We have pre-configured your Mint import for you. Please proceed to the next step.</p>
 </div>
 
@@ -29,5 +31,5 @@
   <%= form.select :category_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Category (optional)" }, disabled: import.complete? %>
   <%= form.select :tags_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Tags (optional)" }, disabled: import.complete? %>
 
-  <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
+  <%= form.submit "Apply configuration", disabled: import.complete? %>
 <% end %>

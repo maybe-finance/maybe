@@ -2,9 +2,9 @@
 <% in_progress_session = Current.true_user.impersonated_support_sessions.in_progress.first %>
 
 <div class="sticky top-0 left-0 w-full bg-black flex items-center justify-between font-mono">
-  <div class="flex items-center bg-red-600 px-6 py-4">
-    <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-white mr-2" %>
-    <span class="text-white font-semibold uppercase">Access <%= in_progress_session.present? ? "Session" : "Request" %></span>
+  <div class="flex items-center bg-red-600 text-inverse px-6 py-4">
+    <%= icon "alert-triangle", size: "lg", color: "current", class: "mr-2" %>
+    <span class="text-inverse font-semibold uppercase">Access <%= in_progress_session.present? ? "Session" : "Request" %></span>
   </div>
   <div class="flex items-center space-x-2 px-2 py-2 text-white gap-4">
     <% if pending_session.present? %>

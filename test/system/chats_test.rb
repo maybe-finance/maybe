@@ -12,7 +12,7 @@ class ChatsTest < ApplicationSystemTestCase
     visit root_path
 
     within "#chat-container" do
-      assert_selector "h3", text: "Enable Personal Finance AI"
+      assert_selector "h3", text: "Enable Maybe AI"
     end
   end
 

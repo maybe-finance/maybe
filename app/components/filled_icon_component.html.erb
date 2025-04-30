@@ -1,0 +1,8 @@
+<%= tag.div style: transparent? ? container_styles : nil,
+            class: container_classes do %>
+  <% if icon %>
+    <%= helpers.icon(icon, size: icon_size, color: "current") %>
+  <% elsif text %>
+    <%= tag.span text.first, class: text_classes %>
+  <% end %>
+<% end %>

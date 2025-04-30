@@ -1,11 +1,12 @@
-<%= drawer do %>
-  <%= render "trades/header", entry: @entry %>
+<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+  <% dialog.with_header do %>
+    <%= render "trades/header", entry: @entry %>
+  <% end %>
 
   <% trade = @entry.trade %>
 
-  <div class="space-y-2">
-    <!-- Details Section -->
-    <%= disclosure t(".details") do %>
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: t(".details"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: trade_path(@entry),
@@ -42,8 +43,7 @@
       </div>
     <% end %>
 
-    <!-- Additional Section -->
-    <%= disclosure t(".additional") do %>
+    <% dialog.with_section(title: t(".additional")) do %>
       <div class="pb-4">
         <%= styled_form_with model: @entry,
               url: trade_path(@entry),
@@ -58,8 +58,7 @@
       </div>
     <% end %>
 
-    <!-- Settings Section -->
-    <%= disclosure t(".settings") do %>
+    <% dialog.with_section(title: t(".settings")) do %>
       <div class="pb-4">
         <!-- Exclude Trade Form -->
         <%= styled_form_with model: @entry,
@@ -72,13 +71,7 @@
               <p class="text-secondary"><%= t(".exclude_subtitle") %></p>
             </div>
 
-            <div class="relative inline-block select-none">
-              <%= f.check_box :excluded,
-                      class: "sr-only peer",
-                      "data-auto-submit-form-target": "auto" %>
-              <label for="entry_excluded"
-                         class="switch"></label>
-            </div>
+            <%= f.toggle :excluded, { data: { auto_submit_form_target: "auto" } } %>
           </div>
         <% end %>
 
@@ -98,5 +91,5 @@
         </div>
       </div>
     <% end %>
-  </div>
+  <% end %>
 <% end %>

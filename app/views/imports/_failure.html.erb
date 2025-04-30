@@ -3,7 +3,7 @@
 <div class="h-full flex flex-col justify-center items-center">
   <div class="space-y-6 max-w-sm">
     <div class="mx-auto bg-red-500/5 h-8 w-8 rounded-full flex items-center justify-center">
-      <%= lucide_icon "alert-octagon", class: "w-5 h-5 text-red-500" %>
+      <%= icon "alert-octagon", color: "destructive" %>
     </div>
 
     <div class="text-center space-y-2">
@@ -11,8 +11,6 @@
       <p class="text-sm text-secondary">Please check that your file format, for any errors and that all required fields are filled, then come back and try again.</p>
     </div>
 
-    <div>
-      <%= button_to "Try again", publish_import_path(import), class: "btn btn--primary text-center w-full" %>
-    </div>
+    <%= render ButtonComponent.new(text: "Try again", href: publish_import_path(import), full_width: true) %>
   </div>
 </div>

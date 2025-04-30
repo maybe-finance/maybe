@@ -1,3 +1,6 @@
-<%= modal_form_wrapper title: t(".edit", account: @account.name) do %>
-  <%= render "form", account: @account, url: depository_path(@account) %>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".edit", account: @account.name)) %>
+  <% dialog.with_body do %>
+    <%= render "form", account: @account, url: depository_path(@account) %>
+  <% end %>
 <% end %>

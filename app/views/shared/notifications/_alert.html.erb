@@ -4,13 +4,13 @@
             data: { controller: "element-removal" } do %>
   <div class="h-5 w-5 shrink-0 p-px text-primary">
     <div class="flex h-full items-center justify-center rounded-full bg-destructive">
-      <%= lucide_icon "x", class: "w-3 h-3" %>
+      <%= icon "x", size: "xs" %>
     </div>
   </div>
 
   <%= tag.p message, class: "text-primary text-sm font-medium" %>
 
   <div class="ml-auto">
-    <%= lucide_icon "x", data: { action: "click->element-removal#remove" }, class: "w-5 h-5 text-secondary hover:text-gray-600 cursor-pointer" %>
+    <%= icon "x", data: { action: "click->element-removal#remove" }, class: "cursor-pointer" %>
   </div>
 <% end %>

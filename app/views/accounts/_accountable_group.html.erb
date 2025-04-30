@@ -1,11 +1,7 @@
 <%# locals: (account_group:) %>
 
-<details class="group" data-controller="account-collapse" data-account-collapse-type-value="<%= account_group.key %>">
-  <summary class="px-3 py-2 flex items-center gap-3 cursor-pointer h-10 mb-1">
-    <%= lucide_icon("chevron-right", class: "group-open:rotate-90 text-secondary w-5 h-5") %>
-
-    <%= tag.p account_group.name, class: "text-sm font-medium" %>
-
+<%= render DisclosureComponent.new(title: account_group.name, align: :left) do |disclosure| %>
+  <% disclosure.with_summary_content do %>
     <div class="ml-auto text-right grow">
       <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
 
@@ -15,11 +11,11 @@
         </div>
       <% end %>
     </div>
-  </summary>
+  <% end %>
 
   <div class="space-y-1">
     <% account_group.accounts.each do |account| %>
-      <%= link_to account_path(account), class: "block flex items-center gap-2 btn btn--ghost", title: account.name do %>
+      <%= link_to account_path(account), class: "block flex items-center gap-2 px-3 py-2 hover:bg-surface-hover", title: account.name do %>
         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
         <div class="min-w-0 grow">
@@ -40,10 +36,13 @@
     <% end %>
   </div>
 
-  <%= link_to new_polymorphic_path(account_group.key, step: "method_select"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary",
-              data: { turbo_frame: "modal" } do %>
-    <%= icon("plus") %>
-    <span>New <%= account_group.name.downcase.singularize %></span>
-  <% end %>
-</details>
+  <%= render LinkComponent.new(
+    href: new_polymorphic_path(account_group.key, step: "method_select"),
+    text: "New #{account_group.name.downcase.singularize}",
+    icon: "plus",
+    full_width: true,
+    variant: "ghost",
+    frame: :modal,
+    class: "justify-start"
+  ) %>
+<% end %>

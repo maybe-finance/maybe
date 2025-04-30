@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     delete :disable
   end
 
+  mount Lookbook::Engine, at: "/design-system"
+
   # Uses basic auth - see config/initializers/sidekiq.rb
   mount Sidekiq::Web => "/sidekiq"
 

@@ -32,7 +32,7 @@
                   <% group.budget_subcategories.each do |budget_subcategory| %>
                     <div class="w-full flex items-center gap-4">
                       <div class="ml-4 flex items-center justify-center text-subdued">
-                        <%= lucide_icon "corner-down-right", class: "w-5 h-5 shrink-0" %>
+                        <%= icon("corner-down-right") %>
                       </div>
 
                       <%= render "budget_categories/budget_category_form", budget_category: budget_subcategory %>

@@ -5,7 +5,7 @@
     <div class="p-3 shadow-border-xs bg-container rounded-lg md:flex md:justify-between md:items-center">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-gray-25 flex justify-center items-center">
-          <%= lucide_icon "shield-check", class: "w-5 h-5 text-secondary" %>
+          <%= icon "shield-check" %>
         </div>
 
         <div class="text-sm space-y-1">
@@ -21,18 +21,24 @@
 
       <div class="mt-4 md:mt-0">
         <% if Current.user.otp_required? %>
-          <%= button_to t(".disable_mfa"), disable_mfa_path,
-              method: :delete,
-              class: "w-full md:w-auto btn btn--secondary flex items-center gap-1 justify-center",
-              data: { turbo_confirm: {
-                title: t(".disable_mfa_confirm"),
-                body: t(".disable_mfa_confirm"),
-                accept: t(".disable_mfa"),
-                acceptClass: "w-full bg-red-500 text-white rounded-xl text-center p-[10px] border mb-2"
-              } } %>
+          <%= render ButtonComponent.new(
+            text: t(".disable_mfa"),
+            variant: "secondary",
+            href: disable_mfa_path,
+            method: :delete,
+            confirm: CustomConfirm.new(
+              title: t(".disable_mfa_confirm"),
+              body: t(".disable_mfa_confirm"),
+              btn_text: t(".disable_mfa"),
+              destructive: true
+            )
+          ) %>
         <% else %>
-          <%= link_to t(".enable_mfa"), new_mfa_path,
-              class: "w-full md:w-auto btn btn--primary flex items-center gap-1 justify-center" %>
+          <%= render LinkComponent.new(
+            text: t(".enable_mfa"),
+            variant: "primary",
+            href: new_mfa_path
+          ) %>
         <% end %>
       </div>
     </div>

@@ -7,11 +7,11 @@
         <%= link_to pagy_url_for(pagy, pagy.prev),
               data: { turbo_frame: :_top },
               class: "inline-flex items-center p-2 text-sm font-medium text-secondary bg-container-inset hover:border-secondary hover:text-secondary" do %>
-          <%= lucide_icon("chevron-left", class: "w-5 h-5 text-secondary") %>
+          <%= icon("chevron-left") %>
         <% end %>
       <% else %>
         <div class="inline-flex items-center p-2 text-sm font-medium hover:border-secondary">
-          <%= lucide_icon("chevron-left", class: "w-5 h-5 text-secondary") %>
+          <%= icon("chevron-left") %>
         </div>
       <% end %>
     </div>
@@ -39,11 +39,11 @@
         <%= link_to pagy_url_for(pagy, pagy.next),
               data: { turbo_frame: :_top },
               class: "inline-flex items-center p-2 text-sm font-medium text-secondary hover:border-secondary hover:text-secondary" do %>
-          <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+          <%= icon("chevron-right") %>
         <% end %>
       <% else %>
         <div class="inline-flex items-center p-2 text-sm font-medium hover:border-secondary">
-          <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+          <%= icon("chevron-right") %>
         </div>
       <% end %>
     </div>

@@ -33,5 +33,10 @@
 </div>
 
 <div class="flex justify-center py-8">
-  <%= link_to "Edit account details", edit_vehicle_path(account), class: "btn btn--ghost", data: { turbo_frame: :modal } %>
+  <%= render LinkComponent.new(
+    text: "Edit account details",
+    variant: "ghost",
+    href: edit_vehicle_path(account),
+    frame: :modal
+  ) %>
 </div>

@@ -18,9 +18,9 @@
 
         <div class="flex items-center justify-between gap-2 bg-container px-5 py-3 rounded-tl-lg rounded-tr-lg">
           <div class="flex items-center gap-3">
-            <div class="<%= resource.bg_class %> w-8 h-8 rounded-full flex justify-center items-center">
-              <%= lucide_icon resource.icon, class: "#{resource.text_class} w-5 h-5 shrink-0" %>
-            </div>
+            <%= tag.div class: class_names(resource.bg_class, resource.text_class, "w-8 h-8 rounded-full flex justify-center items-center") do %>
+              <%= icon resource.icon, color: "current" %>
+            <% end %>
 
             <p><%= resource.label %></p>
           </div>
@@ -35,5 +35,5 @@
     </div>
   </div>
 
-  <%= button_to "Publish import", publish_import_path(import), class: "btn btn--primary w-full" %>
+  <%= render ButtonComponent.new(text: "Publish import", href: publish_import_path(import), full_width: true) %>
 </div>

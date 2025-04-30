@@ -1,39 +1,32 @@
-<%= drawer do %>
-  <div class="space-y-4">
-    <header class="flex justify-between">
-      <div>
-        <p class="text-sm text-secondary">Category</p>
-        <h3 class="text-2xl font-medium text-primary">
-          <%= @budget_category.name %>
-        </h3>
-
-        <% if @budget_category.budget.initialized? %>
-          <p class="text-sm text-secondary">
-            <span class="text-primary">
-              <%= format_money(@budget_category.actual_spending_money) %>
-            </span>
-            <span>/</span>
-            <span><%= format_money(@budget_category.budgeted_spending_money) %></span>
-          </p>
-        <% end %>
-      </div>
+<%= render DialogComponent.new(variant: :drawer) do |dialog| %>
+  <% dialog.with_header do %>
+    <div>
+      <p class="text-sm text-secondary">Category</p>
+      <h3 class="text-2xl font-medium text-primary">
+        <%= @budget_category.name %>
+      </h3>
 
       <% if @budget_category.budget.initialized? %>
-        <div class="ml-auto w-10 h-10">
-          <%= render "budget_categories/budget_category_donut",
-                    budget_category: @budget_category %>
-        </div>
+        <p class="text-sm text-secondary">
+          <span class="text-primary">
+            <%= format_money(@budget_category.actual_spending_money) %>
+          </span>
+          <span>/</span>
+          <span><%= format_money(@budget_category.budgeted_spending_money) %></span>
+        </p>
       <% end %>
-    </header>
+    </div>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4>Overview</h4>
-        <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
-      </summary>
+    <% if @budget_category.budget.initialized? %>
+      <div class="ml-auto w-10 h-10">
+        <%= render "budget_categories/budget_category_donut",
+                    budget_category: @budget_category %>
+      </div>
+    <% end %>
+  <% end %>
 
+  <% dialog.with_body do %>
+    <% dialog.with_section(title: "Overview", open: true) do %>
       <div class="pb-4">
         <dl class="space-y-3 px-3 py-2">
           <div class="flex items-center justify-between text-sm">
@@ -49,20 +42,20 @@
             <div class="flex items-center justify-between text-sm">
               <dt class="text-secondary">Status</dt>
               <% if @budget_category.available_to_spend.negative? %>
-                <dd class="text-red-500 flex items-center gap-1 text-red-500 font-medium">
-                  <%= lucide_icon "alert-circle", class: "shrink-0 w-4 h-4 text-red-500" %>
+                <dd class="flex items-center gap-1 text-red-500 font-medium">
+                  <%= icon "alert-circle", size: "sm", color: "destructive" %>
                   <%= format_money @budget_category.available_to_spend_money.abs %>
                   <span>overspent</span>
                 </dd>
               <% elsif @budget_category.available_to_spend.zero? %>
-                <dd class="text-orange-500 flex items-center gap-1 text-orange-500 font-medium">
-                  <%= lucide_icon "x-circle", class: "shrink-0 w-4 h-4 text-orange-500" %>
+                <dd class="flex items-center gap-1 text-orange-500 font-medium">
+                  <%= icon "x-circle", size: "sm", color: "warning" %>
                   <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
               <% else %>
                 <dd class="text-primary flex items-center gap-1 text-green-500 font-medium">
-                  <%= lucide_icon "check-circle-2", class: "shrink-0 w-4 h-4 text-green-500" %>
+                  <%= icon "check-circle", size: "sm", color: "success" %>
                   <%= format_money @budget_category.available_to_spend_money %>
                   <span>left</span>
                 </dd>
@@ -92,16 +85,9 @@
           </div>
         </dl>
       </div>
-    </details>
+    <% end %>
 
-    <details class="group space-y-2" open>
-      <summary class="flex list-none items-center justify-between rounded-xl px-3 py-2
-                     text-xs font-medium uppercase text-secondary bg-gray-25 focus-visible:outline-hidden">
-        <h4>Recent Transactions</h4>
-        <%= lucide_icon "chevron-down",
-            class: "group-open:transform group-open:rotate-180 text-secondary w-5" %>
-      </summary>
-
+    <% dialog.with_section(title: "Recent Transactions", open: true) do %>
       <div class="space-y-2">
         <div class="px-3 py-4 space-y-2">
           <% if @recent_transactions.any? %>
@@ -133,14 +119,17 @@
               <% end %>
             </ul>
 
-            <%= link_to "View all category transactions",
-                  transactions_path(q: {
-                    categories: [@budget_category.name],
-                    start_date: @budget.start_date,
-                    end_date: @budget.end_date
-                  }),
-                  data: { turbo_frame: :_top },
-                  class: "block text-center btn btn--outline w-full" %>
+            <%= render LinkComponent.new(
+              text: "View all category transactions",
+              variant: "outline",
+              full_width: true,
+              href: transactions_path(q: {
+                categories: [@budget_category.name],
+                start_date: @budget.start_date,
+                end_date: @budget.end_date
+              }),
+              frame: :_top
+            ) %>
           <% else %>
             <p class="text-secondary text-sm mb-4">
               No transactions found for this budget period.
@@ -148,6 +137,6 @@
           <% end %>
         </div>
       </div>
-    </details>
-  </div>
+    <% end %>
+  <% end %>
 <% end %>

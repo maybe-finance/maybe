@@ -3,9 +3,10 @@
     <%= tag.p t(".no_accounts"), class: "text-primary mb-1 font-medium" %>
     <%= tag.p t(".empty_message"), class: "text-secondary mb-4" %>
 
-    <%= link_to new_account_path, class: "w-fit flex text-white text-sm font-medium items-center gap-1 bg-gray-900 rounded-lg p-2 pr-3", data: { turbo_frame: "modal" } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new_account") %></span>
-    <% end %>
+    <%= render LinkComponent.new(
+      text: t(".new_account"),
+      href: new_account_path,
+      frame: :modal
+    ) %>
   </div>
 </div>

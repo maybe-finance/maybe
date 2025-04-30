@@ -5,7 +5,12 @@
       <%= tag.h1 t(".title"), class: "text-3xl font-medium mb-2" %>
       <%= tag.p t(".message"), class: "text-sm text-secondary mb-6" %>
 
-      <%= link_to t(".setup"), profile_onboarding_path, class: "block flex justify-center items-center btn btn--primary w-full" %>
+      <%= render LinkComponent.new(
+        text: t(".setup"),
+        href: profile_onboarding_path,
+        variant: "primary",
+        full_width: true
+      ) %>
     </div>
   </div>
 </div>

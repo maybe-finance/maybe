@@ -1,29 +1,32 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Rules</h1>
 
-  <% turbo_confirm = {
-    title: "Delete all rules",
-    body: "Are you sure you want to delete all rules? This action cannot be undone.",
-    accept: "Delete all rules",
-  } %>
-
   <div class="flex items-center gap-2">
     <% if @rules.any? %>
-      <%= contextual_menu do %>
-        <%= contextual_menu_destructive_item "Delete all rules", destroy_all_rules_path, turbo_confirm: turbo_confirm %>
+      <%= render MenuComponent.new do |menu| %>
+        <% menu.with_item(
+          variant: "button",
+          text: "Delete all rules",
+          href: destroy_all_rules_path,
+          icon: "trash-2",
+          method: :delete,
+          confirm: CustomConfirm.for_resource_deletion("All rules", high_severity: true)) %>
       <% end %>
     <% end %>
 
-    <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1 justify-center", data: { turbo_frame: :modal } do %>
-      <%= lucide_icon "plus", class: "w-5 h-5" %>
-      <p>New rule</p>
-    <% end %>
+    <%= render LinkComponent.new(
+      text: "New rule",
+      variant: "primary",
+      href: new_rule_path(resource_type: "transaction"),
+      icon: "plus",
+      frame: :modal
+    ) %>
   </div>
 </header>
 
 <% if self_hosted? %>
   <div class="flex items-center gap-2 mb-2 py-4">
-    <%= lucide_icon("circle-alert", class: "w-4 h-4 text-secondary") %>
+    <%= icon("circle-alert", size: "sm") %>
     <p class="text-sm text-secondary">
       AI-enabled rule actions will cost money.  Be sure to filter as narrowly as possible to avoid unnecessary costs.
     </p>
@@ -50,10 +53,13 @@
         <p class="text-sm text-primary font-medium mb-1">No rules yet</p>
         <p class="text-sm text-secondary mb-4">Set up rules to perform actions to your transactions and other data on every account sync.</p>
         <div class="flex items-center gap-2">
-          <%= link_to new_rule_path(resource_type: "transaction"), class: "btn btn--primary flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-            <span>New rule</span>
-          <% end %>
+          <%= render LinkComponent.new(
+            text: "New rule",
+            variant: "primary",
+            href: new_rule_path(resource_type: "transaction"),
+            icon: "plus",
+            frame: :modal
+          ) %>
         </div>
       </div>
     </div>

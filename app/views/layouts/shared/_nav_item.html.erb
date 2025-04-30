@@ -1,0 +1,20 @@
+<%# locals:(name:, path:, icon:, icon_custom:, active:, mobile_only: false) %>
+
+<%= link_to path, class: "space-y-1 group block relative pb-1" do %>
+  <div class="grow flex flex-col lg:flex-row gap-1 items-center">
+    <%= tag.div class: class_names("w-4 h-1 lg:w-1 lg:h-4 rounded-bl-sm rounded-br-sm lg:rounded-tr-sm lg:rounded-br-sm lg:rounded-bl-none", "bg-nav-indicator" => active) %>
+
+    <%= tag.div class: class_names(
+      "w-8 h-8 flex items-center justify-center mx-auto rounded-lg",
+      active ? "bg-container shadow-xs text-primary" : "group-hover:bg-container-hover text-secondary"
+    ) do %>
+      <%= icon(icon, color: active ? "current" : "default", custom: icon_custom) %>
+    <% end %>
+  </div>
+
+  <div class="grow flex justify-center lg:pl-2">
+    <%= tag.p class: class_names("font-medium text-[11px]", active ? "text-primary" : "text-secondary") do %>
+      <%= name %>
+    <% end %>
+  </div>
+<% end %>

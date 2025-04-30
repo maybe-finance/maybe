@@ -1,73 +1,47 @@
 <%# locals: (user:, placement: "right-start", offset: 16) %>
 
-<div id="user-menu" data-controller="menu" data-menu-placement-value="<%= placement %>" data-menu-offset-value="<%= offset %>">
-  <button data-menu-target="button">
-    <div class="w-9 h-9 cursor-pointer">
-      <%= render "settings/user_avatar", user: user, variant: :small %>
-    </div>
-  </button>
+<div data-testid="user-menu">
+  <%= render MenuComponent.new(variant: "avatar", avatar_url: user.profile_image&.variant(:small)&.url, placement: placement, offset: offset) do |menu| %>
+    <%= menu.with_header do %>
+      <div class="px-4 py-3 flex items-center gap-3">
+        <div class="w-9 h-9 shrink-0">
+          <%= render "settings/user_avatar", avatar_url: user.profile_image&.variant(:small)&.url, lazy: true %>
+        </div>
 
-  <div data-menu-target="content" class="hidden absolute w-[276px] z-100 divide-y divide-alpha-black-100 bg-container rounded-xl shadow-border-sm">
-    <div class="px-4 py-3 flex items-center gap-3">
-      <div class="w-9 h-9 shrink-0">
-        <%= render "settings/user_avatar", user: user, variant: :small, lazy: true %>
-      </div>
-
-      <div class="overflow-hidden text-ellipsis text-sm">
-        <p class="font-medium"><%= user.display_name %></p>
-        <% if user.display_name != user.email %>
-          <p class="text-secondary"><%= user.email %></p>
-        <% end %>
-      </div>
-    </div>
-
-    <% if self_hosted? %>
-      <div class="p-3">
-        <p class="text-sm">
-          <span class="font-medium text-primary">Version:</span>
-          <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
-
-          <% if Maybe.commit_sha.present? %>
-            (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+        <div class="overflow-hidden text-ellipsis text-sm">
+          <p class="font-medium"><%= user.display_name %></p>
+          <% if user.display_name != user.email %>
+            <p class="text-secondary"><%= user.email %></p>
           <% end %>
-        </p>
+        </div>
       </div>
-    <% end %>
-
-    <div class="p-1">
-      <%= link_to settings_profile_path(return_to: request.fullpath), class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("settings", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Settings</span>
-      <% end %>
-
-      <%= link_to changelog_path, class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("box", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Changelog</span>
-      <% end %>
-
-      <%= link_to feedback_path, class: "btn btn--ghost flex gap-2 items-center" do %>
-        <%= lucide_icon("megaphone", class: "w-5 h-5 text-secondary shrink-0") %>
-        <span class="text-sm">Feedback</span>
-      <% end %>
 
       <% if self_hosted? %>
-        <%= link_to "https://link.maybe.co/discord", class: "btn btn--ghost flex gap-2 items-center" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-sm">Contact</span>
-        <% end %>
-      <% else %>
-        <%= link_to "mailto:hello@maybefinance.com", class: "btn btn--ghost flex gap-2 items-center", onclick: "Intercom('showNewMessage'); return false;" do %>
-          <%= lucide_icon("message-square-more", class: "w-5 h-5 text-secondary shrink-0") %>
-          <span class="text-sm">Contact</span>
-        <% end %>
-      <% end %>
-    </div>
+        <div class="px-4 py-3 border-t border-tertiary">
+          <p class="text-sm">
+            <span class="font-medium text-primary">Version:</span>
+            <%= link_to Maybe.version.to_release_tag, "https://github.com/maybe-finance/maybe/releases/tag/#{Maybe.version.to_release_tag}", target: "_blank", class: "hover:underline" %>
 
-    <div class="p-1">
-      <%= button_to session_path(Current.session), method: :delete, class: "btn btn--ghost text-destructive w-full flex gap-2 items-center" do %>
-        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
-        <span class="text-sm">Logout</span>
+            <% if Maybe.commit_sha.present? %>
+              (<%= link_to Maybe.commit_sha.first(7), "https://github.com/maybe-finance/maybe/commit/#{Maybe.commit_sha}", target: "_blank", class: "hover:underline" %>)
+            <% end %>
+          </p>
+        </div>
       <% end %>
-    </div>
-  </div>
+    <% end %>
+
+    <% menu.with_item(variant: "link", text: "Settings", icon: "settings", href: settings_profile_path(return_to: request.fullpath)) %>
+    <% menu.with_item(variant: "link", text: "Changelog", icon: "box", href: changelog_path) %>
+
+    <% if self_hosted? %>
+      <% menu.with_item(variant: "link", text: "Feedback", icon: "megaphone", href: feedback_path) %>
+      <% menu.with_item(variant: "link", text: "Contact", icon: "message-square-more", href: "https://link.maybe.co/discord") %>
+    <% else %>
+      <% menu.with_item(variant: "button", text: "Contact", icon: "message-square-more", data: { action: "intercom#show" }) %>
+    <% end %>
+
+    <% menu.with_item(variant: "divider") %>
+
+    <% menu.with_item(variant: "button", text: "Log out", icon: "log-out", href: session_path(Current.session), method: :delete) %>
+  <% end %>
 </div>

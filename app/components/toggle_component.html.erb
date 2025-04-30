@@ -1,0 +1,5 @@
+<div class="relative inline-block select-none">
+  <%= hidden_field_tag name, unchecked_value, id: nil %>
+  <%= check_box_tag name, checked_value, checked, class: "sr-only peer", disabled: disabled, id: id, **opts %>
+  <%= label_tag name, "&nbsp;".html_safe, class: label_classes, for: id %>
+</div>

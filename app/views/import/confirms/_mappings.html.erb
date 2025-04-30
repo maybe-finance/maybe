@@ -8,18 +8,29 @@
     <% if import.requires_account? %>
       <div class="w-full max-w-full overflow-hidden mb-4">
         <div class="overflow-x-auto">
-          <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px] min-w-0">
+          <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".no_accounts"), class: "text-sm" %>
-            <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
+
+            <%= render LinkComponent.new(
+              text: "Create account",
+              variant: "primary",
+              href: new_account_path(return_to: import_confirm_path(import)),
+              frame: :modal
+            ) %>
           </div>
         </div>
       </div>
     <% elsif import.has_unassigned_account? %>
       <div class="w-full max-w-full overflow-hidden mb-4">
         <div class="overflow-x-auto">
-          <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px] min-w-0">
+          <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".unassigned_account"), class: "text-sm" %>
-            <%= link_to t(".create_account"), new_account_path(return_to: import_confirm_path(import)), class: "btn btn--primary whitespace-nowrap", data: { turbo_frame: :modal } %>
+            <%= render LinkComponent.new(
+              text: t(".create_account"),
+              variant: "primary",
+              href: new_account_path(return_to: import_confirm_path(import)),
+              frame: :modal
+            ) %>
           </div>
         </div>
       </div>
@@ -29,7 +40,7 @@
   <div class="space-y-4 w-full max-w-full">
     <div class="w-full max-w-full overflow-hidden">
       <div class="overflow-x-auto">
-        <div class="bg-container-inset rounded-xl p-1 space-y-1 w-[650px] min-w-0">
+        <div class="bg-container-inset rounded-xl p-1 space-y-1 w-[650px] min-w-0 mx-auto">
           <div class="grid grid-cols-3 gap-2 text-xs font-medium text-secondary uppercase px-5 py-3">
             <p><%= t(".csv_mapping_label", mapping: mapping_label(mapping_class)) %></p>
             <p><%= t(".maybe_mapping_label", mapping: mapping_label(mapping_class)) %></p>
@@ -48,10 +59,14 @@
     </div>
 
     <div class="flex justify-center w-full">
-      <%= link_to is_last_step ? import_path(import) : url_for(step: step_idx + 2), class: "btn btn--primary w-full md:w-36 flex items-center justify-between gap-2" do %>
-        <span>Next</span>
-        <%= lucide_icon "arrow-right", class: "w-5 h-5" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        text: "Next",
+        variant: "primary",
+        href: is_last_step ? import_path(import) : url_for(step: step_idx + 2),
+        icon: "arrow-right",
+        icon_position: "right",
+        class: "w-full md:w-auto"
+      ) %>
     </div>
   </div>
 </div>

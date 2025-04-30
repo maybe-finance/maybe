@@ -1,0 +1,13 @@
+<%= link_to href, **merged_opts do %>
+  <% if icon && (icon_position != "right") %>
+    <%= lucide_icon(icon, class: icon_classes) %>
+  <% end %>
+
+  <% unless icon_only? %>
+    <%= text %>
+  <% end %>
+
+  <% if icon && icon_position == "right" %>
+    <%= lucide_icon(icon, class: icon_classes) %>
+  <% end %>
+<% end %>

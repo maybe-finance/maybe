@@ -12,7 +12,7 @@
     <div data-profile-image-preview-target="placeholderImage"
          class="h-full w-full flex justify-center  items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
       <div class="h-full w-full flex justify-center items-center bg-container">
-        <%= lucide_icon "image-plus", class: "w-6 h-6 text-secondary" %>
+        <%= icon "image-plus", size: "lg" %>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
          class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
       <% if user.profile_image.attached? %>
         <div class="h-full w-full">
-          <%= render "settings/user_avatar", user: user %>
+          <%= render "settings/user_avatar", avatar_url: user.profile_image.url %>
         </div>
       <% end %>
     </div>
@@ -30,16 +30,15 @@
             data-profile-image-preview-target="clearBtn"
             data-action="click->profile-image-preview#clearFileInput"
       class="<%= user.profile_image.attached? ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
-      <%= lucide_icon "x", class: "w-4 h-4 text-secondary" %>
+      <%= icon "x", size: "sm" %>
     </button>
   </div>
 
   <div class="md:text-left text-center">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
-    <%= form.label :profile_image, class: "btn btn--outline inline-block", data: { profile_image_preview_target: "uploadButton" } do %>
-
-      <%= lucide_icon "camera", class: "w-5 h-5 mr-2 inline-block", data: { profile_image_preview_target: "cameraIcon" } %>
+    <%= form.label :profile_image, class: "px-3 py-2 rounded-lg text-sm hover:bg-surface-hover border border-secondary inline-flex items-center gap-2 cursor-pointer", data: { profile_image_preview_target: "uploadButton" } do %>
+      <%= icon "camera", data: { profile_image_preview_target: "cameraIcon" } %>
       <span data-profile-image-preview-target="uploadText">
         <%= t(".choose") %> <span class="text-secondary"><%= t(".choose_label") %></span>
       </span>

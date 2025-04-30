@@ -1,7 +1,7 @@
-<%# locals: (user:, variant: :thumbnail, lazy: false) %>
+<%# locals: (avatar_url: nil, initials: "U", lazy: false) %>
 
-<% if user.profile_image.attached? %>
-  <%= image_tag user.profile_image.variant(variant), class: "rounded-full w-full h-full object-cover", loading: lazy ? "lazy" : "eager" %>
+<% if avatar_url.present? %>
+  <%= image_tag avatar_url, class: "rounded-full w-full h-full object-cover", loading: lazy ? "lazy" : "eager" %>
 <% else %>
-  <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= user.initial %></div>
+  <div class="w-full h-full bg-surface-inset hover:bg-surface-inset-hover text-secondary rounded-full flex items-center justify-center text-lg uppercase"><%= initials %></div>
 <% end %>

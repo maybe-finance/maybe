@@ -8,9 +8,8 @@
           border-color: color-mix(in srgb, <%= category.color %> 30%, white);
           color: <%= category.color %>;">
     <% if category.lucide_icon.present? %>
-      <%= lucide_icon category.lucide_icon, class: "w-4 h-4 shrink-0" %>
+      <%= icon category.lucide_icon, size: "sm", color: "current" %>
     <% end %>
     <%= category.name %>
   </span>
-
 </div>

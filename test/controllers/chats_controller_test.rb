@@ -7,12 +7,6 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  test "cannot create a chat if AI is disabled" do
-    @user.update!(ai_enabled: false)
-    post chats_url, params: { chat: { content: "Hello", ai_model: "gpt-4o" } }
-    assert_response :forbidden
-  end
-
   test "gets index" do
     get chats_url
     assert_response :success

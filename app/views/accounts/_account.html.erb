@@ -25,7 +25,7 @@
 
       <% unless account.scheduled_for_deletion? %>
         <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
-          <%= lucide_icon "pencil-line", class: "w-4 h-4 text-secondary" %>
+          <%= icon("pencil-line", size: "sm") %>
         <% end %>
       <% end %>
     </div>
@@ -35,7 +35,9 @@
       </p>
 
       <% unless account.scheduled_for_deletion? %>
-        <%= render "shared/toggle_form", model: account, attribute: :is_active, turbo_frame: "_top" %>
+        <%= styled_form_with model: account, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
+          <%= f.toggle :is_active, { data: { auto_submit_form_target: "auto" } } %>
+        <% end %>
       <% end %>
     </div>
   </div>

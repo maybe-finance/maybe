@@ -1,11 +1,13 @@
+<%# locals: (family_merchant:) %>
+
 <div data-controller="color-avatar">
-  <%= styled_form_with model: @merchant, class: "space-y-4" do |f| %>
+  <%= styled_form_with model: family_merchant, class: "space-y-4" do |f| %>
     <section class="space-y-4">
-      <% if @merchant.errors.any? %>
-        <%= render "shared/form_errors", model: @merchant %>
+      <% if family_merchant.errors.any? %>
+        <%= render "shared/form_errors", model: family_merchant %>
       <% end %>
       <div class="w-fit m-auto mb-4">
-        <%= render partial: "shared/color_avatar", locals: { name: @merchant.name, color: @merchant.color } %>
+        <%= render partial: "shared/color_avatar", locals: { name: family_merchant.name, color: family_merchant.color } %>
       </div>
       <div class="flex gap-2 items-center justify-center">
         <% FamilyMerchant::COLORS.each do |color| %>

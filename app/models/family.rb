@@ -146,6 +146,10 @@ class Family < ApplicationRecord
     false
   end
 
+  def missing_data_provider?
+    requires_data_provider? && Provider::Registry.get_provider(:synth).nil?
+  end
+
   def primary_user
     users.order(:created_at).first
   end

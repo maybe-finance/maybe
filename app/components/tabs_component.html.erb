@@ -1,0 +1,17 @@
+<%= tag.div data: {
+  controller: "tabs",
+  testid: testid,
+  tabs_url_param_key_value: url_param_key,
+  tabs_nav_btn_active_class: active_btn_classes,
+  tabs_nav_btn_inactive_class: inactive_btn_classes
+} do %>
+  <% if unstyled? %>
+    <%= content %>
+  <% else %>
+    <%= nav %>
+
+    <% panels.each do |panel| %>
+      <%= panel %>
+    <% end %>
+  <% end %>
+<% end %>

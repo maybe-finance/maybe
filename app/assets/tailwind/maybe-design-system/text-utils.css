@@ -1,0 +1,39 @@
+@utility text-primary {
+  @apply text-gray-900;
+
+  @variant theme-dark {
+   @apply text-white;
+  }
+}
+
+@utility text-inverse {
+  @apply text-white;
+
+  @variant theme-dark {
+    @apply text-gray-900;
+  }
+}
+
+@utility text-secondary {
+  @apply text-gray-500;
+
+  @variant theme-dark {
+    @apply text-gray-400;
+  }
+}
+
+@utility text-subdued {
+  @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-600;
+  }
+}
+
+@utility text-link {
+  @apply text-blue-600;
+
+  @variant theme-dark {
+    @apply text-blue-500;
+  }
+}
