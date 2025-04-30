@@ -39,7 +39,7 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save
     end
 
-    assert_equal "Transfer must have different accounts", transfer.errors.full_messages.first
+    assert_equal "Must be from different accounts", transfer.errors.full_messages.first
   end
 
   test "Transfer transactions must have opposite amounts" do
@@ -55,7 +55,7 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save
     end
 
-    assert_equal "Transfer transactions must have opposite amounts", transfer.errors.full_messages.first
+    assert_equal "Must have opposite amounts", transfer.errors.full_messages.first
   end
 
   test "transfer dates must be within 4 days of each other" do
@@ -71,7 +71,7 @@ class TransferTest < ActiveSupport::TestCase
       transfer.save
     end
 
-    assert_equal "Transfer transaction dates must be within 4 days of each other", transfer.errors.full_messages.first
+    assert_equal "Must be within 4 days", transfer.errors.full_messages.first
   end
 
   test "transfer must be from the same family" do
@@ -90,7 +90,7 @@ class TransferTest < ActiveSupport::TestCase
     )
 
     assert transfer.invalid?
-    assert_equal "Transfer must be from the same family", transfer.errors.full_messages.first
+    assert_equal "Must be from same family", transfer.errors.full_messages.first
   end
 
   test "from_accounts converts amounts to the to_account's currency" do

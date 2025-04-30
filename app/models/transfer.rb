@@ -56,8 +56,8 @@ class Transfer < ApplicationRecord
   end
 
   def sync_account_later
-    inflow_transaction.entry.sync_account_later
-    outflow_transaction.entry.sync_account_later
+    inflow_transaction&.entry&.sync_account_later
+    outflow_transaction&.entry&.sync_account_later
   end
 
   def belongs_to_family?(family)
@@ -65,63 +65,67 @@ class Transfer < ApplicationRecord
   end
 
   def to_account
-    inflow_transaction.entry.account
+    inflow_transaction&.entry&.account
   end
 
   def from_account
-    outflow_transaction.entry.account
+    outflow_transaction&.entry&.account
   end
 
   def amount_abs
-    inflow_transaction.entry.amount_money.abs
+    inflow_transaction&.entry&.amount_money&.abs
   end
 
   def name
+    acc = to_account
     if payment?
-      I18n.t("transfer.payment_name", to_account: to_account.name)
+      acc ? "Payment to #{acc.name}" : "Payment"
     else
-      I18n.t("transfer.name", to_account: to_account.name)
+      acc ? "Transfer to #{acc.name}" : "Transfer"
     end
   end
 
   def payment?
-    to_account.liability?
+    to_account&.liability?
   end
 
   def categorizable?
-    to_account.accountable_type == "Loan"
+    to_account&.accountable_type == "Loan"
   end
 
   private
     def transfer_has_different_accounts
-      return unless inflow_transaction.present? && outflow_transaction.present?
-      errors.add(:base, :must_be_from_different_accounts) if inflow_transaction.entry.account == outflow_transaction.entry.account
+      return unless inflow_transaction&.entry && outflow_transaction&.entry
+      errors.add(:base, "Must be from different accounts") if to_account == from_account
     end
 
     def transfer_has_same_family
-      return unless inflow_transaction.present? && outflow_transaction.present?
-      errors.add(:base, :must_be_from_same_family) unless inflow_transaction.entry.account.family == outflow_transaction.entry.account.family
+      return unless inflow_transaction&.entry && outflow_transaction&.entry
+      errors.add(:base, "Must be from same family") unless to_account&.family == from_account&.family
     end
 
     def transfer_has_opposite_amounts
-      return unless inflow_transaction.present? && outflow_transaction.present?
+      return unless inflow_transaction&.entry && outflow_transaction&.entry
 
-      inflow_amount = inflow_transaction.entry.amount
-      outflow_amount = outflow_transaction.entry.amount
+      inflow_entry = inflow_transaction.entry
+      outflow_entry = outflow_transaction.entry
 
-      if inflow_transaction.entry.currency == outflow_transaction.entry.currency
+      inflow_amount = inflow_entry.amount
+      outflow_amount = outflow_entry.amount
+
+      if inflow_entry.currency == outflow_entry.currency
         # For same currency, amounts must be exactly opposite
-        errors.add(:base, :must_have_opposite_amounts) if inflow_amount + outflow_amount != 0
+        errors.add(:base, "Must have opposite amounts") if inflow_amount + outflow_amount != 0
       else
         # For different currencies, just check the signs are opposite
-        errors.add(:base, :must_have_opposite_amounts) unless inflow_amount.negative? && outflow_amount.positive?
+        errors.add(:base, "Must have opposite amounts") unless inflow_amount.negative? && outflow_amount.positive?
       end
     end
 
     def transfer_within_date_range
-      return unless inflow_transaction.present? && outflow_transaction.present?
+      return unless inflow_transaction&.entry && outflow_transaction&.entry
 
       date_diff = (inflow_transaction.entry.date - outflow_transaction.entry.date).abs
-      errors.add(:base, :must_be_within_date_range) if date_diff > 4
+      errors.add(:base, "Must be within 4 days") if date_diff > 4
     end
 end
