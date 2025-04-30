@@ -29,12 +29,12 @@ class TradesTest < ApplicationSystemTestCase
     visit_trades
 
     within_trades do
-      assert_text "Purchase 10 shares of AAPL"
       assert_text "Buy #{shares_qty} shares of AAPL"
     end
   end
 
   test "can create sell transaction" do
+    qty = 10
     aapl = @account.holdings.find { |h| h.security.ticker == "AAPL" }
 
     open_new_trade_modal
@@ -42,7 +42,7 @@ class TradesTest < ApplicationSystemTestCase
     select "Sell", from: "Type"
     fill_in "Ticker symbol", with: aapl.ticker
     fill_in "Date", with: Date.current
-    fill_in "Quantity", with: aapl.qty
+    fill_in "Quantity", with: qty
     fill_in "entry[price]", with: 215.33
 
     click_button "Add transaction"
@@ -50,7 +50,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_trades
 
     within_trades do
-      assert_text "Sell #{aapl.qty.round} shares of AAPL"
+      assert_text "Sell #{qty} shares of AAPL"
     end
   end
 

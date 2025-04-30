@@ -8,11 +8,10 @@
 <% desktop_nav_items = mobile_nav_items.reject { |item| item[:mobile_only] } %>
 
 <%= render "layouts/shared/htmldoc" do %>
-  <div 
+  <div
     class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
     data-controller="app-layout"
-    data-app-layout-user-id-value="<%= Current.user.id %>"
-  >
+    data-app-layout-user-id-value="<%= Current.user.id %>">
     <div
     class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
     data-app-layout-target="mobileSidebar">
