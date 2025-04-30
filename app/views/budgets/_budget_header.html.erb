@@ -29,7 +29,7 @@
 
   <%= render MenuComponent.new(variant: "button") do |menu| %>
     <% menu.with_button class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2"  do %>
-      <span class="text-primary font-medium text-3xl md:text-base"><%= @budget.name %></span>
+      <span class="text-primary font-medium text-lg lg:text-base"><%= @budget.name %></span>
       <%= icon("chevron-down") %>
     <% end %>
 

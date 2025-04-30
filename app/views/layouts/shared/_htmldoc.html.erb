@@ -27,6 +27,10 @@
       </div>
     <% end %>
 
+    <% if require_upgrade? %>
+      <%= render "shared/subscribe_modal" %>
+    <% end %>
+
     <%= turbo_frame_tag "modal" %>
     <%= turbo_frame_tag "drawer" %>
 

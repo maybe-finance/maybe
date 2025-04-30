@@ -1,0 +1,79 @@
+<%= tag.div class: "flex flex-col lg:flex-row h-dvh lg:h-full bg-surface pt-safe",
+            data: {
+              controller: "app-layout",
+              app_layout_user_id_value: user_id,
+              app_layout_left_sidebar_class: left_sidebar_classes,
+              app_layout_right_sidebar_class: right_sidebar_classes,
+            } do %>
+  <%# MOBILE - Popout nav menu %>
+  <div
+    class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
+    data-app-layout-target="mobileSidebar">
+    <div class="mb-2">
+      <%= helpers.icon("x", as_button: true, data: { action: "app-layout#closeMobileSidebar" }) %>
+    </div>
+    <%= mobile_sidebar %>
+  </div>
+
+  <%# MOBILE - Top nav %>
+  <nav class="lg:hidden flex justify-between items-center p-3">
+    <%= helpers.icon("panel-left", as_button: true, data: { action: "app-layout#openMobileSidebar"}) %>
+
+    <%= link_to root_path, class: "block" do %>
+      <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+    <% end %>
+
+    <%= mobile_user_menu %>
+  </nav>
+
+  <%# DESKTOP - Left navbar %>
+  <div class="hidden lg:block">
+    <nav class="h-full flex flex-col shrink-0 w-[84px] py-4 mr-3">
+      <div class="pl-2 mb-3">
+        <%= link_to root_path, class: "block" do %>
+          <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+        <% end %>
+      </div>
+
+      <ul class="space-y-0.5">
+        <% nav_items.reject { |item| item.mobile_only }.each do |nav_item| %>
+          <li><%= nav_item %></li>
+        <% end %>
+      </ul>
+
+      <div class="pl-2 mt-auto mx-auto">
+        <%= desktop_user_menu %>
+      </div>
+    </nav>
+  </div>
+
+  <%# DESKTOP - Left sidebar %>
+  <%= tag.div class: class_names("hidden py-4 overflow-y-auto shrink-0", left_sidebar_classes, "lg:block" => show_left?), data: { app_layout_target: "leftSidebar" } do %>
+    <%= left_sidebar %>
+  <% end %>
+
+  <%# SHARED - Main content %>
+  <%= tag.main class: class_names("grow overflow-y-auto px-3 lg:px-10 py-4 h-full w-full mx-auto max-w-5xl"), data: { app_layout_target: "content" } do %>
+    <div class="hidden lg:flex gap-2 items-center justify-between mb-6">
+      <div class="flex items-center gap-2">
+        <%= helpers.icon("panel-left", as_button: true, data: { action: "app-layout#toggleLeftSidebar" }) %>
+        <%= breadcrumbs %>
+      </div>
+      <%= helpers.icon("panel-right", as_button: true, data: { action: "app-layout#toggleRightSidebar" }) %>
+    </div>
+
+    <%= content %>
+  <% end %>
+
+  <%# DESKTOP - Right sidebar %>
+  <%= tag.div class: class_names("hidden h-full overflow-y-auto shrink-0", right_sidebar_classes, "lg:block" => show_right?), data: { app_layout_target: "rightSidebar" } do %>
+    <%= right_sidebar %>
+  <% end %>
+
+  <%# MOBILE - Bottom Nav %>
+  <%= tag.nav class: "lg:hidden bg-surface shrink-0 z-10 pb-2 border-t border-tertiary pb-safe flex justify-around" do %>
+    <% nav_items.each do |nav_item| %>
+      <%= nav_item %>
+    <% end %>
+  <% end %>
+<% end %>
