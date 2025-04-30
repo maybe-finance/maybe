@@ -65,7 +65,9 @@
       </div>
 
       <div class="space-y-1 p-1">
-        <%= render @rules %>
+        <% @rules.each do |rule| %>
+          <%= render "rule", rule: rule %>
+        <% end %>
       </div>
     </div>
   <% else %>
