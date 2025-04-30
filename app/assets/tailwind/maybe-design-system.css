@@ -243,6 +243,20 @@
   color: theme(colors.white) !important;
 }
 
+/* Transition when expanding a sidebar */
+@utility from-zero-width-transition {
+  transition-property: width, opacity;
+  transition-duration: 0.5s, 0.7s;
+  transition-timing-function: linear;
+}
+
+/* Transition when collapsing a sidebar */
+@utility to-zero-width-transition {
+  transition-property: width, opacity;
+  transition-duration: 0.3s, 0.2s;
+  transition-timing-function: linear;
+}
+
 @layer base {
   [data-theme="dark"] { 
     --color-success: var(--color-green-500);

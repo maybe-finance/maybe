@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>" lang="en" data-controller="theme" data-theme-user-preference-value="<%= Current.user&.theme || "system" %>">
+<html class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>" lang="en" data-controller="theme intercom" data-theme-user-preference-value="<%= Current.user&.theme || "system" %>">
   <head>
     <%= render "layouts/shared/head" %>
     <%= yield :head %>
@@ -21,7 +21,7 @@
     <%= family_stream %>
 
     <% if Rails.env.development? %>
-      <div class="fixed bottom-20 left-2 flex flex-col gap-1">
+      <div class="fixed bottom-32 left-7 flex flex-col gap-1">
         <%= icon("eclipse", as_button: true, data: { action: "theme#toDark" }) %>
         <%= icon("sun", as_button: true, data: { action: "theme#toLight" }) %>
       </div>

@@ -1,9 +1,17 @@
 <%# locals: (balance_sheet:) %>
 
-<div class="space-y-4">
+<div class="space-y-4 overflow-x-auto">
   <% balance_sheet.classification_groups.each do |classification_group| %>
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
-      <h2 class="text-lg font-medium"><%= classification_group.display_name %></h2>
+      <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
+        <span>
+          <%= classification_group.display_name %>
+        </span>
+
+        <span class="text-secondary">&middot;</span>
+
+        <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
+      </h2>
 
       <% if classification_group.account_groups.any? %>
         <div class="space-y-4">
@@ -23,9 +31,9 @@
           </div>
         </div>
 
-        <div class="bg-surface rounded-xl p-1 space-y-1">
+        <div class="bg-surface rounded-xl p-1 space-y-1 overflow-x-auto">
           <div class="px-4 py-2 flex items-center uppercase text-xs font-medium text-secondary">
-            <div class="hidden sm:block">Name</div>
+            <div class="w-40">Name</div>
             <div class="ml-auto text-right flex items-center gap-6">
               <div class="w-24">
                 <p>Weight</p>
@@ -36,33 +44,22 @@
             </div>
           </div>
 
-          <div class="shadow-border-xs rounded-lg bg-container">
+          <div class="shadow-border-xs rounded-lg bg-container min-w-fit">
             <% classification_group.account_groups.each do |account_group| %>
               <details class="group rounded-lg open:bg-surface font-medium text-sm">
                 <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
-                  <div class="items-center gap-4 hidden md:flex">
+                  <div class="w-40 shrink-0 flex items-center gap-4">
                     <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
                     <p><%= account_group.name %></p>
                   </div>
 
                   <div class="ml-auto flex items-center text-right gap-6">
-                    <div class="w-24 flex items-center justify-end gap-2">
-                      <div class="hidden sm:flex sm:items-center sm:justify-end sm:gap-2">
-                        <%= render partial: "shared/progress_circle", locals: { progress: account_group.weight, color: account_group.color } %>
-                        <p><%= number_to_percentage(account_group.weight, precision: 0) %></p>
-                      </div>
-                      <div class="flex sm:hidden items-center gap-2">
-                        <div class="flex gap-[3px]">
-                          <% 10.times do |i| %>
-                            <div class="w-[2px] h-[10px] rounded-lg <%= i < (account_group.weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= account_group.color %>;"></div>
-                          <% end %>
-                        </div>
-                        <p class="text-sm"><%= number_to_percentage(account_group.weight, precision: 2) %></p>
-                      </div>
+                    <div class="w-24 shrink-0 flex items-center justify-end gap-2">
+                      <%= render "pages/dashboard/group_weight", weight: account_group.weight, color: account_group.color %>
                     </div>
 
-                    <div class="w-40">
+                    <div class="w-40 shrink-0">
                       <p><%= format_money(account_group.total_money) %></p>
                     </div>
                   </div>
@@ -70,39 +67,24 @@
 
                 <div>
                   <% account_group.accounts.each_with_index do |account, idx| %>
-                    <div class="pl-4 sm:pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
-                      <div class="hidden sm:flex sm:items-center sm:gap-3">
+                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
+                      <div class="flex items-center gap-3">
                         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
                         <%= link_to account.name, account_path(account) %>
                       </div>
 
                       <div class="ml-auto flex items-center text-right gap-6">
-                        <div class="w-24 flex items-center justify-end gap-2">
-                          <div class="hidden sm:flex sm:items-center sm:justify-end sm:gap-2">
-                            <%= render partial: "shared/progress_circle", locals: { progress: account.weight, color: account_group.color } %>
-                            <p><%= number_to_percentage(account.weight, precision: 0) %></p>
-                          </div>
-                          <div class="flex sm:hidden items-center gap-2">
-                            <div class="flex gap-[3px]">
-                              <% 10.times do |i| %>
-                                <div class="w-[2px] h-[10px] rounded-lg <%= i < (account.weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= account_group.color %>;"></div>
-                              <% end %>
-                            </div>
-                            <p class="text-sm"><%= number_to_percentage(account.weight, precision: 2) %></p>
-                          </div>
+                        <div class="w-24 shrink-0 flex items-center justify-end gap-2">
+                          <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
                         </div>
 
-                        <div class="w-40">
+                        <div class="w-40 shrink-0">
                           <p><%= format_money(account.balance_money) %></p>
-                          <div class="sm:hidden text-xs text-secondary truncate max-w-28">
-                            <%= account.name %>
-                          </div>
                         </div>
                       </div>
                     </div>
 
                     <% if idx < account_group.accounts.size - 1 %>
-
                       <div class="pl-[84px] pr-40">
                         <div class="w-full border-subdued border-b"></div>
                       </div>

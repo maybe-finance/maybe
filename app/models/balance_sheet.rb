@@ -27,12 +27,14 @@ class BalanceSheet
         key: "asset",
         display_name: "Assets",
         icon: "blocks",
+        total_money: total_assets_money,
         account_groups: account_groups("asset")
       ),
       ClassificationGroup.new(
         key: "liability",
         display_name: "Debts",
         icon: "scale",
+        total_money: total_liabilities_money,
         account_groups: account_groups("liability")
       )
     ]
@@ -75,7 +77,7 @@ class BalanceSheet
   end
 
   private
-    ClassificationGroup = Struct.new(:key, :display_name, :icon, :account_groups, keyword_init: true)
+    ClassificationGroup = Struct.new(:key, :display_name, :icon, :total_money, :account_groups, keyword_init: true)
     AccountGroup = Struct.new(:key, :name, :accountable_type, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, keyword_init: true)
 
     def active_accounts

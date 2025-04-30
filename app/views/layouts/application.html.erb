@@ -6,15 +6,23 @@
 ] %>
 
 <% desktop_nav_items = mobile_nav_items.reject { |item| item[:mobile_only] } %>
+<% expanded_sidebar_class = "w-full opacity-100" %>
+<% collapsed_sidebar_class = "w-0 opacity-0" %>
+<% collapsed_transition_class = "from-zero-width-transition" %>
+<% expanded_transition_class = "to-zero-width-transition" %>
 
 <%= render "layouts/shared/htmldoc" do %>
   <div
     class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
     data-controller="app-layout"
+    data-app-layout-expanded-sidebar-class="<%= expanded_sidebar_class %>"
+    data-app-layout-collapsed-sidebar-class="<%= collapsed_sidebar_class %>"
+    data-app-layout-collapsed-transition-class="<%= collapsed_transition_class %>"
+    data-app-layout-expanded-transition-class="<%= expanded_transition_class %>"
     data-app-layout-user-id-value="<%= Current.user.id %>">
     <div
-    class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
-    data-app-layout-target="mobileSidebar">
+      class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
+      data-app-layout-target="mobileSidebar">
       <div class="mb-2">
         <%= icon("x", as_button: true, data: { action: "app-layout#closeMobileSidebar" }) %>
       </div>
@@ -54,14 +62,25 @@
           <% end %>
         </ul>
 
-        <div class="pl-2 mt-auto mx-auto">
+        <div class="pl-2 mt-auto mx-auto flex flex-col gap-2">
+          <%= render ButtonComponent.new(
+            variant: "icon",
+            icon: "message-circle-question",
+            data: { action: "intercom#show" }
+          ) %>
+
           <%= render "users/user_menu", user: Current.user %>
         </div>
       </nav>
     </div>
 
     <%# DESKTOP - Left sidebar %>
-    <%= tag.div class: class_names("hidden py-4 overflow-y-auto shrink-0 w-[320px]", "lg:block" => Current.user.show_sidebar?), data: { app_layout_target: "leftSidebar" } do %>
+    <%= tag.div class: class_names(
+        "hidden lg:block py-4 overflow-y-auto shrink-0 max-w-[320px]", 
+        Current.user.show_sidebar? ? expanded_sidebar_class : collapsed_sidebar_class,
+        Current.user.show_sidebar? ? expanded_transition_class : collapsed_transition_class
+       ), 
+       data: { app_layout_target: "leftSidebar" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -94,7 +113,12 @@
     <% end %>
 
     <%# DESKTOP - Right sidebar %>
-    <%= tag.div class: class_names("hidden h-full overflow-y-auto shrink-0 w-[400px]", "lg:block" => Current.user.show_ai_sidebar?), data: { app_layout_target: "rightSidebar" } do %>
+    <%= tag.div class: class_names(
+          "hidden lg:block h-full overflow-y-auto shrink-0 max-w-[400px]", 
+          Current.user.show_ai_sidebar? ? expanded_sidebar_class : collapsed_sidebar_class,
+          Current.user.show_ai_sidebar? ? expanded_transition_class : collapsed_transition_class
+        ), 
+        data: { app_layout_target: "rightSidebar" } do %>
       <%= tag.div id: "chat-container",
                 class: class_names("flex flex-col h-full justify-between shrink-0 transition-all duration-300"),
                 data: { controller: "chat hotkey", turbo_permanent: true } do %>

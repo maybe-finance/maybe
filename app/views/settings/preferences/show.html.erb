@@ -7,7 +7,7 @@
 
       <%= form.fields_for :family do |family_form| %>
         <%= family_form.select :currency,
-            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            Money::Currency.as_options.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
             { label: t(".currency") }, disabled: true %>
 
         <%= family_form.select :locale,

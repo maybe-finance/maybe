@@ -84,6 +84,10 @@ class Period
     def all
       PERIODS.map { |key, period| from_key(key) }
     end
+
+    def as_options
+      all.map { |period| [ period.label_short, period.key ] }
+    end
   end
 
   PERIODS.each do |key, period|

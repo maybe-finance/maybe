@@ -3,7 +3,12 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="dialog"
 export default class extends Controller {
   static targets = ["leftSidebar", "rightSidebar", "mobileSidebar"];
-  static classes = ["leftSidebar", "rightSidebar"];
+  static classes = [
+    "expandedSidebar",
+    "collapsedSidebar",
+    "expandedTransition",
+    "collapsedTransition",
+  ];
 
   openMobileSidebar() {
     this.mobileSidebarTarget.classList.remove("hidden");
@@ -14,19 +19,37 @@ export default class extends Controller {
   }
 
   toggleLeftSidebar() {
-    this.#updateUserPreference(
-      "show_sidebar",
-      this.leftSidebarTarget.classList.contains("hidden"),
-    );
-    this.leftSidebarTarget.classList.toggle("hidden");
+    const isOpen = this.leftSidebarTarget.classList.contains("w-full");
+    this.#updateUserPreference("show_sidebar", !isOpen);
+    this.#toggleSidebarWidth(this.leftSidebarTarget, isOpen);
   }
 
   toggleRightSidebar() {
-    this.#updateUserPreference(
-      "show_ai_sidebar",
-      this.rightSidebarTarget.classList.contains("hidden"),
-    );
-    this.rightSidebarTarget.classList.toggle("hidden");
+    const isOpen = this.rightSidebarTarget.classList.contains("w-full");
+    this.#updateUserPreference("show_ai_sidebar", !isOpen);
+    this.#toggleSidebarWidth(this.rightSidebarTarget, isOpen);
+  }
+
+  #toggleSidebarWidth(el, isCurrentlyOpen) {
+    if (isCurrentlyOpen) {
+      el.classList.remove(...this.expandedSidebarClasses);
+      el.classList.add(...this.collapsedSidebarClasses);
+
+      // Wait for existing transition to finish
+      setTimeout(() => {
+        el.classList.remove(this.expandedTransitionClass);
+        el.classList.add(this.collapsedTransitionClass);
+      }, 1000);
+    } else {
+      el.classList.add(...this.expandedSidebarClasses);
+      el.classList.remove(...this.collapsedSidebarClasses);
+
+      // Wait for existing transition to finish
+      setTimeout(() => {
+        el.classList.add(this.expandedTransitionClass);
+        el.classList.remove(this.collapsedTransitionClass);
+      }, 1000);
+    }
   }
 
   #updateUserPreference(field, value) {

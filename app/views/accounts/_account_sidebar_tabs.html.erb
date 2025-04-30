@@ -1,7 +1,7 @@
 <%# locals: (family:, active_account_group_tab:) %>
 
 <div>
-  <% if family.requires_data_provider? && Provider::Registry.get_provider(:synth).nil? || true %>
+  <% if family.missing_data_provider? %>
     <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
       <summary class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
