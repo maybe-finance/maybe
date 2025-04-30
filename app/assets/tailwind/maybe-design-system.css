@@ -243,26 +243,18 @@
   color: theme(colors.white) !important;
 }
 
-/* Transition when expanding a sidebar */
-@utility from-zero-width-transition {
-  transition-property: width, opacity;
-  transition-duration: 0.5s, 0.7s;
-  transition-timing-function: linear;
-}
-
-/* Transition when collapsing a sidebar */
-@utility to-zero-width-transition {
-  transition-property: width, opacity;
-  transition-duration: 0.3s, 0.2s;
-  transition-timing-function: linear;
-}
-
 @layer base {
   [data-theme="dark"] { 
     --color-success: var(--color-green-500);
     --color-warning: var(--color-yellow-400);
     --color-destructive: var(--color-red-400);
     --color-shadow: --alpha(#000000 / 8%);
+
+    --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 6%);
+    --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 6%);
+    --shadow-md: 0px 4px 8px -2px --alpha(var(--color-white) / 6%);
+    --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-white) / 6%);
+    --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-white) / 6%);
   }
 
   button {

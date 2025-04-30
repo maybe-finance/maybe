@@ -3,5 +3,5 @@
 <% if avatar_url.present? %>
   <%= image_tag avatar_url, class: "rounded-full w-full h-full object-cover", loading: lazy ? "lazy" : "eager" %>
 <% else %>
-  <div class="text-white w-full h-full bg-gray-400 rounded-full flex items-center justify-center text-lg uppercase"><%= initials %></div>
+  <div class="w-full h-full bg-surface-inset hover:bg-surface-inset-hover text-secondary rounded-full flex items-center justify-center text-lg uppercase"><%= initials %></div>
 <% end %>

@@ -33,15 +33,22 @@ class DialogComponent < ViewComponent::Base
     end
   end
 
-  attr_reader :variant, :auto_open, :reload_on_close, :opts
+  attr_reader :variant, :auto_open, :reload_on_close, :frame, :width, :opts
 
   VARIANTS = %w[modal drawer].freeze
+  WIDTHS = {
+    sm: "lg:max-w-[300px]",
+    md: "lg:max-w-[550px]",
+    lg: "lg:max-w-[700px]",
+    full: "lg:max-w-full"
+  }.freeze
 
-  def initialize(variant: "modal", auto_open: true, reload_on_close: false, frame: nil, **opts)
+  def initialize(variant: "modal", auto_open: true, reload_on_close: false, frame: nil, width: "md", **opts)
     @variant = variant.to_sym
     @auto_open = auto_open
     @reload_on_close = reload_on_close
     @frame = frame
+    @width = width.to_sym
     @opts = opts
   end
 
@@ -66,7 +73,10 @@ class DialogComponent < ViewComponent::Base
     variant_classes = if drawer?
       "lg:w-[550px] h-full"
     else
-      "max-w-lg max-h-full"
+      class_names(
+        "max-h-full",
+        WIDTHS[width]
+      )
     end
 
     class_names(

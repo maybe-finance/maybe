@@ -26,14 +26,14 @@ class BalanceSheet
       ClassificationGroup.new(
         key: "asset",
         display_name: "Assets",
-        icon: "blocks",
+        icon: "plus",
         total_money: total_assets_money,
         account_groups: account_groups("asset")
       ),
       ClassificationGroup.new(
         key: "liability",
         display_name: "Debts",
-        icon: "scale",
+        icon: "minus",
         total_money: total_liabilities_money,
         account_groups: account_groups("liability")
       )

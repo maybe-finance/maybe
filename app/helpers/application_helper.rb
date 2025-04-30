@@ -53,20 +53,6 @@ module ApplicationHelper
     current_page?(path) || (request.path.start_with?(path) && path != "/")
   end
 
-  def mixed_hex_styles(hex)
-    color = hex || "#1570EF" # blue-600
-
-    <<-STYLE.strip
-      background-color: color-mix(in srgb, #{color} 10%, white);
-      border-color: color-mix(in srgb, #{color} 30%, white);
-      color: #{color};
-    STYLE
-  end
-
-  def circle_logo(name, hex: nil, size: "md")
-    render partial: "shared/circle_logo", locals: { name: name, hex: hex, size: size }
-  end
-
   # Wrapper around I18n.l to support custom date formats
   def format_date(object, format = :default, options = {})
     date = object.to_date

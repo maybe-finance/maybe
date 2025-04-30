@@ -1,6 +1,6 @@
 <%# locals: (balance_sheet:) %>
 
-<div class="space-y-4 overflow-x-auto">
+<div class="space-y-4 overflow-x-auto p-0.5">
   <% balance_sheet.classification_groups.each do |classification_group| %>
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
       <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
@@ -8,9 +8,11 @@
           <%= classification_group.display_name %>
         </span>
 
-        <span class="text-secondary">&middot;</span>
+        <% if classification_group.account_groups.any? %>
+          <span class="text-secondary">&middot;</span>
 
-        <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
+          <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
+        <% end %>
       </h2>
 
       <% if classification_group.account_groups.any? %>
@@ -70,6 +72,7 @@
                     <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
                       <div class="flex items-center gap-3">
                         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
+
                         <%= link_to account.name, account_path(account) %>
                       </div>
 
@@ -97,10 +100,14 @@
         </div>
 
       <% else %>
-        <div class="py-20 flex flex-col items-center">
-          <%= icon(classification_group.icon) %>
-          <p class="text-primary text-sm font-medium mb-1 mt-4">No <%= classification_group.display_name %></p>
-          <p class="text-secondary text-sm max-w-xs text-center"><%= "You have no #{classification_group.display_name}" %></p>
+        <div class="py-10 flex flex-col items-center">
+          <%= render FilledIconComponent.new(
+            variant: :surface,
+            icon: classification_group.icon,
+          ) %>
+
+          <p class="text-primary text-sm font-medium mb-1 mt-4">No <%= classification_group.display_name %> yet</p>
+          <p class="text-secondary text-sm text-center"><%= "Add your #{classification_group.display_name} accounts to see a full breakdown" %></p>
         </div>
       <% end %>
     </div>

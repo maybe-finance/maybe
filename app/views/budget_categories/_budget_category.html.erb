@@ -8,11 +8,17 @@
         <%= render "budget_categories/budget_category_donut", budget_category: budget_category %>
       </div>
     <% else %>
-      <div class="w-8 h-8 group-hover:scale-105 transition-all duration-300 rounded-full flex justify-center items-center" style="<%= mixed_hex_styles(budget_category.category.color) %>">
+      <div class="w-8 h-8 group-hover:scale-105 transition-all duration-300 rounded-full flex justify-center items-center" style="color: <%= budget_category.category.color %>">
         <% if budget_category.category.lucide_icon %>
           <%= icon(budget_category.category.lucide_icon, color: "current") %>
         <% else %>
-          <%= render "shared/circle_logo", name: budget_category.category.name, hex: budget_category.category.color %>
+          <%= render FilledIconComponent.new(
+            variant: :text, 
+            hex_color: budget_category.category.color, 
+            text: budget_category.category.name, 
+            size: "sm", 
+            rounded: true
+          ) %>
         <% end %>
       </div>
     <% end %>

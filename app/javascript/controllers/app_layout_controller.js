@@ -34,21 +34,9 @@ export default class extends Controller {
     if (isCurrentlyOpen) {
       el.classList.remove(...this.expandedSidebarClasses);
       el.classList.add(...this.collapsedSidebarClasses);
-
-      // Wait for existing transition to finish
-      setTimeout(() => {
-        el.classList.remove(this.expandedTransitionClass);
-        el.classList.add(this.collapsedTransitionClass);
-      }, 1000);
     } else {
       el.classList.add(...this.expandedSidebarClasses);
       el.classList.remove(...this.collapsedSidebarClasses);
-
-      // Wait for existing transition to finish
-      setTimeout(() => {
-        el.classList.add(this.expandedTransitionClass);
-        el.classList.remove(this.collapsedTransitionClass);
-      }, 1000);
     }
   }
 

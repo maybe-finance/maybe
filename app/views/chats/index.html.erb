@@ -1,31 +1,28 @@
 <div data-controller="chat hotkey">
   <%= turbo_frame_tag chat_frame do %>
     <div class="flex flex-col h-full md:p-4">
-      <nav class="mb-6">
-        <% back_path = @last_viewed_chat ? chat_path(@last_viewed_chat) : new_chat_path %>
-        <%= link_to back_path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
-          <%= icon("arrow-left", color: "gray" ) %>
-        <% end %>
-      </nav>
+      <% if @chats.any? %>
+        <nav class="mb-6">
+          <% back_path = @last_viewed_chat ? chat_path(@last_viewed_chat) : new_chat_path %>
+          <%= link_to back_path, class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
+            <%= icon("arrow-left", color: "gray" ) %>
+          <% end %>
+        </nav>
+      <% end %>
 
       <div class="grow flex flex-col">
-        <h1 class="text-xl font-medium mb-6">Chats</h1>
-
         <% if @chats.any? %>
+          <h1 class="text-xl font-medium mb-6">Chats</h1>
           <div class="space-y-2 px-0.5">
             <%= render @chats %>
           </div>
         <% else %>
-          <div class="text-center py-12 bg-container rounded-lg border border-primary">
-            <div class="w-16 h-16 bg-surface-inset rounded-full flex items-center justify-center mx-auto mb-4">
-              <%= icon("message-square", size: "lg") %>
-            </div>
-            <h3 class="text-lg font-medium text-primary mb-1">No chats yet</h3>
-            <p class="text-gray-500 mb-4">Start a new conversation with the AI assistant</p>
+          <h1 class="sr-only">Chats</h1>
+          <div class="mt-auto py-8">
+            <%= render "chats/ai_greeting" %>
           </div>
-          <div class="mt-auto p-4 lg:mt-auto">
-            <%= render "messages/chat_form", chat: nil %>
-          </div>
+
+          <%= render "messages/chat_form" %>
         <% end %>
       </div>
     </div>

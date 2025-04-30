@@ -2,7 +2,7 @@
 
 <%= render DialogComponent.new do |dialog| %>
   <div class="flex flex-col relative" data-controller="list-keyboard-navigation">
-    <div class="border-b border-tertiary md:border-alpha-black-25 p-4 text-gray-800 flex items-center justify-between gap-2">
+    <div class="border-b border-tertiary md:border-alpha-black-25 px-4 pb-4 text-gray-800 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <% if back_path %>
           <%= render LinkComponent.new(
@@ -26,7 +26,7 @@
       <%= yield %>
     </div>
 
-    <div class="border-t border-alpha-black-25 p-4 text-secondary text-sm justify-between hidden md:flex">
+    <div class="border-t border-alpha-black-25 px-4 pt-4 text-secondary text-sm justify-between hidden md:flex">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
           <span>Select</span>

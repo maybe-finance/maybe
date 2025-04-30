@@ -16,7 +16,14 @@
                            tag.name,
                            nil %>
         <%= form.label :tags, value: tag.name, class: "text-sm text-primary flex items-center gap-2" do %>
-          <%= circle_logo(tag.name, hex: tag.color || Tag::UNCATEGORIZED_COLOR, size: "sm") %>
+          <%= render FilledIconComponent.new(
+            variant: :text, 
+            hex_color: tag.color || Tag::UNCATEGORIZED_COLOR, 
+            text: tag.name, 
+            size: "sm", 
+            rounded: true
+          ) %>
+
           <%= tag.name %>
         <% end %>
       </div>

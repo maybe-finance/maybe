@@ -24,9 +24,15 @@
 <% end %>
 
 <div class="w-full space-y-6 pb-24">
-  <section class="bg-container py-4 rounded-xl shadow-border-xs">
-    <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
-  </section>
+  <% if Current.family.accounts.any? %>
+    <section class="bg-container py-4 rounded-xl shadow-border-xs px-0.5">
+      <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
+    </section>
+  <% else %>
+    <section class="p-0.5">
+      <%= render "pages/dashboard/no_accounts_graph_placeholder" %>
+    </section>
+  <% end %>
 
   <section>
     <%= render "pages/dashboard/balance_sheet", balance_sheet: @balance_sheet %>
