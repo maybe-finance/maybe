@@ -1,4 +1,4 @@
-<%= tag.div style: variant == :surface ? nil :container_styles,
+<%= tag.div style: transparent? ? container_styles : nil,
             class: container_classes do %>
   <% if icon %>
     <%= helpers.icon(icon, size: icon_size, color: "current") %>
