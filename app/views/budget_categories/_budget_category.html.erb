@@ -13,10 +13,10 @@
           <%= icon(budget_category.category.lucide_icon, color: "current") %>
         <% else %>
           <%= render FilledIconComponent.new(
-            variant: :text, 
-            hex_color: budget_category.category.color, 
-            text: budget_category.category.name, 
-            size: "sm", 
+            variant: :text,
+            hex_color: budget_category.category.color,
+            text: budget_category.category.name,
+            size: "sm",
             rounded: true
           ) %>
         <% end %>

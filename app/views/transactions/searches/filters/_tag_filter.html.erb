@@ -17,10 +17,10 @@
                            nil %>
         <%= form.label :tags, value: tag.name, class: "text-sm text-primary flex items-center gap-2" do %>
           <%= render FilledIconComponent.new(
-            variant: :text, 
-            hex_color: tag.color || Tag::UNCATEGORIZED_COLOR, 
-            text: tag.name, 
-            size: "sm", 
+            variant: :text,
+            hex_color: tag.color || Tag::UNCATEGORIZED_COLOR,
+            text: tag.name,
+            size: "sm",
             rounded: true
           ) %>
 
