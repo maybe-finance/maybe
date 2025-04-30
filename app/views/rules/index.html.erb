@@ -34,27 +34,31 @@
 
   <% if @rules.any? %>
     <div class="rounded-xl bg-gray-25">
-      <div class="flex items-center justify-between px-4 py-2">
-        <div class="flex items-center gap-1.5 text-xs font-medium text-secondary uppercase">
+      <div class="flex items-center justify-between px-4 py-2 text-xs uppercase">
+        <div class="flex items-center gap-1.5 font-medium text-secondary">
           <p>Rules</p>
           <span class="text-subdued">&middot;</span>
           <p><%= @rules.count %></p>
         </div>
         
-        <div class="flex items-center gap-1 text-xs uppercase">
+        <div class="flex items-center gap-1">
           <span class="text-secondary">Sort by:</span>
           <div class="flex items-center">
-            <%= link_to "Name", rules_path(sort_by: "name", direction: (@sort_by == "name" && @direction == "asc") ? "desc" : "asc"), 
-                  class: "px-2 py-1 rounded #{@sort_by == 'name' ? 'bg-accent-light text-accent font-medium' : 'hover:bg-gray-100'}" %>
-            <% if @sort_by == "name" %>
-              <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent") %>
+            <%= link_to rules_path(sort_by: "name", direction: (@sort_by == "name" && @direction == "asc") ? "desc" : "asc"), 
+                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'name' ? 'font-medium' : ''}" do %>
+              <span>Name</span>
+              <% if @sort_by == "name" %>
+                <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent ml-1") %>
+              <% end %>
             <% end %>
           </div>
           <div class="flex items-center">
-            <%= link_to "Date", rules_path(sort_by: "created_at", direction: (@sort_by == "created_at" && @direction == "asc") ? "desc" : "asc"), 
-                  class: "px-2 py-1 rounded #{@sort_by == 'created_at' ? 'bg-accent-light text-accent font-medium' : 'hover:bg-gray-100'}" %>
-            <% if @sort_by == "created_at" %>
-              <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent") %>
+            <%= link_to rules_path(sort_by: "created_at", direction: (@sort_by == "created_at" && @direction == "asc") ? "desc" : "asc"), 
+                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'created_at' ? 'font-medium' : ''}" do %>
+              <span>Date</span>
+              <% if @sort_by == "created_at" %>
+                <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent ml-1") %>
+              <% end %>
             <% end %>
           </div>
         </div>
