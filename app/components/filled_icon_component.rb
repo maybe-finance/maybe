@@ -61,6 +61,10 @@ class FilledIconComponent < ViewComponent::Base
     STYLE
   end
 
+  def transparent?
+    variant.in?(%i[default text])
+  end
+
   private
     def solid_bg_class
       case variant
@@ -69,10 +73,6 @@ class FilledIconComponent < ViewComponent::Base
       when :container
         "bg-container-inset"
       end
-    end
-
-    def transparent?
-      variant.in?(%i[default text])
     end
 
     def size_classes
