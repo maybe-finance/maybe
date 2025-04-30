@@ -1,29 +1,68 @@
-<%= render "layouts/shared/htmldoc" do %>
-  <%= render AppLayoutComponent.new(user: Current.user) do |app_layout| %>
-    <% app_layout.with_nav_items([
-      { name: "Home", path: root_path, icon: "pie-chart", active: page_active?(root_path) },
-      { name: "Transactions", path: transactions_path, icon: "credit-card", active: page_active?(transactions_path) },
-      { name: "Budgets", path: budgets_path, icon: "map", active: page_active?(budgets_path) },
-      { name: "Assistant", path: chats_path, icon: "icon-assistant", icon_custom: true, active: page_active?(chats_path), mobile_only: true }
-    ]) %>
+<% mobile_nav_items = [
+  { name: "Home", path: root_path, icon: "pie-chart", icon_custom: false, active: page_active?(root_path) },
+  { name: "Transactions", path: transactions_path, icon: "credit-card", icon_custom: false, active: page_active?(transactions_path) },
+  { name: "Budgets", path: budgets_path, icon: "map", icon_custom: false, active: page_active?(budgets_path) },
+  { name: "Assistant", path: chats_path, icon: "icon-assistant", icon_custom: true, active: page_active?(chats_path), mobile_only: true }
+] %>
 
-    <% app_layout.with_mobile_sidebar do %>
+<% desktop_nav_items = mobile_nav_items.reject { |item| item[:mobile_only] } %>
+
+<%= render "layouts/shared/htmldoc" do %>
+  <div 
+    class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
+    data-controller="app-layout"
+    data-app-layout-user-id-value="<%= Current.user.id %>"
+  >
+    <div
+    class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
+    data-app-layout-target="mobileSidebar">
+      <div class="mb-2">
+        <%= icon("x", as_button: true, data: { action: "app-layout#closeMobileSidebar" }) %>
+      </div>
+
       <%= render(
         "accounts/account_sidebar_tabs",
         family: Current.family,
         active_account_group_tab: params[:account_group_tab] || "assets"
       ) %>
-    <% end %>
+    </div>
 
-    <% app_layout.with_mobile_user_menu do %>
+    <%# MOBILE - Top nav %>
+    <nav class="lg:hidden flex justify-between items-center p-3">
+      <%= icon("panel-left", as_button: true, data: { action: "app-layout#openMobileSidebar"}) %>
+
+      <%= link_to root_path, class: "block" do %>
+        <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+      <% end %>
+
       <%= render "users/user_menu", user: Current.user, placement: "bottom-end", offset: 12 %>
-    <% end %>
+    </nav>
 
-    <% app_layout.with_desktop_user_menu do %>
-      <%= render "users/user_menu", user: Current.user %>
-    <% end %>
+    <%# DESKTOP - Left navbar %>
+    <div class="hidden lg:block">
+      <nav class="h-full flex flex-col shrink-0 w-[84px] py-4 mr-3">
+        <div class="pl-2 mb-3">
+          <%= link_to root_path, class: "block" do %>
+            <%= image_tag "logomark-color.svg", class: "w-9 h-9 mx-auto" %>
+          <% end %>
+        </div>
 
-    <% app_layout.with_left_sidebar do %>
+        <ul class="space-y-0.5">
+          <% desktop_nav_items.reject { |item| item[:mobile_only] }.each do |nav_item| %>
+            <li>
+              <%= render "layouts/shared/nav_item", **nav_item %>
+            </li>
+          <% end %>
+        </ul>
+
+        <div class="pl-2 mt-auto mx-auto">
+          <%= render "users/user_menu", user: Current.user %>
+        </div>
+      </nav>
+    </div>
+
+    <%# DESKTOP - Left sidebar %>
+    <%= tag.div class: class_names("hidden py-4 overflow-y-auto shrink-0 w-[320px]", "lg:block" => Current.user.show_sidebar?), data: { app_layout_target: "leftSidebar" } do %>
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
@@ -33,7 +72,30 @@
       <% end %>
     <% end %>
 
-    <% app_layout.with_right_sidebar do %>
+    <%# SHARED - Main content %>
+    <%= tag.main class: class_names("grow overflow-y-auto px-3 lg:px-10 py-4 h-full w-full mx-auto max-w-5xl"), data: { app_layout_target: "content" } do %>
+      <div class="hidden lg:flex gap-2 items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+          <%= icon("panel-left", as_button: true, data: { action: "app-layout#toggleLeftSidebar" }) %>
+
+          <% if content_for?(:breadcrumbs) %>
+            <%= yield :breadcrumbs %>
+          <% else %>
+            <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+          <% end %>
+        </div>
+        <%= icon("panel-right", as_button: true, data: { action: "app-layout#toggleRightSidebar" }) %>
+      </div>
+
+      <% if content_for?(:page_header) %>
+        <%= yield :page_header %>
+      <% end %>
+
+      <%= yield %>
+    <% end %>
+
+    <%# DESKTOP - Right sidebar %>
+    <%= tag.div class: class_names("hidden h-full overflow-y-auto shrink-0 w-[400px]", "lg:block" => Current.user.show_ai_sidebar?), data: { app_layout_target: "rightSidebar" } do %>
       <%= tag.div id: "chat-container",
                 class: class_names("flex flex-col h-full justify-between shrink-0 transition-all duration-300"),
                 data: { controller: "chat hotkey", turbo_permanent: true } do %>
@@ -50,21 +112,11 @@
       <% end %>
     <% end %>
 
-    <% app_layout.with_breadcrumbs do %>
-      <% if content_for?(:breadcrumbs) %>
-        <%= yield :breadcrumbs %>
-      <% else %>
-        <%= render "layouts/shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+    <%# MOBILE - Bottom Nav %>
+    <%= tag.nav class: "lg:hidden bg-surface shrink-0 z-10 pb-2 border-t border-tertiary pb-safe flex justify-around" do %>
+      <% mobile_nav_items.each do |nav_item| %>
+        <%= render "layouts/shared/nav_item", **nav_item %>
       <% end %>
     <% end %>
-
-    <%# Main page content  %>
-    <div>
-      <% if content_for?(:page_header) %>
-        <%= yield :page_header %>
-      <% end %>
-
-      <%= yield %>
-    </div>
-  <% end %>
+  </div>
 <% end %>
