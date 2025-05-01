@@ -1,17 +1,17 @@
 <div class="space-y-4">
-  <div class="flex items-center gap-2 p-1.5">
+  <div class="hidden lg:flex items-center gap-2 p-1.5">
     <%= render LinkComponent.new(
       text: "Back",
       icon: "chevron-left",
       href: previous_path,
       variant: "ghost",
-      class: "hidden md:inline-flex"
     ) %>
 
     <%= link_to previous_path, class: "hidden md:block uppercase bg-surface-inset-hover rounded-sm px-1 py-0.5 text-xs text-secondary shadow-sm ml-1 pointer-events-none", data: { controller: "hotkey", hotkey: "Escape" } do %>
       <kbd>esc</kbd>
     <% end %>
   </div>
+
   <nav class="space-y-4 hidden md:block">
     <section class="space-y-2">
       <div class="flex items-center gap-2 px-3">
@@ -93,9 +93,17 @@
       <% end %>
     </section>
   </nav>
-  <nav class="space-y-4 overflow-y-auto  md:hidden" id="mobile-settings-nav">
 
+  <nav class="space-y-4 overflow-y-auto md:hidden" id="mobile-settings-nav">
     <ul class="flex space-y-1">
+      <li>
+        <%= render LinkComponent.new(
+          text: "Back",
+          icon: "chevron-left",
+          href: previous_path,
+          variant: "ghost",
+        ) %>
+      </li>
 
       <li>
         <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
