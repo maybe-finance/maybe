@@ -9,6 +9,7 @@
         <%= loan_form.money_field :initial_balance,
                                  label: t("loans.form.initial_balance"),
                                  default_currency: Current.family.currency,
+                                 value: account.first_valuation_amount,
                                  required: true %>
       </div>
 
