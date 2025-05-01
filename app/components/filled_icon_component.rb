@@ -1,7 +1,7 @@
 class FilledIconComponent < ViewComponent::Base
   attr_reader :icon, :text, :hex_color, :size, :rounded, :variant
 
-  VARIANTS = %i[default text surface container].freeze
+  VARIANTS = %i[default text surface container inverse].freeze
 
   SIZES = {
     sm: {
@@ -72,6 +72,8 @@ class FilledIconComponent < ViewComponent::Base
         "bg-surface-inset"
       when :container
         "bg-container-inset"
+      when :inverse
+        "bg-container"
       end
     end
 

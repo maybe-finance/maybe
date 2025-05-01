@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
       return false unless Current.session
       return false if Current.family.subscribed?
       return false if subscription_pending? || request.path == settings_billing_path
-      return false if Current.family.active_accounts_count <= 3
 
       true
     end

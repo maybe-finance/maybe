@@ -128,7 +128,15 @@ class Family < ApplicationRecord
   end
 
   def subscribed?
-    stripe_subscription_status == "active"
+    trialing? || stripe_subscription_status == "active"
+  end
+
+  def trialing?
+    trial_started_at.present? && trial_started_at <= 14.days.from_now
+  end
+
+  def existing_customer?
+    stripe_customer_id.present?
   end
 
   def requires_data_provider?

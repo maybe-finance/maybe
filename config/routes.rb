@@ -39,8 +39,9 @@ Rails.application.routes.draw do
 
   resource :onboarding, only: :show do
     collection do
-      get :profile
       get :preferences
+      get :goals
+      get :trial
     end
   end
 
@@ -55,7 +56,11 @@ Rails.application.routes.draw do
   end
 
   resource :subscription, only: %i[new show] do
-    get :success, on: :collection
+    collection do
+      get :upgrade
+      get :success
+      post :start_trial
+    end
   end
 
   resources :tags, except: :show do
@@ -211,6 +216,9 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   get "imports/:import_id/upload/sample_csv", to: "import/uploads#sample_csv", as: :import_upload_sample_csv
+
+  get "privacy", to: redirect("https://maybefinance.com/privacy")
+  get "terms", to: redirect("https://maybefinance.com/tos")
 
   # Defines the root path route ("/")
   root "pages#dashboard"

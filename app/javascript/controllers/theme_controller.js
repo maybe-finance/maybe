@@ -68,6 +68,16 @@ export default class extends Controller {
     this.setTheme(false);
   }
 
+  toggle() {
+    console.log("toggle");
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    if (currentTheme === "dark") {
+      this.toLight();
+    } else {
+      this.toDark();
+    }
+  }
+
   startSystemThemeListener() {
     this.darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     this.darkMediaQuery.addEventListener(
