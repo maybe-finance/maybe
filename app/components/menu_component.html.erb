@@ -6,7 +6,7 @@
   <% elsif variant == :avatar %>
     <button data-menu-target="button">
       <div class="w-9 h-9 cursor-pointer">
-        <%= render "settings/user_avatar", avatar_url: avatar_url %>
+        <%= render "settings/user_avatar", avatar_url: avatar_url, initials: initials %>
       </div>
     </button>
   <% end %>
