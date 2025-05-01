@@ -257,6 +257,11 @@
     --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-white) / 8%);
   }
 
+  html {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   button {
     @apply cursor-pointer focus-visible:outline-gray-900;
   }
