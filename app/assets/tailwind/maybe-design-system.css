@@ -248,7 +248,7 @@
     --color-success: var(--color-green-500);
     --color-warning: var(--color-yellow-400);
     --color-destructive: var(--color-red-400);
-    --color-shadow: --alpha(#000000 / 8%);
+    --color-shadow: --alpha(var(--color-white) / 8%);
 
     --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 8%);
     --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 8%);

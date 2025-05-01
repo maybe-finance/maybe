@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_16_235758) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_01_172430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -230,6 +230,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_235758) do
     t.datetime "last_synced_at"
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
+    t.datetime "trial_started_at"
+    t.boolean "early_access", default: false
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -679,6 +681,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_235758) do
     t.string "theme", default: "system"
     t.boolean "rule_prompts_disabled", default: false
     t.datetime "rule_prompt_dismissed_at"
+    t.text "goals", default: [], array: true
+    t.datetime "set_onboarding_preferences_at"
+    t.datetime "set_onboarding_goals_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["last_viewed_chat_id"], name: "index_users_on_last_viewed_chat_id"

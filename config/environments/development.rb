@@ -35,6 +35,9 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
+  config.after_initialize do
+    ActiveStorage::Current.url_options = { host: "localhost", port: 3000 }
+  end
 
   # Set Active Storage URL expiration time to 7 days
   config.active_storage.urls_expire_in = 7.days
@@ -61,10 +64,8 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # Highlight code that triggered database queries in logs.
+  config.assets.quiet = true
   config.active_record.verbose_query_logs = true
-
-  # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
   # Raises error for missing translations.

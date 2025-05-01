@@ -63,6 +63,10 @@ class UsersController < ApplicationController
         redirect_to root_path
       when "preferences"
         redirect_to settings_preferences_path, notice: notice
+      when "goals"
+        redirect_to goals_onboarding_path
+      when "trial"
+        redirect_to trial_onboarding_path
       else
         redirect_to settings_profile_path, notice: notice
       end
@@ -83,8 +87,10 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at, :show_sidebar, :default_period, :show_ai_sidebar, :ai_enabled, :theme,
-        family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id ]
+        :first_name, :last_name, :email, :profile_image, :redirect_to, :delete_profile_image, :onboarded_at,
+        :show_sidebar, :default_period, :show_ai_sidebar, :ai_enabled, :theme, :set_onboarding_preferences_at, :set_onboarding_goals_at,
+        family_attributes: [ :name, :currency, :country, :locale, :date_format, :timezone, :id ],
+        goals: []
       )
     end
 

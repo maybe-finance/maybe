@@ -1,25 +1,37 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="bg-container flex flex-col h-full">
+  <div class="bg-surface flex flex-col h-full">
     <header class="flex items-center justify-between p-8">
-      <%= render LinkComponent.new(
-        variant: "icon",
-        icon: "arrow-left",
-        href: content_for(:previous_path) || root_path
-      ) %>
+      <% if content_for?(:prev_nav) %>
+        <%= yield :prev_nav %>
+      <% else %>
+        <%= render LinkComponent.new(
+          variant: "icon",
+          icon: "arrow-left",
+          href: content_for(:previous_path) || root_path
+        ) %>
+      <% end %>
 
       <nav>
         <%= yield :header_nav %>
       </nav>
 
-      <%= render LinkComponent.new(
-        variant: "icon",
-        icon: "x",
-        href: content_for(:cancel_path) || root_path
-      ) %>
+      <% if content_for?(:cancel_action) %>
+        <%= yield :cancel_action %>
+      <% else %>
+        <%= render LinkComponent.new(
+          variant: "icon",
+          icon: "x",
+          href: content_for(:cancel_path) || root_path
+        ) %>
+      <% end %>
     </header>
 
     <main class="grow px-8 pt-12 pb-32 overflow-y-auto">
       <%= yield %>
     </main>
+
+    <% if content_for?(:footer) %>
+      <%= yield :footer %>
+    <% end %>
   </div>
 <% end %>
