@@ -4,12 +4,25 @@
   <div class="space-y-4">
     <div class="p-3 shadow-border-xs bg-container rounded-lg flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-full bg-gray-25 flex justify-center items-center">
-          <%= icon "gem" %>
-        </div>
+        <%= render FilledIconComponent.new(
+          icon: "gem",
+          rounded: true,
+          size: "lg"
+        ) %>
 
         <div class="text-sm space-y-1">
-          <% if @user.family.subscribed? || subscription_pending? %>
+          <% if subscription_pending? %>
+            <p class="text-primary">
+              Your subscription is pending. You can still use Maybe+ while we process your subscription.
+            </p>
+          <% elsif @user.family.trialing? %>
+            <p class="text-primary">
+              You are currently trialing <span class="font-medium">Maybe+</span>
+              <span class="text-secondary">
+                (<%= @user.family.trial_remaining_days %> days remaining)
+              </span>
+            </p>
+          <% elsif @user.family.subscribed? %>
             <p class="text-primary">You are currently subscribed to <span class="font-medium">Maybe+</span></p>
           <% else %>
             <p class="text-primary">You are currently <span class="font-medium">not subscribed</span></p>
@@ -18,24 +31,22 @@
         </div>
       </div>
 
-      <% if @user.family.subscribed? || subscription_pending? %>
+      <% if @user.family.subscribed? %>
         <%= render LinkComponent.new(
           text: "Manage",
           icon: "external-link",
           variant: "primary",
           icon_position: "right",
           href: subscription_path,
-          target: "_blank",
           rel: "noopener"
         ) %>
-      <% else %>
+      <% elsif @user.family.trialing? && !subscription_pending? %>
         <%= render LinkComponent.new(
-          text: "Subscribe",
+          text: "Choose plan",
           variant: "primary",
-          icon: "external-link",
+          icon: "plus",
           icon_position: "right",
-          href: new_subscription_path,
-          target: "_blank",
+          href: upgrade_subscription_path(view: "upgrade"),
           rel: "noopener") %>
       <% end %>
     </div>

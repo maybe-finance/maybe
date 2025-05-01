@@ -2,7 +2,7 @@ class Demo::Generator
   COLORS = %w[#e99537 #4da568 #6471eb #db5a54 #df4e92 #c44fe9 #eb5429 #61c9ea #805dee #6ad28a]
 
   # Builds a semi-realistic mirror of what production data might look like
-  def reset_and_clear_data!(family_names)
+  def reset_and_clear_data!(family_names, require_onboarding: false)
     puts "Clearing existing data..."
 
     destroy_everything!
@@ -10,7 +10,7 @@ class Demo::Generator
     puts "Data cleared"
 
     family_names.each_with_index do |family_name, index|
-      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local")
+      create_family_and_user!(family_name, "user#{index == 0 ? "" : index + 1}@maybe.local", require_onboarding: require_onboarding)
     end
 
     puts "Users reset"
@@ -152,7 +152,7 @@ class Demo::Generator
       Security::Price.destroy_all
     end
 
-    def create_family_and_user!(family_name, user_email, currency: "USD")
+    def create_family_and_user!(family_name, user_email, currency: "USD", require_onboarding: false)
       base_uuid = "d99e3c6e-d513-4452-8f24-dc263f8528c0"
       id = Digest::UUID.uuid_v5(base_uuid, family_name)
 
@@ -160,7 +160,7 @@ class Demo::Generator
         id: id,
         name: family_name,
         currency: currency,
-        stripe_subscription_status: "active",
+        stripe_subscription_status: require_onboarding ? nil : "active",
         locale: "en",
         country: "US",
         timezone: "America/New_York",
@@ -173,7 +173,7 @@ class Demo::Generator
         last_name: "User",
         role: "admin",
         password: "password",
-        onboarded_at: Time.current
+        onboarded_at: require_onboarding ? nil : Time.current
 
       family.users.create! \
         email: "member_#{user_email}",
@@ -181,7 +181,7 @@ class Demo::Generator
         last_name: "User",
         role: "member",
         password: "password",
-        onboarded_at: Time.current
+        onboarded_at: require_onboarding ? nil : Time.current
     end
 
     def create_rules!(family)

@@ -1,40 +1,41 @@
 <%# locals: (form:, user:) %>
 
-<div class="flex md:flex-row flex-col md:items-center items-center gap-4" data-controller="profile-image-preview">
-  <div class="relative flex justify-center items-center bg-container size-26 md:size-24 rounded-full  border-primary border border-dashed overflow-hidden">
-
-    <%# The image preview once user has uploaded a new file  %>
-    <div data-profile-image-preview-target="previewImage" class="h-full w-full flex justify-center items-center hidden">
-      <img src="" alt="Preview" class="w-full h-full rounded-full object-cover">
-    </div>
-
-    <%# The placeholder image for empty avatar field  %>
-    <div data-profile-image-preview-target="placeholderImage"
-         class="h-full w-full flex justify-center  items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
-      <div class="h-full w-full flex justify-center items-center bg-container">
-        <%= icon "image-plus", size: "lg" %>
-      </div>
-    </div>
-
-    <%# The attached image if user has already uploaded one %>
-    <div data-profile-image-preview-target="attachedImage"
-         class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
-      <% if user.profile_image.attached? %>
-        <div class="h-full w-full">
-          <%= render "settings/user_avatar", avatar_url: user.profile_image.url, initials: user.initials %>
-        </div>
-      <% end %>
-    </div>
-
+<div class="flex flex-col items-center gap-4" data-controller="profile-image-preview">
+  <div class="relative">
     <button type="button"
             data-profile-image-preview-target="clearBtn"
             data-action="click->profile-image-preview#clearFileInput"
-      class="<%= user.profile_image.attached? ? "" : "hidden" %> cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
+      class="<%= user.profile_image.attached? ? "" : "hidden" %> z-50 cursor-pointer absolute bottom-0 right-0 w-8 h-8 bg-gray-50 rounded-full flex justify-center items-center border border-white border-2">
       <%= icon "x", size: "sm" %>
     </button>
+
+    <div class="relative flex justify-center items-center bg-surface-inset size-26 md:size-24 rounded-full border-primary border border-dashed overflow-hidden">
+      <%# The image preview once user has uploaded a new file  %>
+      <div data-profile-image-preview-target="previewImage" class="h-full w-full flex justify-center items-center hidden">
+        <img src="" alt="Preview" class="w-full h-full rounded-full object-cover">
+      </div>
+
+      <%# The placeholder image for empty avatar field  %>
+      <div data-profile-image-preview-target="placeholderImage"
+         class="h-full w-full flex justify-center  items-center <%= user.profile_image.attached? ? "hidden" : "" %>">
+        <div class="h-full w-full flex justify-center items-center bg-surface-inset">
+          <%= icon "image-plus", size: "lg" %>
+        </div>
+      </div>
+
+      <%# The attached image if user has already uploaded one %>
+      <div data-profile-image-preview-target="attachedImage"
+         class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
+        <% if user.profile_image.attached? %>
+          <div class="h-full w-full">
+            <%= render "settings/user_avatar", avatar_url: user.profile_image.url %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <div class="md:text-left text-center">
+  <div class="text-center">
     <%= form.hidden_field :delete_profile_image, value: "0", data: { profile_image_preview_target: "deleteProfileImage" } %>
 
     <%= form.label :profile_image, class: "px-3 py-2 rounded-lg text-sm hover:bg-surface-hover border border-secondary inline-flex items-center gap-2 cursor-pointer", data: { profile_image_preview_target: "uploadButton" } do %>

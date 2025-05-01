@@ -55,7 +55,6 @@ class TradesTest < ApplicationSystemTestCase
   end
 
   private
-
     def open_new_trade_modal
       click_on "New transaction"
     end

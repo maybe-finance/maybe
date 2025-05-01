@@ -1,0 +1,55 @@
+<div class="flex flex-col h-full justify-between bg-surface">
+  <nav class="p-4">
+    <h1 class="sr-only">Upgrade</h1>
+
+    <div class="flex justify-end">
+      <%= render ButtonComponent.new(
+        text: "Sign out",
+        icon: "log-out",
+        icon_position: :right,
+        variant: "ghost",
+        href: session_path(Current.session),
+        method: :delete
+      ) %>
+    </div>
+  </nav>
+
+  <div class="grow flex flex-col items-center justify-center">
+    <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
+
+    <% if Current.family.trialing? %>
+      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial has <%= Current.family.trial_remaining_days %> days remaining</p>
+    <% else %>
+      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial is over</p>
+    <% end %>
+
+    <h2 class="text-xl lg:text-3xl font-display font-medium mb-2">
+      <span class="text-secondary">Unlock</span>
+      <span class="bg-gradient-to-r from-[#EABE7F] to-[#957049] bg-clip-text text-transparent">Maybe</span>
+      <span class="text-secondary">today</span>
+    </h2>
+
+    <p class="text-sm text-secondary mb-8">To continue using Maybe pick a plan below.</p>
+
+    <%= form_with url: new_subscription_path, method: :get, class: "max-w-xs", data: { turbo: false } do |form| %>
+      <div class="space-y-4 mb-6">
+        <%= render "subscriptions/plan_choice", form: form, plan: "annual", checked: params[:plan] == "annual" || params[:plan].blank? %>
+        <%= render "subscriptions/plan_choice", form: form, plan: "monthly", checked: params[:plan] == "monthly" %>
+      </div>
+
+      <div class="text-center space-y-2">
+        <%= render ButtonComponent.new(
+          text: "Subscribe and unlock Maybe",
+          variant: "primary",
+          full_width: true
+        ) %>
+
+        <p class="text-xs text-secondary">
+          In the next step, you'll be redirected to Stripe which handles our billing.
+        </p>
+      </div>
+    <% end %>
+  </div>
+
+  <%= render "layouts/shared/footer" %>
+</div>

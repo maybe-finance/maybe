@@ -1,21 +1,11 @@
-<%# locals: (import:) %>
+<%# locals: (user:) %>
 
 <% steps = [
-  { name: "Upload", path: import_upload_path(import), is_complete: import.uploaded?, step_number: 1 },
-  { name: "Configure", path: import_configuration_path(import), is_complete: import.configured?, step_number: 2 },
-  { name: "Clean", path: import_clean_path(import), is_complete: import.cleaned?, step_number: 3 },
-  { name: "Map", path: import_confirm_path(import), is_complete: import.publishable?, step_number: 4 },
-  { name: "Confirm", path: import_path(import), is_complete: import.complete?, step_number: 5 }
-].reject { |step| step[:name] == "Map" && import.mapping_steps.empty? } %>
-
-<% content_for :mobile_import_progress do %>
-  <% active_step = steps.detect { |s| request.path.eql?(s[:path]) } %>
-  <% if active_step.present? %>
-    <div class="md:hidden text-center text-secondary text-md my-2">
-      <span class="text-gray-500">Step <%= active_step[:step_number] %> of <%= steps.size %></span>
-    </div>
-  <% end %>
-<% end %>
+  { name: "Setup", path: onboarding_path, is_complete: user.first_name.present?, step_number: 1 },
+  { name: "Preferences", path: preferences_onboarding_path, is_complete: user.set_onboarding_preferences_at.present?, step_number: 2 },
+  { name: "Goals", path: goals_onboarding_path , is_complete: user.set_onboarding_goals_at.present?, step_number: 3 },
+  { name: "Start", path: trial_onboarding_path, is_complete: user.onboarded_at.present?, step_number: 4 },
+] %>
 
 <ul class="hidden md:flex items-center gap-2">
   <% steps.each_with_index do |step, idx| %>
