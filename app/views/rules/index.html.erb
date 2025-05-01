@@ -49,18 +49,18 @@
           <div class="flex items-center">
             <%= link_to rules_path(sort_by: "name", direction: (@sort_by == "name" && @direction == "asc") ? "desc" : "asc"), 
                   class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'name' ? 'font-medium' : ''}" do %>
-              <span>Name</span>
+              <span class="mr-1">Name</span>
               <% if @sort_by == "name" %>
-                <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent ml-1") %>
+                <%= icon(@direction == "asc" ? "arrow-up" : "arrow-down", size: "xs") %>
               <% end %>
             <% end %>
           </div>
           <div class="flex items-center">
             <%= link_to rules_path(sort_by: "created_at", direction: (@sort_by == "created_at" && @direction == "asc") ? "desc" : "asc"), 
                   class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'created_at' ? 'font-medium' : ''}" do %>
-              <span>Date</span>
+              <span class="mr-1">Date</span>
               <% if @sort_by == "created_at" %>
-                <%= lucide_icon(@direction == "asc" ? "arrow-up" : "arrow-down", class: "w-3 h-3 text-accent ml-1") %>
+                <%= icon(@direction == "asc" ? "arrow-up" : "arrow-down", size: "xs") %>
               <% end %>
             <% end %>
           </div>
