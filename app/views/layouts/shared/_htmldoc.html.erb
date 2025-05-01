@@ -2,9 +2,9 @@
 
 <% theme = Current.user&.theme || "system" %>
 
-<html 
+<html
   lang="en"
-  data-theme="<%= theme %>" 
+  data-theme="<%= theme %>"
   data-controller="theme intercom"
   data-theme-user-preference-value="<%= Current.user&.theme || "system" %>"
   class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
