@@ -128,11 +128,15 @@ class Family < ApplicationRecord
   end
 
   def subscribed?
-    trialing? || stripe_subscription_status == "active"
+    stripe_subscription_status == "active"
   end
 
   def trialing?
-    trial_started_at.present? && trial_started_at <= 14.days.from_now
+    !subscribed? && trial_started_at.present? && trial_started_at <= 14.days.from_now
+  end
+
+  def trial_remaining_days
+    (14 - (Time.current - trial_started_at).to_i / 86400).to_i
   end
 
   def existing_customer?

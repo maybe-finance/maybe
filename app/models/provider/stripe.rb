@@ -30,14 +30,14 @@ class Provider::Stripe
     end
   end
 
-  def create_customer(email, metadata: {})
+  def create_customer(email:, metadata: {})
     client.v1.customers.create(
       email: email,
       metadata: metadata
     )
   end
 
-  def get_checkout_session_url(price_id, customer_id: nil, success_url: nil, cancel_url: nil)
+  def get_checkout_session_url(price_id:, customer_id: nil, success_url: nil, cancel_url: nil)
     client.v1.checkout.sessions.create(
       customer: customer_id,
       line_items: [ { price: price_id, quantity: 1 } ],
@@ -48,7 +48,7 @@ class Provider::Stripe
     ).url
   end
 
-  def get_billing_portal_session_url(customer_id, return_url: nil)
+  def get_billing_portal_session_url(customer_id:, return_url: nil)
     client.v1.billing_portal.sessions.create(
       customer: customer_id,
       return_url: return_url

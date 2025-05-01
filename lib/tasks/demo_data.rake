@@ -5,6 +5,11 @@ namespace :demo_data do
     Demo::Generator.new.reset_and_clear_data!(families)
   end
 
+  task new_user: :environment do
+    families = [ "Demo Family 1" ]
+    Demo::Generator.new.reset_and_clear_data!(families, require_onboarding: true)
+  end
+
   task :reset, [ :count ] => :environment do |t, args|
     count = (args[:count] || 1).to_i
     families = count.times.map { |i| "Demo Family #{i + 1}" }

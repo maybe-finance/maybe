@@ -17,7 +17,11 @@
   <div class="grow flex flex-col items-center justify-center">
     <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
 
-    <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial is over</p>
+    <% if Current.family.trialing? %>
+      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial has <%= Current.family.trial_remaining_days %> days remaining</p>
+    <% else %>
+      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial is over</p>
+    <% end %>
 
     <h2 class="text-xl lg:text-3xl font-display font-medium mb-2">
       <span class="text-secondary">Unlock</span>

@@ -38,7 +38,7 @@ class SubscriptionsController < ApplicationController
     end
 
     checkout_session_url = stripe.get_checkout_session_url(
-      price_id,
+      price_id: price_id,
       customer_id: Current.family.stripe_customer_id,
       success_url: success_subscription_url + "?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: upgrade_subscription_url(plan: params[:plan])
@@ -49,7 +49,7 @@ class SubscriptionsController < ApplicationController
 
   def show
     portal_session_url = stripe.get_billing_portal_session_url(
-      Current.family.stripe_customer_id,
+      customer_id: Current.family.stripe_customer_id,
       return_url: settings_billing_url
     )
 

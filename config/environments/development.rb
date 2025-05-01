@@ -35,7 +35,9 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
-  config.active_storage.default_url_options = { host: "localhost", port: 3000 }
+  config.after_initialize do
+    ActiveStorage::Current.url_options = { host: "localhost", port: 3000 }
+  end
 
   # Set Active Storage URL expiration time to 7 days
   config.active_storage.urls_expire_in = 7.days
