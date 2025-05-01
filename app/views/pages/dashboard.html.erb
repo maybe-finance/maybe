@@ -1,8 +1,8 @@
 <% content_for :page_header do %>
-  <div class="space-y-1 mb-6 flex justify-between items-center lg:items-start">
+  <div class="space-y-1 mb-6 flex gap-4 justify-between items-center lg:items-start">
     <div class="space-y-1">
-      <h1 class="text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
-      <p class="text-gray-500">Here's what's happening with your finances</p>
+      <h1 class="text-xl lg:text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
+      <p class="text-sm lg:text-base text-gray-500">Here's what's happening with your finances</p>
     </div>
 
     <%= render LinkComponent.new(

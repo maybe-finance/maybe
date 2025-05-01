@@ -33,7 +33,7 @@ class DialogComponent < ViewComponent::Base
     end
   end
 
-  attr_reader :variant, :auto_open, :reload_on_close, :frame, :width, :opts
+  attr_reader :variant, :auto_open, :reload_on_close, :width, :disable_frame, :opts
 
   VARIANTS = %w[modal drawer].freeze
   WIDTHS = {
@@ -43,17 +43,22 @@ class DialogComponent < ViewComponent::Base
     full: "lg:max-w-full"
   }.freeze
 
-  def initialize(variant: "modal", auto_open: true, reload_on_close: false, frame: nil, width: "md", **opts)
+  def initialize(variant: "modal", auto_open: true, reload_on_close: false, width: "md", disable_frame: false, **opts)
     @variant = variant.to_sym
     @auto_open = auto_open
     @reload_on_close = reload_on_close
-    @frame = frame
     @width = width.to_sym
+    @disable_frame = disable_frame
     @opts = opts
   end
 
-  def frame
-    @frame || variant
+  # Caller must "opt-out" of using the default turbo-frame based on the variant
+  def wrapper_element(&block)
+    if disable_frame
+      content_tag(:div, &block)
+    else
+      content_tag("turbo-frame", id: variant, &block)
+    end
   end
 
   def dialog_outer_classes
@@ -80,7 +85,7 @@ class DialogComponent < ViewComponent::Base
     end
 
     class_names(
-      "flex flex-col bg-container lg:rounded-xl lg:shadow-border-xs w-full overflow-hidden",
+      "flex flex-col bg-container rounded-xl shadow-border-xs mx-3 lg:mx-0 w-full overflow-hidden",
       variant_classes
     )
   end

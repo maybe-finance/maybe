@@ -1,4 +1,4 @@
-<div class="pt-safe space-y-4">
+<div class="space-y-4">
   <div class="flex items-center gap-2 p-1.5">
     <%= render LinkComponent.new(
       text: "Back",
@@ -146,7 +146,7 @@
       </li>
 
       <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
-        <%= icon("log-out") %>
+        <%= icon("log-out", color: "current") %>
         <span><%= t(".logout") %></span>
       <% end %>
 

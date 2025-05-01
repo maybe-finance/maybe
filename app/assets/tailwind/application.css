@@ -166,15 +166,3 @@
     background: #a6a6a6;
   }
 }
-
-.mt-safe {
-	margin-top: env(safe-area-inset-top);
-}
-
-.pt-safe {
-	padding-top: env(safe-area-inset-top);
-}
-
-.pb-safe {
-	padding-bottom: env(safe-area-inset-bottom);
-}
