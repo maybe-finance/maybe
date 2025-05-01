@@ -21,7 +21,7 @@
          class="h-full w-full flex justify-center items-center <%= user.profile_image.attached? ? "" : "hidden" %>">
       <% if user.profile_image.attached? %>
         <div class="h-full w-full">
-          <%= render "settings/user_avatar", avatar_url: user.profile_image.url %>
+          <%= render "settings/user_avatar", avatar_url: user.profile_image.url, initials: user.initials %>
         </div>
       <% end %>
     </div>
