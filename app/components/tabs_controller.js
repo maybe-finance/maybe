@@ -6,10 +6,6 @@ export default class extends Controller {
   static targets = ["panel", "navBtn"];
   static values = { urlParamKey: String };
 
-  connect() {
-    console.log("tabs controller connected");
-  } 
-
   show(e) {
     const btn = e.target.closest("button");
     const selectedTabId = btn.dataset.id;

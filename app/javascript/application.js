@@ -5,3 +5,11 @@ import "controllers";
 Turbo.StreamActions.redirect = function () {
   Turbo.visit(this.target);
 };
+
+if (typeof console !== "undefined") {
+  console.debug = console.log;
+  window.onerror = (msg, url, line) => {
+    console.log(`Error: ${msg}\nURL: ${url}\nLine: ${line}`);
+    return false;
+  };
+}
