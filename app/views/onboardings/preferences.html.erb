@@ -1,26 +1,33 @@
-<div class="bg-surface h-screen flex flex-col justify-between">
-  <%= render "onboardings/header" %>
+<%= content_for :previous_path, onboarding_path %>
 
-  <div class="grow max-w-lg w-full mx-auto bg-surface flex flex-col justify-center md:py-0 py-6 px-4 md:px-0" data-controller="onboarding">
-    <div>
-      <div class="space-y-1 mb-6">
-        <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
-        <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
-      </div>
+<%= content_for :header_nav do %>
+  <%= render "onboardings/onboarding_nav", user: @user %>
+<% end %>
 
-      <div class="p-1 bg-alpha-black-25 mb-2 rounded-lg">
-        <div class="bg-container p-4 rounded-lg flex gap-8 shadow-border-xs">
-          <div class="space-y-2">
-            <%= tag.p t(".example"), class: "text-secondary text-sm" %>
-            <%= tag.p format_money(Money.new(2325.25, params[:currency] || @user.family.currency)), class: "text-primary font-medium text-2xl" %>
-            <p class="text-sm">
-              <span class="text-green-500 font-medium">+<%= format_money(Money.new(78.90, params[:currency] || @user.family.currency)) %></span>
-              <span class="text-green-500 font-medium">(+<%= format_money(Money.new(6.39, params[:currency] || @user.family.currency)) %>)</span>
-              <span class="text-secondary">as of <%= format_date(Date.parse("2024-10-23"), :default, format_code: params[:date_format] || @user.family.date_format) %></span>
-            </p>
-          </div>
+<%= content_for :cancel_action do %>
+  <%= render "onboardings/logout" %>
+<% end %>
 
-          <% placeholder_series_data = [
+<div class="grow max-w-lg w-full mx-auto bg-surface flex flex-col justify-center md:py-0 py-6 px-4 md:px-0" data-controller="onboarding">
+  <div>
+    <div class="space-y-1 mb-6">
+      <h1 class="text-2xl font-medium"><%= t(".title") %></h1>
+      <p class="text-secondary text-sm"><%= t(".subtitle") %></p>
+    </div>
+
+    <div class="p-1 bg-alpha-black-25 mb-2 rounded-lg">
+      <div class="bg-container p-4 rounded-lg flex gap-8 shadow-border-xs">
+        <div class="space-y-2">
+          <%= tag.p t(".example"), class: "text-secondary text-sm" %>
+          <%= tag.p format_money(Money.new(2325.25, params[:currency] || @user.family.currency)), class: "text-primary font-medium text-2xl" %>
+          <p class="text-sm">
+            <span class="text-green-500 font-medium">+<%= format_money(Money.new(78.90, params[:currency] || @user.family.currency)) %></span>
+            <span class="text-green-500 font-medium">(+<%= format_money(Money.new(6.39, params[:currency] || @user.family.currency)) %>)</span>
+            <span class="text-secondary">as of <%= format_date(Date.parse("2024-10-23"), :default, format_code: params[:date_format] || @user.family.date_format) %></span>
+          </p>
+        </div>
+
+        <% placeholder_series_data = [
             { date: Date.current - 14.days, value: 200 },
             { date: Date.current - 13.days, value: 200 },
             { date: Date.current - 12.days, value: 220 },
@@ -38,53 +45,54 @@
             { date: Date.current, value: 265 }
           ] %>
 
-          <% placeholder_series = Series.from_raw_values(placeholder_series_data) %>
+        <% placeholder_series = Series.from_raw_values(placeholder_series_data) %>
 
-          <div class="flex items-center w-2/5">
-            <div class="h-12 w-full">
-              <div
+        <div class="flex items-center w-2/5">
+          <div class="h-12 w-full">
+            <div
                 id="previewChart"
                 class="h-full w-full"
                 data-controller="time-series-chart"
                 data-time-series-chart-data-value="<%= placeholder_series.to_json %>"
                 data-time-series-chart-use-labels-value="false"
                 data-time-series-chart-use-tooltip-value="false"></div>
-            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <p class="text-secondary text-xs mb-4"><%= t(".preview") %></p>
+    <p class="text-secondary text-xs mb-4"><%= t(".preview") %></p>
 
-      <%= styled_form_with model: @user, data: { turbo: false } do |form| %>
-        <%= form.hidden_field :onboarded_at, value: Time.current %>
-        <%= form.hidden_field :redirect_to, value: "home" %>
+    <%= styled_form_with model: @user, data: { turbo: false } do |form| %>
+      <%= form.hidden_field :set_onboarding_preferences_at, value: Time.current %>
+      <%= form.hidden_field :redirect_to, value: "goals" %>
 
-        <div class="space-y-4 mb-4">
-          <%= form.fields_for :family do |family_form| %>
+      <div class="mb-4">
+        <%= form.select :theme, [["System", "system"], ["Light", "light"], ["Dark", "dark"]], { label: "Color theme" }, data: { action: "onboarding#setTheme" } %>
+      </div>
 
-            <%= family_form.select :locale,
+      <div class="space-y-4 mb-4">
+        <%= form.fields_for :family do |family_form| %>
+
+          <%= family_form.select :locale,
             language_options,
             { label: t(".locale"), required: true, selected: params[:locale] || @user.family.locale },
             { data: { action: "onboarding#setLocale" } } %>
 
-            <%= family_form.select :currency,
-            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+          <%= family_form.select :currency,
+            Money::Currency.as_options.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
             { label: t(".currency"), required: true, selected: params[:currency] || @user.family.currency },
             { data: { action: "onboarding#setCurrency" } } %>
 
-            <%= family_form.select :date_format,
+          <%= family_form.select :date_format,
             Family::DATE_FORMATS,
             { label: t(".date_format"), required: true, selected: params[:date_format] || @user.family.date_format },
             { data: { action: "onboarding#setDateFormat" } } %>
 
-          <% end %>
-        </div>
+        <% end %>
+      </div>
 
-        <%= form.submit t(".submit") %>
-      <% end %>
-    </div>
+      <%= form.submit t(".submit") %>
+    <% end %>
   </div>
-
-  <%= render "layouts/shared/footer" %>
 </div>

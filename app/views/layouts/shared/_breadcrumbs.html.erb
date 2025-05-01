@@ -1,33 +1,17 @@
-<%# locals: (breadcrumbs:, sidebar_toggle_enabled: true) %>
+<%# locals: (breadcrumbs:) %>
 
-<nav class="items-center gap-2 mb-6 hidden md:flex">
-  <% if sidebar_toggle_enabled %>
-    <button data-action="sidebar#toggleLeftPanel" class="hidden p-2 lg:inline-flex rounded-lg items-center justify-center hover:bg-container-inset cursor-pointer">
-      <%= icon("panel-left", color: "gray") %>
-    </button>
-  <% end %>
-
-  <div class="py-2 flex items-center gap-2">
-    <% breadcrumbs.each_with_index do |(name, path), index| %>
-      <% if index > 0 %>
-        <%= icon("chevron-right", color: "gray", size: "sm") %>
-      <% end %>
-
-      <% if path.present? && index < breadcrumbs.size - 1 %>
-        <%= link_to name, path, class: "text-sm text-gray-500 font-medium" %>
-      <% elsif index == breadcrumbs.size - 1 %>
-        <span class="text-primary font-medium text-sm"><%= name %></span>
-      <% else %>
-        <span class="text-sm text-gray-500 font-medium"><%= name %></span>
-      <% end %>
+<div class="py-2 flex items-center gap-2">
+  <% breadcrumbs.each_with_index do |(name, path), index| %>
+    <% if index > 0 %>
+      <%= icon("chevron-right", color: "gray", size: "sm") %>
     <% end %>
-  </div>
 
-  <% if sidebar_toggle_enabled %>
-    <div class="ml-auto">
-      <button data-action="sidebar#toggleRightPanel" class="p-2 hidden lg:inline-flex rounded-lg items-center justify-center hover:bg-container-inset cursor-pointer" title="Toggle AI Assistant">
-        <%= icon("panel-right", color: "gray") %>
-      </button>
-    </div>
+    <% if path.present? && index < breadcrumbs.size - 1 %>
+      <%= link_to name, path, class: "text-sm text-gray-500 font-medium" %>
+    <% elsif index == breadcrumbs.size - 1 %>
+      <span class="text-primary font-medium text-sm"><%= name %></span>
+    <% else %>
+      <span class="text-sm text-gray-500 font-medium"><%= name %></span>
+    <% end %>
   <% end %>
-</nav>
+</div>

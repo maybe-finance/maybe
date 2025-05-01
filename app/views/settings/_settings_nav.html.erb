@@ -1,13 +1,17 @@
-<div class="pt-safe space-y-4">
-  <div class="flex items-center gap-2 p-1.5">
-    <%= link_to previous_path, class: "flex items-center gap-1 text-primary font-medium text-sm" do %>
-      <%= lucide_icon "chevron-left", class: "w-5 h-5 text-secondary" %>
-      <span class="hidden md:block">Back</span>
-    <% end %>
+<div class="space-y-4">
+  <div class="hidden lg:flex items-center gap-2 p-1.5">
+    <%= render LinkComponent.new(
+      text: "Back",
+      icon: "chevron-left",
+      href: previous_path,
+      variant: "ghost",
+    ) %>
+
     <%= link_to previous_path, class: "hidden md:block uppercase bg-surface-inset-hover rounded-sm px-1 py-0.5 text-xs text-secondary shadow-sm ml-1 pointer-events-none", data: { controller: "hotkey", hotkey: "Escape" } do %>
-      esc
+      <kbd>esc</kbd>
     <% end %>
   </div>
+
   <nav class="space-y-4 hidden md:block">
     <section class="space-y-2">
       <div class="flex items-center gap-2 px-3">
@@ -83,15 +87,23 @@
     </section>
 
     <section>
-      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
-        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
+        <%= icon("log-out", color: "current") %>
         <span><%= t(".logout") %></span>
       <% end %>
     </section>
   </nav>
-  <nav class="space-y-4 overflow-y-auto  md:hidden" id="mobile-settings-nav" data-preserve-scroll data-controller="preserve-scroll">
 
+  <nav class="space-y-4 overflow-y-auto md:hidden" id="mobile-settings-nav">
     <ul class="flex space-y-1">
+      <li>
+        <%= render LinkComponent.new(
+          text: "Back",
+          icon: "chevron-left",
+          href: previous_path,
+          variant: "ghost",
+        ) %>
+      </li>
 
       <li>
         <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
@@ -141,8 +153,8 @@
         <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
       </li>
 
-      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 btn btn--ghost text-destructive w-full" do %>
-        <%= lucide_icon("log-out", class: "w-5 h-5 shrink-0") %>
+      <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
+        <%= icon("log-out", color: "current") %>
         <span><%= t(".logout") %></span>
       <% end %>
 

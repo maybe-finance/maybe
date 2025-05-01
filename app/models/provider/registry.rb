@@ -19,6 +19,15 @@ class Provider::Registry
     end
 
     private
+      def stripe
+        secret_key = ENV["STRIPE_SECRET_KEY"]
+        webhook_secret = ENV["STRIPE_WEBHOOK_SECRET"]
+
+        return nil unless secret_key.present? && webhook_secret.present?
+
+        Provider::Stripe.new(secret_key:, webhook_secret:)
+      end
+
       def synth
         api_key = ENV.fetch("SYNTH_API_KEY", Setting.synth_api_key)
 

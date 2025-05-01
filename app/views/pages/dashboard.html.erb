@@ -1,24 +1,38 @@
 <% content_for :page_header do %>
-  <div class="space-y-1 mb-6 flex justify-between">
+  <div class="space-y-1 mb-6 flex gap-4 justify-between items-center lg:items-start">
     <div class="space-y-1">
-      <h1 class="text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
-      <p class="text-gray-500">Here's what's happening with your finances</p>
+      <h1 class="text-xl lg:text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
+      <p class="text-sm lg:text-base text-secondary">Here's what's happening with your finances</p>
     </div>
 
-    <%= link_to new_account_path(step: "method_select", classification: "asset"),
-                class: "btn btn--primary flex items-center justify-center gap-2 rounded-full w-9 h-9 md:hidden",
-                data: { turbo_frame: "modal" } do %>
-                <span class="flex items-center justify-center">
-          <%= lucide_icon("plus", class: "size-5") %>
-        </span>
-    <% end %>
+    <%= render LinkComponent.new(
+      icon: "plus",
+      text: "New",
+      href: new_account_path,
+      frame: :modal,
+      class: "hidden lg:inline-flex"
+    ) %>
+
+    <%= render LinkComponent.new(
+        variant: "icon-inverse",
+        icon: "plus",
+        href: new_account_path,
+        frame: :modal,
+        class: "rounded-full lg:hidden"
+      ) %>
   </div>
 <% end %>
 
 <div class="w-full space-y-6 pb-24">
-  <section class="bg-container py-4 rounded-xl shadow-border-xs">
-    <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
-  </section>
+  <% if Current.family.accounts.any? %>
+    <section class="bg-container py-4 rounded-xl shadow-border-xs px-0.5">
+      <%= render partial: "pages/dashboard/net_worth_chart", locals: { series: @balance_sheet.net_worth_series(period: @period), period: @period } %>
+    </section>
+  <% else %>
+    <section class="p-0.5">
+      <%= render "pages/dashboard/no_accounts_graph_placeholder" %>
+    </section>
+  <% end %>
 
   <section>
     <%= render "pages/dashboard/balance_sheet", balance_sheet: @balance_sheet %>

@@ -1,0 +1,8 @@
+ <%= render ButtonComponent.new(
+        text: "Sign out",
+        icon: "log-out",
+        icon_position: :right,
+        variant: "ghost",
+        href: session_path(Current.session),
+        method: :delete
+      ) %>

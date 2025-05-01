@@ -131,6 +131,18 @@ class Family < ApplicationRecord
     stripe_subscription_status == "active"
   end
 
+  def trialing?
+    !subscribed? && trial_started_at.present? && trial_started_at <= 14.days.from_now
+  end
+
+  def trial_remaining_days
+    (14 - (Time.current - trial_started_at).to_i / 86400).to_i
+  end
+
+  def existing_customer?
+    stripe_customer_id.present?
+  end
+
   def requires_data_provider?
     # If family has any trades, they need a provider for historical prices
     return true if trades.any?
@@ -144,6 +156,10 @@ class Family < ApplicationRecord
     return true if uniq_currencies.count > 0 && uniq_currencies.first != self.currency
 
     false
+  end
+
+  def missing_data_provider?
+    requires_data_provider? && Provider::Registry.get_provider(:synth).nil?
   end
 
   def primary_user

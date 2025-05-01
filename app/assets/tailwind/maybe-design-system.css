@@ -5,6 +5,12 @@
   One-off styling (3rd party overrides, etc.) should be done in the application.css file.
 */
 
+@import './maybe-design-system/background-utils.css';
+@import './maybe-design-system/foreground-utils.css';
+@import './maybe-design-system/text-utils.css';
+@import './maybe-design-system/border-utils.css';
+@import './maybe-design-system/component-utils.css';
+
 @custom-variant theme-dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
@@ -18,6 +24,7 @@
   --color-success: var(--color-green-600);
   --color-warning: var(--color-yellow-600);
   --color-destructive: var(--color-red-600);
+  --color-shadow: --alpha(var(--color-black) / 6%);
 
   /* Gray scale */
   --color-gray-25: #FAFAFA;
@@ -231,268 +238,42 @@
   }
 }
 
-/* Custom shadow borders used for surfaces / containers  */
-@utility shadow-border-xs {
-  box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-sm {
-  box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-md {
-  box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-lg {
-  box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-@utility shadow-border-xl {
-  box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
-}
-
-/* Design system color utilities */
-@utility text-primary {
-  @apply text-gray-900;
-
-  @variant theme-dark {
-   @apply text-white;
-  }
-}
-
-@utility text-secondary {
-  @apply text-gray-500;
-
-  @variant theme-dark {
-    @apply text-gray-400;
-  }
-}
-
-@utility text-subdued {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-600;
-  }
-}
-
-@utility text-link {
-  @apply text-blue-600;
-
-  @variant theme-dark {
-    @apply text-blue-500;
-  }
-}
-
-@utility bg-surface {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-black;
-  }
-}
-
-@utility bg-surface-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-surface-inset {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-900;
-  }
-}
-
-@utility bg-surface-inset-hover {
-  @apply bg-gray-200;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-gray-900;
-  }
-}
-
-@utility bg-container-hover {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container-inset {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility bg-container-inset-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility bg-inverse {
-  @apply bg-gray-800;
-
-  @variant theme-dark {
-    @apply bg-white;
-  }
-}
-
-@utility bg-inverse-hover {
-  @apply bg-gray-700;
-
-  @variant theme-dark {
-    @apply bg-gray-100;
-  }
-}
-
-@utility bg-overlay {
-  background-color: rgba(var(--color-gray-100), 0.5);
-
-  @variant theme-dark {
-    background-color: var(--color-alpha-black-900);
-  }
-}
-
-@utility border-primary {
-  @apply border-alpha-black-300;
-
-  @variant theme-dark {
-    @apply border-alpha-white-400;
-  }
-}
-
-@utility border-secondary {
-  @apply border-alpha-black-200;
-
-  @variant theme-dark {
-    @apply border-alpha-white-300;
-  }
-}
-
-@utility border-tertiary {
-  @apply border-alpha-black-100;
-
-  @variant theme-dark {
-    @apply border-alpha-white-200;
-  }
-}
-
-@utility border-subdued {
-  @apply border-alpha-black-50;
-
-  @variant theme-dark {
-    @apply border-alpha-white-100;
-  }
-}
-
-@utility border-solid {
-  @apply border-black;
-
-  @variant theme-dark {
-    @apply border-white;
-  }
-}
-
-@utility border-destructive {
-  @apply border-red-500;
-
-  @variant theme-dark {
-    @apply border-red-400;
-  }
-}
-
-/* Foreground Colors */
-@utility fg-gray {
-  @apply text-gray-500;
-
-  @variant theme-dark {
-    @apply text-gray-400;
-  }
-}
-
-@utility fg-contrast {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-500;
-  }
-}
-
-@utility fg-inverse {
-  @apply text-white;
-
-  @variant theme-dark {
-    @apply text-gray-900;
-  }
-}
-
-@utility fg-primary {
-  @apply text-gray-900;
-
-  @variant theme-dark {
-    @apply text-white;
-  }
-}
-
-@utility fg-primary-variant {
-  @apply text-gray-800;
-
-  @variant theme-dark {
-    @apply text-gray-50;
-  }
-}
-
-@utility fg-secondary {
-  @apply text-gray-50;
-
-  @variant theme-dark {
-    @apply text-gray-700;
-  }
-}
-
-@utility fg-secondary-variant {
-  @apply text-gray-100;
-
-  @variant theme-dark {
-    @apply text-gray-600;
-  }
-}
-
-@utility fg-subdued {
-  @apply text-gray-400;
-
-  @variant theme-dark {
-    @apply text-gray-500;
-  }
+/* Specific override for strong tags in prose under dark mode */
+.prose:where([data-theme=dark], [data-theme=dark] *) strong {
+  color: theme(colors.white) !important;
 }
 
 @layer base {
+  [data-theme="dark"] { 
+    --color-success: var(--color-green-500);
+    --color-warning: var(--color-yellow-400);
+    --color-destructive: var(--color-red-400);
+    --color-shadow: --alpha(var(--color-white) / 8%);
+
+    --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 8%);
+    --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 8%);
+    --shadow-md: 0px 4px 8px -2px --alpha(var(--color-white) / 8%);
+    --shadow-lg: 0px 12px 16px -4px --alpha(var(--color-white) / 8%);
+    --shadow-xl: 0px 20px 24px -4px --alpha(var(--color-white) / 8%);
+  }
+
+  html {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   button {
     @apply cursor-pointer focus-visible:outline-gray-900;
   }
 
   hr {
     @apply text-gray-200;
+  }
+
+  /* We control the sizing through DialogComponent, so reset this value */
+  dialog:modal {
+    max-width: 100dvw;
+    max-height: 100dvh;
   }
 
   details>summary::-webkit-details-marker {
@@ -515,85 +296,6 @@
 }
 
 @layer components {
-  /* Buttons */
-  .btn {
-    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer disabled:cursor-not-allowed focus:outline-gray-500;
-    @apply transition-all duration-300;
-  }
-
-  .btn--primary {
-    @apply button-bg-primary text-white disabled:text-gray-400;
-    @apply hover:button-bg-primary-hover;
-    @apply disabled:button-bg-disabled disabled:hover:button-bg-disabled;
-
-    @variant theme-dark {
-      @apply button-bg-primary fg-primary;
-      @apply hover:button-bg-primary-hover;
-      @apply disabled:button-bg-disabled disabled:hover:button-bg-disabled;
-    }
-  }
-
-  .btn--secondary {
-    @apply button-bg-secondary text-primary;
-    @apply hover:button-bg-secondary-hover;
-
-    @variant theme-dark {
-      @apply text-white;
-      background-color: var(--color-gray-700);
-      &:hover {
-        background-color: var(--color-gray-800);
-      }
-    }
-  }
-
-  .btn--outline {
-    @apply border border-alpha-black-200 text-primary disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-400;
-
-    &:hover {
-      background-color: var(--color-gray-100);
-    }
-
-    @variant theme-dark {
-      @apply border-alpha-white-300 text-white disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-gray-600;
-
-      &:hover {
-        background-color: var(--color-gray-800);
-      }
-    }
-  }
-
-  .btn--ghost {
-    @apply border border-transparent text-primary;
-
-    &:hover {
-      background-color: var(--color-gray-100)
-    }
-
-    @variant theme-dark {
-      @apply fg-primary;
-
-      &:hover {
-        background-color: var(--color-gray-900);
-      }
-    }
-  }
-
-  .btn--outline-destructive {
-    @apply border border-red-500 text-red-500 hover:bg-gray-50;
-
-    @variant theme-dark {
-      @apply border-red-400 text-red-400 hover:button-bg-destructive-hover;
-    }
-  }
-
-  .btn--destructive {
-    @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled disabled:text-red-400;
-
-    @variant theme-dark {
-      @apply button-bg-destructive text-white hover:button-bg-destructive-hover disabled:button-bg-disabled disabled:hover:button-bg-disabled;
-    }
-  }
-
   /* Forms */
   .form-field {
     @apply flex flex-col gap-1 relative px-3 py-2 rounded-md border bg-container border-secondary shadow-xs w-full;
@@ -706,19 +408,6 @@
     }
   }
 
-  /* Switches */
-  .switch {
-    @apply block bg-gray-100 w-9 h-5 rounded-full cursor-pointer;
-    @apply after:content-[''] after:block after:absolute after:top-0.5 after:left-0.5 after:bg-white after:w-4 after:h-4 after:rounded-full;
-    @apply after:transition-transform after:duration-300 after:ease-in-out;
-    @apply peer-checked:bg-green-600 peer-checked:after:translate-x-4;
-    @apply transition-colors duration-300;
-
-    @variant theme-dark {
-      background-color: var(--color-gray-700);
-    }
-  }
-
   /* Tooltips */
   .tooltip {
     @apply hidden absolute;
@@ -733,120 +422,5 @@
   }
 }
 
-@layer utilities {
 
-  /* Specific override for strong tags in prose under dark mode */
-  .prose:where([data-theme=dark], [data-theme=dark] *) strong {
-    color: theme(colors.white) !important;
-  }
-}
 
-/* Button Backgrounds */
-@utility button-bg-primary {
-  @apply bg-gray-900;
-  /* Maps to fg-primary light */
-
-  @variant theme-dark {
-    @apply bg-white;
-    /* Maps to fg-primary dark */
-  }
-}
-
-@utility button-bg-primary-hover {
-  @apply bg-gray-800;
-  /* Maps to fg-primary-variant light */
-
-  @variant theme-dark {
-    @apply bg-gray-50;
-    /* Maps to fg-primary-variant dark */
-  }
-}
-
-@utility button-bg-secondary {
-  @apply bg-gray-50; /* Maps to fg-secondary light */
-
-  @variant theme-dark {
-    @apply bg-gray-700; /* Maps to fg-secondary dark */
-  }
-}
-
-@utility button-bg-secondary-hover {
-  @apply bg-gray-100; /* Maps to fg-secondary-variant light */
-
-  @variant theme-dark {
-    @apply bg-gray-600; /* Maps to fg-secondary-variant dark */
-  }
-}
-
-@utility button-bg-disabled {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility button-bg-destructive {
-  @apply bg-red-500;
-
-  @variant theme-dark {
-    @apply bg-red-400;
-  }
-}
-
-@utility button-bg-destructive-hover {
-  @apply bg-red-600;
-
-  @variant theme-dark {
-    @apply bg-red-500;
-  }
-}
-
-@utility button-bg-ghost-hover {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-gray-800 fg-inverse;
-  }
-}
-
-@utility button-bg-outline-hover {
-  @apply bg-gray-100;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-/* Tab Styles */
-@utility tab-item-active {
-  @apply bg-white;
-
-  @variant theme-dark {
-    @apply bg-gray-700;
-  }
-}
-
-@utility tab-item-hover {
-  @apply bg-gray-200;
-
-  @variant theme-dark {
-    @apply bg-gray-800;
-  }
-}
-
-@utility tab-bg-group {
-  @apply bg-gray-50;
-
-  @variant theme-dark {
-    @apply bg-alpha-black-700;
-  }
-}
-
-@utility bg-nav-indicator {
-  @apply bg-black;
-
-  @variant theme-dark {
-    @apply bg-white;
-  }
-}

@@ -1,13 +1,15 @@
 <%# locals: (budget:) %>
 
 <div class="flex flex-col gap-4 items-center justify-center h-full">
-  <%= lucide_icon "alert-triangle", class: "w-6 h-6 text-red-500" %>
+  <%= icon "alert-triangle", size: "lg", color: "destructive" %>
   <p class="text-secondary text-sm text-center">You have over-allocated your budget.  Please fix your allocations.</p>
 
-  <%= link_to budget_budget_categories_path(budget), class: "btn btn--secondary flex items-center gap-1" do %>
-    <span class="text-primary font-medium">
-      Fix allocations
-    </span>
-    <%= lucide_icon "pencil", class: "w-4 h-4 text-secondary hover:text-gray-600" %>
-  <% end %>
+  <%= render LinkComponent.new(
+    text: "Fix allocations",
+    variant: "secondary",
+    size: "sm",
+    icon: "pencil",
+    icon_position: "right",
+    href: budget_budget_categories_path(budget)
+  ) %>
 </div>

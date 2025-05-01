@@ -1,7 +1,10 @@
 <% if params[:step] == "method_select" %>
   <%= render "accounts/new/method_selector", path: new_credit_card_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
 <% else %>
-  <%= modal_form_wrapper title: t(".title") do %>
-    <%= render "credit_cards/form", account: @account, url: credit_cards_path %>
+  <%= render DialogComponent.new do |dialog| %>
+    <% dialog.with_header(title: t(".title")) %>
+    <% dialog.with_body do %>
+      <%= render "credit_cards/form", account: @account, url: credit_cards_path %>
+    <% end %>
   <% end %>
 <% end %>

@@ -6,7 +6,9 @@
                   id: dom_id(@account, "new_trade"),
                   data: { turbo_frame: :modal },
                   class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg" do %>
-        <%= lucide_icon("plus", class: "w-5 h-5 text-primary") %>
+        <span class="text-primary">
+          <%= icon("plus", color: "current") %>
+        </span>
         <%= tag.span t(".new_holding"), class: "text-sm" %>
       <% end %>
     </div>

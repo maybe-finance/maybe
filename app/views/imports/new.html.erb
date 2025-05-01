@@ -1,16 +1,7 @@
-<%= modal do %>
-  <div class="p-4 space-y-4 max-w-[420px]">
-    <div class="space-y-2">
-      <div class="flex justify-between items-center">
-        <h2 class="font-medium text-primary"><%= t(".title") %></h2>
-        <button data-action="modal#close" tabindex="-1">
-          <%= lucide_icon("x", class: "w-5 h-5 text-primary") %>
-        </button>
-      </div>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".title"), subtitle: t(".description")) %>
 
-      <p class="text-secondary text-sm"><%= t(".description") %></p>
-    </div>
-
+  <% dialog.with_body do %>
     <div class="rounded-xl bg-container-inset p-1">
       <h3 class="uppercase text-secondary text-xs font-medium px-3 py-1.5"><%= t(".sources") %></h3>
       <ul class="bg-container shadow-border-xs rounded-lg">
@@ -19,13 +10,15 @@
             <%= link_to import_path(@pending_import), class: "flex items-center justify-between p-4 group cursor-pointer", data: { turbo: false } do %>
               <div class="flex items-center gap-2">
                 <div class="bg-orange-500/5 rounded-md w-8 h-8 flex items-center justify-center">
-                  <%= lucide_icon("loader", class: "w-5 h-5 text-orange-500") %>
+                  <span class="text-orange-500">
+                    <%= icon("loader", color: "current") %>
+                  </span>
                 </div>
                 <span class="text-sm text-primary group-hover:text-secondary">
                   <%= t(".resume", type: @pending_import.type.titleize) %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+              <%= icon("chevron-right") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -39,13 +32,15 @@
             <%= button_to imports_path(import: { type: "TransactionImport" }), class: "flex items-center justify-between p-4 group cursor-pointer w-full", data: { turbo: false } do %>
               <div class="flex items-center gap-2">
                 <div class="bg-indigo-500/5 rounded-md w-8 h-8 flex items-center justify-center">
-                  <%= lucide_icon("file-spreadsheet", class: "w-5 h-5 text-indigo-500") %>
+                  <span class="text-indigo-500">
+                    <%= icon("file-spreadsheet", color: "current") %>
+                  </span>
                 </div>
                 <span class="text-sm text-primary group-hover:text-secondary">
                   <%= t(".import_transactions") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+              <%= icon("chevron-right") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -59,13 +54,15 @@
             <%= button_to imports_path(import: { type: "TradeImport" }), class: "flex items-center justify-between p-4 group cursor-pointer w-full", data: { turbo: false } do %>
               <div class="flex items-center gap-2">
                 <div class="bg-yellow-500/5 rounded-md w-8 h-8 flex items-center justify-center">
-                  <%= lucide_icon("square-percent", class: "w-5 h-5 text-yellow-500") %>
+                  <span class="text-yellow-500">
+                    <%= icon("square-percent", color: "current") %>
+                  </span>
                 </div>
                 <span class="text-sm text-primary group-hover:text-secondary">
                   <%= t(".import_portfolio") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+              <%= icon("chevron-right") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -79,13 +76,15 @@
             <%= button_to imports_path(import: { type: "AccountImport" }), class: "flex items-center justify-between p-4 group cursor-pointer w-full", data: { turbo: false } do %>
               <div class="flex items-center gap-2">
                 <div class="bg-violet-500/5 rounded-md w-8 h-8 flex items-center justify-center">
-                  <%= lucide_icon("building", class: "w-5 h-5 text-violet-500") %>
+                  <span class="text-violet-500">
+                    <%= icon("building", color: "current") %>
+                  </span>
                 </div>
                 <span class="text-sm text-primary group-hover:text-secondary">
                   <%= t(".import_accounts") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+              <%= icon("chevron-right") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -103,7 +102,7 @@
                   <%= t(".import_mint") %>
                 </span>
               </div>
-              <%= lucide_icon("chevron-right", class: "w-5 h-5 text-secondary") %>
+              <%= icon("chevron-right") %>
             <% end %>
 
             <div class="pl-14 pr-3">
@@ -113,5 +112,5 @@
         <% end %>
       </ul>
     </div>
-  </div>
+  <% end %>
 <% end %>

@@ -7,7 +7,7 @@
 
       <%= form.fields_for :family do |family_form| %>
         <%= family_form.select :currency,
-            currencies_for_select.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
+            Money::Currency.as_options.map { |currency| [ "#{currency.name} (#{currency.iso_code})", currency.iso_code ] },
             { label: t(".currency") }, disabled: true %>
 
         <%= family_form.select :locale,
@@ -46,9 +46,9 @@
     <%= form_with model: @user, class: "flex flex-col md:flex-row justify-between items-center gap-4", id: "theme_form",
         data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "change" } do |form| %>
       <%= form.hidden_field :redirect_to, value: "preferences" %>
-      
+
       <% theme_option_class = "text-center transition-all duration-200 p-3 rounded-lg hover:bg-surface-hover cursor-pointer [&:has(input:checked)]:bg-surface-hover [&:has(input:checked)]:border [&:has(input:checked)]:border-primary [&:has(input:checked)]:shadow-xs" %>
-      
+
       <% [
         { value: "light", image: "light-mode-preview.png" },
         { value: "dark", image: "dark-mode-preview.png" },
@@ -57,8 +57,8 @@
         <%= form.label :"theme_#{theme[:value]}", class: "group" do %>
           <div class="<%= theme_option_class %>">
             <%= image_tag(theme[:image], alt: "#{theme[:value].titleize} Theme Preview", class: "h-44 mb-2") %>
-            <div class="<%= theme[:value] == 'system' ? 'flex items-center gap-2 justify-center' : 'text-sm font-medium text-primary' %>">
-              <%= form.radio_button :theme, theme[:value], checked: @user.theme == theme[:value], class: "sr-only", 
+            <div class="<%= theme[:value] == "system" ? "flex items-center gap-2 justify-center" : "text-sm font-medium text-primary" %>">
+              <%= form.radio_button :theme, theme[:value], checked: @user.theme == theme[:value], class: "sr-only",
                 data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change", action: "theme#updateTheme" } %>
               <%= t(".theme_#{theme[:value]}") %>
             </div>

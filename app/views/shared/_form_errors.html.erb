@@ -1,6 +1,6 @@
 <%# locals: (model:) %>
 
 <div class="flex items-center gap-2">
-  <%= lucide_icon("alert-circle", class: "text-red-500 w-4 h-4 shrink-0") %>
-  <p class="text-red-500 text-sm"><%= model.errors.full_messages.to_sentence %></p>
+  <%= icon("alert-circle", size: "sm", color: "destructive") %>
+  <p class="text-destructive text-sm"><%= model.errors.full_messages.to_sentence %></p>
 </div>

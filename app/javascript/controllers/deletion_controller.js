@@ -1,30 +1,28 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["replacementField", "submitButton"];
-  static classes = ["dangerousAction", "safeAction"];
+  static targets = [
+    "replacementField",
+    "destructiveSubmitButton",
+    "safeSubmitButton",
+  ];
+
   static values = {
     submitTextWhenReplacing: String,
     submitTextWhenNotReplacing: String,
   };
 
-  updateSubmitButton() {
+  chooseSubmitButton() {
     if (this.replacementFieldTarget.value) {
-      this.submitButtonTarget.value = this.submitTextWhenReplacingValue;
-      this.#markSafe();
+      this.destructiveSubmitButtonTarget.hidden = true;
+      this.safeSubmitButtonTarget.textContent =
+        this.submitTextWhenReplacingValue;
+      this.safeSubmitButtonTarget.hidden = false;
     } else {
-      this.submitButtonTarget.value = this.submitTextWhenNotReplacingValue;
-      this.#markDangerous();
+      this.destructiveSubmitButtonTarget.textContent =
+        this.submitTextWhenNotReplacingValue;
+      this.destructiveSubmitButtonTarget.hidden = false;
+      this.safeSubmitButtonTarget.hidden = true;
     }
-  }
-
-  #markSafe() {
-    this.submitButtonTarget.classList.remove(...this.dangerousActionClasses);
-    this.submitButtonTarget.classList.add(...this.safeActionClasses);
-  }
-
-  #markDangerous() {
-    this.submitButtonTarget.classList.remove(...this.safeActionClasses);
-    this.submitButtonTarget.classList.add(...this.dangerousActionClasses);
   }
 }

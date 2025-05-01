@@ -4,9 +4,9 @@
   <details open class="group bg-container p-4 shadow-border-xs rounded-xl">
     <summary class="flex items-center justify-between gap-2 focus-visible:outline-hidden">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "chevron-right", class: "group-open:transform group-open:rotate-90 text-secondary w-5" %>
+        <%= icon "chevron-right", class: "group-open:transform group-open:rotate-90" %>
 
-        <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full bg-black/5">
+        <div class="flex items-center justify-center h-8 w-8 bg-blue-600/10 rounded-full">
           <% if plaid_item.logo.attached? %>
             <%= image_tag plaid_item.logo, class: "rounded-full h-full w-full", loading: "lazy" %>
           <% else %>
@@ -20,23 +20,23 @@
           <div class="flex items-center gap-2">
             <%= tag.p plaid_item.name, class: "font-medium text-primary" %>
             <% if plaid_item.scheduled_for_deletion? %>
-              <p class="text-red-500 text-sm animate-pulse">(deletion in progress...)</p>
+              <p class="text-destructive text-sm animate-pulse">(deletion in progress...)</p>
             <% end %>
           </div>
           <% if plaid_item.syncing? %>
             <div class="text-secondary flex items-center gap-1">
-              <%= lucide_icon "loader", class: "w-4 h-4 animate-pulse" %>
+              <%= icon "loader", size: "sm", class: "animate-pulse" %>
               <%= tag.span t(".syncing") %>
             </div>
           <% elsif plaid_item.requires_update? %>
-            <div class="text-amber-500 flex items-center gap-1">
-              <%= lucide_icon "alert-triangle", class: "w-4 h-4" %>
+            <div class="text-warning flex items-center gap-1">
+              <%= icon "alert-triangle", size: "sm" %>
               <%= tag.span t(".requires_update") %>
             </div>
           <% elsif plaid_item.sync_error.present? %>
             <div class="text-secondary flex items-center gap-1">
-              <%= lucide_icon "alert-circle", class: "w-4 h-4 text-red-500" %>
-              <%= tag.span t(".error"), class: "text-red-500" %>
+              <%= icon "alert-circle", size: "sm", color: "destructive" %>
+              <%= tag.span t(".error"), class: "text-destructive" %>
             </div>
           <% else %>
             <p class="text-secondary">
@@ -50,69 +50,66 @@
         <% if plaid_item.requires_update? %>
           <% begin %>
             <% link_token = plaid_item.get_update_link_token(webhooks_url: plaid_webhooks_url(plaid_item.plaid_region), redirect_url: accounts_url) %>
-            <button
-              data-controller="plaid"
-              data-action="plaid#open"
-              data-plaid-region-value="<%= plaid_item.plaid_region %>"
-              data-plaid-link-token-value="<%= link_token %>"
-              data-plaid-is-update-value="true"
-              data-plaid-item-id-value="<%= plaid_item.id %>"
-              class="btn btn--secondary flex items-center gap-2">
-              <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
-              <%= tag.span t(".update") %>
-            </button>
+
+            <%= render ButtonComponent.new(
+              text: t(".update"),
+              icon: "refresh-cw",
+              variant: "secondary",
+              data: {
+                controller: "plaid",
+                action: "plaid#open",
+                plaid_region_value: plaid_item.plaid_region,
+                plaid_link_token_value: link_token,
+                plaid_is_update_value: true,
+                plaid_item_id_value: plaid_item.id
+              }
+            ) %>
             <% rescue PlaidItem::PlaidConnectionLostError %>
             <div class="flex flex-col gap-2">
-              <div class="text-amber-500 flex items-center gap-1">
-                <%= lucide_icon "alert-triangle", class: "w-4 h-4" %>
+              <div class="text-warning flex items-center gap-1">
+                <%= icon "alert-triangle", size: "sm", color: "warning" %>
                 <%= tag.span t(".connection_lost") %>
               </div>
+
               <p class="text-sm text-secondary"><%= t(".connection_lost_description") %></p>
+
               <div class="flex items-center gap-2">
-                <%= button_to plaid_item_path(plaid_item),
-                          method: :delete,
-                          class: "btn btn--danger flex items-center gap-2",
-                          data: {
-                            turbo_confirm: {
-                              title: t(".confirm_title"),
-                              body: t(".confirm_body"),
-                              accept: t(".confirm_accept")
-                            }
-                          } do %>
-                  <%= lucide_icon "trash-2", class: "w-4 h-4" %>
-                  <%= tag.span t(".delete") %>
-                <% end %>
-                <%= link_to new_account_path, class: "btn btn--secondary flex items-center gap-2" do %>
-                  <%= lucide_icon "plus", class: "w-4 h-4" %>
-                  <%= tag.span t(".add_new") %>
-                <% end %>
+                <%= render ButtonComponent.new(
+                  text: t(".delete"),
+                  icon: "trash-2",
+                  variant: "destructive",
+                  href: plaid_item_path(plaid_item),
+                  method: :delete,
+                  confirm: CustomConfirm.for_resource_deletion(plaid_item.name, high_severity: true)
+                ) %>
+
+                <%= render LinkComponent.new(
+                  text: t(".add_new"),
+                  icon: "plus",
+                  variant: "secondary",
+                  href: new_account_path
+                ) %>
               </div>
             </div>
           <% end %>
         <% else %>
-          <%= button_to sync_plaid_item_path(plaid_item), disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?, class: "disabled:text-subdued text-primary flex hover:text-gray-800 items-center text-sm font-medium hover:underline" do %>
-            <%= lucide_icon "refresh-cw", class: "w-4 h-4" %>
-          <% end %>
+          <%= icon(
+            "refresh-cw",
+            as_button: true,
+            href: sync_plaid_item_path(plaid_item),
+            disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
+          ) %>
         <% end %>
 
-        <%= contextual_menu do %>
-          <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-            <%= button_to plaid_item_path(plaid_item),
-                      method: :delete,
-                      class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
-                      disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?,
-                      data: {
-                        turbo_confirm: {
-                          title: t(".confirm_title"),
-                          body: t(".confirm_body"),
-                          accept: t(".confirm_accept")
-                        }
-                      } do %>
-              <%= lucide_icon "trash-2", class: "w-5 h-5" %>
-
-              <span><%= t(".delete") %></span>
-            <% end %>
-          </div>
+        <%= render MenuComponent.new do |menu| %>
+          <% menu.with_item(
+            variant: "button",
+            text: t(".delete"),
+            icon: "trash-2",
+            href: plaid_item_path(plaid_item),
+            method: :delete,
+            confirm: CustomConfirm.for_resource_deletion(plaid_item.name, high_severity: true)
+          ) %>
         <% end %>
       </div>
     </summary>

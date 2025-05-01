@@ -35,6 +35,12 @@ class Money::Currency
       all.values.map { |currency_data| new(currency_data["iso_code"]) }
     end
 
+    def as_options
+      all_instances.sort_by do |currency|
+        [ currency.priority, currency.name ]
+      end
+    end
+
     def popular
       all.values.sort_by { |currency| currency["priority"] }.first(12).map { |currency_data| new(currency_data["iso_code"]) }
     end

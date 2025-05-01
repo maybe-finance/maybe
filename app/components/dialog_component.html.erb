@@ -1,0 +1,38 @@
+<%= wrapper_element do %>
+  <%= tag.dialog class: "w-full h-full bg-transparent theme-dark:backdrop:bg-alpha-black-900 backdrop:bg-overlay #{drawer? ? "lg:p-3" : "lg:p-1"}", **merged_opts do %>
+    <%= tag.div class: dialog_outer_classes do %>
+      <%= tag.div class: dialog_inner_classes, data: { dialog_target: "content" } do %>
+        <div class="grow overflow-y-auto py-4 space-y-4">
+          <% if header? %>
+            <%= header %>
+          <% end %>
+
+          <% if body? %>
+            <div class="px-4">
+              <%= body %>
+
+              <% if sections.any? %>
+                <div class="space-y-4">
+                  <% sections.each do |section| %>
+                    <%= section %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%# Optional, for customizing dialogs %>
+          <%= content %>
+        </div>
+
+        <% if actions? %>
+          <div class="flex items-center gap-2 justify-end p-4">
+            <% actions.each do |action| %>
+              <%= action %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,18 +1,22 @@
 <%# locals: (title:, back_path: nil) %>
 
-<%= modal do %>
-  <div class="flex flex-col w-screen max-w-xl relative" data-controller="list-keyboard-navigation">
-    <div class="border-b border-tertiary md:border-alpha-black-25 p-4 text-gray-800 flex items-center space-x-3">
-      <% if back_path %>
-        <%= link_to back_path, class: "flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 focus:outline-gray-300 focus:outline" do %>
-          <%= lucide_icon("arrow-left", class: "text-secondary w-5 h-5") %>
+<%= render DialogComponent.new do |dialog| %>
+  <div class="flex flex-col relative" data-controller="list-keyboard-navigation">
+    <div class="border-b border-tertiary md:border-alpha-black-25 px-4 pb-4 text-gray-800 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <% if back_path %>
+          <%= render LinkComponent.new(
+          variant: "icon",
+          icon: "arrow-left",
+          href: back_path,
+          size: "lg"
+        ) %>
         <% end %>
-      <% end %>
 
-      <span class="text-primary"><%= title %></span>
-      <button class="absolute top-1/2 -translate-y-1/2 right-4 flex w-8 h-8 items-center justify-center rounded-lg md:hidden outline-0" data-action="click->modal#close">
-        <%= lucide_icon("x", class: "text-secondary w-6 h-6") %>
-      </button>
+        <span class="text-primary"><%= title %></span>
+      </div>
+
+      <%= icon("x", as_button: true, size: "lg", data: { action: "dialog#close" }) %>
     </div>
 
     <div class="p-2 text-subdued">
@@ -22,20 +26,26 @@
       <%= yield %>
     </div>
 
-    <div class="border-t border-alpha-black-25 p-4 text-secondary text-sm justify-between hidden md:flex">
+    <div class="border-t border-alpha-black-25 px-4 pt-4 text-secondary text-sm justify-between hidden md:flex">
       <div class="flex space-x-5">
         <div class="flex items-center space-x-2">
           <span>Select</span>
-          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("corner-down-left", class: "inline w-3 h-3") %></kbd>
+          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center">
+            <%= icon("corner-down-left", size: "xs") %>
+          </kbd>
         </div>
         <div class="flex items-center space-x-2">
           <span>Navigate</span>
-          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-up", class: "inline w-3 h-3") %></kbd>
-          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center"><%= lucide_icon("arrow-down", class: "inline w-3 h-3") %></kbd>
+          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center">
+            <%= icon("arrow-up", size: "xs") %>
+          </kbd>
+          <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-5 h-5 shrink-0 grow-0 items-center justify-center">
+            <%= icon("arrow-down", size: "xs") %>
+          </kbd>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <button data-action="modal#close">Close</button>
+        <button data-action="dialog#close">Close</button>
         <kbd class="bg-alpha-black-50 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)] p-1 rounded-md flex w-8 h-5 shrink-0 grow-0 items-center justify-center text-xs">ESC</kbd>
       </div>
     </div>

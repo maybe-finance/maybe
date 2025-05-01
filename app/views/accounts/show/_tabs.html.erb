@@ -1,11 +1,17 @@
 <%# locals: (account:, tabs:) %>
 
-<% selected_tab = tabs.find { |tab| tab[:key] == params[:tab] } || tabs.first %>
+<% active_tab = tabs.find { |tab| tab[:key] == params[:tab] } || tabs.first %>
 
-<div class="flex gap-2 text-sm text-primary font-medium mb-4">
-  <% tabs.each do |tab| %>
-    <%= render "accounts/show/tab", account: account, key: tab[:key], is_selected: selected_tab[:key] == tab[:key] %>
+<%= render TabsComponent.new(active_tab: active_tab[:key], url_param_key: "tab") do |tabs_container| %>
+  <% tabs_container.with_nav(classes: "max-w-fit") do |nav| %>
+    <% tabs.each do |tab| %>
+      <% nav.with_btn(id: tab[:key], label: tab[:key].humanize, classes: "px-6") %>
+    <% end %>
   <% end %>
-</div>
 
-<%= selected_tab[:contents] %>
+  <% tabs.each do |tab| %>
+    <% tabs_container.with_panel(tab_id: tab[:key]) do %>
+      <%= tab[:contents] %>
+    <% end %>
+  <% end %>
+<% end %>

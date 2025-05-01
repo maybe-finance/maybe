@@ -15,32 +15,17 @@
       method: :patch,
       class: "flex w-full items-center gap-1.5 cursor-pointer focus:outline-none" do %>
 
-    <span class="w-5 h-5">
-      <%= lucide_icon("check", class: "w-5 h-5 text-secondary") if is_selected %>
-    </span>
+    <%= icon("check") if is_selected %>
+
     <% if category.subcategory? %>
-      <%= lucide_icon "corner-down-right", class: "shrink-0 w-5 h-5 text-subdued" %>
+      <%= icon("corner-down-right", size: "sm") %>
     <% end %>
+
     <%= render partial: "categories/badge", locals: { category: category } %>
   <% end %>
 
-  <%= contextual_menu do %>
-    <div class="w-48 p-1 text-sm leading-6 text-primary bg-container shadow-lg shrink rounded-xl ring-1 ring-gray-900/5">
-      <%= link_to edit_category_path(category),
-            class: "block w-full py-2 px-3 space-x-2 text-primary hover:bg-gray-50 flex items-center rounded-lg",
-            data: { turbo_frame: :modal } do %>
-        <%= lucide_icon "pencil-line", class: "w-5 h-5 text-secondary" %>
-
-        <span><%= t(".edit") %></span>
-      <% end %>
-
-      <%= link_to new_category_deletion_path(category),
-            class: "block w-full py-2 px-3 space-x-2 text-red-600 hover:bg-red-50 flex items-center rounded-lg",
-            data: { turbo_frame: :modal } do %>
-        <%= lucide_icon "trash-2", class: "w-5 h-5" %>
-
-        <span><%= t(".delete") %></span>
-      <% end %>
-    </div>
+  <%= render MenuComponent.new do |menu| %>
+    <% menu.with_item(variant: "link", text: t(".edit"), icon: "pencil-line", href: edit_category_path(category), data: { turbo_frame: :modal }) %>
+    <% menu.with_item(variant: "link", text: t(".delete"), icon: "trash-2", href: new_category_deletion_path(category), data: { turbo_frame: :modal }, destructive: true) %>
   <% end %>
 <% end %>

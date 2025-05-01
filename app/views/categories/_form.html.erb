@@ -2,59 +2,60 @@
 
 <div data-controller="category" data-category-preset-colors-value="<%= Category::COLORS %>">
   <%= styled_form_with model: category, class: "space-y-4" do |f| %>
-    <section class="space-y-4">
-      <div class="w-fit m-auto">
+    <section class="space-y-4 ">
+      <div class="w-fit mx-auto relative">
         <%= render partial: "color_avatar", locals: { category: category } %>
+
+        <details data-category-target="details">
+          <summary class="cursor-pointer absolute -bottom-2 -right-2 flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
+            <%= icon("pen", size: "sm") %>
+          </summary>
+
+          <div class="fixed ml-8 mt-2 z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit">
+            <div class="flex gap-2 flex-col mb-4" data-category-target="selection" style="<%= "display:none;" if @category.subcategory? %>">
+              <div data-category-target="pickerSection"></div>
+              <h4 class="text-gray-500 text-sm">Color</h4>
+              <div class="flex gap-2 items-center" data-category-target="colorsSection">
+                <% Category::COLORS.each do |color| %>
+                  <label class="relative">
+                    <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->category#handleColorChange" } %>
+                    <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
+                  </label>
+                <% end %>
+                <label class="relative">
+                  <%= f.radio_button :color, "custom-color", class: "sr-only peer", data: { category_target: "colorPickerRadioBtn"} %>
+                  <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" data-category-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)"></div>
+                </label>
+              </div>
+              <div class="flex gap-2 items-center hidden flex-col" data-category-target="paletteSection">
+                <div class="flex gap-2 items-center w-full">
+                  <div class="w-6 h-6 p-4 rounded-full cursor-pointer" style="background-color: <%= category.color %>" data-category-target="colorPreview"></div>
+                  <%= f.text_field :color , data: { category_target: "colorInput"}, inline: true %>
+                  <%= icon "palette", size: "2xl", data: { action: "click->category#toggleSections" } %>
+                </div>
+                <div data-category-target="validationMessage" class="hidden self-start flex gap-1 items-center text-xs text-destructive ">
+                  <span>Poor contrast, choose darker color or</span>
+                  <button type="button" class="underline cursor-pointer" data-action="category#autoAdjust">auto-adjust.</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 justify-center flex-col w-87">
+              <h4 class="text-gray-500 text-sm">Icon</h4>
+              <div class="flex flex-wrap gap-0.5">
+                <% Category.icon_codes.each do |icon| %>
+                  <label class="relative">
+                    <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->category#handleIconChange change->category#handleIconColorChange", category_target:"icon" } %>
+                    <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent">
+                      <%= icon(icon, size: "sm", color: "current") %>
+                    </div>
+                  </label>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </details>
       </div>
-      <details data-category-target="details">
-        <summary class="cursor-pointer absolute top-23 left-58.5 flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
-          <%= icon("pen", size: "sm") %>
-        </summary>
-
-        <div class=" absolute z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit left-66 top-24">
-          <div class="flex gap-2 flex-col mb-4" data-category-target="selection" style="<%= "display:none;" if @category.subcategory? %>">
-            <div data-category-target="pickerSection"></div>
-            <h4 class="text-gray-500 text-sm">Color</h4>
-            <div class="flex gap-2 items-center" data-category-target="colorsSection">
-              <% Category::COLORS.each do |color| %>
-                <label class="relative">
-                  <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->category#handleColorChange" } %>
-                  <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
-                </label>
-              <% end %>
-              <label class="relative">
-                <%= f.radio_button :color, "custom-color", class: "sr-only peer", data: { category_target: "colorPickerRadioBtn"} %>
-                <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" data-category-target="pickerBtn" style="background: conic-gradient(red,orange,yellow,lime,green,teal,cyan,blue,indigo,purple,magenta,pink,red)"></div>
-              </label>
-            </div>
-            <div class="flex gap-2 items-center hidden flex-col" data-category-target="paletteSection">
-              <div class="flex gap-2 items-center w-full">
-                <div class="w-6 h-6 p-4 rounded-full cursor-pointer" style="background-color: <%= category.color %>" data-category-target="colorPreview"></div>
-                <%= f.text_field :color , data: { category_target: "colorInput"}, inline: true %>
-                <%= lucide_icon "palette", class: "w-8 h-8 cursor-pointer hover:bg-gray-100 p-1", data: { action: "click->category#toggleSections" } %>
-              </div>
-              <div data-category-target="validationMessage" class="hidden self-start flex gap-1 items-center text-xs text-destructive ">
-                <span>Poor contrast, choose darker color or</span>
-                <button type="button" class="underline cursor-pointer" data-action="category#autoAdjust">auto-adjust.</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap gap-2 justify-center flex-col w-87">
-            <h4 class="text-gray-500 text-sm">Icon</h4>
-            <div class="flex flex-wrap gap-0.5">
-              <% Category.icon_codes.each do |icon| %>
-                <label class="relative">
-                  <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->category#handleIconChange change->category#handleIconColorChange", category_target:"icon" } %>
-                  <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent">
-                    <%= lucide_icon icon, class: "w-6 h-6 p-1" %>
-                  </div>
-                </label>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </details>
 
       <% if category.errors.any? %>
         <%= render "shared/form_errors", model: category %>

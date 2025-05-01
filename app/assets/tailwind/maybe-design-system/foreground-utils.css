@@ -1,0 +1,63 @@
+@utility fg-gray {
+  @apply text-gray-500;
+
+  @variant theme-dark {
+    @apply text-gray-400;
+  }
+}
+
+@utility fg-contrast {
+  @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-500;
+  }
+}
+
+@utility fg-inverse {
+  @apply text-white;
+
+  @variant theme-dark {
+    @apply text-gray-900;
+  }
+}
+
+@utility fg-primary {
+  @apply text-gray-900;
+
+  @variant theme-dark {
+    @apply text-white;
+  }
+}
+
+@utility fg-primary-variant {
+  @apply text-gray-800;
+
+  @variant theme-dark {
+    @apply text-gray-50;
+  }
+}
+
+@utility fg-secondary {
+  @apply text-gray-50;
+
+  @variant theme-dark {
+    @apply text-gray-700;
+  }
+}
+
+@utility fg-secondary-variant {
+  @apply text-gray-100;
+
+  @variant theme-dark {
+    @apply text-gray-600;
+  }
+}
+
+@utility fg-subdued {
+  @apply text-gray-400;
+
+  @variant theme-dark {
+    @apply text-gray-500;
+  }
+}

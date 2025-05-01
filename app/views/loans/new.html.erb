@@ -1,7 +1,10 @@
 <% if params[:step] == "method_select" %>
   <%= render "accounts/new/method_selector", path: new_loan_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
 <% else %>
-  <%= modal_form_wrapper title: t(".title") do %>
-    <%= render "loans/form", account: @account, url: loans_path %>
+  <%= render DialogComponent.new do |dialog| %>
+    <% dialog.with_header(title: t(".title")) %>
+    <% dialog.with_body do %>
+      <%= render "loans/form", account: @account, url: loans_path %>
+    <% end %>
   <% end %>
 <% end %>

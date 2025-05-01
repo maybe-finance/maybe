@@ -9,8 +9,14 @@
     </p>
   </div>
 
-  <%= contextual_menu icon: "more-vertical" do %>
-    <%= contextual_menu_item("Edit chat", url: edit_chat_path(chat), icon: "pencil", turbo_frame: dom_id(chat, :title)) %>
-    <%= contextual_menu_destructive_item("Delete chat", chat_path(chat)) %>
+  <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
+    <% menu.with_item(variant: "link", text: "Edit chat", href: edit_chat_path(chat), icon: "pencil", frame: dom_id(chat, "title")) %>
+    <% menu.with_item(
+      variant: "button",
+      text: "Delete chat",
+      href: chat_path(chat),
+      icon: "trash-2",
+      method: :delete,
+      confirm: CustomConfirm.for_resource_deletion("Chat")) %>
   <% end %>
 <% end %>

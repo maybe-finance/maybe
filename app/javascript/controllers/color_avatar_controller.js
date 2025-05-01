@@ -21,8 +21,8 @@ export default class extends Controller {
 
   handleColorChange(e) {
     const color = e.currentTarget.value;
-    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 10%, white)`;
-    this.avatarTarget.style.borderColor = `color-mix(in srgb, ${color} 10%, white)`;
+    this.avatarTarget.style.backgroundColor = `color-mix(in srgb, ${color} 10%, transparent)`;
+    this.avatarTarget.style.borderColor = `color-mix(in srgb, ${color} 10%, transparent)`;
     this.avatarTarget.style.color = color;
   }
 }

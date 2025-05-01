@@ -1,0 +1,16 @@
+<div class="max-w-[400px]">
+  <%= render TabsComponent.new(active_tab: "tab1") do |tabs| %>
+    <%= tabs.with_nav do |tab_nav| %>
+      <%= tab_nav.with_btn(id: "tab1", label: "Tab 1") %>
+      <%= tab_nav.with_btn(id: "tab2", label: "Tab 2") %>
+    <% end %>
+
+    <%= tabs.with_panel(tab_id: "tab1") do %>
+      <%= content_tag(:p, "Content for tab 1") %>
+    <% end %>
+
+    <%= tabs.with_panel(tab_id: "tab2") do %>
+      <%= content_tag(:p, "Content for tab 2") %>
+    <% end %>
+  <% end %>
+</div>

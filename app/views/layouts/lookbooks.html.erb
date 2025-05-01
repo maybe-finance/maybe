@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html data-theme="<%= params.dig(:lookbook, :display, :theme) %>">
+  <head>
+    <title>Component Preview</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="p-4 h-full bg-container <%= params.dig(:lookbook, :display, :container_classes) %>">
+    <%= yield %>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 <%# locals: (rule:) %>
 
-<%= styled_form_with model: rule, class: "space-y-6 w-[550px]",
+<%= styled_form_with model: rule, class: "space-y-6",
                      data: { controller: "rules", rule_registry_value: rule.registry.to_json } do |f| %>
 
   <%= f.hidden_field :resource_type, value: rule.resource_type %>
@@ -50,17 +50,9 @@
         <% end %>
       </ul>
 
-      <div class="flex items-center gap-2">
-        <button type="button" data-action="rules#addCondition" class="btn btn--ghost">
-          <%= icon("plus") %>
-          <span>Add condition</span>
-        </button>
-
-        <button type="button" data-action="rules#addConditionGroup" class="btn btn--ghost">
-          <%= icon("boxes") %>
-          <span>Add condition group</span>
-        </button>
-      </div>
+    <div class="flex items-center gap-2">
+      <%= render ButtonComponent.new(text: "Add condition", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addCondition" }) %>
+      <%= render ButtonComponent.new(text: "Add condition group", icon: "boxes", variant: "ghost", type: "button", data: { action: "rules#addConditionGroup" }) %>
     </div>
   </section>
 
@@ -84,11 +76,7 @@
         <% end %>
       </ul>
 
-      <button type="button" data-action="rules#addAction" class="btn btn--ghost">
-        <%= icon("plus") %>
-        <span>Add action</span>
-      </button>
-    </div>
+    <%= render ButtonComponent.new(text: "Add action", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addAction" }) %>
   </section>
 
   <section class="space-y-4">

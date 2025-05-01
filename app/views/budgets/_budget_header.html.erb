@@ -3,38 +3,46 @@
 <div class="flex items-center gap-1 mb-4">
   <div class="flex items-center gap-2">
     <% if budget.previous_budget_param %>
-      <%= link_to budget_path(budget.previous_budget_param) do %>
-        <%= lucide_icon "chevron-left" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "chevron-left",
+        href: budget_path(budget.previous_budget_param),
+      ) %>
     <% else %>
-      <%= lucide_icon "chevron-left", class: "text-subdued" %>
+      <span class="text-subdued">
+        <%= icon "chevron-left", color: "current" %>
+      </span>
     <% end %>
 
     <% if budget.next_budget_param %>
-      <%= link_to budget_path(budget.next_budget_param) do %>
-        <%= lucide_icon "chevron-right" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "chevron-right",
+        href: budget_path(budget.next_budget_param),
+      ) %>
     <% else %>
-      <%= lucide_icon "chevron-right", class: "text-subdued" %>
+      <span class="text-subdued">
+        <%= icon "chevron-right", color: "current" %>
+      </span>
     <% end %>
   </div>
 
-  <div data-controller="menu" data-menu-placement-value="bottom-start">
-    <%= tag.button data: { menu_target: "button" }, class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2" do %>
-      <span class="text-primary font-medium text-3xl md:text-base"><%= @budget.name %></span>
-      <%= lucide_icon "chevron-down", class: "w-5 h-5 shrink-0 text-secondary" %>
+  <%= render MenuComponent.new(variant: "button") do |menu| %>
+    <% menu.with_button class: "flex items-center gap-1 hover:bg-alpha-black-25 cursor-pointer rounded-md p-2"  do %>
+      <span class="text-primary font-medium text-lg lg:text-base"><%= @budget.name %></span>
+      <%= icon("chevron-down") %>
     <% end %>
 
-    <div data-menu-target="content" class="hidden z-10">
+    <% menu.with_custom_content do %>
       <%= render "budgets/picker", family: Current.family, year: budget.start_date.year %>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 
   <div class="ml-auto">
-    <% if @budget.current? %>
-      <span class="border border-secondary text-primary text-sm font-medium px-3 py-2 rounded-lg">Today</span>
-    <% else %>
-      <%= link_to "Today", budget_path(Budget.date_to_param(Date.current)), class: "btn btn--outline" %>
-    <% end %>
+    <%= render LinkComponent.new(
+        text: "Today",
+        variant: "outline",
+        href: budget_path(Budget.date_to_param(Date.current)),
+    ) %>
   </div>
 </div>

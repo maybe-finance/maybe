@@ -7,7 +7,7 @@ export default class extends Controller {
     "group",
     "selectionBar",
     "selectionBarText",
-    "bulkEditDrawerTitle",
+    "bulkEditDrawerHeader",
   ];
   static values = {
     singularLabel: String,
@@ -25,8 +25,9 @@ export default class extends Controller {
     document.removeEventListener("turbo:load", this._updateView);
   }
 
-  bulkEditDrawerTitleTargetConnected(element) {
-    element.innerText = `Edit ${
+  bulkEditDrawerHeaderTargetConnected(element) {
+    const headingTextEl = element.querySelector("h2");
+    headingTextEl.innerText = `Edit ${
       this.selectedIdsValue.length
     } ${this._pluralizedResourceName()}`;
   }

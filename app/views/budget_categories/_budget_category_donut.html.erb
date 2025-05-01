@@ -11,7 +11,9 @@
   <div data-donut-chart-target="contentContainer" class="flex justify-center items-center h-full p-1">
     <div data-donut-chart-target="defaultContent" class="h-full w-full rounded-full flex flex-col items-center justify-center" style="background-color: <%= hex_with_alpha(budget_category.category.color, 0.05) %>">
       <% if budget_category.category.lucide_icon %>
-        <%= lucide_icon budget_category.category.lucide_icon, class: "w-4 h-4 shrink-0", style: "color: #{budget_category.category.color}" %>
+        <span style="color: <%= budget_category.category.color %>">
+          <%= icon(budget_category.category.lucide_icon, size: "sm", color: "current") %>
+        </span>
       <% else %>
         <span class="text-sm uppercase" style="color: <%= budget_category.category.color %>">
           <%= budget_category.category.name.first.upcase %>

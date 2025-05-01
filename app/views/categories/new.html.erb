@@ -1,3 +1,6 @@
-<%= modal_form_wrapper title: t(".new_category"), overflow_visible: true do %>
-  <%= render "form", category: @category, categories: @categories %>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".new_category")) %>
+  <% dialog.with_body do %>
+    <%= render "form", category: @category, categories: @categories %>
+  <% end %>
 <% end %>

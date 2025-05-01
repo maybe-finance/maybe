@@ -1,9 +1,13 @@
 <div class="flex justify-center items-center py-20">
   <div class="text-center flex flex-col items-center max-w-[300px] gap-4">
     <p class="text-primary mb-1 font-medium text-sm"><%= t(".message") %></p>
-    <%= link_to new_import_path, class: "btn btn--primary flex items-center gap-2", data: { turbo_frame: "modal" } do %>
-      <%= lucide_icon("plus", class: "w-5 h-5") %>
-      <span><%= t(".new") %></span>
-    <% end %>
+
+    <%= render LinkComponent.new(
+      text: t(".new"),
+      variant: "primary",
+      href: new_import_path,
+      icon: "plus",
+      frame: :modal
+    ) %>
   </div>
 </div>

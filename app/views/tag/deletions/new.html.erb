@@ -1,21 +1,32 @@
-<%= modal_form_wrapper title: t(".delete_tag"), subtitle: t(".explanation", tag_name: @tag.name) do %>
-  <%= styled_form_with url: tag_deletions_path(@tag),
-                       class: "space-y-4",
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".delete_tag"), subtitle: t(".explanation", tag_name: @tag.name)) %>
+
+  <% dialog.with_body do %>
+    <%= styled_form_with url: tag_deletions_path(@tag),
                        data: {
                          turbo: false,
                          controller: "deletion",
-                         deletion_dangerous_action_class: "form-field__submit bg-container text-red-600 border hover:bg-red-50",
-                         deletion_safe_action_class: "form-field__submit border border-transparent",
                          deletion_submit_text_when_not_replacing_value: t(".delete_and_leave_uncategorized", tag_name: @tag.name),
                          deletion_submit_text_when_replacing_value: t(".delete_and_recategorize", tag_name: @tag.name) } do |f| %>
-    <%= f.collection_select :replacement_tag_id,
+      <%= f.collection_select :replacement_tag_id,
                             Current.family.tags.alphabetically.without(@tag),
                             :id, :name,
-                            { prompt: t(".replacement_tag_prompt"), label: t(".tag") },
-                            { data: { deletion_target: "replacementField", action: "deletion#updateSubmitButton" } } %>
+                            { prompt: t(".replacement_tag_prompt"), label: t(".tag"), container_class: "mb-4" },
+                            data: { deletion_target: "replacementField", action: "deletion#chooseSubmitButton" } %>
 
-    <%= f.submit t(".delete_and_leave_uncategorized", tag_name: @tag.name),
-                 class: "form-field__submit bg-container text-red-600 border hover:bg-red-50",
-                 data: { deletion_target: "submitButton" } %>
+      <%= render ButtonComponent.new(
+        variant: "destructive",
+        text: t(".delete_and_leave_uncategorized", tag_name: @tag.name),
+        full_width: true,
+        data: { deletion_target: "destructiveSubmitButton" }
+      ) %>
+
+      <%= render ButtonComponent.new(
+        text: "Delete and reassign",
+        data: { deletion_target: "safeSubmitButton" },
+        hidden: true,
+        full_width: true
+      ) %>
+    <% end %>
   <% end %>
 <% end %>
