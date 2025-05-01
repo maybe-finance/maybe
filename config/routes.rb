@@ -24,7 +24,6 @@ Rails.application.routes.draw do
 
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
-  get "early-access", to: "pages#early_access"
 
   resource :registration, only: %i[new create]
   resources :sessions, only: %i[new create destroy]

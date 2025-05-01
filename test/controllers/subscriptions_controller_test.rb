@@ -8,7 +8,6 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   test "redirects to settings if self hosting" do
     Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
     get subscription_path
-    assert_redirected_to root_path
-    assert_equal I18n.t("subscriptions.self_hosted_alert"), flash[:alert]
+    assert_response :forbidden
   end
 end

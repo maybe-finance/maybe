@@ -69,7 +69,6 @@ export default class extends Controller {
   }
 
   toggle() {
-    console.log("toggle");
     const currentTheme = document.documentElement.getAttribute("data-theme");
     if (currentTheme === "dark") {
       this.toLight();
