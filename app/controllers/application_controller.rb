@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
 
     def set_active_storage_url_options
       ActiveStorage::Current.url_options = {
-        protocol: request.protocol.delete("://"),
+        protocol: request.protocol,
         host: request.host,
         port: request.optional_port
       }
