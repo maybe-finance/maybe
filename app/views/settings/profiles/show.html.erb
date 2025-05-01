@@ -136,7 +136,13 @@
           variant: "destructive",
           href: reset_user_path(@user),
           method: :delete,
-          confirm: CustomConfirm.for_resource_deletion("Account", high_severity: true)
+          confirm: CustomConfirm.new(
+            title: "Reset account?",
+            body: "This will delete all data associated with your account. Your user profile will remain active.",
+            btn_text: "Reset account",
+            destructive: true,
+            high_severity: true
+          )
         ) %>
       </div>
     <% end %>

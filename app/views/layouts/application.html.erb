@@ -11,13 +11,13 @@
 
 <%= render "layouts/shared/htmldoc" do %>
   <div
-    class="flex flex-col lg:flex-row h-dvh lg:h-full bg-surface"
+    class="flex flex-col lg:flex-row h-full bg-surface"
     data-controller="app-layout"
     data-app-layout-expanded-sidebar-class="<%= expanded_sidebar_class %>"
     data-app-layout-collapsed-sidebar-class="<%= collapsed_sidebar_class %>"
     data-app-layout-user-id-value="<%= Current.user.id %>">
     <div
-      class="hidden fixed inset-0 bg-surface z-20 h-dvh w-full p-3 overflow-y-auto transition-all duration-300"
+      class="hidden fixed inset-0 bg-surface z-20 h-full w-full p-3 overflow-y-auto transition-all duration-300"
       data-app-layout-target="mobileSidebar">
       <div class="mb-2">
         <%= icon("x", as_button: true, data: { action: "app-layout#closeMobileSidebar" }) %>
