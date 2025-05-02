@@ -14,7 +14,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
 
     post start_trial_subscription_path
     assert_redirected_to root_path
-    assert_equal "Your trial has started", flash[:notice]
+    assert_equal "Welcome to Maybe!", flash[:notice]
 
     assert @user.reload.onboarded?
     assert @user.family.reload.trial_started_at.present?
