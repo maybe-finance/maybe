@@ -19,10 +19,9 @@ class Rule::Registry::TransactionResource < Rule::Registry
       Rule::ActionExecutor::SetTransactionName.new(rule)
     ]
 
-    if ai_enabled?
-      enabled_executors << Rule::ActionExecutor::AutoCategorize.new(rule)
-      enabled_executors << Rule::ActionExecutor::AutoDetectMerchants.new(rule)
-    end
+    # TODO PUT BACK
+    enabled_executors << Rule::ActionExecutor::AutoCategorize.new(rule)
+    enabled_executors << Rule::ActionExecutor::AutoDetectMerchants.new(rule)
 
     enabled_executors
   end

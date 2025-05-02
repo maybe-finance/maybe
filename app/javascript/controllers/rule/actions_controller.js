@@ -3,7 +3,13 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="rule--actions"
 export default class extends Controller {
   static values = { actionExecutors: Array };
-  static targets = ["destroyField", "actionValue"];
+  static targets = [
+    "destroyField",
+    "actionValue",
+    "selectTemplate",
+    "textTemplate",
+    "toSpan"
+  ];
 
   remove(e) {
     if (e.params.destroy) {
@@ -19,77 +25,69 @@ export default class extends Controller {
       (executor) => executor.key === e.target.value,
     );
 
+    if (!actionExecutor || actionExecutor.needs_value === false) {
+      this.#hideActionValue();
+      return;
+    }
+
+    // Clear any existing input elements first
+    this.#clearFormFields();
+
     if (actionExecutor.type === "select") {
-      this.#convertToSelect(actionExecutor);
-      this.#showActionValue();
+      this.#buildSelectFor(actionExecutor);
     } else if (actionExecutor.type === "text") {
-      this.#convertToTextInput();
-      this.#showActionValue();
+      this.#buildTextInputFor();
     } else {
+      // For any type that doesn't need a value (e.g. function)
       this.#hideActionValue();
     }
-  }
-
-  get valueSelectEl() {
-    return this.actionValueTarget.querySelector("select");
-  }
-
-  get valueInputEl() {
-    return this.actionValueTarget.querySelector("input");
-  }
-
-  #showActionValue() {
-    this.actionValueTarget.classList.remove("hidden");
   }
 
   #hideActionValue() {
     this.actionValueTarget.classList.add("hidden");
   }
 
+  #clearFormFields() {
+    const toRemove = [];
 
-  #convertToTextInput() {
-    // If we already have a text input, do nothing
-    if (this.valueInputEl && this.valueInputEl.type === "text") {
-      return;
-    }
+    // Find all elements to remove, unless it's the "to" span
+    Array.from(this.actionValueTarget.children).forEach(child => {
+      if (child !== this.toSpanTarget) {
+        toRemove.push(child);
+      }
+    });
 
-    // Convert select to text input
-    const valueField = this.valueSelectEl || this.valueInputEl;
-
-    if (valueField) {
-      const textInput = document.createElement("input");
-      textInput.type = "text";
-      textInput.name = valueField.name;
-      textInput.id = valueField.id;
-      textInput.placeholder = "Enter a value";
-      textInput.className = "form-field__input";
-
-      valueField.replaceWith(textInput);
-    }
+    // Remove the elements
+    toRemove.forEach(element => element.remove());
   }
 
-  // Converts a field to a select with new options based on the action executor
-  // This includes a current select with different options
-  #convertToSelect(actionExecutor) {
-    const valueField = this.valueInputEl || this.valueSelectEl;
+  #buildSelectFor(actionExecutor) {
+    // Clone the select template
+    const template = this.selectTemplateTarget.content.cloneNode(true);
+    const selectEl = template.querySelector("select");
 
-    if (!valueField) {
-      return;
+    // Add options to the select element
+    if (selectEl) {
+      selectEl.innerHTML = "";
+      for (const option of actionExecutor.options) {
+        const optionEl = document.createElement("option");
+        optionEl.value = option[1];
+        optionEl.textContent = option[0];
+        selectEl.appendChild(optionEl);
+      }
     }
 
-    const selectInput = document.createElement("select");
-    selectInput.name = valueField.name;
-    selectInput.id = valueField.id;
-    selectInput.className = "form-field__input";
+    // Add the template content to the actionValue target and ensure it's visible
+    this.actionValueTarget.appendChild(template);
+    this.actionValueTarget.classList.remove("hidden");
+  }
 
-    // Add options
-    for (const option of actionExecutor.options) {
-      const optionEl = document.createElement("option");
-      optionEl.value = option[1];
-      optionEl.textContent = option[0];
-      selectInput.appendChild(optionEl);
-    }
+  #buildTextInputFor() {
+    // Clone the text template
+    const template = this.textTemplateTarget.content.cloneNode(true);
 
-    valueField.replaceWith(selectInput);
+    // Add the template content to the actionValue target and ensure it's visible
+    this.actionValueTarget.appendChild(template);
+    this.actionValueTarget.classList.remove("hidden");
   }
 }
