@@ -63,6 +63,6 @@ class Provider::Stripe
     attr_reader :client, :webhook_secret
 
     def retrieve_event(event_id)
-      client.v2.core.events.retrieve(event_id)
+      client.v1.events.retrieve(event_id)
     end
 end
