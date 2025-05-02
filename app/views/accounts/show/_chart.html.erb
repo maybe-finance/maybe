@@ -4,14 +4,14 @@
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
 <div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
-  <div class="flex justify-between px-4 pt-4 mb-2">
-    <div class="space-y-2">
+  <div class="flex justify-between flex-col-reverse lg:flex-row gap-2 px-4 pt-4 mb-2">
+    <div class="space-y-2 w-full">
       <div class="flex items-center gap-1">
         <%= tag.p title || default_value_title, class: "text-sm font-medium text-secondary" %>
         <%= tooltip %>
       </div>
 
-      <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium" %>
+      <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
     </div>
 
     <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
