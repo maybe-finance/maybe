@@ -24,7 +24,7 @@ module Onboardable
 
       if Current.user.onboarded_at.blank? && !trial_just_started
         redirect_to onboarding_path
-      elsif !Current.family.subscribed? && !Current.family.trialing?
+      elsif !Current.family.subscribed? && !Current.family.trialing? && !self_hosted?
         redirect_to upgrade_subscription_path
       end
     end
