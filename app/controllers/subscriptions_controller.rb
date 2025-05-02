@@ -15,7 +15,7 @@ class SubscriptionsController < ApplicationController
       end
     end
 
-    redirect_to root_path, notice: "Your trial has started"
+    redirect_to root_path, notice: "Welcome to Maybe!"
   end
 
   def new
