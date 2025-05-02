@@ -6,7 +6,7 @@
   <% end %>
 
   <section>
-    <%= render "shared/transaction_type_tabs", active_tab: params[:nature] == "inflow" ? "income" : "expense" %>
+    <%= render "shared/transaction_type_tabs", active_tab: params[:nature] == "inflow" ? "income" : "expense", account_id: params[:account_id] %>
 
     <%= f.hidden_field :nature, value: params[:nature] || "outflow", data: { "transaction-form-target": "natureField" } %>
     <%= f.hidden_field :entryable_type, value: "Transaction" %>
