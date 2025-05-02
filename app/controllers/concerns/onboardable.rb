@@ -18,7 +18,7 @@ module Onboardable
       return unless Current.user
       return unless redirectable_path?(request.path)
 
-      if Current.user.onboarded_at.blank?
+      if !Current.user.onboarded?
         redirect_to onboarding_path
       elsif !Current.family.subscribed? && !Current.family.trialing? && !self_hosted?
         redirect_to upgrade_subscription_path
