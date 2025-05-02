@@ -14,7 +14,6 @@ class OnboardingsController < ApplicationController
   end
 
   private
-
     def set_user
       @user = Current.user
     end
