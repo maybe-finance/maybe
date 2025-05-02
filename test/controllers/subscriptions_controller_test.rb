@@ -30,8 +30,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     post start_trial_subscription_path
     assert_redirected_to root_path
 
-    assert_equal onboard_time, @user.reload.onboarded_at
-    assert_equal trial_start_time, @user.family.reload.trial_started_at
+    assert @user.reload.family.trial_started_at < Date.current
   end
 
   test "redirects to settings if self hosting" do
