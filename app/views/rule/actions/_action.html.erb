@@ -17,16 +17,9 @@
                 data: { rule__actions_target: "actionValue" } do %>
       <span class="font-medium uppercase text-xs" data-rule--actions-target="toSpan">to</span>
       <%# Initial rendering based on rule.action_executors.first from the rule form. %>
-      <%# This is currently always SetTransactionCategory from transaction_resource.rb. %>
-      <%# Only the first select option will render here, as subsequent renders are injected by the Stimulus controller, which uses the templates from below. %>
-      <% case action_type
-         when "select" %>
-        <%= form.select :value, action.options || [], {} %>
-      <% when "text" %>
-        <%= form.text_field :value, placeholder: "Enter a value" %>
-      <% when "function" %>
-        <%# Function type doesn't need a value input %>
-      <% end %>
+      <%# This is currently always SetTransactionCategory from transaction_resource.rb, which is a select type. %>
+      <%# Subsequent renders are injected by the Stimulus controller, which uses the templates from below. %>
+      <%= form.select :value, action.options || [], {} %>
     <% end %>
   </div>
 
