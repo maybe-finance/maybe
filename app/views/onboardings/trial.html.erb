@@ -32,7 +32,8 @@
       <%= render ButtonComponent.new(
         text: "Try Maybe for 14 days",
         href: start_trial_subscription_path,
-        full_width: true
+        full_width: true,
+        data: { turbo: false }
       ) %>
     </div>
   </div>
