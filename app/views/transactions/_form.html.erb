@@ -1,6 +1,6 @@
 <%# locals: (entry:, income_categories:, expense_categories:) %>
 
-<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4 text-subdued", data: { controller: "transaction-form" } do |f| %>
+<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4", data: { controller: "transaction-form" } do |f| %>
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>
@@ -12,7 +12,7 @@
     <%= f.hidden_field :entryable_type, value: "Transaction" %>
   </section>
 
-  <section class="space-y-2 overflow-hidden">
+  <section class="space-y-2">
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
 
     <% if @entry.account_id %>
