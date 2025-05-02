@@ -25,11 +25,6 @@ export default class extends Controller {
       (executor) => executor.key === e.target.value,
     );
 
-    if (!actionExecutor || actionExecutor.needs_value === false) {
-      this.#hideActionValue();
-      return;
-    }
-
     // Clear any existing input elements first
     this.#clearFormFields();
 
@@ -38,7 +33,7 @@ export default class extends Controller {
     } else if (actionExecutor.type === "text") {
       this.#buildTextInputFor();
     } else {
-      // For any type that doesn't need a value (e.g. function)
+      // Hide for any type that doesn't need a value (e.g. function)
       this.#hideActionValue();
     }
   }

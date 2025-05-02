@@ -2,8 +2,6 @@
 
 <% action = form.object %>
 <% rule = action.rule %>
-<% action_type = action.executor.type %>
-<% needs_value = action.executor.type == "select" || action.executor.type == "text" %>
 
 <li data-controller="rule--actions" data-rule--actions-action-executors-value="<%= rule.action_executors.to_json %>" class="flex items-center gap-3">
   <%= form.hidden_field :_destroy, value: false, data: { rule__actions_target: "destroyField" } %>
@@ -13,7 +11,7 @@
       <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" } %>
     </div>
 
-    <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value),
+    <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2"),
                 data: { rule__actions_target: "actionValue" } do %>
       <span class="font-medium uppercase text-xs" data-rule--actions-target="toSpan">to</span>
       <%# Initial rendering based on rule.action_executors.first from the rule form. %>
