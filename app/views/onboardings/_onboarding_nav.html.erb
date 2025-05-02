@@ -7,6 +7,9 @@
   { name: "Start", path: trial_onboarding_path, is_complete: user.onboarded_at.present?, step_number: 4 },
 ] %>
 
+<%# Don't show last step if self hosted %>
+<% steps.pop if self_hosted? %>
+
 <ul class="hidden md:flex items-center gap-2">
   <% steps.each_with_index do |step, idx| %>
     <li class="flex items-center gap-2 group">

@@ -20,8 +20,12 @@
     </div>
 
     <%= form_with model: @user do |form| %>
-      <%= form.hidden_field :redirect_to, value: "trial" %>
+      <%= form.hidden_field :redirect_to, value: self_hosted? ? "home" : "trial" %>
       <%= form.hidden_field :set_onboarding_goals_at, value: Time.current %>
+
+      <% if self_hosted? %>
+        <%= form.hidden_field :onboarded_at, value: Time.current %>
+      <% end %>
 
       <div class="space-y-3">
         <% [
