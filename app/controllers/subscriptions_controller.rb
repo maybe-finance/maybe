@@ -8,16 +8,14 @@ class SubscriptionsController < ApplicationController
   end
 
   def start_trial
-    if Current.family.trial_started_at.present?
-      redirect_to root_path, alert: "You've already started or completed your trial"
-    else
-      Family.transaction do
-        Current.family.update(trial_started_at: Time.current)
-        Current.user.update(onboarded_at: Time.current)
+    unless Current.family.trialing?
+      ActiveRecord::Base.transaction do
+        Current.user.update!(onboarded_at: Time.current)
+        Current.family.update!(trial_started_at: Time.current)
       end
-
-      redirect_to root_path, notice: "Your trial has started"
     end
+
+    redirect_to root_path, notice: "Your trial has started"
   end
 
   def new
