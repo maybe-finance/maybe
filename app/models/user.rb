@@ -152,6 +152,10 @@ class User < ApplicationRecord
     totp.provisioning_uri(email)
   end
 
+  def onboarded?
+    onboarded_at.present?
+  end
+
   private
     def ensure_valid_profile_image
       return unless profile_image.attached?
