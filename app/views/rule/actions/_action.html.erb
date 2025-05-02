@@ -16,8 +16,8 @@
     <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value),
                 data: { rule__actions_target: "actionValue" } do %>
       <span class="font-medium uppercase text-xs" data-rule--actions-target="toSpan">to</span>
-      <%# Initial rendering based on rule.action_executors.first from the form. %>
-      <%# This is currently always SetTransactionCategory from app/models/rule/action_executor/transaction_resource.rb. %>
+      <%# Initial rendering based on rule.action_executors.first from the rule form. %>
+      <%# This is currently always SetTransactionCategory from transaction_resource.rb. %>
       <%# Only the first select option will render here, as subsequent renders are injected by the Stimulus controller, which uses the templates from below. %>
       <% case action_type
          when "select" %>
@@ -44,4 +44,6 @@
   <template data-rule--actions-target="textTemplate">
     <%= form.text_field :value, placeholder: "Enter a value" %>
   </template>
+
+  <%# The function type doesn't need an input, so no template is required.%>
 </li>
