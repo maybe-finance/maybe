@@ -3,7 +3,7 @@
 <div class="h-full flex flex-col justify-center items-center">
   <div class="space-y-6 max-w-sm">
     <div class="mx-auto bg-gray-500/5 h-8 w-8 rounded-full flex items-center justify-center">
-      <%= lucide_icon "loader", class: "animate-pulse w-5 h-5 text-secondary" %>
+      <%= icon "loader", class: "animate-pulse" %>
     </div>
 
     <div class="text-center space-y-2">
@@ -12,8 +12,8 @@
     </div>
 
     <div class="space-y-2">
-      <%= link_to "Check status", import_path(import), class: "block btn btn--primary text-center w-full" %>
-      <%= link_to "Back to dashboard", root_path, class: "block btn btn--secondary text-center w-full" %>
+      <%= render LinkComponent.new(text: "Check status", href: import_path(import), variant: "primary") %>
+      <%= render LinkComponent.new(text: "Back to dashboard", href: root_path, variant: "secondary") %>
     </div>
   </div>
 </div>

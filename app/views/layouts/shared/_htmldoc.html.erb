@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>" lang="en" data-controller="theme" data-theme-user-preference-value="<%= Current.user&.theme || "system" %>">
+
+<% theme = Current.user&.theme || "system" %>
+
+<html
+  lang="en"
+  data-theme="<%= theme %>"
+  data-controller="theme intercom"
+  data-theme-user-preference-value="<%= Current.user&.theme || "system" %>"
+  class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
   <head>
     <%= render "layouts/shared/head" %>
     <%= yield :head %>
   </head>
 
-  <body class="h-screen overflow-hidden lg:overflow-auto antialiased h-screen-safe ">
+  <body class="h-full overflow-hidden lg:overflow-auto antialiased">
+    <% if Rails.env.development? %>
+      <button hidden data-controller="hotkey" data-hotkey="t t /" data-action="theme#toggle"></button>
+    <% end %>
+
     <div class="fixed z-50 top-6 md:top-4 left-1/2 -translate-x-1/2 w-full md:w-80 px-4 md:px-0 mx-auto md:mx-0 md:right-auto mt-safe">
       <div id="notification-tray" class="space-y-1 w-full">
         <%= render_flash_notifications %>
@@ -13,7 +25,7 @@
         <div id="cta"></div>
 
         <% if Current.family&.syncing? %>
-          <% render "shared/notifications/loading", id: "syncing-notice", message: "Syncing accounts data..." %>
+          <%= render "shared/notifications/loading", id: "syncing-notice", message: "Syncing accounts data..." %>
         <% end %>
       </div>
     </div>
@@ -22,7 +34,9 @@
 
     <%= turbo_frame_tag "modal" %>
     <%= turbo_frame_tag "drawer" %>
-    <%= render "shared/confirm_modal" %>
+
+    <%# Custom overrides for browser's confirm API  %>
+    <%= render "layouts/shared/confirm_dialog" %>
 
     <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? && show_super_admin_bar? %>
     <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>

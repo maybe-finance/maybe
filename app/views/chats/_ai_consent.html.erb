@@ -1,33 +1,26 @@
-<div class="flex flex-col items-center justify-start h-full p-6 text-center">
-  <div class="border border-secondary rounded-lg p-4 bg-container">
-    <div class="w-16 h-16 bg-surface-inset rounded-full flex items-center justify-center mx-auto mb-4">
-      <%= icon("sparkles") %>
-    </div>
-
-    <h3 class="text-lg font-medium text-primary mb-2">Enable Personal Finance AI</h3>
-
-    <p class="text-gray-600 mb-6 text-sm">
-      <% if Current.user.ai_available? %>
-        Our personal finance AI can help answer questions about your finances and provide insights based on your data.
-        To use this feature, you'll need to explicitly enable it.
-      <% else %>
-        To use the AI assistant, you need to set the <code class="bg-surface-inset px-1 py-0.5 rounded font-mono text-xs">OPENAI_ACCESS_TOKEN</code>
-        environment variable in your self-hosted instance.
-      <% end %>
-    </p>
-
-    <% unless self_hosted? %>
-      <p class="text-gray-600 mb-6 text-sm">
-        NOTE: During beta testing, we'll be monitoring usage and AI conversations to improve the assistant.
-      </p>
-    <% end %>
-
-    <% if Current.user.ai_available? %>
-      <%= form_with url: user_path(Current.user), method: :patch, class: "w-full", data: { turbo: false } do |form| %>
-        <%= form.hidden_field "user[ai_enabled]", value: true %>
-        <%= form.hidden_field "user[redirect_to]", value: "home" %>
-        <%= form.submit "Enable AI Assistant", class: "cursor-pointer hover:bg-black w-full py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
-      <% end %>
-    <% end %>
+<div class="rounded-lg p-4 bg-container shadow-border-xs">
+  <div class="flex justify-center mb-4">
+    <%= render "chats/ai_avatar" %>
   </div>
+
+  <h3 class="text-sm font-medium text-primary mb-1 -mt-2 text-center">Enable Maybe AI</h3>
+
+  <p class="text-gray-600 mb-4 text-sm text-center">
+    <% if Current.user.ai_available? %>
+      Maybe AI can answer financial questions and provide insights based on your data. To use this feature you'll need to explicitly enable it.
+    <% else %>
+      To use the AI assistant, you need to set the <code class="bg-surface-inset px-1 py-0.5 rounded font-mono text-xs">OPENAI_ACCESS_TOKEN</code>
+      environment variable in your self-hosted instance.
+    <% end %>
+  </p>
+
+  <% if Current.user.ai_available? %>
+    <%= form_with url: user_path(Current.user), method: :patch, class: "w-full", data: { turbo: false } do |form| %>
+      <%= form.hidden_field "user[ai_enabled]", value: true %>
+      <%= form.hidden_field "user[redirect_to]", value: "home" %>
+      <%= form.submit "Enable Maybe AI", class: "cursor-pointer hover:bg-black w-full py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
+    <% end %>
+  <% end %>
+
+  <p class="text-xs text-secondary text-center mt-2">Disable anytime.  All data sent to our LLM providers is anonymized.</p>
 </div>

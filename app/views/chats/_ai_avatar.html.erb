@@ -1,4 +1,7 @@
-<div class="w-16 h-16 flex-shrink-0 -ml-3 -mt-3">
+<%# locals: (theme: "light") %>
+
+<div class="shrink-0 w-8 h-8 antialiased" style="filter: drop-shadow(0px 6px 8px rgba(244, 78, 247, 0.10));">
   <%# Never use svg as an image tag, it appears blurry in Safari %>
-  <%= inline_svg_tag "ai.svg", alt: "AI", class: "w-full h-full" %>
+  <%= inline_svg_tag "ai-dark.svg", alt: "AI", class: "w-full h-full hidden theme-dark:block" %>
+  <%= inline_svg_tag "ai.svg", alt: "AI", class: "w-full h-full theme-dark:hidden" %>
 </div>

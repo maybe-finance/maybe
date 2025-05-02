@@ -13,12 +13,23 @@
     </div>
   </div>
 
-  <%= contextual_menu icon: "more-vertical", id: "chat-menu" do %>
-    <%= contextual_menu_item "Start new chat", url: new_chat_path, icon: "plus" %>
+  <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
+    <% menu.with_item(variant: "link", text: "Start new chat", href: new_chat_path, icon: "plus") %>
 
     <% unless chat.new_record? %>
-      <%= contextual_menu_item "Edit chat title", url: edit_chat_path(chat, ctx: "chat"), icon: "pencil", turbo_frame: dom_id(chat, "title") %>
-      <%= contextual_menu_destructive_item "Delete chat", chat_path(chat), turbo_confirm: "Are you sure you want to delete this chat?" %>
+      <% menu.with_item(
+        variant: "link",
+        text: "Edit chat title",
+        href: edit_chat_path(chat, ctx: "chat"),
+        icon: "pencil", data: { turbo_frame: dom_id(chat, "title") }) %>
+
+      <% menu.with_item(
+        variant: "button",
+        text: "Delete chat",
+        href: chat_path(chat),
+        icon: "trash-2",
+        method: :delete,
+        confirm: CustomConfirm.for_resource_deletion("Chat")) %>
     <% end %>
   <% end %>
 </nav>

@@ -1,12 +1,30 @@
 module ApplicationHelper
   include Pagy::Frontend
 
-  def icon(key, size: "md", color: "current")
-    render partial: "shared/icon", locals: { key:, size:, color: }
+  def styled_form_with(**options, &block)
+    options[:builder] = StyledFormBuilder
+    form_with(**options, &block)
   end
 
-  def icon_custom(key, size: "md", color: "current")
-    render partial: "shared/icon_custom", locals: { key:, size:, color: }
+  def icon(key, size: "md", color: "default", custom: false, as_button: false, **opts)
+    extra_classes = opts.delete(:class)
+    sizes = { xs: "w-3 h-3", sm: "w-4 h-4", md: "w-5 h-5", lg: "w-6 h-6", xl: "w-7 h-7", "2xl": "w-8 h-8" }
+    colors = { default: "fg-gray", white: "fg-inverse", success: "text-success", warning: "text-warning", destructive: "text-destructive", current: "text-current" }
+
+    icon_classes = class_names(
+      "shrink-0",
+      sizes[size.to_sym],
+      colors[color.to_sym],
+      extra_classes
+    )
+
+    if custom
+      inline_svg_tag("#{key}.svg", class: icon_classes, **opts)
+    elsif as_button
+      render ButtonComponent.new(variant: "icon", class: extra_classes, icon: key, size: size, type: "button", **opts)
+    else
+      lucide_icon(key, class: icon_classes, **opts)
+    end
   end
 
   # Convert alpha (0-1) to 8-digit hex (00-FF)
@@ -31,58 +49,8 @@ module ApplicationHelper
     turbo_stream_from Current.family if Current.family
   end
 
-  ##
-  # Helper to open a centered and overlayed modal with custom contents
-  #
-  # @example Basic usage
-  #   <%= modal classes: "custom-class" do %>
-  #     <div>Content here</div>
-  #   <% end %>
-  #
-  def modal(reload_on_close: false, overflow_visible: false, &block)
-    content = capture &block
-    render partial: "shared/modal", locals: { content:, reload_on_close:, overflow_visible: }
-  end
-
-  ##
-  # Helper to open a drawer on the right side of the screen with custom contents
-  #
-  # @example Basic usage
-  #   <%= drawer do %>
-  #     <div>Content here</div>
-  #   <% end %>
-  #
-  def drawer(reload_on_close: false, &block)
-    content = capture &block
-    render partial: "shared/drawer", locals: { content:, reload_on_close: }
-  end
-
-  def disclosure(title, default_open: true, &block)
-    content = capture &block
-    render partial: "shared/disclosure", locals: { title: title, content: content, open: default_open }
-  end
-
   def page_active?(path)
     current_page?(path) || (request.path.start_with?(path) && path != "/")
-  end
-
-  def mixed_hex_styles(hex)
-    color = hex || "#1570EF" # blue-600
-
-    <<-STYLE.strip
-      background-color: color-mix(in srgb, #{color} 10%, white);
-      border-color: color-mix(in srgb, #{color} 30%, white);
-      color: #{color};
-    STYLE
-  end
-
-  def circle_logo(name, hex: nil, size: "md")
-    render partial: "shared/circle_logo", locals: { name: name, hex: hex, size: size }
-  end
-
-  def return_to_path(params, fallback = root_path)
-    uri = URI.parse(params[:return_to] || fallback)
-    uri.relative? ? uri.path : root_path
   end
 
   # Wrapper around I18n.l to support custom date formats
@@ -142,49 +110,6 @@ module ApplicationHelper
     )
 
     markdown.render(text).html_safe
-  end
-
-  # Determines the starting widths of each panel depending on the user's sidebar preferences
-  def app_sidebar_config(user)
-    left_sidebar_showing = user.show_sidebar?
-    right_sidebar_showing = user.show_ai_sidebar?
-
-    content_max_width = if !left_sidebar_showing && !right_sidebar_showing
-      1024 # 5xl
-    elsif left_sidebar_showing && !right_sidebar_showing
-      896 # 4xl
-    else
-      768 # 3xl
-    end
-
-    left_panel_min_width = 320
-    left_panel_max_width = 320
-    right_panel_min_width = 400
-    right_panel_max_width = 550
-
-    left_panel_width = left_sidebar_showing ? left_panel_min_width : 0
-    right_panel_width = if right_sidebar_showing
-      left_sidebar_showing ? right_panel_min_width : right_panel_max_width
-    else
-      0
-    end
-
-    {
-      left_panel: {
-        is_open: left_sidebar_showing,
-        initial_width: left_panel_width,
-        min_width: left_panel_min_width,
-        max_width: left_panel_max_width
-      },
-      right_panel: {
-        is_open: right_sidebar_showing,
-        initial_width: right_panel_width,
-        min_width: right_panel_min_width,
-        max_width: right_panel_max_width,
-        overflow: right_sidebar_showing ? "auto" : "hidden"
-      },
-      content_max_width: content_max_width
-    }
   end
 
   private

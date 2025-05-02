@@ -3,30 +3,45 @@
     <h1 class="text-xl">Transactions</h1>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
-        <%= contextual_menu do %>
+        <%= render MenuComponent.new do |menu| %>
           <% if Rails.env.development? %>
-            <%= button_to "Dev only: Sync all", sync_all_accounts_path, class: "btn btn--ghost w-full" %>
+            <% menu.with_item(variant: "button", text: "Dev only: Sync all", href: sync_all_accounts_path, method: :post, icon: "refresh-cw") %>
           <% end %>
-          <%= contextual_menu_item "New rule", url: new_rule_path(resource_type: "transaction"), icon: "plus", turbo_frame: :modal %>
-          <%= contextual_menu_item "Edit rules", url: rules_path, icon: "git-branch", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_categories"), categories_path, icon: "shapes", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_tags"), tags_path, icon: "tags", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_merchants"), family_merchants_path, icon: "store", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".edit_imports"), imports_path, icon: "hard-drive-upload", turbo_frame: :_top %>
-          <%= contextual_menu_modal_action_item t(".import"), new_import_path, icon: "download", turbo_frame: "modal", class_name: "md:!hidden" %>
+          <% menu.with_item(variant: "link", text: "New rule", href: new_rule_path(resource_type: "transaction"), icon: "plus", data: { turbo_frame: :modal }) %>
+          <% menu.with_item(variant: "link", text: "Edit rules", href: rules_path, icon: "git-branch", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit categories", href: categories_path, icon: "shapes", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit tags", href: tags_path, icon: "tags", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit merchants", href: family_merchants_path, icon: "store", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Edit imports", href: imports_path, icon: "hard-drive-upload", data: { turbo_frame: :_top }) %>
+          <% menu.with_item(variant: "link", text: "Import", href: new_import_path, icon: "download", data: { turbo_frame: "modal", class_name: "md:!hidden" }) %>
         <% end %>
 
-        <%= link_to new_import_path, class: "btn btn--outline flex items-center gap-2 hidden md:flex", data: { turbo_frame: "modal" } do %>
-          <%= lucide_icon("download", class: "text-secondary w-4 h-4") %>
-          <p class="text-sm font-medium text-primary"><%= t(".import") %></p>
-        <% end %>
+        <div class="hidden md:flex">
+          <%= render LinkComponent.new(
+            text: t(".import"),
+            icon: "download",
+            variant: "outline",
+            href: new_import_path,
+            frame: :modal,
+          ) %>
+        </div>
 
-        <%= link_to new_transaction_path, class: "btn btn--primary flex items-center justify-center gap-2 rounded-full md:rounded-lg w-9 h-9 md:w-auto md:h-auto", data: { turbo_frame: :modal } do %>
-          <span class="flex items-center justify-center">
-            <%= lucide_icon("plus", class: "w-5 h-5") %>
-          </span>
-          <p class="text-sm font-medium hidden md:block">New transaction</p>
-        <% end %>
+        <%= render LinkComponent.new(
+            text: "New transaction",
+            icon: "plus",
+            variant: "primary",
+            href: new_transaction_path,
+            frame: :modal,
+            class: "hidden md:inline-flex"
+          ) %>
+
+        <%= render LinkComponent.new(
+            icon: "plus",
+            variant: "icon-inverse",
+            href: new_transaction_path,
+            frame: :modal,
+            class: "rounded-full md:hidden"
+          ) %>
       </div>
     </div>
   </header>

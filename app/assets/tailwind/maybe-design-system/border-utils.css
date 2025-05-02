@@ -1,0 +1,88 @@
+/* Custom shadow borders used for surfaces / containers  */
+@utility shadow-border-xs {
+  box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
+
+  @variant theme-dark {
+    box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-white-50);
+  }
+}
+
+@utility shadow-border-sm {
+  box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
+
+  @variant theme-dark {
+    box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-white-50);
+  }
+}
+
+@utility shadow-border-md {
+  box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
+
+  @variant theme-dark {
+    box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-white-50);
+  }
+}
+
+@utility shadow-border-lg {
+  box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
+
+  @variant theme-dark {
+    box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-white-50);
+  }
+}
+
+@utility shadow-border-xl {
+  box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
+
+  @variant theme-dark {
+    box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-white-50);
+  }
+}
+
+@utility border-primary {
+  @apply border-alpha-black-300;
+
+  @variant theme-dark {
+    @apply border-alpha-white-400;
+  }
+}
+
+@utility border-secondary {
+  @apply border-alpha-black-200;
+
+  @variant theme-dark {
+    @apply border-alpha-white-300;
+  }
+}
+
+@utility border-tertiary {
+  @apply border-alpha-black-100;
+
+  @variant theme-dark {
+    @apply border-alpha-white-200;
+  }
+}
+
+@utility border-subdued {
+  @apply border-alpha-black-50;
+
+  @variant theme-dark {
+    @apply border-alpha-white-100;
+  }
+}
+
+@utility border-solid {
+  @apply border-black;
+
+  @variant theme-dark {
+    @apply border-white;
+  }
+}
+
+@utility border-destructive {
+  @apply border-red-500;
+
+  @variant theme-dark {
+    @apply border-red-400;
+  }
+}

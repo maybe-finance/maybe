@@ -13,18 +13,24 @@
   <% if @import.cleaned? %>
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "check-circle", class: "w-4 h-4 text-green-500" %>
-        <p class="text-green-500 text-sm md:text-base">Your data has been cleaned</p>
+        <%= icon "check-circle", size: "sm", color: "success" %>
+        <p class="text-success text-sm">Your data has been cleaned</p>
       </div>
 
-      <%= link_to "Next step", import_confirm_path(@import), class: "btn btn--primary w-full md:w-auto" %>
+      <%= render LinkComponent.new(
+        text: "Next step",
+        variant: "primary",
+        href: import_confirm_path(@import),
+        frame: :_top,
+        class: "w-full md:w-auto"
+      ) %>
     </div>
   <% else %>
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
       <div class="flex items-center gap-2">
-        <%= lucide_icon "alert-triangle", class: "w-4 h-4 text-red-500 flex-shrink-0" %>
-        <p class="text-red-500 text-sm hidden md:block"><%= t(".errors_notice") %></p>
-        <p class="text-red-500 text-sm md:hidden"><%= t(".errors_notice_mobile") %></p>
+        <%= icon "alert-triangle", size: "sm", color: "destructive" %>
+        <p class="text-destructive text-sm hidden md:block"><%= t(".errors_notice") %></p>
+        <p class="text-destructive text-sm md:hidden"><%= t(".errors_notice_mobile") %></p>
       </div>
 
       <div class="flex justify-center w-full md:w-auto">
@@ -39,13 +45,13 @@
   <div class="pb-12">
     <div class="bg-container-inset rounded-xl p-1 mb-6">
       <div class="overflow-x-auto">
-        <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, minmax(150px, 1fr)); min-width: max-content;" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
+        <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, minmax(150px, 1fr));" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
           <% @import.column_keys.each do |key| %>
             <div class="px-5"><%= import_col_label(key) %></div>
           <% end %>
         </div>
 
-        <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
+        <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200 theme-dark:divide-alpha-white-200">
           <% @rows.each do |row| %>
             <%= render "import/rows/form", row: row %>
           <% end %>

@@ -1,7 +1,10 @@
 <% if params[:step] == "method_select" %>
   <%= render "accounts/new/method_selector", path: new_crypto_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
 <% else %>
-  <%= modal_form_wrapper title: t(".title") do %>
-    <%= render "cryptos/form", account: @account, url: cryptos_path %>
+  <%= render DialogComponent.new do |dialog| %>
+    <% dialog.with_header(title: t(".title")) %>
+    <% dialog.with_body do %>
+      <%= render "form", account: @account, url: cryptos_path %>
+    <% end %>
   <% end %>
 <% end %>

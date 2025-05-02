@@ -1,11 +1,10 @@
 <div id="<%= dom_id(budget, :confirm_button) %>">
-  <% if budget.allocations_valid? %>
-    <%= link_to "Confirm",
-        budget_path(budget),
-        class: "block btn btn--primary w-full text-center" %>
-  <% else %>
-    <span class="block btn btn--secondary w-full text-center text-subdued cursor-not-allowed">
-      Confirm
-    </span>
-  <% end %>
+  <%= render ButtonComponent.new(
+    text: "Confirm",
+    variant: "primary",
+    full_width: true,
+    href: budget_path(budget),
+    method: :get,
+    disabled: !budget.allocations_valid?
+  ) %>
 </div>

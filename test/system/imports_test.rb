@@ -15,11 +15,15 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import transactions"
 
-    find("button[data-id='csv-paste-tab']").click
+    within_testid("import-tabs") do
+      click_on "Copy & Paste"
+    end
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/transactions.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "Date", from: "import[date_col_label]"
     select "YYYY-MM-DD", from: "import[date_format]"
@@ -61,11 +65,15 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import investments"
 
-    find("button[data-id='csv-paste-tab']").click
+    within_testid("import-tabs") do
+      click_on "Copy & Paste"
+    end
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/trades.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "date", from: "import[date_col_label]"
     select "YYYY-MM-DD", from: "import[date_format]"
@@ -99,11 +107,15 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import accounts"
 
-    find("button[data-id='csv-paste-tab']").click
+    within_testid("import-tabs") do
+      click_on "Copy & Paste"
+    end
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/accounts.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     select "type", from: "import[entity_type_col_label]"
     select "name", from: "import[name_col_label]"
@@ -143,11 +155,15 @@ class ImportsTest < ApplicationSystemTestCase
 
     click_on "Import from Mint"
 
-    find("button[data-id='csv-paste-tab']").click
+    within_testid("import-tabs") do
+      click_on "Copy & Paste"
+    end
 
     fill_in "import[raw_file_str]", with: file_fixture("imports/mint.csv").read
 
-    find('input[type="submit"][value="Upload CSV"]').click
+    within "form" do
+      click_on "Upload CSV"
+    end
 
     click_on "Apply configuration"
 

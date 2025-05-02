@@ -3,7 +3,7 @@
 <div class="h-full flex flex-col justify-center items-center">
   <div class="space-y-6 max-w-sm">
     <div class="mx-auto bg-green-500/5 h-8 w-8 rounded-full flex items-center justify-center">
-      <%= lucide_icon "check", class: "w-5 h-5 text-green-500" %>
+      <%= icon "check", color: "success" %>
     </div>
 
     <div class="text-center space-y-2">
@@ -11,8 +11,11 @@
       <p class="text-sm text-secondary">Your imported data has been successfully added to the app and is now ready for use.</p>
     </div>
 
-    <div>
-      <%= link_to "Back to dashboard", root_path, class: "block btn btn--primary text-center w-full" %>
-    </div>
+    <%= render LinkComponent.new(
+      text: "Back to dashboard",
+      variant: "primary",
+      full_width: true,
+      href: root_path
+    ) %>
   </div>
 </div>

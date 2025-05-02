@@ -1,6 +1,6 @@
 <%# locals: (row:) %>
 
-<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, minmax(150px, 1fr)); min-width: max-content;" class="first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg grid divide-x divide-alpha-black-200 group">
+<div style="grid-template-columns: repeat(<%= row.import.column_keys.count %>, minmax(150px, 1fr));" class="first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg grid divide-x divide-alpha-black-200 theme-dark:divide-alpha-white-200 group">
   <% row.import.column_keys.each_with_index do |key, idx| %>
     <%= turbo_frame_tag dom_id(row, key), title: row.valid? ? nil : row.errors.full_messages.join(", ") do %>
       <%= form_with(
@@ -28,10 +28,10 @@
                 disabled: row.import.complete? %>
 
           <% if !cell_is_valid?(row, key) %>
-            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 md:hidden"
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-destructive md:hidden"
                   data-action="click->mobile-cell-interaction#toggleErrorMessage"
-                  data-mobile-cell-interaction-target="errorIcon">
-              <%= lucide_icon "alert-circle", class: "w-4 h-4" %>
+              data-mobile-cell-interaction-target="errorIcon">
+              <%= icon "alert-circle", size: "sm", color: "destructive" %>
             </span>
 
             <div class="absolute left-4 right-4 bottom-full mb-2 p-2 bg-red-50 border border-red-200 rounded-lg shadow-lg text-xs text-red-600 hidden md:hidden z-20"

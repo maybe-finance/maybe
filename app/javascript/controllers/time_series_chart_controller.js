@@ -95,7 +95,8 @@ export default class extends Controller {
       .attr("cx", this._d3InitialContainerWidth / 2)
       .attr("cy", this._d3InitialContainerHeight / 2)
       .attr("r", 4)
-      .style("fill", "var(--color-gray-400)");
+      .attr("class", "fg-subdued")
+      .style("fill", "currentColor");
   }
 
   _drawChart() {
@@ -151,7 +152,8 @@ export default class extends Controller {
       .append("stop")
       .attr("class", "end-color")
       .attr("offset", "100%")
-      .attr("stop-color", "var(--color-gray-300)");
+      .attr("class", "fg-subdued")
+      .attr("stop-color", "currentColor");
   }
 
   _setTrendlineSplitAt(percent) {
@@ -191,7 +193,7 @@ export default class extends Controller {
     // Style ticks
     this._d3Group
       .selectAll(".tick text")
-      .style("fill", "var(--color-gray-500)")
+      .attr("class", "fg-gray")
       .style("font-size", "12px")
       .style("font-weight", "500")
       .attr("text-anchor", "middle")
@@ -258,14 +260,10 @@ export default class extends Controller {
     this._d3Tooltip = d3
       .select(`#${this.element.id}`)
       .append("div")
-      .style("position", "absolute")
-      .style("padding", "8px")
-      .style("font", "14px Inter, sans-serif")
-      .style("background", "var(--color-white)")
-      .style("border", "1px solid var(--color-alpha-black-100)")
-      .style("border-radius", "10px")
-      .style("pointer-events", "none")
-      .style("opacity", 0); // Starts as hidden
+      .attr(
+        "class",
+        "bg-container text-sm font-sans absolute p-2 border border-secondary rounded-lg pointer-events-none opacity-0",
+      );
   }
 
   _trackMouseForShowingTooltip() {
@@ -273,6 +271,7 @@ export default class extends Controller {
 
     this._d3Group
       .append("rect")
+      .attr("class", "bg-container")
       .attr("width", this._d3ContainerWidth)
       .attr("height", this._d3ContainerHeight)
       .attr("fill", "none")
@@ -308,12 +307,12 @@ export default class extends Controller {
         // Guideline
         this._d3Group
           .append("line")
-          .attr("class", "guideline")
+          .attr("class", "guideline fg-subdued")
           .attr("x1", this._d3XScale(d.date))
           .attr("y1", 0)
           .attr("x2", this._d3XScale(d.date))
           .attr("y2", this._d3ContainerHeight)
-          .attr("stroke", "var(--color-gray-300)")
+          .attr("stroke", "currentColor")
           .attr("stroke-dasharray", "4, 4");
 
         // Big circle
@@ -353,7 +352,6 @@ export default class extends Controller {
           this._d3Group.selectAll(".guideline").remove();
           this._d3Group.selectAll(".data-point-circle").remove();
           this._d3Tooltip.style("opacity", 0);
-
           this._setTrendlineSplitAt(1);
         }
       });
@@ -364,23 +362,17 @@ export default class extends Controller {
       <div style="margin-bottom: 4px; color: var(--color-gray-500);">
         ${datum.date_formatted}
       </div>
-      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 0px;">
-        <div style="display: flex; align-items: center; gap: 8px; color: var(--color-black);">
-          <div style="display: flex; align-items: center; justify-content: center; height: 16px; width: 16px;">
-            ${datum.trend.previous.amount === datum.trend.current.amount ? `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus-icon lucide-minus"><path d="M5 12h14"/></svg>
-            ` : Number(datum.trend.previous.amount) < Number(datum.trend.current.amount) ? `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-            ` : `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right-icon lucide-arrow-down-right"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
-              `}
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 text-primary">
+          <div class="flex items-center justify-center h-4 w-4">
+            ${this._getTrendIcon(datum)}
           </div>
           ${this._extractFormattedValue(datum.trend.current)}
         </div>
 
         ${
           datum.trend.value === 0
-            ? `<span style="width: 80px;"></span>`
+            ? `<span class="w-20"></span>`
             : `
           <span style="color: ${datum.trend.color};">
             ${this._extractFormattedValue(datum.trend.value)} (${datum.trend.percent_formatted})
@@ -389,6 +381,23 @@ export default class extends Controller {
         }
       </div>
     `;
+  }
+
+  _getTrendIcon(datum) {
+    const isIncrease =
+      Number(datum.trend.previous.amount) < Number(datum.trend.current.amount);
+    const isDecrease =
+      Number(datum.trend.previous.amount) > Number(datum.trend.current.amount);
+
+    if (isIncrease) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>`;
+    }
+
+    if (isDecrease) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right-icon lucide-arrow-down-right"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>`;
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${datum.trend.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus-icon lucide-minus"><path d="M5 12h14"/></svg>`;
   }
 
   _getDatumValue = (datum) => {

@@ -8,6 +8,7 @@ export default class extends Controller {
   remove(e) {
     if (e.params.destroy) {
       this.destroyFieldTarget.value = true;
+      this.element.classList.add("hidden");
     } else {
       this.element.remove();
     }

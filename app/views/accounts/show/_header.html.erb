@@ -19,17 +19,27 @@
       </div>
     <% end %>
 
-    <div class="flex items-center gap-3 ml-auto">
+    <div class="flex items-center gap-1 ml-auto">
       <% if account.plaid_account_id.present? %>
         <% if Rails.env.development? %>
-          <%= button_to sync_plaid_item_path(account.plaid_account.plaid_item), disabled: account.syncing?, data: { turbo: false }, class: "flex items-center gap-2", title: "Sync Account" do %>
-            <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-secondary hover:text-subdued" %>
-          <% end %>
+          <%= icon(
+            "refresh-cw",
+            as_button: true,
+            size: "sm",
+            href: sync_plaid_item_path(account.plaid_account.plaid_item),
+            disabled: account.syncing?,
+            frame: :_top
+          ) %>
         <% end %>
       <% else %>
-        <%= button_to sync_account_path(account), disabled: account.syncing?, data: { turbo: false }, class: "flex items-center gap-2", title: "Sync Account" do %>
-          <%= lucide_icon "refresh-cw", class: "w-4 h-4 text-secondary hover:text-subdued" %>
-        <% end %>
+        <%= icon(
+          "refresh-cw",
+          as_button: true,
+          size: "sm",
+          href: sync_account_path(account),
+          disabled: account.syncing?,
+          frame: :_top
+        ) %>
       <% end %>
 
       <%= render "accounts/show/menu", account: account %>

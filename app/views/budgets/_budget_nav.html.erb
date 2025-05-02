@@ -24,7 +24,7 @@
       <%= link_to step[:path], class: "flex items-center gap-3" do %>
         <div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
           <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
-            <%= step[:is_complete] && !is_current ? lucide_icon("check", class: "w-4 h-4") : idx + 1 %>
+            <%= step[:is_complete] && !is_current ? icon("check", size: "sm") : idx + 1 %>
           </span>
 
           <span><%= step[:name] %></span>

@@ -1,6 +1,10 @@
 <footer class="p-6">
   <div class="space-y-2 text-center text-xs text-secondary">
     <p>&copy; <%= Date.current.year %>, Maybe Finance, Inc.</p>
-    <p><%= link_to t(".privacy_policy"), "https://maybefinance.com/privacy", class: "underline hover:text-gray-600" %> &bull; <%= link_to t(".terms_of_service"), "https://maybefinance.com/tos", class: "underline hover:text-gray-600" %></p>
+    <div class="flex justify-center items-center gap-2">
+      <%= link_to "Privacy Policy", privacy_path, class: "text-secondary", target: "_blank" %>
+      <span>&bull;</span>
+      <%= link_to "Terms of Service", terms_path, class: "text-secondary", target: "_blank" %>
+    </div>
   </div>
 </footer>

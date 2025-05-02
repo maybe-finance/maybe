@@ -1,17 +1,17 @@
 <%# locals: (family:, year:) %>
 
 <%= turbo_frame_tag "budget_picker" do %>
-  <div class="bg-container shadow-border-xs p-3 rounded-xl space-y-4">
+  <div class="p-3 space-y-4">
     <div class="flex items-center gap-2 justify-between">
       <% last_month_of_previous_year = Date.new(year - 1, 12, 1) %>
 
       <% if Budget.budget_date_valid?(last_month_of_previous_year, family: family) %>
         <%= link_to picker_budgets_path(year: year - 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
-          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-secondary" %>
+          <%= icon "chevron-left" %>
         <% end %>
       <% else %>
-        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
-          <%= lucide_icon "chevron-left", class: "w-5 h-5 shrink-0 text-subdued" %>
+        <span class="p-2 flex items-center justify-center text-subdued rounded-md">
+          <%= icon "chevron-left", color: "current" %>
         </span>
       <% end %>
 
@@ -23,11 +23,11 @@
 
       <% if Budget.budget_date_valid?(first_month_of_next_year, family: family) %>
         <%= link_to picker_budgets_path(year: year + 1), data: { turbo_frame: "budget_picker" }, class: "p-2 flex items-center justify-center hover:bg-alpha-black-25 rounded-md" do %>
-          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-secondary" %>
+          <%= icon "chevron-right" %>
         <% end %>
       <% else %>
-        <span class="p-2 flex items-center justify-center text-gray-300 rounded-md">
-          <%= lucide_icon "chevron-right", class: "w-5 h-5 shrink-0 text-subdued" %>
+        <span class="p-2 flex items-center justify-center text-subdued rounded-md">
+          <%= icon "chevron-right", color: "current" %>
         </span>
       <% end %>
     </div>
@@ -38,7 +38,13 @@
         <% param_key = Budget.date_to_param(date) %>
 
         <% if Budget.budget_date_valid?(date, family: family) %>
-          <%= link_to month_name, budget_path(param_key), data: { turbo_frame: "_top" }, class: "btn btn--ghost" %>
+          <%= render LinkComponent.new(
+            variant: "ghost",
+            text: month_name,
+            href: budget_path(param_key),
+            full_width: true,
+            frame: :_top
+          ) %>
         <% else %>
           <span class="px-3 py-2 text-subdued rounded-md"><%= month_name %></span>
         <% end %>

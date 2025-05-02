@@ -16,7 +16,7 @@
       <%= render "accounts/show/chart", account: account %>
     <% end %>
 
-    <div class="min-h-[800px]">
+    <div class="min-h-[800px]" data-testid="account-details">
       <% if tabs.present? %>
         <%= tabs %>
       <% else %>

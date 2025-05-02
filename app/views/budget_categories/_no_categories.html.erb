@@ -6,12 +6,18 @@
     </p>
 
     <div class="flex items-center gap-2">
-      <%= button_to "Use defaults (recommended)", bootstrap_categories_path, class: "btn btn--primary" %>
+      <%= render ButtonComponent.new(
+        text: "Use defaults (recommended)",
+        href: bootstrap_categories_path,
+      ) %>
 
-      <%= link_to new_category_path, class: "btn btn--outline flex items-center gap-1", data: { turbo_frame: "modal" } do %>
-        <%= lucide_icon("plus", class: "w-5 h-5") %>
-        <span>New category</span>
-      <% end %>
+      <%= render LinkComponent.new(
+        text: "New category",
+        variant: "outline",
+        icon: "plus",
+        href: new_category_path,
+        frame: :modal,
+      ) %>
     </div>
   </div>
 </div>

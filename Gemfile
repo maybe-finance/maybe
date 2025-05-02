@@ -19,9 +19,11 @@ gem "propshaft"
 gem "tailwindcss-rails"
 gem "lucide-rails", github: "maybe-finance/lucide-rails"
 
-# Hotwire
+# Hotwire + UI
 gem "stimulus-rails"
 gem "turbo-rails"
+gem "view_component"
+gem "lookbook", ">= 2.3.7"
 
 gem "hotwire_combobox"
 

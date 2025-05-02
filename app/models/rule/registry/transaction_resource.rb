@@ -15,6 +15,7 @@ class Rule::Registry::TransactionResource < Rule::Registry
     enabled_executors = [
       Rule::ActionExecutor::SetTransactionCategory.new(rule),
       Rule::ActionExecutor::SetTransactionTags.new(rule),
+      Rule::ActionExecutor::SetTransactionMerchant.new(rule),
       Rule::ActionExecutor::SetTransactionName.new(rule)
     ]
 

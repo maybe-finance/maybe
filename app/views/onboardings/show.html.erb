@@ -1,11 +1,53 @@
-<div class="bg-surface">
-  <div class="h-screen flex flex-col items-center py-6">
-    <div class="grow flex justify-center items-center flex-col max-w-sm w-full text-center">
-      <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
-      <%= tag.h1 t(".title"), class: "text-3xl font-medium mb-2" %>
-      <%= tag.p t(".message"), class: "text-sm text-secondary mb-6" %>
+<%= content_for :prev_nav do  %>
+  <%= image_tag "logomark-color.svg", class: "w-10 h-10" %>
+<% end %>
 
-      <%= link_to t(".setup"), profile_onboarding_path, class: "block flex justify-center items-center btn btn--primary w-full" %>
+<%= content_for :header_nav do %>
+  <%= render "onboardings/onboarding_nav", user: @user %>
+<% end %>
+
+<%= content_for :cancel_action do %>
+  <%= render "onboardings/logout" %>
+<% end %>
+
+<div class="grow max-w-lg w-full mx-auto bg-surface flex flex-col justify-center md:py-0 py-6 px-4 md:px-0">
+  <div>
+    <div class="space-y-1 mb-6 text-center">
+      <h1 class="text-2xl font-medium md:text-2xl">Let's set up your account</h1>
+      <p class="text-secondary text-sm">First things first, let's get your profile set up.</p>
     </div>
+
+    <%= styled_form_with model: @user do |form| %>
+      <%= form.hidden_field :redirect_to, value: @invitation ? "home" : "onboarding_preferences" %>
+      <%= form.hidden_field :onboarded_at, value: Time.current if @invitation %>
+
+      <div class="mb-6">
+        <%= render "settings/user_avatar_field", form: form, user: @user %>
+      </div>
+
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center md:gap-4 space-y-4 md:space-y-0 mb-4">
+        <%= form.text_field :first_name, placeholder: "First name", label: "First name", container_class: "bg-container md:w-1/2 w-full", required: true %>
+        <%= form.text_field :last_name, placeholder: "Last name", label: "Last name", container_class: "bg-container md:w-1/2 w-full", required: true %>
+      </div>
+
+      <% unless @invitation %>
+        <div class="space-y-4 mb-4">
+          <%= form.fields_for :family do |family_form| %>
+            <%= family_form.text_field :name, placeholder: "Household name", label: "Household name" %>
+
+            <%= family_form.select :country,
+              country_options,
+              { label: "Country" },
+              required: true
+            %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= form.submit "Continue" %>
+    <% end %>
   </div>
+</div>
+
+<%= render "layouts/shared/footer" %>
 </div>

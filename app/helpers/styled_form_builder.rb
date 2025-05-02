@@ -48,19 +48,46 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     }
   end
 
-  def submit(value = nil, options = {})
-    default_options = {
-      data: { turbo_submits_with: "Submitting..." },
-      class: "btn btn--primary w-full justify-center"
-    }
+  # A custom styled "toggle" switch input.  Underlying input is a `check_box` (uses same API)
+  def toggle(method, options = {}, checked_value = "1", unchecked_value = "0")
+    if object
+      id = "#{object.id}_#{object_name}_#{method}"
+      name = "#{object_name}[#{method}]"
+      checked = object.send(method)
+    else
+      id = "#{method}_toggle_id"
+      name = method
+      checked = options[:checked]
+    end
 
-    merged_options = default_options.merge(options)
+    @template.render(
+      ToggleComponent.new(
+        id: id,
+        name: name,
+        checked: checked,
+        disabled: options[:disabled],
+        checked_value: checked_value,
+        unchecked_value: unchecked_value,
+        **options
+      )
+    )
+  end
+
+  def submit(value = nil, options = {})
+    # Rails superclass logic to extract the submit text
     value, options = nil, value if value.is_a?(Hash)
-    super(value, merged_options)
+    value ||= submit_default_value
+
+    @template.render(
+      ButtonComponent.new(
+        text: value,
+        data: (options[:data] || {}).merge({ turbo_submits_with: "Submitting..." }),
+        full_width: true
+      )
+    )
   end
 
   private
-
     def build_styled_field(label, field, options, remove_padding_right: false)
       if options[:inline]
         label + field

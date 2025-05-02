@@ -1,0 +1,31 @@
+<%# locals: (plan:, form:, checked: false) %>
+
+<% price = plan == "annual" ? 90 : 9 %>
+<% frequency = plan == "annual" ? "/year" : "/month" %>
+
+<div class="relative">
+  <%= form.radio_button :plan, plan, class: "peer sr-only", checked: checked %>
+  <%= form.label "plan_#{plan}", class: class_names(
+    "flex flex-col gap-1 p-4 cursor-pointer rounded-lg border border-primary hover:bg-container",
+    "peer-checked:bg-container peer-checked:rounded-2xl peer-checked:border-solid peer-checked:ring-4 peer-checked:ring-shadow",
+    "transition-all duration-300"
+  ) do %>
+    <h3 class="text-sm text-secondary"><%= plan.titleize %></h3>
+
+    <div class="mt-auto flex items-end gap-1">
+      <p class="font-display text-xl lg:text-3xl font-medium text-primary">$<%= price %><%= frequency %></p>
+
+      <% if plan == "annual" %>
+        <span class="text-sm text-secondary mb-1">or <%= Money.new(price.to_f / 52).format %>/week</span>
+      <% end %>
+    </div>
+
+    <p class="text-sm text-secondary">
+      <% if plan == "annual" %>
+        Billed annually, 2 months free
+      <% else %>
+        Billed monthly
+      <% end %>
+    </p>
+  <% end %>
+</div>

@@ -1,17 +1,21 @@
 <%= render "layouts/shared/htmldoc" do %>
-  <div class="flex flex-col h-dvh bg-container pt-safe">
+  <div class="flex flex-col h-full bg-container">
     <header class="flex items-center justify-between p-8">
-      <%= link_to content_for(:previous_path) || imports_path do %>
-        <%= lucide_icon "arrow-left", class: "w-5 h-5 text-secondary" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "arrow-left",
+        href: content_for(:previous_path) || imports_path
+      ) %>
 
       <nav>
         <%= yield :header_nav %>
       </nav>
 
-      <%= link_to imports_path do %>
-        <%= lucide_icon "x", class: "text-secondary w-5 h-5" %>
-      <% end %>
+      <%= render LinkComponent.new(
+        variant: "icon",
+        icon: "x",
+        href: imports_path
+      ) %>
     </header>
 
     <main class="grow px-8 md:pt-12 pb-32 overflow-y-auto">

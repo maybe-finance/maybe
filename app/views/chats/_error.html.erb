@@ -10,8 +10,9 @@
   <div class="flex items-center justify-between gap-2">
     <p class="text-xs text-red-500">Failed to generate response.  Please try again.</p>
 
-    <%= button_to retry_chat_path(chat), method: :post, class: "btn btn--primary" do %>
-      <span>Retry</span>
-    <% end %>
+    <%= render ButtonComponent.new(
+      text: "Retry",
+      href: retry_chat_path(chat),
+    ) %>
   </div>
 </div>

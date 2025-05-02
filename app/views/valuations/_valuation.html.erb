@@ -14,8 +14,8 @@
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
         <div class="flex items-center gap-3">
-          <%= tag.div class: "w-6 h-6 rounded-full p-1.5 flex items-center justify-center", style: mixed_hex_styles(color) do %>
-            <%= lucide_icon icon, class: "w-4 h-4 shrink-0" %>
+          <%= tag.div class: "w-6 h-6 rounded-full p-1.5 flex items-center justify-center", style: "color: #{color}" do %>
+            <%= icon(icon, size: "sm", color: "current") %>
           <% end %>
 
           <div class="truncate text-primary">

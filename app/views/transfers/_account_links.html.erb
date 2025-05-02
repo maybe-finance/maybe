@@ -1,7 +1,25 @@
 <%# locals: (transfer:, is_inflow: false) %>
 <div class="flex items-center gap-1">
   <% first_account, second_account = is_inflow ? [transfer.to_account, transfer.from_account] : [transfer.from_account, transfer.to_account] %>
-  <%= link_to first_account.name, account_path(first_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
-  <%= lucide_icon is_inflow ? "arrow-left" : "arrow-right", class: "w-4 h-4 shrink-0" %>
-  <%= link_to second_account.name, account_path(second_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
+
+  <%# Check if first_account exists before creating link %>
+  <% if first_account %>
+    <%= link_to first_account.name, account_path(first_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
+  <% else %>
+    <span class="text-warning text-xs italic" title="Transfer ID: <%= transfer.id %>">
+      Data Error: Missing account
+    </span>
+  <% end %>
+
+  <%# Use icon helper per conventions %>
+  <%= icon(is_inflow ? "arrow-left" : "arrow-right", size: "sm") %>
+
+  <%# Check if second_account exists before creating link %>
+  <% if second_account %>
+    <%= link_to second_account.name, account_path(second_account, tab: "activity"), class: "hover:underline", data: { turbo_frame: "_top" } %>
+  <% else %>
+    <span class="text-warning text-xs italic" title="Transfer ID: <%= transfer.id %>">
+      Data Error: Missing account
+    </span>
+  <% end %>
 </div>

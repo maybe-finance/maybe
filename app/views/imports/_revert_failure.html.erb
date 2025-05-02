@@ -3,7 +3,7 @@
 <div class="h-full flex flex-col justify-center items-center">
   <div class="space-y-6 max-w-sm">
     <div class="mx-auto bg-red-500/5 h-8 w-8 rounded-full flex items-center justify-center">
-      <%= lucide_icon "alert-octagon", class: "w-5 h-5 text-red-500" %>
+      <%= icon "alert-octagon", color: "destructive" %>
     </div>
 
     <div class="text-center space-y-2">
@@ -11,8 +11,10 @@
       <p class="text-sm text-secondary">Please try again or contact support.</p>
     </div>
 
-    <div>
-      <%= button_to "Try again", revert_import_path(import), class: "btn btn--primary text-center w-full" %>
-    </div>
+    <%= render ButtonComponent.new(
+      text: "Try again",
+      full_width: true,
+      href: revert_import_path(import)
+    ) %>
   </div>
 </div>

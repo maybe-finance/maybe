@@ -1,88 +1,91 @@
-<%# locals: (family:) %>
+<%# locals: (family:, active_account_group_tab:) %>
 
-<% if family.requires_data_provider? && Provider::Registry.get_provider(:synth).nil? %>
-  <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
-    <summary class="flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <%= icon "triangle-alert", size: "sm" %>
-        <p class="font-medium">Missing historical data</p>
+<div>
+  <% if family.missing_data_provider? %>
+    <details class="group bg-yellow-tint-10 rounded-lg p-2 text-yellow-600 mb-3 text-xs">
+      <summary class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <%= icon "triangle-alert", size: "sm", color: "warning" %>
+          <p class="font-medium">Missing historical data</p>
+        </div>
+
+        <%= icon("chevron-down", color: "warning", class: "group-open:transform group-open:rotate-180") %>
+      </summary>
+      <div class="text-xs py-2 space-y-2">
+        <p>Maybe uses Synth API to fetch historical exchange rates, security prices, and more.  This data is required to calculate accurate historical account balances.</p>
+
+        <p>
+          <%= link_to "Add your Synth API key here.", settings_hosting_path, class: "text-yellow-600 underline" %>
+        </p>
       </div>
+    </details>
+  <% end %>
 
-      <%= lucide_icon "chevron-down", class: "text-yellow-600 group-open:transform group-open:rotate-180 w-5" %>
-    </summary>
-    <div class="text-xs py-2 space-y-2">
-      <p>Maybe uses Synth API to fetch historical exchange rates, security prices, and more.  This data is required to calculate accurate historical account balances.</p>
-
-      <p>
-        <%= link_to "Add your Synth API key here.", settings_hosting_path, class: "text-yellow-600 underline" %>
-      </p>
-    </div>
-  </details>
-<% end %>
-
-<div
-  class="space-y-3"
-  data-controller="tabs"
-  data-tabs-local-storage-key-value="account-sidebar-tabs"
-  data-tabs-active-class="bg-surface shadow-sm text-primary"
-  data-tabs-inactive-class="text-secondary"
-  data-tabs-default-tab-value="assets-tab">
-  <div class="bg-surface-inset rounded-lg p-1 flex">
-    <button type="button" data-id="assets-tab" class="w-1/3 px-2 py-1 rounded-md text-sm text-secondary font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      Assets
-    </button>
-
-    <button type="button" data-id="debts-tab" class="w-1/3 px-2 py-1 rounded-md text-secondary text-sm font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      Debts
-    </button>
-
-    <button type="button" data-id="all-tab" class="w-1/3 px-2 py-1 rounded-md text-secondary text-sm font-medium" data-tabs-target="btn" data-action="click->tabs#select">
-      All
-    </button>
-  </div>
-
-  <div data-tabs-target="tab" id="assets-tab">
-    <%= link_to new_account_path(step: "method_select", classification: "asset"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New asset</span>
+  <%= render TabsComponent.new(active_tab: active_account_group_tab, url_param_key: "account_group_tab", testid: "account-sidebar-tabs") do |tabs| %>
+    <% tabs.with_nav do |nav| %>
+      <% nav.with_btn(id: "assets", label: "Assets") %>
+      <% nav.with_btn(id: "debts", label: "Debts") %>
+      <% nav.with_btn(id: "all", label: "All") %>
     <% end %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups("asset").each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+    <% tabs.with_panel(tab_id: "assets") do %>
+      <div class="space-y-2">
+        <%= render LinkComponent.new(
+        text: "New asset",
+        variant: "ghost",
+        href: new_account_path(step: "method_select", classification: "asset"),
+        icon: "plus",
+        frame: :modal,
+        full_width: true,
+        class: "justify-start"
+      ) %>
 
-  <div data-tabs-target="tab" id="debts-tab" class="hidden">
-    <%= link_to new_account_path(step: "method_select", classification: "liability"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New debt</span>
+        <div>
+          <% family.balance_sheet.account_groups("asset").each do |group| %>
+            <%= render "accounts/accountable_group", account_group: group %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups("liability").each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+    <% tabs.with_panel(tab_id: "debts") do %>
+      <div class="space-y-2">
+        <%= render LinkComponent.new(
+          text: "New debt",
+          variant: "ghost",
+          href: new_account_path(step: "method_select", classification: "liability"),
+          icon: "plus",
+          frame: :modal,
+        full_width: true,
+        class: "justify-start"
+      ) %>
 
-  <div data-tabs-target="tab" id="all-tab" class="hidden">
-    <%= link_to new_account_path(step: "method_select"),
-              class: "flex items-center gap-3 btn btn--ghost text-secondary mb-1",
-              data: { turbo_frame: "modal" } do %>
-      <%= icon("plus") %>
-      <span>New account</span>
+        <div>
+          <% family.balance_sheet.account_groups("liability").each do |group| %>
+            <%= render "accounts/accountable_group", account_group: group %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
 
-    <div class="space-y-2">
-      <% family.balance_sheet.account_groups.each do |group| %>
-        <%= render "accounts/accountable_group", account_group: group %>
-      <% end %>
-    </div>
-  </div>
+    <% tabs.with_panel(tab_id: "all") do %>
+      <div class="space-y-2">
+        <%= render LinkComponent.new(
+          text: "New account",
+          variant: "ghost",
+          full_width: true,
+          href: new_account_path(step: "method_select"),
+          icon: "plus",
+        frame: :modal,
+        class: "justify-start"
+      ) %>
+
+        <div>
+          <% family.balance_sheet.account_groups.each do |group| %>
+            <%= render "accounts/accountable_group", account_group: group %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
 </div>

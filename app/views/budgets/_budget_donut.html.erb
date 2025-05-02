@@ -8,24 +8,29 @@
           <span>Spent</span>
         </div>
 
-        <div class="text-3xl font-medium <%= budget.available_to_spend.negative? ? "text-red-500" : "text-primary" %>">
+        <div class="mb-2 text-3xl font-medium <%= budget.available_to_spend.negative? ? "text-red-500" : "text-primary" %>">
           <%= format_money(budget.actual_spending_money) %>
         </div>
 
-        <%= link_to edit_budget_path(budget), class: "btn btn--secondary flex items-center gap-1 mt-2" do %>
-          <span class="text-primary font-medium">
-            of <%= format_money(budget.budgeted_spending_money) %>
-          </span>
-          <%= lucide_icon "pencil", class: "w-4 h-4 text-secondary hover:text-gray-600" %>
-        <% end %>
+        <%= render LinkComponent.new(
+          text: "of #{budget.budgeted_spending_money.format}",
+          variant: "secondary",
+          icon: "pencil",
+          icon_position: "right",
+          size: "sm",
+          href: edit_budget_path(budget)
+        ) %>
       <% else %>
         <div class="text-subdued text-3xl mb-2">
           <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
         </div>
-        <%= link_to edit_budget_path(budget), class: "flex items-center gap-2 btn btn--primary" do %>
-          <%= lucide_icon "plus", class: "w-4 h-4 text-white" %>
-          New budget
-        <% end %>
+
+        <%= render LinkComponent.new(
+          text: "New budget",
+          size: "sm",
+          icon: "plus",
+          href: edit_budget_path(budget)
+        ) %>
       <% end %>
     </div>
 
@@ -41,11 +46,14 @@
             <%= format_money(bc.actual_spending_money) %>
           </p>
 
-          <%= link_to budget_budget_categories_path(budget), class: "btn btn--secondary flex items-center gap-1" do %>
-            <span>of <%= format_money(bc.budgeted_spending_money, precision: 0) %></span>
-
-            <%= lucide_icon "pencil", class: "w-4 h-4 text-secondary shrink-0" %>
-          <% end %>
+          <%= render LinkComponent.new(
+            text: "of #{bc.budgeted_spending_money.format(precision: 0)}",
+            variant: "secondary",
+            icon: "pencil",
+            icon_position: "right",
+            size: "sm",
+            href: budget_budget_categories_path(budget)
+          ) %>
         </div>
       </div>
     <% end %>

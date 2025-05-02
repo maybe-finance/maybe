@@ -1,0 +1,87 @@
+@utility bg-surface {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-black;
+  }
+}
+
+@utility bg-surface-hover {
+  @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-900;
+  }
+}
+
+@utility bg-surface-inset {
+  @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility bg-surface-inset-hover {
+  @apply bg-gray-200;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility bg-container {
+  @apply bg-white;
+
+  @variant theme-dark {
+    @apply bg-gray-900;
+  }
+}
+
+@utility bg-container-hover {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility bg-container-inset {
+  @apply bg-gray-50;
+
+  @variant theme-dark {
+    @apply bg-gray-800;
+  }
+}
+
+@utility bg-container-inset-hover {
+  @apply bg-gray-100;
+
+  @variant theme-dark {
+    @apply bg-gray-700;
+  }
+}
+
+@utility bg-inverse {
+  @apply bg-gray-800;
+
+  @variant theme-dark {
+    @apply bg-white;
+  }
+}
+
+@utility bg-inverse-hover {
+  @apply bg-gray-700;
+
+  @variant theme-dark {
+    @apply bg-gray-100;
+  }
+}
+
+@utility bg-overlay {
+  background-color: --alpha(var(--color-gray-100) / 50%);
+
+  @variant theme-dark {
+    background-color: var(--color-alpha-black-900);
+  }
+}

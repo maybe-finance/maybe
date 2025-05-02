@@ -2,23 +2,23 @@
   <h1 class="text-xl"><%= t(".accounts") %></h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
-      <%= button_to sync_all_accounts_path,
-                      disabled: Current.family.syncing?,
-                      class: "md:btn md:btn--outline flex items-center justify-center gap-2 w-9 h-9 md:w-auto md:h-auto rounded-full md:rounded-lg",
-                      title: t(".sync") do %>
-        <%= lucide_icon "refresh-cw", class: "w-5 h-5" %>
-        <span class="hidden md:inline"><%= t(".sync") %></span>
-      <% end %>
+      <%= render ButtonComponent.new(
+        text: "Sync all",
+        href: sync_all_accounts_path,
+        method: :post,
+        variant: "outline",
+        disabled: Current.family.syncing?,
+        icon: "refresh-cw",
+        class: ""
+      ) %>
 
-      <%= link_to new_account_path(return_to: accounts_path),
-                    data: { turbo_frame: "modal" },
-                    class: "btn btn--primary flex items-center justify-center gap-1 w-9 h-9 md:w-auto md:h-auto rounded-full md:rounded-lg" do %>
-        <div class="flex items-center justify-center w-5 h-5">
-
-        <%= lucide_icon("plus") %>
-                    </div>
-        <p class="hidden md:block text-sm font-medium"><%= t(".new_account") %></p>
-      <% end %>
+      <%= render LinkComponent.new(
+        text: "New account",
+        href: new_account_path(return_to: accounts_path),
+        variant: "primary",
+        icon: "plus",
+        frame: :modal
+      ) %>
     </div>
   </div>
 </header>

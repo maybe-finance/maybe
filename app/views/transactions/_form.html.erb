@@ -1,16 +1,18 @@
-<%= styled_form_with model: @entry, url: transactions_path, class: "space-y-4 text-subdued", data: { controller: "transaction-form" } do |f| %>
+<%# locals: (entry:, income_categories:, expense_categories:) %>
+
+<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4", data: { controller: "transaction-form" } do |f| %>
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>
 
   <section>
-    <%= render "shared/transaction_type_tabs", active_tab: params[:nature] == "inflow" ? "income" : "expense" %>
+    <%= render "shared/transaction_type_tabs", active_tab: params[:nature] == "inflow" ? "income" : "expense", account_id: params[:account_id] %>
 
     <%= f.hidden_field :nature, value: params[:nature] || "outflow", data: { "transaction-form-target": "natureField" } %>
     <%= f.hidden_field :entryable_type, value: "Transaction" %>
   </section>
 
-  <section class="space-y-2 overflow-hidden">
+  <section class="space-y-2">
     <%= f.text_field :name, label: t(".description"), placeholder: t(".description_placeholder"), required: true %>
 
     <% if @entry.account_id %>
@@ -21,13 +23,13 @@
 
     <%= f.money_field :amount, label: t(".amount"), required: true %>
     <%= f.fields_for :entryable do |ef| %>
-      <% categories = params[:nature] == "inflow" ? @income_categories : @expense_categories %>
+      <% categories = params[:nature] == "inflow" ? income_categories : expense_categories %>
       <%= ef.collection_select :category_id, categories, :id, :name, { prompt: t(".category_prompt"), label: t(".category") } %>
     <% end %>
     <%= f.date_field :date, label: t(".date"), required: true, min: Entry.min_supported_date, max: Date.current, value: Date.current %>
   </section>
 
-  <%= disclosure t(".details"), default_open: false do %>
+  <%= render DisclosureComponent.new(title: t(".details")) do %>
     <%= f.fields_for :entryable do |ef| %>
       <%= ef.select :tag_ids,
                     Current.family.tags.alphabetically.pluck(:name, :id),

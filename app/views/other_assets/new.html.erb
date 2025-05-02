@@ -1,3 +1,6 @@
-<%= modal_form_wrapper title: t(".title") do %>
-  <%= render "other_assets/form", account: @account, url: other_assets_path(return_to: params[:return_to]) %>
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_body do %>
+    <%= render "form", account: @account, url: other_assets_path %>
+  <% end %>
 <% end %>

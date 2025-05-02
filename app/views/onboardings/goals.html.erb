@@ -1,0 +1,57 @@
+<%= content_for :previous_path, preferences_onboarding_path %>
+
+<%= content_for :header_nav do %>
+  <%= render "onboardings/onboarding_nav", user: @user %>
+<% end %>
+
+<%= content_for :cancel_action do %>
+  <%= render "onboardings/logout" %>
+<% end %>
+
+<%= content_for :footer do %>
+  <%= render "layouts/shared/footer" %>
+<% end %>
+
+<div class="grow max-w-lg w-full mx-auto bg-surface flex flex-col justify-center md:py-0 py-6 px-4 md:px-0">
+  <div>
+    <div class="space-y-1 mb-6 text-center">
+      <h1 class="text-2xl font-medium md:text-2xl">What brings you to Maybe?</h1>
+      <p class="text-secondary text-sm">Select one or more goals that you have with using Maybe as your personal finance tool.</p>
+    </div>
+
+    <%= form_with model: @user do |form| %>
+      <%= form.hidden_field :redirect_to, value: self_hosted? ? "home" : "trial" %>
+      <%= form.hidden_field :set_onboarding_goals_at, value: Time.current %>
+
+      <% if self_hosted? %>
+        <%= form.hidden_field :onboarded_at, value: Time.current %>
+      <% end %>
+
+      <div class="space-y-3">
+        <% [
+          { icon: "layers", label: "See all my accounts in one piece", value: "unified_accounts" },
+          { icon: "banknote", label: "Understand cashflow and expenses", value: "cashflow" },
+          { icon: "pie-chart", label: "Manage financial plans and budgeting", value: "budgeting" },
+          { icon: "users", label: "Manage finances with a partner", value: "partner" },
+          { icon: "area-chart", label: "Track investments", value: "investments" },
+          { icon: "bot", label: "Let AI help me understand my finances", value: "ai_insights" },
+          { icon: "settings-2", label: "Analyze and optimize accounts", value: "optimization" },
+          { icon: "frown", label: "Reduce financial stress or anxiety", value: "reduce_stress" }
+        ].each do |goal| %>
+          <label class="flex items-center gap-2.5 p-4 rounded-lg border border-tertiary cursor-pointer hover:bg-container transition-colors [&:has(input:checked)]:border-solid [&:has(input:checked)]:bg-container">
+            <%= form.check_box :goals, { multiple: true, class: "sr-only" }, goal[:value], nil %>
+            <%= icon goal[:icon] %>
+            <span class="text-primary text-sm"><%= goal[:label] %></span>
+          </label>
+        <% end %>
+      </div>
+
+      <div class="mt-6">
+        <%= render ButtonComponent.new(
+          text: "Next",
+          full_width: true
+        ) %>
+      </div>
+    <% end %>
+  </div>
+</div>

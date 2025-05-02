@@ -1,0 +1,42 @@
+<%# locals: (user:) %>
+
+<% steps = [
+  { name: "Setup", path: onboarding_path, is_complete: user.first_name.present?, step_number: 1 },
+  { name: "Preferences", path: preferences_onboarding_path, is_complete: user.set_onboarding_preferences_at.present?, step_number: 2 },
+  { name: "Goals", path: goals_onboarding_path , is_complete: user.set_onboarding_goals_at.present?, step_number: 3 },
+  { name: "Start", path: trial_onboarding_path, is_complete: user.onboarded_at.present?, step_number: 4 },
+] %>
+
+<%# Don't show last step if self hosted %>
+<% steps.pop if self_hosted? %>
+
+<ul class="hidden md:flex items-center gap-2">
+  <% steps.each_with_index do |step, idx| %>
+    <li class="flex items-center gap-2 group">
+      <% is_current = request.path == step[:path] %>
+
+      <% text_class = if is_current
+                  "text-primary"
+                else
+                  step[:is_complete] ? "text-green-600" : "text-secondary"
+                end %>
+      <% step_class = if is_current
+                  "bg-surface-inset text-primary"
+                else
+                  step[:is_complete] ? "bg-green-600/10 border-alpha-black-25" : "bg-container-inset"
+                end %>
+
+      <%= link_to step[:path], class: "flex items-center gap-3" do %>
+        <div class="flex items-center gap-2 text-sm font-medium <%= text_class %>">
+          <span class="<%= step_class %> w-7 h-7 rounded-full shrink-0 inline-flex items-center justify-center border border-transparent">
+            <%= step[:is_complete] && !is_current ? icon("check", size: "sm", color: "current") : idx + 1 %>
+          </span>
+
+          <span><%= step[:name] %></span>
+        </div>
+      <% end %>
+
+      <hr class="border border-secondary w-12 group-last:hidden">
+    </li>
+  <% end %>
+</ul>

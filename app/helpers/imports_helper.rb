@@ -46,11 +46,11 @@ module ImportsHelper
   end
 
   def cell_class(row, field)
-    base = "text-sm focus:ring-gray-900 focus:border-gray-900 w-full max-w-full disabled:text-subdued"
+    base = "bg-container text-sm focus:ring-gray-900 theme-dark:focus:ring-gray-100 focus:border-solid w-full max-w-full disabled:text-subdued"
 
     row.valid? # populate errors
 
-    border = row.errors.key?(field) ? "border-red-500" : "border-transparent"
+    border = row.errors.key?(field) ? "border-destructive" : "border-transparent"
 
     [ base, border ].join(" ")
   end

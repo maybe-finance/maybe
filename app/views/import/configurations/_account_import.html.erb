@@ -6,5 +6,5 @@
   <%= form.select :amount_col_label, import.csv_headers, { include_blank: "Leave empty", label: "Balance" }, required: true %>
   <%= form.select :currency_col_label, import.csv_headers, { include_blank: "Default", label: "Currency" } %>
 
-  <%= form.submit "Apply configuration", class: "w-full btn btn--primary", disabled: import.complete? %>
+  <%= form.submit "Apply configuration", disabled: import.complete? %>
 <% end %>

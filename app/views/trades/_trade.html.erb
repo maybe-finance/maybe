@@ -12,9 +12,12 @@
 
         <div class="max-w-full">
           <%= tag.div class: ["flex items-center gap-2"] do %>
-            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-600">
-              <%= entry.name.first.upcase %>
-            </div>
+            <%= render FilledIconComponent.new(
+              variant: :text,
+              text: entry.name,
+              size: "sm",
+              rounded: true
+            ) %>
 
             <div class="truncate">
               <%= link_to entry.name,

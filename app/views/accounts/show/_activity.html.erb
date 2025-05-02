@@ -2,30 +2,29 @@
 
 <%= turbo_frame_tag dom_id(account, "entries") do %>
   <div class="bg-container p-5 shadow-border-xs rounded-xl" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
       <% unless @account.plaid_account_id.present? %>
-        <div data-controller="menu" data-testid="activity-menu">
-          <button class="btn btn--secondary flex items-center gap-2" data-menu-target="button">
-            <%= lucide_icon("plus", class: "w-4 h-4") %>
-            <%= tag.span t(".new") %>
-          </button>
-          <div data-menu-target="content" class="z-10 hidden bg-container rounded-lg border border-alpha-black-25 shadow-xs p-1">
-            <%= link_to new_valuation_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "block p-2 rounded-lg hover:bg-gray-50 flex items-center gap-2" do %>
-              <%= lucide_icon("circle-dollar-sign", class: "text-secondary w-5 h-5") %>
-              <%= tag.span t(".new_balance"), class: "text-sm" %>
-            <% end %>
+        <%= render MenuComponent.new(variant: "button") do |menu| %>
+          <% menu.with_button(text: "New", variant: "secondary", icon: "plus") %>
 
-            <% unless @account.crypto? %>
-              <%= link_to @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id), data: { turbo_frame: :modal }, class: "btn btn--primary flex items-center justify-center gap-2 rounded-full md:rounded-lg w-9 h-9 md:w-auto md:h-auto" do %>
-              <span class="flex items-center justify-center">
-                <%= lucide_icon("credit-card", class: "text-secondary w-5 h-5") %>
-              </span>
-                <%= tag.span t(".new_transaction"), class: "text-sm md:block" %>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+          <% menu.with_item(
+              variant: "link",
+              text: "New balance",
+              icon: "circle-dollar-sign",
+              href: new_valuation_path(account_id: @account.id),
+              data: { turbo_frame: :modal }) %>
+
+          <% unless @account.crypto? %>
+            <% href = @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id) %>
+            <% menu.with_item(
+                variant: "link",
+                text: "New transaction",
+                icon: "credit-card",
+                href: href,
+                data: { turbo_frame: :modal }) %>
+          <% end %>
+        <% end %>
       <% end %>
     </div>
 
@@ -38,7 +37,7 @@
         <div class="flex gap-2 mb-4">
           <div class="grow">
             <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
-              <%= lucide_icon("search", class: "w-5 h-5 text-secondary") %>
+              <%= icon("search") %>
               <%= hidden_field_tag :account_id, @account.id %>
               <%= form.search_field :search,
                             placeholder: "Search entries by name",
