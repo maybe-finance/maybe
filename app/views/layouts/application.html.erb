@@ -79,8 +79,31 @@
       <% if content_for?(:sidebar) %>
         <%= yield :sidebar %>
       <% else %>
-        <div id="account-sidebar-tabs" data-turbo-permanent>
-          <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
+        <div class="h-full flex flex-col">
+          <div class="overflow-y-auto grow" id="account-sidebar-tabs" data-turbo-permanent>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
+          </div>
+
+          <% if Current.family.trialing? && !self_hosted? %>
+            <div class="px-4 py-3 space-y-4 bg-container shadow-border-xs rounded-xl">
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-sm font-medium text-primary">Free trial</p>
+                  <p class="text-sm text-secondary"><%= Current.family.trial_remaining_days %> days remaining</p>
+                </div>
+
+                <%= render LinkComponent.new(
+                  text: "Upgrade",
+                  href: upgrade_subscription_path,
+                ) %>
+              </div>
+
+              <div class="flex items-center gap-0.5 h-1.5">
+                <div class="h-full bg-warning rounded-full" style="width: <%= 100 - Current.family.trial_remaining_days / 14.0 * 100 %>%"></div>
+                <div class="h-full bg-surface-inset rounded-full" style="width: <%= Current.family.trial_remaining_days / 14.0 * 100 %>%"></div>
+              </div>
+            </div>
+          <% end %>
         </div>
       <% end %>
     <% end %>

@@ -4,7 +4,7 @@
   { name: "Setup", path: onboarding_path, is_complete: user.first_name.present?, step_number: 1 },
   { name: "Preferences", path: preferences_onboarding_path, is_complete: user.set_onboarding_preferences_at.present?, step_number: 2 },
   { name: "Goals", path: goals_onboarding_path , is_complete: user.set_onboarding_goals_at.present?, step_number: 3 },
-  { name: "Start", path: trial_onboarding_path, is_complete: user.onboarded_at.present?, step_number: 4 },
+  { name: "Start", path: trial_onboarding_path, is_complete: user.onboarded?, step_number: 4 },
 ] %>
 
 <%# Don't show last step if self hosted %>
