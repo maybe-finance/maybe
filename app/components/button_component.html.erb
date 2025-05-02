@@ -1,6 +1,6 @@
 <%= container do %>
   <% if icon && (icon_position != :right) %>
-    <%= lucide_icon(icon, class: icon_classes) %>
+    <%= helpers.icon(icon, class: icon_classes) %>
   <% end %>
 
   <% unless icon_only? %>
@@ -8,6 +8,6 @@
   <% end %>
 
   <% if icon && icon_position == :right %>
-    <%= lucide_icon(icon, class: icon_classes) %>
+    <%= helpers.icon(icon, class: icon_classes) %>
   <% end %>
 <% end %>
