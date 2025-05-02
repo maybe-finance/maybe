@@ -155,7 +155,7 @@ NOT_ automatically update. To update your self-hosted app, run the following com
 cd ~/docker-apps/maybe # Navigate to whatever directory you configured the app in
 docker compose pull # This pulls the "latest" published image from GHCR
 docker compose build # This rebuilds the app with updates
-docker compose up --no-deps -d app # This restarts the app using the newest version
+docker compose up --no-deps -d web worker # This restarts the app using the newest version
 ```
 
 ## How to change which updates your app receives
