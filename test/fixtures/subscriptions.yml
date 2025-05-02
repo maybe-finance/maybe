@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  stripe_id: MyString
+  family_id: one
+  name: MyString
+  status: MyString
+
+two:
+  stripe_id: MyString
+  family_id: two
+  name: MyString
+  status: MyString
