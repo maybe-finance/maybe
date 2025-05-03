@@ -8,8 +8,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.5.0)
-      concurrent-ruby (~> 1.0)
     actioncable (7.2.2.1)
       actionpack (= 7.2.2.1)
       activesupport (= 7.2.2.1)
@@ -563,7 +561,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  aasm
   activerecord-import
   aws-sdk-s3 (~> 1.177.0)
   bcrypt (~> 3.1)

@@ -1,23 +1,36 @@
 class CreateSubscriptions < ActiveRecord::Migration[7.2]
   def change
     create_table :subscriptions, id: :uuid do |t|
-      t.references :family_id, null: false, foreign_key: true, type: :uuid
+      t.references :family, null: false, foreign_key: true, type: :uuid
 
       t.string :status, null: false
 
       t.string :stripe_id
-      t.string :name
       t.decimal :amount, precision: 19, scale: 4
       t.string :currency
       t.string :interval
-      t.datetime :current_period_end
+
+      t.datetime :current_period_ends_at
+      t.datetime :trial_ends_at
 
       t.timestamps
     end
 
-
     reversible do |dir|
       dir.up do
+        execute <<~SQL
+          INSERT INTO subscriptions (family_id, status, trial_ends_at, created_at, updated_at)
+          SELECT
+            f.id,
+            COALESCE(f.stripe_subscription_status, 'incomplete'),
+            CASE
+              WHEN f.trial_started_at IS NOT NULL THEN f.trial_started_at + INTERVAL '14 days'
+              ELSE NULL
+            END,
+            now(),
+            now()
+          FROM families f
+        SQL
       end
     end
   end

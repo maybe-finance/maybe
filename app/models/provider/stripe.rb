@@ -1,9 +1,8 @@
 class Provider::Stripe
+  Error = Class.new(StandardError)
+
   def initialize(secret_key:, webhook_secret:)
-    @client = Stripe::StripeClient.new(
-      secret_key,
-      stripe_version: "2025-04-30.basil"
-    )
+    @client = Stripe::StripeClient.new(secret_key)
     @webhook_secret = webhook_secret
   end
 
@@ -12,51 +11,37 @@ class Provider::Stripe
 
     case event.type
     when /^customer\.subscription\./
-      SubscriptionEventProcessor.new(event: event, client: client).process
-    when /^customer\./
-      CustomerEventProcessor.new(event: event, client: client).process
+      SubscriptionEventProcessor.new(event).process
     else
-      Rails.logger.info "Unhandled event type: #{event.type}"
+      Rails.logger.warn "Unhandled event type: #{event.type}"
     end
   end
 
   def process_webhook_later(webhook_body, sig_header)
     thin_event = client.parse_thin_event(webhook_body, sig_header, webhook_secret)
-
-    if thin_event.type.start_with?("customer.")
-      StripeEventHandlerJob.perform_later(thin_event.id)
-    else
-      Rails.logger.info "Unhandled event type: #{thin_event.type}"
-    end
+    StripeEventHandlerJob.perform_later(thin_event.id)
   end
 
-  def create_customer(email:, metadata: {})
-    client.v1.customers.create(
-      email: email,
-      metadata: metadata
-    )
-  end
-
-  def get_checkout_session_url(price_id:, customer_id: nil, success_url: nil, cancel_url: nil)
+  def create_checkout_session(price_id:, customer_email: nil, success_url: nil, cancel_url: nil)
     client.v1.checkout.sessions.create(
-      customer: customer_id,
+      customer_email: customer_email,
       line_items: [ { price: price_id, quantity: 1 } ],
       mode: "subscription",
       allow_promotion_codes: true,
       success_url: success_url,
       cancel_url: cancel_url
-    ).url
-  end
-
-  def get_billing_portal_session_url(customer_id:, return_url: nil)
-    client.v1.billing_portal.sessions.create(
-      customer: customer_id,
-      return_url: return_url
-    ).url
+    )
   end
 
   def retrieve_checkout_session(session_id)
     client.v1.checkout.sessions.retrieve(session_id)
+  end
+
+  def create_billing_portal_session(customer_id:, return_url: nil)
+    client.v1.billing_portal.sessions.create(
+      customer: customer_id,
+      return_url: return_url
+    )
   end
 
   private

@@ -63,10 +63,6 @@ gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 3.0"
 gem "activerecord-import"
 
-# State Machines
-gem "aasm"
-gem "after_commit_everywhere", "~> 1.0"
-
 # AI
 gem "ruby-openai"
 

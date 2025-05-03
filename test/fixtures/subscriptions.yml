@@ -1,13 +1,9 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+active:
+  family: dylan_family 
+  status: active 
+  stripe_id: "test_1234567890"
 
-one:
-  stripe_id: MyString
-  family_id: one
-  name: MyString
-  status: MyString
-
-two:
-  stripe_id: MyString
-  family_id: two
-  name: MyString
-  status: MyString
+trialing:
+  family: empty
+  status: trialing
+  trial_ends_at: <%= 12.days.from_now %>

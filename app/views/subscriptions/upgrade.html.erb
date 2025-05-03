@@ -18,7 +18,7 @@
     <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
 
     <% if Current.family.trialing? %>
-      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial has <%= Current.family.trial_remaining_days %> days remaining</p>
+      <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial has <%= Current.family.days_left_in_trial %> days remaining</p>
     <% else %>
       <p class="text-xl lg:text-3xl text-primary font-display font-medium">Your trial is over</p>
     <% end %>
@@ -33,8 +33,8 @@
 
     <%= form_with url: new_subscription_path, method: :get, class: "max-w-xs", data: { turbo: false } do |form| %>
       <div class="space-y-4 mb-6">
-        <%= render "subscriptions/plan_choice", form: form, plan: "annual", checked: params[:plan] == "annual" || params[:plan].blank? %>
-        <%= render "subscriptions/plan_choice", form: form, plan: "monthly", checked: params[:plan] == "monthly" %>
+        <%= render "subscriptions/plan_choice", form: form, plan: "annual", checked: @plan == "annual" %>
+        <%= render "subscriptions/plan_choice", form: form, plan: "monthly", checked: @plan == "monthly" %>
       </div>
 
       <div class="text-center space-y-2">

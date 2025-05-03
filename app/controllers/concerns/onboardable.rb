@@ -20,7 +20,9 @@ module Onboardable
 
       if !Current.user.onboarded?
         redirect_to onboarding_path
-      elsif !Current.family.subscribed? && !Current.family.trialing? && !self_hosted?
+      elsif !Current.family.subscription.present?
+        redirect_to trial_onboarding_path
+      elsif Current.family.upgrade_required?
         redirect_to upgrade_subscription_path
       end
     end

@@ -19,7 +19,7 @@
             <p class="text-primary">
               You are currently trialing <span class="font-medium">Maybe+</span>
               <span class="text-secondary">
-                (<%= @user.family.trial_remaining_days %> days remaining)
+                (<%= @user.family.days_left_in_trial %> days remaining)
               </span>
             </p>
           <% elsif @user.family.subscribed? %>

@@ -1,41 +1,55 @@
 require "test_helper"
+require "ostruct"
 
 class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in @user = users(:family_admin)
+    sign_in @user = users(:empty)
+    @family = @user.family
   end
 
-  test "can start trial" do
-    @user.update!(onboarded_at: nil)
-    @user.family.update!(trial_started_at: nil, stripe_subscription_status: "incomplete")
+  test "disabled for self hosted users" do
+    Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
+    post subscription_path
+    assert_response :forbidden
+  end
 
-    assert_nil @user.onboarded_at
-    assert_nil @user.family.trial_started_at
+  # Trial subscriptions are managed internally and do NOT go through Stripe
+  test "can create trial subscription" do
+    @family.subscription.destroy
+    @family.reload
 
-    post start_trial_subscription_path
+    assert_difference "Subscription.count", 1 do
+      post subscription_path
+    end
+
     assert_redirected_to root_path
     assert_equal "Welcome to Maybe!", flash[:notice]
-
-    assert @user.reload.onboarded?
-    assert @user.family.reload.trial_started_at.present?
+    assert_equal "trialing", @family.subscription.status
+    assert_in_delta Subscription::TRIAL_DAYS.days.from_now, @family.subscription.trial_ends_at, 1.minute
   end
 
-  test "if user re-enters onboarding, don't restart trial" do
-    onboard_time = 1.day.ago
-    trial_start_time = 1.day.ago
+  test "users who have already trialed cannot create a new subscription" do
+    @family.start_trial_subscription!
 
-    @user.update!(onboarded_at: onboard_time)
-    @user.family.update!(trial_started_at: trial_start_time, stripe_subscription_status: "incomplete")
+    assert_no_difference "Subscription.count" do
+      post subscription_path
+    end
 
-    post start_trial_subscription_path
     assert_redirected_to root_path
-
-    assert @user.reload.family.trial_started_at < Date.current
+    assert_equal "You have already started or completed a trial. Please upgrade to continue.", flash[:alert]
   end
 
-  test "redirects to settings if self hosting" do
-    Rails.application.config.app_mode.stubs(:self_hosted?).returns(true)
-    get subscription_path
-    assert_response :forbidden
+  test "creates active subscription on checkout success" do
+    SubscriptionManager.any_instance.expects(:get_checkout_result).with("test-session-id").returns(
+      OpenStruct.new(
+        success?: true,
+        subscription_id: "test-subscription-id"
+      )
+    )
+
+    get success_subscription_url(session_id: "test-session-id")
+
+    assert @family.subscription.active?
+    assert_equal "Welcome to Maybe!  Your subscription has been created.", flash[:notice]
   end
 end

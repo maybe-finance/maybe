@@ -1,0 +1,207 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/test_helpers/test_clocks
+    body:
+      encoding: UTF-8
+      string: frozen_time=1746281894
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/15.1.0
+      Authorization:
+      - Bearer <STRIPE_SECRET_KEY>
+      Idempotency-Key:
+      - 7c61726e-6b37-46bb-b4b1-3e232fa9afd3
+      Stripe-Version:
+      - 2025-04-30.basil
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"15.1.0","lang":"ruby","lang_version":"3.4.1 p0 (2024-12-25)","platform":"arm64-darwin24","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Zachs-MacBook-Pro.local 24.3.0 Darwin Kernel Version 24.3.0: Thu Jan  2 20:24:16
+        PST 2025; root:xnu-11215.81.4~3/RELEASE_ARM64_T6000 arm64","hostname":"Zachs-MacBook-Pro.local"}'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Sat, 03 May 2025 14:18:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '250'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=A5jD49wPG2zi0H9dv_dAHkKRJRxoPUlxsqY57MBMgwNqO-xr9ctlpvj4PVyHyqWkbO-mGjC4lAttUTad
+      Idempotency-Key:
+      - 7c61726e-6b37-46bb-b4b1-3e232fa9afd3
+      Original-Request:
+      - req_pkr9gJ0ZBalHyL
+      Request-Id:
+      - req_pkr9gJ0ZBalHyL
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - 2025-04-30.basil
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - ABGHI
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "clock_1RKgtOQT2jbOS8G0GiZN9BcG",
+          "object": "test_helpers.test_clock",
+          "created": 1746281894,
+          "deletes_after": 1748873894,
+          "frozen_time": 1746281894,
+          "livemode": false,
+          "name": null,
+          "status": "ready",
+          "status_details": {}
+        }
+  recorded_at: Sat, 03 May 2025 14:18:14 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/customers
+    body:
+      encoding: UTF-8
+      string: email=user_1746281894%40maybe.test&payment_method=pm_card_visa&invoice_settings[default_payment_method]=pm_card_visa&test_clock=clock_1RKgtOQT2jbOS8G0GiZN9BcG
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/15.1.0
+      Authorization:
+      - Bearer <STRIPE_SECRET_KEY>
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_pkr9gJ0ZBalHyL","request_duration_ms":324}}'
+      Idempotency-Key:
+      - e7e6a003-e35a-4b9b-a4c5-24b35d96c6f1
+      Stripe-Version:
+      - 2025-04-30.basil
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"15.1.0","lang":"ruby","lang_version":"3.4.1 p0 (2024-12-25)","platform":"arm64-darwin24","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Zachs-MacBook-Pro.local 24.3.0 Darwin Kernel Version 24.3.0: Thu Jan  2 20:24:16
+        PST 2025; root:xnu-11215.81.4~3/RELEASE_ARM64_T6000 arm64","hostname":"Zachs-MacBook-Pro.local"}'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Sat, 03 May 2025 14:18:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '691'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=CVaoXgStJLDSIIs8OesmQd17r8u8RftA91tkjoazhG7pAVY7KLycpOG4AIWxH49xwoieNo4cU8kWXDi-
+      Idempotency-Key:
+      - e7e6a003-e35a-4b9b-a4c5-24b35d96c6f1
+      Original-Request:
+      - req_dXTYzEFfG5jDNA
+      Request-Id:
+      - req_dXTYzEFfG5jDNA
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - 2025-04-30.basil
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - ABGHI
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cus_SFBFdJm0XLT5N5",
+          "object": "customer",
+          "address": null,
+          "balance": 0,
+          "created": 1746281894,
+          "currency": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": null,
+          "discount": null,
+          "email": "user_1746281894@maybe.test",
+          "invoice_prefix": "GUUYJYBR",
+          "invoice_settings": {
+            "custom_fields": null,
+            "default_payment_method": "pm_1RKgtOQT2jbOS8G0FqlgpwQL",
+            "footer": null,
+            "rendering_options": null
+          },
+          "livemode": false,
+          "metadata": {},
+          "name": null,
+          "next_invoice_sequence": 1,
+          "phone": null,
+          "preferred_locales": [],
+          "shipping": null,
+          "tax_exempt": "none",
+          "test_clock": "clock_1RKgtOQT2jbOS8G0GiZN9BcG"
+        }
+  recorded_at: Sat, 03 May 2025 14:18:15 GMT
+recorded_with: VCR 6.3.1
