@@ -7,7 +7,7 @@ class RulesController < ApplicationController
     @sort_by = params[:sort_by] || "name"
     @direction = params[:direction] || "asc"
 
-    allowed_columns = [ "name", "created_at" ]
+    allowed_columns = [ "name", "updated_at" ]
     @sort_by = "name" unless allowed_columns.include?(@sort_by)
     @direction = "asc" unless [ "asc", "desc" ].include?(@direction)
 

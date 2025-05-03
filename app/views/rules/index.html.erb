@@ -56,10 +56,10 @@
             <% end %>
           </div>
           <div class="flex items-center">
-            <%= link_to rules_path(sort_by: "created_at", direction: (@sort_by == "created_at" && @direction == "asc") ? "desc" : "asc"), 
-                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'created_at' ? 'font-medium' : ''}" do %>
-              <span class="mr-1">Date</span>
-              <% if @sort_by == "created_at" %>
+            <%= link_to rules_path(sort_by: "updated_at", direction: (@sort_by == "updated_at" && @direction == "asc") ? "desc" : "asc"), 
+                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'updated_at' ? 'font-medium' : ''}" do %>
+              <span class="mr-1">Updated At</span>
+              <% if @sort_by == "updated_at" %>
                 <%= icon(@direction == "asc" ? "arrow-up" : "arrow-down", size: "xs") %>
               <% end %>
             <% end %>
