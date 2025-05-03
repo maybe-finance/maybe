@@ -14,7 +14,7 @@
     <div class="bg-container border border-tertiary rounded-lg p-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
       <div class="flex items-center gap-2">
         <%= icon "check-circle", size: "sm", color: "success" %>
-        <p class="text-success text-sm md:text-base">Your data has been cleaned</p>
+        <p class="text-success text-sm">Your data has been cleaned</p>
       </div>
 
       <%= render LinkComponent.new(
@@ -45,13 +45,13 @@
   <div class="pb-12">
     <div class="bg-container-inset rounded-xl p-1 mb-6">
       <div class="overflow-x-auto">
-        <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, minmax(150px, 1fr)); min-width: max-content;" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
+        <div style="grid-template-columns: repeat(<%= @import.column_keys.count %>, minmax(150px, 1fr));" class="grid items-center uppercase text-xs font-medium text-secondary py-3">
           <% @import.column_keys.each do |key| %>
             <div class="px-5"><%= import_col_label(key) %></div>
           <% end %>
         </div>
 
-        <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200">
+        <div class="bg-container shadow-border-xs rounded-xl divide-y divide-alpha-black-200 theme-dark:divide-alpha-white-200">
           <% @rows.each do |row| %>
             <%= render "import/rows/form", row: row %>
           <% end %>

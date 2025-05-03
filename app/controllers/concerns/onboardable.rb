@@ -18,13 +18,9 @@ module Onboardable
       return unless Current.user
       return unless redirectable_path?(request.path)
 
-      # Check if trial was started VERY recently (e.g., within the last few seconds)
-      # If so, assume onboarding was just completed in the previous request, even if onboarded_at appears blank momentarily.
-      trial_just_started = Current.family.trial_started_at.present? && Current.family.trial_started_at > 10.seconds.ago
-
-      if Current.user.onboarded_at.blank? && !trial_just_started
+      if !Current.user.onboarded?
         redirect_to onboarding_path
-      elsif !Current.family.subscribed? && !Current.family.trialing?
+      elsif !Current.family.subscribed? && !Current.family.trialing? && !self_hosted?
         redirect_to upgrade_subscription_path
       end
     end

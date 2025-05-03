@@ -62,8 +62,18 @@ class Account < ApplicationRecord
   end
 
   def institution_domain
-    return nil unless plaid_account&.plaid_item&.institution_url.present?
-    URI.parse(plaid_account.plaid_item.institution_url).host.gsub(/^www\./, "")
+    url_string = plaid_account&.plaid_item&.institution_url
+    return nil unless url_string.present?
+
+    begin
+      uri = URI.parse(url_string)
+      # Use safe navigation on .host before calling gsub
+      uri.host&.gsub(/^www\./, "")
+    rescue URI::InvalidURIError
+      # Log a warning if the URL is invalid and return nil
+      Rails.logger.warn("Invalid institution URL encountered for account #{id}: #{url_string}")
+      nil
+    end
   end
 
   def destroy_later

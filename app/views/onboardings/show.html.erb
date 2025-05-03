@@ -1,4 +1,6 @@
-<%= content_for :previous_path, onboarding_path %>
+<%= content_for :prev_nav do  %>
+  <%= image_tag "logomark-color.svg", class: "w-10 h-10" %>
+<% end %>
 
 <%= content_for :header_nav do %>
   <%= render "onboardings/onboarding_nav", user: @user %>
