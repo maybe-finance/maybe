@@ -8,7 +8,7 @@ class CustomConfirm
         high_severity: high_severity,
         title: "Delete #{resource_name.titleize}?",
         body: "Are you sure you want to delete #{resource_name.downcase}? This is not reversible.",
-        btn_text: "Delete #{resource_name.downcase}"
+        btn_text: "Delete #{resource_name.titleize}"
       )
     end
   end
