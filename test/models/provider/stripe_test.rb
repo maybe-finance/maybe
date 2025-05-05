@@ -3,8 +3,8 @@ require "test_helper"
 class Provider::StripeTest < ActiveSupport::TestCase
   setup do
     @stripe = Provider::Stripe.new(
-      secret_key: ENV["STRIPE_SECRET_KEY"],
-      webhook_secret: ENV["STRIPE_WEBHOOK_SECRET"]
+      secret_key: ENV["STRIPE_SECRET_KEY"] || "foo",
+      webhook_secret: ENV["STRIPE_WEBHOOK_SECRET"] || "bar"
     )
   end
 
