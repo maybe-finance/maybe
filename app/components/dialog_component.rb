@@ -37,10 +37,10 @@ class DialogComponent < ViewComponent::Base
 
   VARIANTS = %w[modal drawer].freeze
   WIDTHS = {
-    sm: "lg:max-w-[300px]",
-    md: "lg:max-w-[550px]",
-    lg: "lg:max-w-[700px]",
-    full: "lg:max-w-full"
+    sm: "md:max-w-[300px]",
+    md: "md:max-w-[550px]",
+    lg: "md:max-w-[700px]",
+    full: "md:max-w-full"
   }.freeze
 
   def initialize(variant: "modal", auto_open: true, reload_on_close: false, width: "md", disable_frame: false, **opts)
@@ -76,16 +76,16 @@ class DialogComponent < ViewComponent::Base
 
   def dialog_inner_classes
     variant_classes = if drawer?
-      "lg:w-[550px] h-full"
+      "md:w-[550px]"
     else
       class_names(
-        "max-h-full",
+        "max-h-full md:h-auto",
         WIDTHS[width]
       )
     end
 
     class_names(
-      "flex flex-col bg-container rounded-xl shadow-border-xs mx-3 lg:mx-0 w-full overflow-hidden",
+      "flex flex-col bg-container rounded-none md:rounded-xl shadow-border-xs mx-0 h-full w-full md:w-[550px] overflow-hidden",
       variant_classes
     )
   end
