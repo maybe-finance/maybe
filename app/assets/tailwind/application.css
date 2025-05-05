@@ -124,6 +124,7 @@
 
   ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -132,7 +133,7 @@
 
   ::-webkit-scrollbar-thumb {
     background-color: rgba(156, 163, 175, 0.5);
-    border-radius: 3px; 
+    border-radius: 3px;
   }
 }
 
@@ -140,6 +141,7 @@
 .windows {
   ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -149,11 +151,12 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #a6a6a6;
-  }  
+  }
 }
 
 .scrollbar {
   &::-webkit-scrollbar {
+    height: 4px;
     width: 4px;
   }
 
