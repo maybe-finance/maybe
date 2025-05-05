@@ -35,7 +35,7 @@ class FilledIconComponent < ViewComponent::Base
 
   def container_classes
     class_names(
-      "flex justify-center items-center",
+      "flex justify-center items-center shrink-0",
       size_classes,
       radius_classes,
       transparent? ? "border" : solid_bg_class
