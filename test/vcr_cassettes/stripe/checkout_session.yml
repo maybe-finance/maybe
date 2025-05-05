@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 05 May 2025 14:58:31 GMT
+      - Mon, 05 May 2025 16:09:23 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -52,9 +52,9 @@ http_interactions:
       Content-Security-Policy:
       - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
         img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
-        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=3AzDWQAbaRaojvOTuE7VLPowA9c1tV0lGvUHQ0rCKMr_KwrjE9q8TQxkHp_i_gDHBzbIZ6Zqj5y790kZ
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=7L6NHIm4wk05H5wi0PfH951BH62utb5j2ZImtzEXvcfJgdc1v5juGoNb0oSAXIHhGQtWiGOiCmz3UG1W
       Request-Id:
-      - req_cT0zDBr0RIZ7WP
+      - req_c2n4M98HkgTk63
       Stripe-Version:
       - 2025-04-30.basil
       Vary:
@@ -177,5 +177,5 @@ http_interactions:
           "url": null,
           "wallet_options": null
         }
-  recorded_at: Mon, 05 May 2025 14:58:31 GMT
+  recorded_at: Mon, 05 May 2025 16:09:23 GMT
 recorded_with: VCR 6.3.1

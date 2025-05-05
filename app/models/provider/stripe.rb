@@ -11,9 +11,9 @@ class Provider::Stripe
 
     case event.type
     when "customer.created", "customer.updated"
-      CustomerEventProcessor.new(event: event, client: client).process
+      CustomerEventProcessor.new(event).process
     when /^customer\.subscription\./
-      SubscriptionEventProcessor.new(event: event, client: client).process
+      SubscriptionEventProcessor.new(event).process
     else
       Rails.logger.warn "Unhandled event type: #{event.type}"
     end
