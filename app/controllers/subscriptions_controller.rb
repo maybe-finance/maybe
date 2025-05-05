@@ -13,13 +13,17 @@ class SubscriptionsController < ApplicationController
   end
 
   def new
-    checkout_session_url = subscription_manager.checkout_session_url(
+    checkout_session = stripe.create_checkout_session(
       plan: params[:plan],
-      email: Current.family.billing_email,
-      family_id: Current.family.id
+      family_id: Current.family.id,
+      family_email: Current.family.billing_email,
+      success_url: success_subscription_url + "?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: upgrade_subscription_url
     )
 
-    redirect_to checkout_session_url, allow_other_host: true, status: :see_other
+    Current.family.update!(stripe_customer_id: checkout_session.customer_id)
+
+    redirect_to checkout_session.url, allow_other_host: true, status: :see_other
   end
 
   # Only used for managing our "offline" trials.  Paid subscriptions are handled in success callback of checkout session
@@ -33,8 +37,9 @@ class SubscriptionsController < ApplicationController
   end
 
   def show
-    portal_session_url = subscription_manager.billing_portal_url_for(
-      Current.family.stripe_customer_id
+    portal_session_url = stripe.create_billing_portal_session_url(
+      customer_id: Current.family.stripe_customer_id,
+      return_url: settings_billing_url
     )
 
     redirect_to portal_session_url, allow_other_host: true, status: :see_other
@@ -42,7 +47,7 @@ class SubscriptionsController < ApplicationController
 
   # Stripe redirects here after a successful checkout session and passes the session ID in the URL
   def success
-    checkout_result = subscription_manager.get_checkout_result(params[:session_id])
+    checkout_result = stripe.get_checkout_result(params[:session_id])
 
     if checkout_result.success?
       Current.family.start_subscription!(checkout_result.subscription_id)
@@ -53,11 +58,7 @@ class SubscriptionsController < ApplicationController
   end
 
   private
-    def subscription_manager
-      @subscription_manager ||= SubscriptionManager.new(
-        upgrade_url: upgrade_subscription_url,
-        checkout_success_url: success_subscription_url,
-        billing_url: settings_billing_url
-      )
+    def stripe
+      @stripe ||= Provider::Registry.get_provider(:stripe)
     end
 end

@@ -5,6 +5,9 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in @user = users(:empty)
     @family = @user.family
+
+    @mock_stripe = mock
+    Provider::Registry.stubs(:get_provider).with(:stripe).returns(@mock_stripe)
   end
 
   test "disabled for self hosted users" do
@@ -39,8 +42,28 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "You have already started or completed a trial. Please upgrade to continue.", flash[:alert]
   end
 
+  test "creates new checkout session" do
+    @mock_stripe.expects(:create_checkout_session).with(
+      plan: "monthly",
+      family_id: @family.id,
+      family_email: @family.billing_email,
+      success_url: success_subscription_url + "?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: upgrade_subscription_url
+    ).returns(
+      OpenStruct.new(
+        url: "https://checkout.stripe.com/c/pay/test-session-id",
+        customer_id: "test-customer-id"
+      )
+    )
+
+    get new_subscription_path(plan: "monthly")
+
+    assert_redirected_to "https://checkout.stripe.com/c/pay/test-session-id"
+    assert_equal "test-customer-id", @family.reload.stripe_customer_id
+  end
+
   test "creates active subscription on checkout success" do
-    SubscriptionManager.any_instance.expects(:get_checkout_result).with("test-session-id").returns(
+    @mock_stripe.expects(:get_checkout_result).with("test-session-id").returns(
       OpenStruct.new(
         success?: true,
         subscription_id: "test-subscription-id"

@@ -1,6 +1,7 @@
 class Provider::Stripe::EventProcessor
-  def initialize(event)
+  def initialize(event:, client:)
     @event = event
+    @client = client
   end
 
   def process
@@ -8,7 +9,7 @@ class Provider::Stripe::EventProcessor
   end
 
   private
-    attr_reader :event
+    attr_reader :event, :client
 
     def event_data
       event.data.object

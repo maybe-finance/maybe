@@ -7,34 +7,20 @@ class Provider::Stripe::SubscriptionEventProcessorTest < ActiveSupport::TestCase
       webhook_secret: ENV["STRIPE_WEBHOOK_SECRET"]
     )
 
-    VCR.use_cassette("stripe/create_test_customer") do
-      @test_email = "user_#{Time.current.to_i}@maybe.test"
-
-      @test_clock = raw_client.v1.test_helpers.test_clocks.create(
-        frozen_time: Time.current.to_i
-      )
-
-      # https://docs.stripe.com/testing?testing-method=payment-methods#test-code
-      @test_customer = raw_client.v1.customers.create(
-        email: @test_email,
-        payment_method: "pm_card_visa",
-        invoice_settings: {
-          default_payment_method: "pm_card_visa"
-        },
-        test_clock: @test_clock.id
-      )
-    end
+    @test_customer_email = "user_#{Time.current.to_i}@maybe.test"
   end
 
   test "handles subscription event" do
-    VCR.use_cassette("stripe/events/subscription/created") do
+    VCR.use_cassette("stripe/events/subscription") do
+      customer = create_test_customer
+
       family = Family.create!(
         name: "Test Subscribed Family",
-        stripe_customer_id: @test_customer.id,
+        stripe_customer_id: customer.id,
       )
 
       subscription = raw_client.v1.subscriptions.create(
-        customer: @test_customer.id,
+        customer: customer.id,
         items: [
           {
             price: ENV["STRIPE_MONTHLY_PRICE_ID"],
@@ -45,16 +31,20 @@ class Provider::Stripe::SubscriptionEventProcessorTest < ActiveSupport::TestCase
 
       family.start_subscription!(subscription.id)
 
+      sleep 10
+
       events = raw_client.v1.events.list(
-        type: "customer.subscription.created"
+        type: "customer.subscription.created",
+        created: { gt: 1.minute.ago.to_i }
       )
 
       subscription_create_event = events.data.find do |event|
-        event.data.object.customer == @test_customer.id
+        event.data.object.customer == customer.id
       end
 
       processor = Provider::Stripe::SubscriptionEventProcessor.new(
-        subscription_create_event
+        event: subscription_create_event,
+        client: raw_client
       )
 
       assert_equal "active", family.subscription.status
@@ -78,5 +68,16 @@ class Provider::Stripe::SubscriptionEventProcessorTest < ActiveSupport::TestCase
   private
     def raw_client
       @raw_client ||= Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
+    end
+
+    def create_test_customer
+      # https://docs.stripe.com/testing?testing-method=payment-methods#test-code
+      raw_client.v1.customers.create(
+        email: @test_customer_email,
+        payment_method: "pm_card_visa",
+        invoice_settings: {
+          default_payment_method: "pm_card_visa"
+        },
+      )
     end
 end

@@ -5,6 +5,7 @@ empty:
   email: user1@email.com
   password_digest: $2a$12$XoNBo/cMCyzpYtvhrPAhsubG21mELX48RAcjSVCRctW8dG8wrDIla 
   onboarded_at: <%= 3.days.ago %>
+  role: admin
   ai_enabled: true
 
 maybe_support_staff:

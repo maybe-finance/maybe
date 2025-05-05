@@ -16,13 +16,15 @@ class Provider::StripeTest < ActiveSupport::TestCase
 
     VCR.use_cassette("stripe/create_checkout_session") do
       session = @stripe.create_checkout_session(
-        price_id: ENV["STRIPE_MONTHLY_PRICE_ID"],
-        customer_email: test_email,
+        plan: "monthly",
+        family_id: 1,
+        family_email: test_email,
         success_url: test_success_url,
         cancel_url: test_cancel_url
       )
 
       assert_match /https:\/\/checkout.stripe.com\/c\/pay\/cs_test_.*/, session.url
+      assert_match /cus_.*/, session.customer_id
     end
   end
 
@@ -34,10 +36,10 @@ class Provider::StripeTest < ActiveSupport::TestCase
     test_session_id = "cs_test_b1RD8r6DAkSA8vrQ3grBC2QVgR5zUJ7QQFuVHZkcKoSYaEOQgCMPMOCOM5" # must exist in test Dashboard
 
     VCR.use_cassette("stripe/checkout_session") do
-      result = @stripe.retrieve_checkout_session(test_session_id)
-      assert_match /sub_.*/, result.subscription
-      assert_equal "complete", result.status
-      assert_equal "paid", result.payment_status
+      result = @stripe.get_checkout_result(test_session_id)
+
+      assert result.success?
+      assert_match /sub_.*/, result.subscription_id
     end
   end
 end
