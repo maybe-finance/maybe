@@ -19,14 +19,15 @@ class SubscriptionManager
     CheckoutSessionResult.new(success?: false, subscription_id: nil)
   end
 
-  def checkout_session_url(plan:, email:)
+  def checkout_session_url(plan:, email:, family_id:)
     cancel_url = upgrade_url + "?plan=#{plan}"
 
     stripe_provider.create_checkout_session(
       price_id: price_id_for(plan),
       customer_email: email,
       success_url: checkout_success_url + "?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: cancel_url
+      cancel_url: cancel_url,
+      family_id: family_id
     ).url
   end
 

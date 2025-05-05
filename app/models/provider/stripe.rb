@@ -22,14 +22,17 @@ class Provider::Stripe
     StripeEventHandlerJob.perform_later(thin_event.id)
   end
 
-  def create_checkout_session(price_id:, customer_email: nil, success_url: nil, cancel_url: nil)
+  def create_checkout_session(price_id:, family_id: nil, customer_email: nil, success_url: nil, cancel_url: nil)
     client.v1.checkout.sessions.create(
       customer_email: customer_email,
       line_items: [ { price: price_id, quantity: 1 } ],
       mode: "subscription",
       allow_promotion_codes: true,
       success_url: success_url,
-      cancel_url: cancel_url
+      cancel_url: cancel_url,
+      metadata: {
+        family_id: family_id
+      }
     )
   end
 

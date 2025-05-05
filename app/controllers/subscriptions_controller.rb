@@ -15,7 +15,8 @@ class SubscriptionsController < ApplicationController
   def new
     checkout_session_url = subscription_manager.checkout_session_url(
       plan: params[:plan],
-      email: Current.family.billing_email
+      email: Current.family.billing_email,
+      family_id: Current.family.id
     )
 
     redirect_to checkout_session_url, allow_other_host: true, status: :see_other

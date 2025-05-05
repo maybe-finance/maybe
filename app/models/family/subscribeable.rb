@@ -52,12 +52,12 @@ module Family::Subscribeable
 
   def percentage_of_trial_remaining
     return 0 unless subscription.present?
-    (days_left_in_trial.to_f / 14) * 100
+    (days_left_in_trial.to_f / Subscription::TRIAL_DAYS) * 100
   end
 
   def percentage_of_trial_completed
     return 0 unless subscription.present?
-    (1 - days_left_in_trial.to_f / 14) * 100
+    (1 - days_left_in_trial.to_f / Subscription::TRIAL_DAYS) * 100
   end
 
   private
