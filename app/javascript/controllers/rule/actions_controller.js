@@ -7,8 +7,7 @@ export default class extends Controller {
     "destroyField",
     "actionValue",
     "selectTemplate",
-    "textTemplate",
-    "toSpan"
+    "textTemplate"
   ];
 
   remove(e) {
@@ -43,17 +42,8 @@ export default class extends Controller {
   }
 
   #clearFormFields() {
-    const toRemove = [];
-
-    // Find all elements to remove, unless it's the "to" span
-    Array.from(this.actionValueTarget.children).forEach(child => {
-      if (child !== this.toSpanTarget) {
-        toRemove.push(child);
-      }
-    });
-
-    // Remove the elements
-    toRemove.forEach(element => element.remove());
+    // Remove all children from actionValueTarget
+    this.actionValueTarget.innerHTML = "";
   }
 
   #buildSelectFor(actionExecutor) {
@@ -64,11 +54,19 @@ export default class extends Controller {
     // Add options to the select element
     if (selectEl) {
       selectEl.innerHTML = "";
-      for (const option of actionExecutor.options) {
+      if (!actionExecutor.options || actionExecutor.options.length === 0) {
+        selectEl.disabled = true;
         const optionEl = document.createElement("option");
-        optionEl.value = option[1];
-        optionEl.textContent = option[0];
+        optionEl.textContent = "(none)";
         selectEl.appendChild(optionEl);
+      } else {
+        selectEl.disabled = false;
+        for (const option of actionExecutor.options) {
+          const optionEl = document.createElement("option");
+          optionEl.value = option[1];
+          optionEl.textContent = option[0];
+          selectEl.appendChild(optionEl);
+        }
       }
     }
 
@@ -80,6 +78,10 @@ export default class extends Controller {
   #buildTextInputFor() {
     // Clone the text template
     const template = this.textTemplateTarget.content.cloneNode(true);
+
+    // Ensure the input is always empty
+    const inputEl = template.querySelector("input");
+    if (inputEl) inputEl.value = "";
 
     // Add the template content to the actionValue target and ensure it's visible
     this.actionValueTarget.appendChild(template);

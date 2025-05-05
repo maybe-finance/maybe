@@ -13,10 +13,10 @@
 
     <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2"),
                 data: { rule__actions_target: "actionValue" } do %>
-      <span class="font-medium uppercase text-xs" data-rule--actions-target="toSpan">to</span>
       <%# Initial rendering based on rule.action_executors.first from the rule form. %>
       <%# This is currently always SetTransactionCategory from transaction_resource.rb, which is a select type. %>
       <%# Subsequent renders are injected by the Stimulus controller, which uses the templates from below. %>
+      <span class="font-medium uppercase text-xs">to</span>
       <%= form.select :value, action.options || [], {} %>
     <% end %>
   </div>
@@ -29,10 +29,12 @@
     
   <%# Templates for different input types - these will be cloned and used by the Stimulus controller %>
   <template data-rule--actions-target="selectTemplate">
+    <span class="font-medium uppercase text-xs">to</span>
     <%= form.select :value, [], {} %>
   </template>
   
   <template data-rule--actions-target="textTemplate">
+    <span class="font-medium uppercase text-xs">to</span>
     <%= form.text_field :value, placeholder: "Enter a value" %>
   </template>
 
