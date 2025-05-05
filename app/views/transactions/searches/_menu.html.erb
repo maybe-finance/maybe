@@ -6,7 +6,16 @@
   active_btn_classes: "bg-surface text-primary",
   inactive_btn_classes: "text-secondary hover:bg-container-inset"
 ) do |tabs| %>
-  <div id="transaction-filters-menu" class="flex flex-col md:flex-row h-[50vh] lg:max-h-auto z-10 md:h-80 w-full md:w-[540px] top-12 right-0 overflow-hidden">
+  <div id="transaction-filters-menu" class="bg-container fixed md:static inset-0 h-screen w-screen flex flex-col md:flex-row h-[50vh] lg:max-h-auto z-20 md:h-80 w-full md:w-[540px] top-0 md:top-12 right-0 overflow-hidden">
+
+    <!-- Mobile header - only visible on small screens -->
+    <div class="flex items-center justify-between p-3 border-b border-b-alpha-black-100 md:hidden">
+      <h2 class="text-lg font-medium">Filters</h2>
+      <button type="button" data-action="menu#close" class="p-2 hover:bg-container-inset rounded-md">
+        <%= lucide_icon("x", class: "w-5 h-5 text-secondary") %>
+      </button>
+    </div>
+
     <%= tabs.with_nav(classes: "shrink-0 flex w-full md:w-44 flex-row md:flex-col items-start p-3 text-sm font-medium text-secondary border-b md:border-b-0 md:border-r border-secondary overflow-x-auto md:overflow-x-visible") do |nav| %>
       <% transaction_search_filters.each do |filter| %>
         <%= nav.with_btn(id: filter[:key], label: filter[:label], classes: "w-full px-3 py-2 flex gap-2 items-center rounded-md") do %>
