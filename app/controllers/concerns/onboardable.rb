@@ -3,16 +3,9 @@ module Onboardable
 
   included do
     before_action :require_onboarding_and_upgrade
-    helper_method :subscription_pending?
   end
 
   private
-    # A subscription goes into "pending" mode immediately after checkout, but before webhooks are processed.
-    def subscription_pending?
-      subscribed_at = Current.session.subscribed_at
-      subscribed_at.present? && subscribed_at <= Time.current && subscribed_at > 1.hour.ago
-    end
-
     # First, we require onboarding, then once that's complete, we require an upgrade for non-subscribed users.
     def require_onboarding_and_upgrade
       return unless Current.user

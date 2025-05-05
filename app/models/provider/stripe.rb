@@ -10,8 +10,6 @@ class Provider::Stripe
     event = retrieve_event(event_id)
 
     case event.type
-    when "customer.created", "customer.updated"
-      CustomerEventProcessor.new(event).process
     when /^customer\.subscription\./
       SubscriptionEventProcessor.new(event).process
     else

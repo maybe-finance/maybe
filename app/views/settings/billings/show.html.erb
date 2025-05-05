@@ -11,9 +11,9 @@
         ) %>
 
         <div class="text-sm space-y-1">
-          <% if subscription_pending? %>
+          <% if @user.family.subscription.active? %>
             <p class="text-primary">
-              Your subscription is pending. You can still use Maybe+ while we process your subscription.
+              You are currently subscribed to <span class="font-medium">Maybe</span>
             </p>
           <% elsif @user.family.trialing? %>
             <p class="text-primary">
@@ -22,8 +22,6 @@
                 (<%= @user.family.days_left_in_trial %> days remaining)
               </span>
             </p>
-          <% elsif @user.family.subscribed? %>
-            <p class="text-primary">You are currently subscribed to <span class="font-medium">Maybe+</span></p>
           <% else %>
             <p class="text-primary">You are currently <span class="font-medium">not subscribed</span></p>
             <p class="text-secondary">Once you subscribe to Maybe+, you'll see your billing settings here.</p>
@@ -31,7 +29,7 @@
         </div>
       </div>
 
-      <% if @user.family.subscribed? %>
+      <% if @user.family.subscription.active? %>
         <%= render LinkComponent.new(
           text: "Manage",
           icon: "external-link",
@@ -40,7 +38,7 @@
           href: subscription_path,
           rel: "noopener"
         ) %>
-      <% elsif @user.family.trialing? && !subscription_pending? %>
+      <% else %>
         <%= render LinkComponent.new(
           text: "Choose plan",
           variant: "primary",
