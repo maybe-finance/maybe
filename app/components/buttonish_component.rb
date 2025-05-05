@@ -39,22 +39,19 @@ class ButtonishComponent < ViewComponent::Base
       container_classes: "px-2 py-1",
       icon_container_classes: "inline-flex items-center justify-center w-8 h-8",
       radius_classes: "rounded-md",
-      text_classes: "text-sm",
-      icon_classes: "w-4 h-4"
+      text_classes: "text-sm"
     },
     md: {
       container_classes: "px-3 py-2",
       icon_container_classes: "inline-flex items-center justify-center w-9 h-9",
       radius_classes: "rounded-lg",
-      text_classes: "text-sm",
-      icon_classes: "w-5 h-5"
+      text_classes: "text-sm"
     },
     lg: {
       container_classes: "px-4 py-3",
       icon_container_classes: "inline-flex items-center justify-center w-10 h-10",
       radius_classes: "rounded-xl",
-      text_classes: "text-base",
-      icon_classes: "w-6 h-6"
+      text_classes: "text-base"
     }
   }.freeze
 
@@ -92,9 +89,20 @@ class ButtonishComponent < ViewComponent::Base
     icon_only? ? size_data.dig(:icon_container_classes) : size_data.dig(:container_classes)
   end
 
+  def icon_color
+    # Map variant to icon color for the icon helper
+    case variant
+    when :primary, :icon_inverse
+      :white
+    when :destructive, :outline_destructive
+      :destructive
+    else
+      :default
+    end
+  end
+
   def icon_classes
     class_names(
-      size_data.dig(:icon_classes),
       variant_data.dig(:icon_classes)
     )
   end
