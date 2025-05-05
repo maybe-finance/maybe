@@ -1,13 +1,27 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium"><%= t(".tags") %></h1>
 
-  <%= render LinkComponent.new(
-    text: t(".new"),
-    variant: "primary",
-    href: new_tag_path,
-    icon: "plus",
-    frame: :modal
-  ) %>
+<div class="flex items-center gap-2">
+  <%= render MenuComponent.new do |menu| %>
+    <% menu.with_item(
+          variant: "button",
+          text: "Delete all",
+          href: destroy_all_tags_path,
+          method: :delete,
+          icon: "trash-2",
+          confirm: CustomConfirm.for_resource_deletion("all tags", high_severity: true)) %>
+  <% end %>
+
+    <%= render LinkComponent.new(
+      text: t(".new"),
+      variant: "primary",
+      href: new_tag_path,
+      icon: "plus",
+      frame: :modal
+    ) %>
+
+</div>
+
 </header>
 
 <div class="bg-container shadow-border-xs rounded-xl p-4">
