@@ -35,54 +35,60 @@
 
         <div class="bg-surface rounded-xl p-1 space-y-1 overflow-x-auto">
           <div class="px-4 py-2 flex items-center uppercase text-xs font-medium text-secondary">
-            <div class="w-40">Name</div>
-            <div class="ml-auto text-right flex items-center gap-6">
-              <div class="w-24">
+            <div class="hidden sm:block w-40">Name</div>
+            <div class="w-full sm:w-auto sm:ml-auto justify-between sm:justify-end text-right flex items-center gap-6">
+              <div class="w-auto sm:w-24">
                 <p>Weight</p>
               </div>
-              <div class="w-40">
+              <div class="w-auto sm:w-40">
                 <p>Value</p>
               </div>
             </div>
           </div>
 
-          <div class="shadow-border-xs rounded-lg bg-container min-w-fit">
+          <div class="shadow-border-xs rounded-lg bg-container">
             <% classification_group.account_groups.each do |account_group| %>
-              <details class="group rounded-lg open:bg-surface font-medium text-sm">
+              <details class="group rounded-lg open:bg-surface open:border-b-2 border-subdued font-medium text-sm">
                 <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
-                  <div class="w-40 shrink-0 flex items-center gap-4">
+                  <div class="w-40 shrink-0 items-center gap-4 hidden sm:flex">
                     <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
                     <p><%= account_group.name %></p>
                   </div>
 
-                  <div class="ml-auto flex items-center text-right gap-6">
-                    <div class="w-24 shrink-0 flex items-center justify-end gap-2">
+                  <div class="w-full sm:w-auto sm:ml-auto flex items-center justify-between sm:justify-end text-right gap-6">
+                    <div class="w-24 flex items-center sm:justify-end gap-2">
                       <%= render "pages/dashboard/group_weight", weight: account_group.weight, color: account_group.color %>
                     </div>
 
-                    <div class="w-40 shrink-0">
+                    <div class="w-auto sm:w-40 shrink-0">
                       <p><%= format_money(account_group.total_money) %></p>
+                      <div class="sm:hidden text-xs text-secondary truncate max-w-28 ml-auto">
+                        <%= account_group.name %>
+                      </div>
                     </div>
                   </div>
                 </summary>
 
                 <div>
                   <% account_group.accounts.each_with_index do |account, idx| %>
-                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
-                      <div class="flex items-center gap-3">
+                    <div class="pl-5 sm:pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
+                      <div class="hidden sm:flex sm:items-center sm:gap-3">
                         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
                         <%= link_to account.name, account_path(account) %>
                       </div>
 
-                      <div class="ml-auto flex items-center text-right gap-6">
+                      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end text-right gap-6">
                         <div class="w-24 shrink-0 flex items-center justify-end gap-2">
                           <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
                         </div>
 
-                        <div class="w-40 shrink-0">
+                        <div class="w-auto sm:w-40 shrink-0">
                           <p><%= format_money(account.balance_money) %></p>
+                          <div class="sm:hidden text-xs text-secondary truncate max-w-28 ml-auto">
+                            <%= account.name %>
+                          </div>
                         </div>
                       </div>
                     </div>
