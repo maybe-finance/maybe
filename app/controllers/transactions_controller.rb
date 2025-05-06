@@ -118,7 +118,7 @@ class TransactionsController < ApplicationController
         return false if time_since_last_rule_prompt < 1.day
       end
 
-      transaction.saved_change_to_category_id? &&
+      transaction.saved_change_to_category_id? && transaction.category_id.present? &&
       transaction.eligible_for_category_rule?
     end
 
