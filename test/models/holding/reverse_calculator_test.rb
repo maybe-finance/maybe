@@ -18,6 +18,30 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
     assert_equal [], calculated
   end
 
+  test "holding generation respects user timezone and last generated date is current user date" do
+    # Simulate user in EST timezone
+    Time.zone = "America/New_York"
+
+    # Set current time to 1am UTC on Jan 5, 2025
+    # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate holdings for)
+    travel_to Time.utc(2025, 01, 05, 1, 0, 0)
+
+    voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
+    Security::Price.create!(security: voo, date: "2025-01-02", price: 500)
+    Security::Price.create!(security: voo, date: "2025-01-03", price: 500)
+    Security::Price.create!(security: voo, date: "2025-01-04", price: 500)
+
+    # Today's holdings (provided)
+    @account.holdings.create!(security: voo, date: "2025-01-04", qty: 10, price: 500, amount: 5000, currency: "USD")
+
+    create_trade(voo, qty: 10, date: "2025-01-03", price: 500, account: @account)
+
+    expected = [ [ "2025-01-02", 0 ], [ "2025-01-03", 5000 ], [ "2025-01-04", 5000 ] ]
+    calculated = Holding::ReverseCalculator.new(@account).calculate
+
+    assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.amount ] }
+  end
+
   # Should be able to handle this case, although we should not be reverse-syncing an account without provided current day holdings
   test "reverse portfolio with trades but without current day holdings" do
     voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
@@ -70,6 +94,46 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
       Holding.new(security: @voo, date: Date.current, qty: 10, price: 500, amount: 5000),
       Holding.new(security: @wmt, date: Date.current, qty: 100, price: 100, amount: 10000),
       Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
+    ]
+
+    calculated = Holding::ReverseCalculator.new(@account).calculate
+
+    assert_equal expected.length, calculated.length
+
+    expected.each do |expected_entry|
+      calculated_entry = calculated.find { |c| c.security == expected_entry.security && c.date == expected_entry.date }
+
+      assert_equal expected_entry.qty, calculated_entry.qty, "Qty mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+      assert_equal expected_entry.price, calculated_entry.price, "Price mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+      assert_equal expected_entry.amount, calculated_entry.amount, "Amount mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+    end
+  end
+
+  # For a reverse sync, Plaid will provide today's holdings + prices.  We need to match those exactly so balances match in net worth rollups.
+  test "current day holdings always match provided holdings and prices" do
+    # Provider gives us total value of $10,000 ($5,000 cash, $5,000 in holdings)
+    @account.update!(balance: 10000, cash_balance: 5000)
+
+    wmt = Security.create!(ticker: "WMT", name: "Walmart Inc.")
+    create_trade(wmt, qty: 50, date: 1.day.ago.to_date, price: 98, account: @account)
+
+    @account.holdings.create!(
+      date: Date.current,
+      price: 100,
+      qty: 50,
+      amount: 5000,
+      currency: "USD",
+      security: wmt
+    )
+
+    Security::Price.create!(security: wmt, date: Date.current, price: 102) # This price should be ignored on current day
+    Security::Price.create!(security: wmt, date: 1.day.ago, price: 98) # This price will be used for historical holding calculation
+    Security::Price.create!(security: wmt, date: 2.days.ago, price: 95) # This price will be used for historical holding calculation
+
+    expected = [
+      Holding.new(security: wmt, date: 2.days.ago.to_date, qty: 0, price: 95, amount: 0), # Uses market price, empty holding
+      Holding.new(security: wmt, date: 1.day.ago.to_date, qty: 50, price: 98, amount: 4900), # Uses market price
+      Holding.new(security: wmt, date: Date.current, qty: 50, price: 100, amount: 5000) # Uses holding price, not market price
     ]
 
     calculated = Holding::ReverseCalculator.new(@account).calculate

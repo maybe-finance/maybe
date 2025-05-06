@@ -55,6 +55,7 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
           period: period,
           interval: "1 month",
           favorable_direction: "up",
+          timezone: family.timezone
         )
 
         to_ai_time_series(balance_series)

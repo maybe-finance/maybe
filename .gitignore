@@ -69,3 +69,5 @@ coverage
 node_modules
 
 compose.yml
+
+plaid_test_accounts/
