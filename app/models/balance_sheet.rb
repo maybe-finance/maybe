@@ -69,7 +69,7 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    active_accounts.balance_series(currency: currency, period: period, favorable_direction: "up", timezone: family.timezone)
+    active_accounts.balance_series(currency: currency, period: period, favorable_direction: "up")
   end
 
   def currency

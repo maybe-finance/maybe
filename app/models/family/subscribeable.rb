@@ -34,7 +34,15 @@ module Family::Subscribeable
   end
 
   def trialing?
-    subscription&.status == "trialing" && days_left_in_trial.positive?
+    subscription&.trialing? && days_left_in_trial.positive?
+  end
+
+  def has_active_subscription?
+    subscription&.active?
+  end
+
+  def next_billing_date
+    subscription&.current_period_ends_at
   end
 
   def start_subscription!(stripe_subscription_id)

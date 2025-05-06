@@ -2,6 +2,6 @@ class Settings::BillingsController < ApplicationController
   layout "settings"
 
   def show
-    @user = Current.user
+    @family = Current.family
   end
 end

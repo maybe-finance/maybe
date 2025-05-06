@@ -11,15 +11,19 @@
         ) %>
 
         <div class="text-sm space-y-1">
-          <% if @user.family.subscription.active? %>
+          <% if @family.has_active_subscription? %>
             <p class="text-primary">
-              You are currently subscribed to <span class="font-medium">Maybe</span>
+              <span>You are currently subscribed to the <span class="font-medium">Monthly</span> plan.</span>
+
+              <% if @family.next_billing_date %>
+                <span>Your plan renews on <span class="font-medium"><%= @family.next_billing_date.strftime("%B %d, %Y") %></span>.</span>
+              <% end %>
             </p>
-          <% elsif @user.family.trialing? %>
+          <% elsif @family.trialing? %>
             <p class="text-primary">
-              You are currently trialing <span class="font-medium">Maybe+</span>
+              You are currently trialing Maybe
               <span class="text-secondary">
-                (<%= @user.family.days_left_in_trial %> days remaining)
+                (<%= @family.days_left_in_trial %> days remaining)
               </span>
             </p>
           <% else %>
@@ -29,7 +33,7 @@
         </div>
       </div>
 
-      <% if @user.family.subscription.active? %>
+      <% if @family.has_active_subscription? %>
         <%= render LinkComponent.new(
           text: "Manage",
           icon: "external-link",

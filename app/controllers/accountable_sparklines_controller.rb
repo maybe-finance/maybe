@@ -7,7 +7,6 @@ class AccountableSparklinesController < ApplicationController
               .where(accountable_type: @accountable.name)
               .balance_series(
                 currency: family.currency,
-                timezone: family.timezone,
                 favorable_direction: @accountable.favorable_direction
               )
     end

@@ -2,7 +2,7 @@ module Account::Chartable
   extend ActiveSupport::Concern
 
   class_methods do
-    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up", view: :balance, interval: nil, timezone: nil)
+    def balance_series(currency:, period: Period.last_30_days, favorable_direction: "up", view: :balance, interval: nil)
       raise ArgumentError, "Invalid view type" unless [ :balance, :cash_balance, :holdings_balance ].include?(view.to_sym)
 
       series_interval = interval || period.interval
@@ -132,8 +132,7 @@ module Account::Chartable
       period: period,
       view: view,
       interval: interval,
-      favorable_direction: favorable_direction,
-      timezone: family.timezone
+      favorable_direction: favorable_direction
     )
   end
 
