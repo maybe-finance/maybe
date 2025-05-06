@@ -79,8 +79,8 @@
                         <%= link_to account.name, account_path(account) %>
                       </div>
 
-                      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end text-right gap-6">
-                        <div class="w-24 shrink-0 flex items-center justify-end gap-2">
+                      <div class="w-full sm:w-auto sm:ml-auto flex items-center justify-between sm:justify-end text-right gap-6">
+                        <div class="w-24 shrink-0 flex items-center sm:justify-end sm:pl-2 gap-2">
                           <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
                         </div>
 
