@@ -6,7 +6,7 @@ module Family::Subscribeable
   end
 
   def billing_email
-    primary_admin = users.admin.order(:created_at).first
+    primary_admin = users.admin.order(:created_at).first || users.super_admin.order(:created_at).first
 
     unless primary_admin.present?
       raise "No primary admin found for family #{id}.  This is an invalid data state and should never occur."
