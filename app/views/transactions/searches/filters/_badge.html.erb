@@ -2,7 +2,7 @@
 <li class="flex items-center gap-1 text-sm border border-secondary rounded-3xl p-1.5">
   <% if param_key == "start_date" || param_key == "end_date" %>
     <div class="flex items-center gap-2">
-      <%= lucide_icon "calendar", class: "w-5 h-5 text-secondary" %>
+      <%= icon "calendar" %>
       <p>
         <% if param_key == "start_date" %>
           <%= t(".on_or_after", date: param_value) %>
@@ -13,7 +13,7 @@
     </div>
   <% elsif param_key == "search" %>
     <div class="flex items-center gap-2">
-      <%= lucide_icon "text", class: "w-5 h-5 text-secondary" %>
+      <%= icon "text" %>
       <p><%= "\"#{param_value}\"".truncate(20) %></p>
     </div>
   <% elsif param_key == "accounts" %>
@@ -23,7 +23,7 @@
     </div>
   <% elsif param_key == "amount" %>
     <div class="flex items-center gap-2">
-      <%= lucide_icon "hash", class: "w-5 h-5 text-secondary" %>
+      <%= icon "hash" %>
       <p><%= param_value %></p>
     </div>
   <% elsif param_key == "types" %>
@@ -45,6 +45,6 @@
         method: :delete,
         data: { turbo: false },
         class: "flex items-center cursor-pointer" do %>
-    <%= lucide_icon "x", class: "w-4 h-4 text-secondary hover:text-primary" %>
+    <%= icon "x", size: "sm", class: "hover:text-primary" %>
   <% end %>
 </li>

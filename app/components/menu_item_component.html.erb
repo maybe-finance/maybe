@@ -4,7 +4,7 @@
   <div class="px-1">
     <%= wrapper do %>
       <% if icon %>
-        <%= lucide_icon(icon, class: destructive? ? "text-destructive" : "fg-gray") %>
+        <%= helpers.icon(icon, color: destructive? ? :destructive : :default) %>
       <% end %>
       <%= tag.span(text, class: text_classes) %>
     <% end %>

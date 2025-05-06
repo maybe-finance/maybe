@@ -40,12 +40,11 @@ class Holding::BaseCalculator
       new_quantities
     end
 
-    def build_holdings(portfolio, date)
+    def build_holdings(portfolio, date, price_source: nil)
       portfolio.map do |security_id, qty|
-        price = portfolio_cache.get_price(security_id, date)
+        price = portfolio_cache.get_price(security_id, date, source: price_source)
 
         if price.nil?
-          Rails.logger.warn "No price found for security #{security_id} on #{date}"
           next
         end
 

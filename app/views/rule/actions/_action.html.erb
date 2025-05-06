@@ -2,7 +2,6 @@
 
 <% action = form.object %>
 <% rule = action.rule %>
-<% needs_value = action.executor.type == "select" %>
 
 <li data-controller="rule--actions" data-rule--actions-action-executors-value="<%= rule.action_executors.to_json %>" class="flex items-center gap-3">
   <%= form.hidden_field :_destroy, value: false, data: { rule__actions_target: "destroyField" } %>
@@ -12,10 +11,13 @@
       <%= form.select :action_type, rule.action_executors.map { |executor| [ executor.label, executor.key ] }, {}, data: { action: "rule--actions#handleActionTypeChange" } %>
     </div>
 
-    <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2", "hidden" => !needs_value),
+    <%= tag.div class: class_names("min-w-1/2 flex items-center gap-2"),
                 data: { rule__actions_target: "actionValue" } do %>
+      <%# Initial rendering based on rule.action_executors.first from the rule form. %>
+      <%# This is currently always SetTransactionCategory from transaction_resource.rb, which is a select type. %>
+      <%# Subsequent renders are injected by the Stimulus controller, which uses the templates from below. %>
       <span class="font-medium uppercase text-xs">to</span>
-      <%= form.select :value, action.options || [], {}, disabled: !needs_value %>
+      <%= form.select :value, action.options || [], {} %>
     <% end %>
   </div>
 
@@ -24,4 +26,17 @@
     size: "sm",
     as_button: true,
     data: { action: "rule--actions#remove", rule__actions_destroy_param: action.persisted? }) %>
+    
+  <%# Templates for different input types - these will be cloned and used by the Stimulus controller %>
+  <template data-rule--actions-target="selectTemplate">
+    <span class="font-medium uppercase text-xs">to</span>
+    <%= form.select :value, [], {} %>
+  </template>
+  
+  <template data-rule--actions-target="textTemplate">
+    <span class="font-medium uppercase text-xs">to</span>
+    <%= form.text_field :value, placeholder: "Enter a value" %>
+  </template>
+
+  <%# The function type doesn't need an input, so no template is required.%>
 </li>
