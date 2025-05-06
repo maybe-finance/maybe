@@ -13,7 +13,7 @@
         <div class="text-sm space-y-1">
           <% if @family.has_active_subscription? %>
             <p class="text-primary">
-              <span>You are currently subscribed to the <span class="font-medium">Monthly</span> plan.</span>
+              <span>You are currently subscribed to the <span class="font-medium"><%= @family.subscription.name %></span>.</span>
 
               <% if @family.next_billing_date %>
                 <span>Your plan renews on <span class="font-medium"><%= @family.next_billing_date.strftime("%B %d, %Y") %></span>.</span>
