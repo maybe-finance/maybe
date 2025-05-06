@@ -1,6 +1,7 @@
 <%# locals: (rule:) %>
 
-<div class="flex justify-between items-center gap-4 bg-white shadow-border-xs rounded-md p-4">
+<div class="flex justify-between items-center gap-4 bg-white shadow-border-xs rounded-md p-4 <%= 'text-secondary' unless rule.active? %>">
+
   <div class="text-sm space-y-1.5">
     <% if rule.name.present? %>
       <h3 class="font-medium text-md text-primary"><%= rule.name %></h3>
