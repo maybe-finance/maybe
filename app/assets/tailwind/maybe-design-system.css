@@ -26,6 +26,11 @@
   --color-destructive: var(--color-red-600);
   --color-shadow: --alpha(var(--color-black) / 6%);
 
+  /* Colors used in Stimulus controllers with SVGs (easier to define light/dark mode here than toggle within the controllers) */
+  /* See @layer base block below for dark mode overrides */
+  --budget-unused-fill: var(--color-gray-200);
+  --budget-unallocated-fill: var(--color-gray-50);
+
   /* Gray scale */
   --color-gray-25: #FAFAFA;
   --color-gray-50: #F7F7F7;
@@ -249,6 +254,10 @@
     --color-warning: var(--color-yellow-400);
     --color-destructive: var(--color-red-400);
     --color-shadow: --alpha(var(--color-white) / 8%);
+
+    /* Dark mode overrides for colors used in Stimulus controllers with SVGs */
+    --budget-unused-fill: var(--color-gray-500);
+    --budget-unallocated-fill: var(--color-gray-700);
 
     --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 8%);
     --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 8%);
