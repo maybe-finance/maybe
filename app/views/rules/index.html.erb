@@ -1,6 +1,5 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Rules</h1>
-
   <div class="flex items-center gap-2">
     <% if @rules.any? %>
       <%= render MenuComponent.new do |menu| %>
@@ -13,7 +12,6 @@
           confirm: CustomConfirm.for_resource_deletion("All rules", high_severity: true)) %>
       <% end %>
     <% end %>
-
     <%= render LinkComponent.new(
       text: "New rule",
       variant: "primary",
@@ -23,7 +21,6 @@
     ) %>
   </div>
 </header>
-
 <% if self_hosted? %>
   <div class="flex items-center gap-2 mb-2 py-4">
     <%= icon("circle-alert", size: "sm") %>
@@ -32,9 +29,7 @@
     </p>
   </div>
 <% end %>
-
 <div class="bg-container shadow-border-xs rounded-xl p-4">
-
   <% if @rules.any? %>
     <div class="rounded-xl bg-gray-25">
       <div class="flex items-center justify-between px-4 py-2 text-xs uppercase">
@@ -43,30 +38,27 @@
           <span class="text-subdued">&middot;</span>
           <p><%= @rules.count %></p>
         </div>
-        
         <div class="flex items-center gap-1">
-          <span class="text-secondary">Sort by:</span>
-          <div class="flex items-center">
-            <%= link_to rules_path(sort_by: "name", direction: (@sort_by == "name" && @direction == "asc") ? "desc" : "asc"), 
-                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'name' ? 'font-medium' : ''}" do %>
-              <span class="mr-1">Name</span>
-              <% if @sort_by == "name" %>
-                <%= icon(@direction == "asc" ? "arrow-up" : "arrow-down", size: "xs") %>
-              <% end %>
+          <span class="text-secondary pr-2">Sort by:</span>
+          <%= form_with url: rules_path, method: :get, local: true, class: "flex items-center gap-2", data: { controller: "auto-submit-form" } do |form| %>
+            <%= form.select :sort_by,
+                      options_for_select([["Name", "name"], ["Updated At", "updated_at"]], @sort_by),
+                      {},
+                      class: "min-w-[120px] rounded border-primary cursor-pointer text-primary text-sm w-auto",
+                      data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
+            <%= form.hidden_field :direction, value: (@direction == "asc" ? "desc" : "asc") %>
+            <%= render ButtonComponent.new(
+                variant: :icon,
+                icon: "arrow-up-down",
+                size: :sm,
+                type: "submit",
+                title: "Toggle sort direction"
+              ) do %>
+              <span class="sr-only">Toggle sort direction</span>
             <% end %>
-          </div>
-          <div class="flex items-center">
-            <%= link_to rules_path(sort_by: "updated_at", direction: (@sort_by == "updated_at" && @direction == "asc") ? "desc" : "asc"), 
-                  class: "px-2 py-1 rounded flex items-center hover:bg-gray-100 #{@sort_by == 'updated_at' ? 'font-medium' : ''}" do %>
-              <span class="mr-1">Updated At</span>
-              <% if @sort_by == "updated_at" %>
-                <%= icon(@direction == "asc" ? "arrow-up" : "arrow-down", size: "xs") %>
-              <% end %>
-            <% end %>
-          </div>
+          <% end %>
         </div>
       </div>
-
       <div class="space-y-1 p-1">
         <% @rules.each do |rule| %>
           <%= render "rule", rule: rule %>
