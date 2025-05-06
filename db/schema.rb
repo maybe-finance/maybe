@@ -222,15 +222,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.datetime "updated_at", null: false
     t.string "currency", default: "USD"
     t.string "locale", default: "en"
-    t.string "stripe_plan_id"
     t.string "stripe_customer_id"
-    t.string "stripe_subscription_status", default: "incomplete"
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
     t.datetime "last_synced_at"
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
-    t.datetime "trial_started_at"
     t.boolean "early_access", default: false
   end
 

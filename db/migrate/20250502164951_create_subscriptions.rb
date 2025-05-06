@@ -33,5 +33,9 @@ class CreateSubscriptions < ActiveRecord::Migration[7.2]
         SQL
       end
     end
+
+    remove_column :families, :stripe_subscription_status
+    remove_column :families, :trial_started_at
+    remove_column :families, :stripe_plan_id
   end
 end
