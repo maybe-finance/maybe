@@ -19,15 +19,26 @@ class HoldingTest < ActiveSupport::TestCase
     assert_in_delta expected_nvda_weight, @nvda.weight, 0.001
   end
 
-  test "calculates simple average cost basis" do
+  test "calculates average cost basis" do
     create_trade(@amzn.security, account: @account, qty: 10, price: 212.00, date: 1.day.ago.to_date)
     create_trade(@amzn.security, account: @account, qty: 15, price: 216.00, date: Date.current)
 
     create_trade(@nvda.security, account: @account, qty: 5, price: 128.00, date: 1.day.ago.to_date)
     create_trade(@nvda.security, account: @account, qty: 30, price: 124.00, date: Date.current)
 
-    assert_equal Money.new((212.0 + 216.0) / 2), @amzn.avg_cost
-    assert_equal Money.new((128.0 + 124.0) / 2), @nvda.avg_cost
+    assert_equal Money.new((212.00 + 216.00).to_d / 2), @amzn.avg_cost
+    assert_equal Money.new((128.00 + 124.00).to_d / 2), @nvda.avg_cost
+  end
+
+  test "calculates average cost basis from another currency" do
+    create_trade(@amzn.security, account: @account, qty: 10, price: 212.00, date: 1.day.ago.to_date, currency: "CAD")
+    create_trade(@amzn.security, account: @account, qty: 15, price: 216.00, date: Date.current, currency: "CAD")
+
+    create_trade(@nvda.security, account: @account, qty: 5, price: 128.00, date: 1.day.ago.to_date, currency: "CAD")
+    create_trade(@nvda.security, account: @account, qty: 30, price: 124.00, date: Date.current, currency: "CAD")
+
+    assert_equal Money.new((212.00 + 216.00).to_d / 2, "CAD").exchange_to("USD", fallback_rate: 1), @amzn.avg_cost
+    assert_equal Money.new((128.00 + 124.00).to_d / 2, "CAD").exchange_to("USD", fallback_rate: 1), @nvda.avg_cost
   end
 
   test "calculates total return trend" do
