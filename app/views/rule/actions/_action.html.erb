@@ -26,13 +26,13 @@
     size: "sm",
     as_button: true,
     data: { action: "rule--actions#remove", rule__actions_destroy_param: action.persisted? }) %>
-    
+
   <%# Templates for different input types - these will be cloned and used by the Stimulus controller %>
   <template data-rule--actions-target="selectTemplate">
     <span class="font-medium uppercase text-xs">to</span>
     <%= form.select :value, [], {} %>
   </template>
-  
+
   <template data-rule--actions-target="textTemplate">
     <span class="font-medium uppercase text-xs">to</span>
     <%= form.text_field :value, placeholder: "Enter a value" %>
