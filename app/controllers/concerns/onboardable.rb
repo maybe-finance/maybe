@@ -11,9 +11,9 @@ module Onboardable
       return unless Current.user
       return unless redirectable_path?(request.path)
 
-      if !Current.user.onboarded?
+      if Current.user.needs_onboarding?
         redirect_to onboarding_path
-      elsif !Current.family.subscription.present?
+      elsif Current.family.needs_subscription?
         redirect_to trial_onboarding_path
       elsif Current.family.upgrade_required?
         redirect_to upgrade_subscription_path

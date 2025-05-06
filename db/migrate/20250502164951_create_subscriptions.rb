@@ -18,24 +18,29 @@ class CreateSubscriptions < ActiveRecord::Migration[7.2]
 
     reversible do |dir|
       dir.up do
-        execute <<~SQL
-          INSERT INTO subscriptions (family_id, status, trial_ends_at, created_at, updated_at)
-          SELECT
-            f.id,
-            COALESCE(f.stripe_subscription_status, 'incomplete'),
-            CASE
-              WHEN f.trial_started_at IS NOT NULL THEN f.trial_started_at + INTERVAL '14 days'
-              ELSE NULL
-            END,
-            now(),
-            now()
-          FROM families f
-        SQL
+        if Rails.application.config.app_mode.managed?
+          execute <<~SQL
+            INSERT INTO subscriptions (family_id, status, trial_ends_at, created_at, updated_at)
+            SELECT
+              f.id,
+              CASE
+                WHEN f.trial_started_at IS NOT NULL THEN 'trialing'
+                ELSE COALESCE(f.stripe_subscription_status, 'incomplete')
+              END,
+              CASE
+                WHEN f.trial_started_at IS NOT NULL THEN f.trial_started_at + INTERVAL '14 days'
+                ELSE NULL
+              END,
+              now(),
+              now()
+            FROM families f
+          SQL
+        end
       end
     end
 
-    remove_column :families, :stripe_subscription_status
-    remove_column :families, :trial_started_at
-    remove_column :families, :stripe_plan_id
+    remove_column :families, :stripe_subscription_status, :string
+    remove_column :families, :trial_started_at, :datetime
+    remove_column :families, :stripe_plan_id, :string
   end
 end

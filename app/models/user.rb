@@ -156,6 +156,10 @@ class User < ApplicationRecord
     onboarded_at.present?
   end
 
+  def needs_onboarding?
+    !onboarded?
+  end
+
   private
     def ensure_valid_profile_image
       return unless profile_image.attached?

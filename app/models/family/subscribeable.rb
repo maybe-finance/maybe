@@ -16,8 +16,8 @@ module Family::Subscribeable
   end
 
   def upgrade_required?
-    return false if subscription.active? || subscription.trialing?
     return false if self_hoster?
+    return false if subscription&.active? || subscription&.trialing?
 
     true
   end
@@ -39,6 +39,10 @@ module Family::Subscribeable
 
   def has_active_subscription?
     subscription&.active?
+  end
+
+  def needs_subscription?
+    subscription.nil? && !self_hoster?
   end
 
   def next_billing_date
