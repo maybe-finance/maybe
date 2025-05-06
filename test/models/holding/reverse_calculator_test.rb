@@ -85,6 +85,46 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
     end
   end
 
+  # For a reverse sync, Plaid will provide today's holdings + prices.  We need to match those exactly so balances match in net worth rollups.
+  test "current day holdings always match provided holdings and prices" do
+    # Provider gives us total value of $10,000 ($5,000 cash, $5,000 in holdings)
+    @account.update!(balance: 10000, cash_balance: 5000)
+
+    wmt = Security.create!(ticker: "WMT", name: "Walmart Inc.")
+    create_trade(wmt, qty: 50, date: 1.day.ago.to_date, price: 98, account: @account)
+
+    @account.holdings.create!(
+      date: Date.current,
+      price: 100,
+      qty: 50,
+      amount: 5000,
+      currency: "USD",
+      security: wmt
+    )
+
+    Security::Price.create!(security: wmt, date: Date.current, price: 102) # This price should be ignored on current day
+    Security::Price.create!(security: wmt, date: 1.day.ago, price: 98) # This price will be used for historical holding calculation
+    Security::Price.create!(security: wmt, date: 2.days.ago, price: 95) # This price will be used for historical holding calculation
+
+    expected = [
+      Holding.new(security: wmt, date: 2.days.ago.to_date, qty: 0, price: 95, amount: 0), # Uses market price, empty holding
+      Holding.new(security: wmt, date: 1.day.ago.to_date, qty: 50, price: 98, amount: 4900), # Uses market price
+      Holding.new(security: wmt, date: Date.current, qty: 50, price: 100, amount: 5000) # Uses holding price, not market price
+    ]
+
+    calculated = Holding::ReverseCalculator.new(@account).calculate
+
+    assert_equal expected.length, calculated.length
+
+    expected.each do |expected_entry|
+      calculated_entry = calculated.find { |c| c.security == expected_entry.security && c.date == expected_entry.date }
+
+      assert_equal expected_entry.qty, calculated_entry.qty, "Qty mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+      assert_equal expected_entry.price, calculated_entry.price, "Price mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+      assert_equal expected_entry.amount, calculated_entry.amount, "Amount mismatch for #{expected_entry.security.ticker} on #{expected_entry.date}"
+    end
+  end
+
   private
     def assert_holdings(expected, calculated)
       expected.each do |expected_entry|

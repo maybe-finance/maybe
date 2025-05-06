@@ -71,4 +71,42 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_equal expected, calculated
   end
+
+  test "holdings and trades sync" do
+    aapl = securities(:aapl)
+
+    # Account starts at a value of $5000
+    create_valuation(account: @account, date: 2.days.ago.to_date, amount: 5000)
+
+    # Share purchase reduces cash balance by $1000, but keeps overall balance same
+    create_trade(aapl, account: @account, qty: 10, date: 1.day.ago.to_date, price: 100)
+
+    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
+    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
+
+    # Given constant prices, overall balance (account value) should be constant
+    # (the single trade doesn't affect balance; it just alters cash vs. holdings composition)
+    expected = [ 0, 5000, 5000, 5000 ]
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+
+    assert_equal expected, calculated
+  end
+
+  # Balance calculator is entirely reliant on HoldingCalculator and respects whatever holding records it creates.
+  test "holdings are additive to total balance" do
+    aapl = securities(:aapl)
+
+    # Account starts at a value of $5000
+    create_valuation(account: @account, date: 2.days.ago.to_date, amount: 5000)
+
+    # Even though there are no trades in the history, the calculator will still add the holdings to the total balance
+    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
+    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
+
+    # Start at zero, then valuation of $5000, then tack on $1000 of holdings for remaining 2 days
+    expected = [ 0, 5000, 6000, 6000 ]
+    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+
+    assert_equal expected, calculated
+  end
 end
