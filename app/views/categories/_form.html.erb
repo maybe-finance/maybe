@@ -7,7 +7,7 @@
         <%= render partial: "color_avatar", locals: { category: category } %>
 
         <details data-category-target="details">
-          <summary class="cursor-pointer absolute -bottom-2 -right-2 flex justify-center items-center bg-gray-50 border-2 w-7 h-7 border-white rounded-full text-gray-500">
+          <summary class="cursor-pointer absolute -bottom-2 -right-2 flex justify-center items-center bg-surface-inset hover:bg-surface-inset-hover border-2 w-7 h-7 border-subdued rounded-full text-secondary">
             <%= icon("pen", size: "sm") %>
           </summary>
 
@@ -19,7 +19,7 @@
                 <% Category::COLORS.each do |color| %>
                   <label class="relative">
                     <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->category#handleColorChange" } %>
-                    <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500" style="background-color: <%= color %>"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-gray-500" style="background-color: <%= color %>"></div>
                   </label>
                 <% end %>
                 <label class="relative">
@@ -41,12 +41,12 @@
             </div>
 
             <div class="flex flex-wrap gap-2 justify-center flex-col w-87">
-              <h4 class="text-gray-500 text-sm">Icon</h4>
+              <h4 class="text-secondary text-sm">Icon</h4>
               <div class="flex flex-wrap gap-0.5">
                 <% Category.icon_codes.each do |icon| %>
                   <label class="relative">
                     <%= f.radio_button :lucide_icon, icon, class: "sr-only peer", data: { action: "change->category#handleIconChange change->category#handleIconColorChange", category_target:"icon" } %>
-                    <div class="w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 peer-checked:bg-gray-100 border-1 border-transparent">
+                    <div class="text-secondary w-7 h-7 flex m-0.5 items-center justify-center rounded-full cursor-pointer hover:bg-container-inset-hover peer-checked:bg-container-inset border-1 border-transparent">
                       <%= icon(icon, size: "sm", color: "current") %>
                     </div>
                   </label>
