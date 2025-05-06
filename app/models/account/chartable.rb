@@ -7,16 +7,13 @@ module Account::Chartable
 
       series_interval = interval || period.interval
 
-      local_today = Time.current.in_time_zone(timezone || "UTC").to_date
-
       balances = Balance.find_by_sql([
         balance_series_query,
         {
           start_date: period.start_date,
           end_date: period.end_date,
           interval: series_interval,
-          target_currency: currency,
-          end_date: local_today
+          target_currency: currency
         }
       ])
 

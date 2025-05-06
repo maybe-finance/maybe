@@ -23,6 +23,22 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     assert_equal expected, calculated.map(&:balance)
   end
 
+  test "balance generation respects user timezone and last generated date is current user date" do
+    # Simulate user in EST timezone
+    Time.zone = "America/New_York"
+
+    # Set current time to 1am UTC on Jan 5, 2025
+    # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate balances for)
+    travel_to Time.utc(2025, 01, 05, 1, 0, 0)
+
+    create_valuation(account: @account, date: "2025-01-03", amount: 17000)
+
+    expected = [ [ "2025-01-02", 17000 ], [ "2025-01-03", 17000 ], [ "2025-01-04", @account.balance ] ]
+    calculated = Balance::ReverseCalculator.new(@account).calculate
+
+    assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.balance ] }
+  end
+
   test "valuations sync" do
     create_valuation(account: @account, date: 4.days.ago.to_date, amount: 17000)
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 19000)

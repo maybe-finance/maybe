@@ -13,9 +13,7 @@ class Holding::ReverseCalculator < Holding::BaseCalculator
 
       holdings = []
 
-      local_today = Time.current.in_time_zone(account.family.timezone).to_date
-
-      local_today.downto(account.start_date).each do |date|
+      Date.current.downto(account.start_date).each do |date|
         today_trades = portfolio_cache.get_trades(date: date)
         previous_portfolio = transform_portfolio(current_portfolio, today_trades, direction: :reverse)
 

@@ -6,9 +6,7 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
 
       @balances = []
 
-      local_today = Time.current.in_time_zone(account.family.timezone).to_date
-
-      account.start_date.upto(local_today).each do |date|
+      account.start_date.upto(Date.current).each do |date|
         entries = sync_cache.get_entries(date)
         holdings = sync_cache.get_holdings(date)
         holdings_value = holdings.sum(&:amount)

@@ -13,6 +13,23 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     )
   end
 
+  test "balance generation respects user timezone and last generated date is current user date" do
+    # Simulate user in EST timezone
+    Time.zone = "America/New_York"
+
+    # Set current time to 1am UTC on Jan 5, 2025
+    # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate balances for)
+    travel_to Time.utc(2025, 01, 05, 1, 0, 0)
+
+    # Create a valuation for Jan 3, 2025
+    create_valuation(account: @account, date: "2025-01-03", amount: 17000)
+
+    expected = [ [ "2025-01-02", 0 ], [ "2025-01-03", 17000 ], [ "2025-01-04", 17000 ] ]
+    calculated = Balance::ForwardCalculator.new(@account).calculate
+
+    assert_equal expected, calculated.map { |b| [ b.date.to_s, b.balance ] }
+  end
+
   # When syncing forwards, we don't care about the account balance.  We generate everything based on entries, starting from 0.
   test "no entries sync" do
     assert_equal 0, @account.balances.count

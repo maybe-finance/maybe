@@ -9,9 +9,7 @@ class Holding::ForwardCalculator < Holding::BaseCalculator
       next_portfolio = {}
       holdings = []
 
-      local_today = Time.current.in_time_zone(account.family.timezone).to_date
-
-      account.start_date.upto(local_today).each do |date|
+      account.start_date.upto(Date.current).each do |date|
         trades = portfolio_cache.get_trades(date: date)
         next_portfolio = transform_portfolio(current_portfolio, trades, direction: :forward)
         holdings += build_holdings(next_portfolio, date)
