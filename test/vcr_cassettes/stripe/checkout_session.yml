@@ -1,0 +1,181 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.stripe.com/v1/checkout/sessions/cs_test_b1RD8r6DAkSA8vrQ3grBC2QVgR5zUJ7QQFuVHZkcKoSYaEOQgCMPMOCOM5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/15.1.0
+      Authorization:
+      - Bearer <STRIPE_SECRET_KEY>
+      Stripe-Version:
+      - 2025-04-30.basil
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"15.1.0","lang":"ruby","lang_version":"3.4.1 p0 (2024-12-25)","platform":"arm64-darwin24","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Zachs-MacBook-Pro.local 24.3.0 Darwin Kernel Version 24.3.0: Thu Jan  2 20:24:16
+        PST 2025; root:xnu-11215.81.4~3/RELEASE_ARM64_T6000 arm64","hostname":"Zachs-MacBook-Pro.local"}'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 05 May 2025 16:09:23 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2667'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src
+        'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=7L6NHIm4wk05H5wi0PfH951BH62utb5j2ZImtzEXvcfJgdc1v5juGoNb0oSAXIHhGQtWiGOiCmz3UG1W
+      Request-Id:
+      - req_c2n4M98HkgTk63
+      Stripe-Version:
+      - 2025-04-30.basil
+      Vary:
+      - Origin
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - ABGHI
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cs_test_b1RD8r6DAkSA8vrQ3grBC2QVgR5zUJ7QQFuVHZkcKoSYaEOQgCMPMOCOM5",
+          "object": "checkout.session",
+          "adaptive_pricing": null,
+          "after_expiration": null,
+          "allow_promotion_codes": true,
+          "amount_subtotal": 900,
+          "amount_total": 900,
+          "automatic_tax": {
+            "enabled": false,
+            "liability": null,
+            "provider": null,
+            "status": null
+          },
+          "billing_address_collection": null,
+          "cancel_url": "http://localhost:3000/subscription/upgrade?plan=monthly",
+          "client_reference_id": null,
+          "client_secret": null,
+          "collected_information": {
+            "shipping_details": null
+          },
+          "consent": null,
+          "consent_collection": null,
+          "created": 1746281950,
+          "currency": "usd",
+          "currency_conversion": null,
+          "custom_fields": [],
+          "custom_text": {
+            "after_submit": null,
+            "shipping_address": null,
+            "submit": null,
+            "terms_of_service_acceptance": null
+          },
+          "customer": "cus_SFBH32Bf5lsggB",
+          "customer_creation": "always",
+          "customer_details": {
+            "address": {
+              "city": null,
+              "country": "US",
+              "line1": null,
+              "line2": null,
+              "postal_code": "12345",
+              "state": null
+            },
+            "email": "user@maybe.local",
+            "name": "Test Checkout User",
+            "phone": null,
+            "tax_exempt": "none",
+            "tax_ids": []
+          },
+          "customer_email": "user@maybe.local",
+          "discounts": [],
+          "expires_at": 1746368350,
+          "invoice": "in_1RKguoQT2jbOS8G0PuBVklxw",
+          "invoice_creation": null,
+          "livemode": false,
+          "locale": null,
+          "metadata": {},
+          "mode": "subscription",
+          "payment_intent": null,
+          "payment_link": null,
+          "payment_method_collection": "always",
+          "payment_method_configuration_details": {
+            "id": "pmc_1RJyv5QT2jbOS8G0PDwTVBar",
+            "parent": null
+          },
+          "payment_method_options": {
+            "card": {
+              "request_three_d_secure": "automatic"
+            }
+          },
+          "payment_method_types": [
+            "card",
+            "link",
+            "cashapp",
+            "amazon_pay"
+          ],
+          "payment_status": "paid",
+          "permissions": null,
+          "phone_number_collection": {
+            "enabled": false
+          },
+          "recovered_from": null,
+          "saved_payment_method_options": {
+            "allow_redisplay_filters": [
+              "always"
+            ],
+            "payment_method_remove": null,
+            "payment_method_save": null
+          },
+          "setup_intent": null,
+          "shipping_address_collection": null,
+          "shipping_cost": null,
+          "shipping_options": [],
+          "status": "complete",
+          "submit_type": null,
+          "subscription": "sub_1RKguoQT2jbOS8G0Zih79ix9",
+          "success_url": "http://localhost:3000/subscription/success?session_id={CHECKOUT_SESSION_ID}",
+          "total_details": {
+            "amount_discount": 0,
+            "amount_shipping": 0,
+            "amount_tax": 0
+          },
+          "ui_mode": "hosted",
+          "url": null,
+          "wallet_options": null
+        }
+  recorded_at: Mon, 05 May 2025 16:09:23 GMT
+recorded_with: VCR 6.3.1

@@ -79,4 +79,25 @@ class Rule::ActionTest < ActiveSupport::TestCase
       assert_equal merchant.id, transaction.reload.merchant_id
     end
   end
+
+  test "set_transaction_name" do
+    new_name = "Renamed Transaction"
+
+    # Does not modify transactions that are locked (user edited them)
+    @txn1.lock!(:name)
+
+    action = Rule::Action.new(
+      rule: @transaction_rule,
+      action_type: "set_transaction_name",
+      value: new_name
+    )
+
+    action.apply(@rule_scope)
+
+    assert_not_equal new_name, @txn1.reload.entry.name
+
+    [ @txn2, @txn3 ].each do |transaction|
+      assert_equal new_name, transaction.reload.entry.name
+    end
+  end
 end

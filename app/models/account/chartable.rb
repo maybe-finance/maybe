@@ -51,7 +51,7 @@ module Account::Chartable
           WITH dates as (
             SELECT generate_series(DATE :start_date, DATE :end_date, :interval::interval)::date as date
             UNION DISTINCT
-            SELECT CURRENT_DATE -- Ensures we always end on current date, regardless of interval
+            SELECT :end_date::date AS date -- Ensures we always end on user's "today" date, regardless of interval
           )
           SELECT
             d.date,

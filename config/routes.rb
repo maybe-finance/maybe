@@ -54,16 +54,16 @@ Rails.application.routes.draw do
     resource :security, only: :show
   end
 
-  resource :subscription, only: %i[new show] do
+  resource :subscription, only: %i[new show create] do
     collection do
       get :upgrade
       get :success
-      post :start_trial
     end
   end
 
   resources :tags, except: :show do
     resources :deletions, only: %i[new create], module: :tag
+    delete :destroy_all, on: :collection
   end
 
   namespace :category do

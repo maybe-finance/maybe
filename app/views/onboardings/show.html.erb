@@ -1,4 +1,4 @@
-<%= content_for :prev_nav do  %>
+<%= content_for :prev_nav do %>
   <%= image_tag "logomark-color.svg", class: "w-10 h-10" %>
 <% end %>
 
@@ -38,8 +38,7 @@
             <%= family_form.select :country,
               country_options,
               { label: "Country" },
-              required: true
-            %>
+              required: true %>
           <% end %>
         </div>
       <% end %>

@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 import * as d3 from "d3";
 
+const parseLocalDate = d3.timeParse("%Y-%m-%d");
+
 export default class extends Controller {
   static values = {
     data: Object,
@@ -51,7 +53,7 @@ export default class extends Controller {
 
   _normalizeDataPoints() {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
-      date: new Date(`${d.date}T00:00:00Z`),
+      date: parseLocalDate(d.date),
       date_formatted: d.date_formatted,
       trend: d.trend,
     }));
@@ -185,7 +187,7 @@ export default class extends Controller {
             this._normalDataPoints[this._normalDataPoints.length - 1].date,
           ])
           .tickSize(0)
-          .tickFormat(d3.utcFormat("%b %d, %Y")),
+          .tickFormat(d3.timeFormat("%b %d, %Y")),
       )
       .select(".domain")
       .remove();

@@ -3,7 +3,12 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="rule--actions"
 export default class extends Controller {
   static values = { actionExecutors: Array };
-  static targets = ["destroyField", "actionValue"];
+  static targets = [
+    "destroyField",
+    "actionValue",
+    "selectTemplate",
+    "textTemplate"
+  ];
 
   remove(e) {
     if (e.params.destroy) {
@@ -19,38 +24,67 @@ export default class extends Controller {
       (executor) => executor.key === e.target.value,
     );
 
+    // Clear any existing input elements first
+    this.#clearFormFields();
+
     if (actionExecutor.type === "select") {
-      this.#updateValueSelectFor(actionExecutor);
-      this.#showAndEnableValueSelect();
+      this.#buildSelectFor(actionExecutor);
+    } else if (actionExecutor.type === "text") {
+      this.#buildTextInputFor();
     } else {
-      this.#hideAndDisableValueSelect();
+      // Hide for any type that doesn't need a value (e.g. function)
+      this.#hideActionValue();
     }
   }
 
-  get valueSelectEl() {
-    return this.actionValueTarget.querySelector("select");
-  }
-
-  #showAndEnableValueSelect() {
-    this.actionValueTarget.classList.remove("hidden");
-    this.valueSelectEl.disabled = false;
-  }
-
-  #hideAndDisableValueSelect() {
+  #hideActionValue() {
     this.actionValueTarget.classList.add("hidden");
-    this.valueSelectEl.disabled = true;
   }
 
-  #updateValueSelectFor(actionExecutor) {
-    // Clear existing options
-    this.valueSelectEl.innerHTML = "";
+  #clearFormFields() {
+    // Remove all children from actionValueTarget
+    this.actionValueTarget.innerHTML = "";
+  }
 
-    // Add new options
-    for (const option of actionExecutor.options) {
-      const optionEl = document.createElement("option");
-      optionEl.value = option[1];
-      optionEl.textContent = option[0];
-      this.valueSelectEl.appendChild(optionEl);
+  #buildSelectFor(actionExecutor) {
+    // Clone the select template
+    const template = this.selectTemplateTarget.content.cloneNode(true);
+    const selectEl = template.querySelector("select");
+
+    // Add options to the select element
+    if (selectEl) {
+      selectEl.innerHTML = "";
+      if (!actionExecutor.options || actionExecutor.options.length === 0) {
+        selectEl.disabled = true;
+        const optionEl = document.createElement("option");
+        optionEl.textContent = "(none)";
+        selectEl.appendChild(optionEl);
+      } else {
+        selectEl.disabled = false;
+        for (const option of actionExecutor.options) {
+          const optionEl = document.createElement("option");
+          optionEl.value = option[1];
+          optionEl.textContent = option[0];
+          selectEl.appendChild(optionEl);
+        }
+      }
     }
+
+    // Add the template content to the actionValue target and ensure it's visible
+    this.actionValueTarget.appendChild(template);
+    this.actionValueTarget.classList.remove("hidden");
+  }
+
+  #buildTextInputFor() {
+    // Clone the text template
+    const template = this.textTemplateTarget.content.cloneNode(true);
+
+    // Ensure the input is always empty
+    const inputEl = template.querySelector("input");
+    if (inputEl) inputEl.value = "";
+
+    // Add the template content to the actionValue target and ensure it's visible
+    this.actionValueTarget.appendChild(template);
+    this.actionValueTarget.classList.remove("hidden");
   }
 }
