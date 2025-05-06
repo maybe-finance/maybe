@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include Syncable, AutoTransferMatchable
+  include Syncable, AutoTransferMatchable, Subscribeable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -68,6 +68,9 @@ class Family < ApplicationRecord
   def sync_data(sync, start_date: nil)
     update!(last_synced_at: Time.current)
 
+    # We don't rely on this value to guard the app, but keep it eventually consistent
+    sync_trial_status!
+
     Rails.logger.info("Syncing accounts for family #{id}")
     accounts.manual.each do |account|
       account.sync_later(start_date: start_date, parent_sync: sync)
@@ -127,22 +130,6 @@ class Family < ApplicationRecord
     ).link_token
   end
 
-  def subscribed?
-    stripe_subscription_status == "active"
-  end
-
-  def trialing?
-    !subscribed? && trial_started_at.present? && trial_started_at <= 14.days.from_now
-  end
-
-  def trial_remaining_days
-    (14 - (Time.current - trial_started_at).to_i / 86400).to_i
-  end
-
-  def existing_customer?
-    stripe_customer_id.present?
-  end
-
   def requires_data_provider?
     # If family has any trades, they need a provider for historical prices
     return true if trades.any?
@@ -162,16 +149,8 @@ class Family < ApplicationRecord
     requires_data_provider? && Provider::Registry.get_provider(:synth).nil?
   end
 
-  def primary_user
-    users.order(:created_at).first
-  end
-
   def oldest_entry_date
     entries.order(:date).first&.date || Date.current
-  end
-
-  def active_accounts_count
-    accounts.active.count
   end
 
   # Cache key that is invalidated when any of the family's entries are updated (which affect rollups and other calculations)

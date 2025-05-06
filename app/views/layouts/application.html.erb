@@ -89,7 +89,7 @@
               <div class="flex items-start justify-between">
                 <div>
                   <p class="text-sm font-medium text-primary">Free trial</p>
-                  <p class="text-sm text-secondary"><%= Current.family.trial_remaining_days %> days remaining</p>
+                  <p class="text-sm text-secondary"><%= Current.family.days_left_in_trial %> days remaining</p>
                 </div>
 
                 <%= render LinkComponent.new(
@@ -99,8 +99,8 @@
               </div>
 
               <div class="flex items-center gap-0.5 h-1.5">
-                <div class="h-full bg-warning rounded-full" style="width: <%= 100 - Current.family.trial_remaining_days / 14.0 * 100 %>%"></div>
-                <div class="h-full bg-surface-inset rounded-full" style="width: <%= Current.family.trial_remaining_days / 14.0 * 100 %>%"></div>
+                <div class="h-full bg-warning rounded-full" style="width: <%= Current.family.percentage_of_trial_completed %>%"></div>
+                <div class="h-full bg-surface-inset rounded-full" style="width: <%= Current.family.percentage_of_trial_remaining %>%"></div>
               </div>
             </div>
           <% end %>

@@ -44,9 +44,11 @@ class WebhooksController < ApplicationController
       head :ok
     rescue JSON::ParserError => error
       Sentry.capture_exception(error)
+      Rails.logger.error "JSON parser error: #{error.message}"
       head :bad_request
     rescue Stripe::SignatureVerificationError => error
       Sentry.capture_exception(error)
+      Rails.logger.error "Stripe signature verification error: #{error.message}"
       head :bad_request
     end
   end

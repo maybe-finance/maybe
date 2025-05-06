@@ -33,7 +33,7 @@ class Assistant::Function::GetAccounts < Assistant::Function
     def historical_balances(account)
       start_date = [ account.start_date, 5.years.ago.to_date ].max
       period = Period.custom(start_date: start_date, end_date: Date.current)
-      balance_series = account.balance_series(period: period, interval: "1 month", timezone: family.timezone)
+      balance_series = account.balance_series(period: period, interval: "1 month")
 
       to_ai_time_series(balance_series)
     end
