@@ -41,10 +41,12 @@ class Sync < ApplicationRecord
   end
 
   def handle_child_completion_event
-    unless has_pending_child_syncs?
-      if has_failed_child_syncs?
-        fail!(Error.new("One or more child syncs failed"))
-      else
+    Sync.transaction do
+      # We need this to ensure 2 child syncs don't update the parent at the exact same time with different results
+      # and cause the sync to hang in "syncing" status indefinitely
+      self.lock!
+
+      unless has_pending_child_syncs?
         complete!
         syncable.post_sync(self)
       end
@@ -54,10 +56,6 @@ class Sync < ApplicationRecord
   private
     def has_pending_child_syncs?
       children.where(status: [ :pending, :syncing ]).any?
-    end
-
-    def has_failed_child_syncs?
-      children.where(status: :failed).any?
     end
 
     def has_parent?
