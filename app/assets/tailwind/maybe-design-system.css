@@ -339,7 +339,7 @@
   }
 
   .form-field__input {
-    @apply text-primary border-none bg-transparent text-sm opacity-100 w-full p-0;
+    @apply text-primary border-none bg-container text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-hidden focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:text-subdued;
@@ -357,8 +357,6 @@
         cursor: pointer;
       }
     }
-
-
   }
 
   .form-field__radio {
