@@ -16,31 +16,26 @@
       </div>
 
       <div>
+
         <% if @budget.initialized? && @budget.available_to_allocate.positive? %>
-          <div class="flex gap-2 mb-2 rounded-lg bg-alpha-black-25 p-1">
-            <% base_classes = "rounded-md px-2 py-1 flex-1 text-center" %>
-            <% selected_tab = params[:tab].presence || "budgeted" %>
+          <%= render TabsComponent.new(active_tab: params[:tab].presence || "budgeted") do |tabs| %>
+            <% tabs.with_nav do |nav| %>
+              <% nav.with_btn(id: "budgeted", label: "Budgeted") %>
+              <% nav.with_btn(id: "actuals", label: "Actual") %>
+            <% end %>
 
-            <%= link_to "Budgeted",
-                        budget_path(@budget, tab: "budgeted"),
-                        class: class_names(
-                          base_classes,
-                          "bg-container shadow-xs text-primary": selected_tab == "budgeted",
-                          "text-secondary": selected_tab != "budgeted"
-                        ) %>
+            <% tabs.with_panel(tab_id: "budgeted") do %>
+              <div class="bg-container rounded-xl shadow-border-xs">
+                <%= render "budgets/budgeted_summary", budget: @budget %>
+              </div>
+            <% end %>
 
-            <%= link_to "Actual",
-                        budget_path(@budget, tab: "actuals"),
-                        class: class_names(
-                          base_classes,
-                          "bg-container shadow-xs text-primary": selected_tab == "actuals",
-                          "text-secondary": selected_tab != "actuals"
-                        ) %>
-          </div>
-
-          <div class="bg-container rounded-xl shadow-border-xs">
-            <%= render selected_tab == "budgeted" ? "budgets/budgeted_summary" : "budgets/actuals_summary", budget: @budget %>
-          </div>
+            <% tabs.with_panel(tab_id: "actuals") do %>
+              <div class="bg-container rounded-xl shadow-border-xs">
+                <%= render "budgets/actuals_summary", budget: @budget %>
+              </div>
+            <% end %>
+          <% end %>
         <% else %>
           <div class="bg-container rounded-xl shadow-border-xs">
             <%= render "budgets/actuals_summary", budget: @budget %>

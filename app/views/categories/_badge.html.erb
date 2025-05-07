@@ -2,10 +2,10 @@
 <% category ||= Category.uncategorized %>
 
 <div>
-  <span class="flex items-center gap-1 text-sm font-medium rounded-full px-1.5 py-1 border truncate"
+  <span class="flex items-center gap-1 text-sm font-medium rounded-full px-1.5 py-1 border truncate focus-visible:outline-none focus-visible:ring-0"
         style="
-          background-color: color-mix(in srgb, <%= category.color %> 5%, white);
-          border-color: color-mix(in srgb, <%= category.color %> 30%, white);
+          background-color: color-mix(in oklab, <%= category.color %> 10%, transparent);
+          border-color: color-mix(in oklab, <%= category.color %> 10%, transparent);
           color: <%= category.color %>;">
     <% if category.lucide_icon.present? %>
       <%= icon category.lucide_icon, size: "sm", color: "current" %>

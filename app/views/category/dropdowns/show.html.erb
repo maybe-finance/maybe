@@ -2,7 +2,13 @@
   <div class="flex flex-col relative" data-controller="list-filter">
     <div class="grow p-1.5">
       <div class="relative flex items-center bg-container border border-secondary rounded-lg">
-        <input placeholder="<%= t(".search_placeholder") %>" autocomplete="nope" type="search" class="placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg" data-list-filter-target="input" data-action="list-filter#filter">
+        <input 
+          placeholder="<%= t(".search_placeholder") %>" 
+          autocomplete="nope" 
+          type="search" 
+          class="bg-container placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg focus:outline-hidden focus:ring-0" 
+          data-list-filter-target="input" 
+          data-action="list-filter#filter" />
         <%= icon("search", class: "absolute inset-0 ml-2 transform top-1/2 -translate-y-1/2") %>
       </div>
     </div>
@@ -33,14 +39,16 @@
         </div>
       <% end %>
     </div>
-    <hr>
+
+    <hr class="border-tertiary">
+
     <div class="relative p-1.5 w-full">
       <% if @transaction.category %>
         <%= button_to transaction_path(@transaction.entry),
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction.entry) },
                       params: { entry: { entryable_type: "Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
-                      class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100" do %>
+                      class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-container-inset-hover" do %>
           <%= icon("minus") %>
 
           <%= t(".clear") %>
@@ -49,7 +57,7 @@
 
       <% unless @transaction.transfer? %>
         <%= link_to new_transaction_transfer_match_path(@transaction.entry),
-                  class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-gray-100",
+                  class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-container-inset-hover",
                   data: { turbo_frame: "modal" } do %>
           <%= icon("refresh-cw") %>
 
