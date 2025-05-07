@@ -31,8 +31,8 @@
 <% end %>
 <div class="bg-container shadow-border-xs rounded-xl p-4">
   <% if @rules.any? %>
-    <div class="rounded-xl bg-gray-25">
-      <div class="flex items-center justify-between px-4 py-2 text-xs uppercase">
+    <div class="bg-container-inset rounded-xl">
+      <div class="flex justify-between px-4 py-2 text-xs uppercase">
         <div class="flex items-center gap-1.5 font-medium text-secondary">
           <p>Rules</p>
           <span class="text-subdued">&middot;</span>
@@ -44,7 +44,7 @@
             <%= form.select :sort_by,
                       options_for_select([["Name", "name"], ["Updated At", "updated_at"]], @sort_by),
                       {},
-                      class: "min-w-[120px] rounded border-primary cursor-pointer text-primary text-sm w-auto",
+                      class: "min-w-[120px] bg-container rounded border-primary cursor-pointer text-primary text-sm w-auto",
                       data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
             <%= form.hidden_field :direction, value: (@direction == "asc" ? "desc" : "asc") %>
             <%= render ButtonComponent.new(
