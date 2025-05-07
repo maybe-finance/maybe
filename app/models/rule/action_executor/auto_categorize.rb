@@ -11,7 +11,7 @@ class Rule::ActionExecutor::AutoCategorize < Rule::ActionExecutor
     enrichable_transactions = transaction_scope.enrichable(:category_id)
 
     if enrichable_transactions.empty?
-      Rails.logger.info("No transactions to auto-categorize for #{rule.title} #{rule.id}")
+      Rails.logger.info("No transactions to auto-categorize for #{rule.id}")
       return
     end
 
