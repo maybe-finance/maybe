@@ -71,18 +71,22 @@
 
 /* Typography */
 .prose {
-  @apply max-w-none;
+  @apply max-w-none text-primary; 
+
+  a {
+    @apply text-link;
+  }
 
   h2 {
-    @apply text-xl font-medium;
+    @apply text-xl font-medium text-primary;
   }
 
   h3 {
-    @apply text-lg font-medium;
+    @apply text-lg font-medium text-primary;
   }
 
   li {
-    @apply m-0;
+    @apply m-0 text-primary;
   }
 
   details {

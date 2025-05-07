@@ -43,13 +43,18 @@ class DialogComponent < ViewComponent::Base
     full: "md:max-w-full"
   }.freeze
 
-  def initialize(variant: "modal", auto_open: true, reload_on_close: false, width: "md", disable_frame: false, **opts)
+  def initialize(variant: "modal", auto_open: true, reload_on_close: false, width: "md", frame: nil, disable_frame: false, **opts)
     @variant = variant.to_sym
     @auto_open = auto_open
     @reload_on_close = reload_on_close
     @width = width.to_sym
+    @frame = frame
     @disable_frame = disable_frame
     @opts = opts
+  end
+
+  def frame
+    @frame || variant
   end
 
   # Caller must "opt-out" of using the default turbo-frame based on the variant
@@ -57,7 +62,7 @@ class DialogComponent < ViewComponent::Base
     if disable_frame
       content_tag(:div, &block)
     else
-      content_tag("turbo-frame", id: variant, &block)
+      content_tag("turbo-frame", id: frame, &block)
     end
   end
 

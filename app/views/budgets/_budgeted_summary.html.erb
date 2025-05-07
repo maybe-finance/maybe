@@ -15,7 +15,7 @@
           <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.surplus_percent %>%"></div>
         <% else %>
           <div class="rounded-md h-1.5 bg-green-500" style="width: <%= budget.actual_income_percent %>%"></div>
-          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.actual_income_percent %>%"></div>
+          <div class="rounded-md h-1.5 bg-surface-inset" style="width: <%= 100 - budget.actual_income_percent %>%"></div>
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
@@ -41,18 +41,18 @@
     <div>
       <div class="flex h-1.5 mb-3 gap-1">
         <% if budget.available_to_spend.negative? %>
-          <div class="rounded-md h-1.5 bg-gray-900" style="width: <%= 100 - budget.overage_percent %>%"></div>
-          <div class="rounded-md h-1.5 bg-red-500" style="width: <%= budget.overage_percent %>%"></div>
+          <div class="rounded-md h-1.5 bg-inverse" style="width: <%= 100 - budget.overage_percent %>%"></div>
+          <div class="rounded-md h-1.5 bg-destructive" style="width: <%= budget.overage_percent %>%"></div>
         <% else %>
-          <div class="rounded-md h-1.5 bg-gray-900" style="width: <%= budget.percent_of_budget_spent %>%"></div>
-          <div class="rounded-md h-1.5 bg-gray-100" style="width: <%= 100 - budget.percent_of_budget_spent %>%"></div>
+          <div class="rounded-md h-1.5 bg-inverse" style="width: <%= budget.percent_of_budget_spent %>%"></div>
+          <div class="rounded-md h-1.5 bg-surface-inset" style="width: <%= 100 - budget.percent_of_budget_spent %>%"></div>
         <% end %>
       </div>
       <div class="flex justify-between text-sm">
         <p class="text-secondary"><%= format_money(budget.actual_spending_money) %> spent</p>
         <p class="font-medium">
           <% if budget.available_to_spend.negative? %>
-            <span class="text-red-500"><%= format_money(budget.available_to_spend_money.abs) %> over</span>
+            <span class="text-destructive"><%= format_money(budget.available_to_spend_money.abs) %> over</span>
           <% else %>
             <span class="text-primary"><%= format_money(budget.available_to_spend_money) %> left</span>
           <% end %>

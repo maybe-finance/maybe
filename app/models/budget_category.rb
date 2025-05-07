@@ -79,14 +79,14 @@ class BudgetCategory < ApplicationRecord
     unused_segment_id = "unused"
     overage_segment_id = "overage"
 
-    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless actual_spending > 0
+    return [ { color: "var(--budget-unallocated-fill)", amount: 1, id: unused_segment_id } ] unless actual_spending > 0
 
     segments = [ { color: category.color, amount: actual_spending, id: id } ]
 
     if available_to_spend.negative?
-      segments.push({ color: "#EF4444", amount: available_to_spend.abs, id: overage_segment_id })
+      segments.push({ color: "var(--color-destructive)", amount: available_to_spend.abs, id: overage_segment_id })
     else
-      segments.push({ color: "#F0F0F0", amount: available_to_spend, id: unused_segment_id })
+      segments.push({ color: "var(--budget-unallocated-fill)", amount: available_to_spend, id: unused_segment_id })
     end
 
     segments

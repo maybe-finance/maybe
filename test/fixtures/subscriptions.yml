@@ -1,0 +1,9 @@
+active:
+  family: dylan_family 
+  status: active 
+  stripe_id: "test_1234567890"
+
+trialing:
+  family: empty
+  status: trialing
+  trial_ends_at: <%= 12.days.from_now %>

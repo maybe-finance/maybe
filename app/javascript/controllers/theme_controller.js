@@ -4,7 +4,6 @@ export default class extends Controller {
   static values = { userPreference: String };
 
   connect() {
-    this.applyTheme();
     this.startSystemThemeListener();
   }
 
@@ -45,7 +44,7 @@ export default class extends Controller {
     if (isDark) {
       document.documentElement.setAttribute("data-theme", "dark");
     } else {
-      document.documentElement.removeAttribute("data-theme");
+      document.documentElement.setAttribute("data-theme", "light");
     }
   }
 
@@ -60,20 +59,12 @@ export default class extends Controller {
     }
   };
 
-  toDark() {
-    this.setTheme(true);
-  }
-
-  toLight() {
-    this.setTheme(false);
-  }
-
   toggle() {
     const currentTheme = document.documentElement.getAttribute("data-theme");
     if (currentTheme === "dark") {
-      this.toLight();
+      this.setTheme(false);
     } else {
-      this.toDark();
+      this.setTheme(true);
     }
   }
 

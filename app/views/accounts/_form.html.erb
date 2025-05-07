@@ -6,7 +6,10 @@
     <%= form.hidden_field :return_to, value: params[:return_to] %>
 
     <%= form.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label") %>
-    <%= form.money_field :balance, label: t(".balance"), required: true, default_currency: Current.family.currency %>
+
+    <% unless account.linked? %>
+      <%= form.money_field :balance, label: t(".balance"), required: true, default_currency: Current.family.currency %>
+    <% end %>
 
     <%= yield form %>
   </div>

@@ -49,7 +49,7 @@
           <div class="shadow-border-xs rounded-lg bg-container">
             <% classification_group.account_groups.each do |account_group| %>
               <details class="group rounded-lg open:bg-surface open:border-b-2 border-subdued font-medium text-sm">
-                <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
+                <summary class="focus-visible:outline-none focus-visible:ring-0 cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
                   <div class="w-40 shrink-0 items-center gap-4 hidden sm:flex">
                     <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
@@ -57,7 +57,7 @@
                   </div>
 
                   <div class="w-full sm:w-auto sm:ml-auto flex items-center justify-between sm:justify-end text-right gap-6">
-                    <div class="w-24 flex items-center sm:justify-end gap-2">
+                    <div class="w-28 flex items-center sm:justify-end gap-2">
                       <%= render "pages/dashboard/group_weight", weight: account_group.weight, color: account_group.color %>
                     </div>
 
@@ -80,7 +80,7 @@
                       </div>
 
                       <div class="w-full sm:w-auto sm:ml-auto flex items-center justify-between sm:justify-end text-right gap-6">
-                        <div class="w-24 shrink-0 flex items-center sm:justify-end sm:pl-2 gap-2">
+                        <div class="w-28 shrink-0 flex items-center sm:justify-end sm:pl-2 gap-2">
                           <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
                         </div>
 

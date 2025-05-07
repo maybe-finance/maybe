@@ -3,7 +3,7 @@
 <div class="flex w-full items-center pl-2 sm:pl-auto gap-2">
   <div class="flex gap-[3px]">
     <% 10.times do |i| %>
-      <div class="w-[2px] h-[10px] rounded-lg <%= i < (weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= color %>;"></div>
+      <div class="w-0.5 h-2.5 rounded-lg <%= i < (weight / 10.0).ceil ? "" : "opacity-20" %>" style="background-color: <%= color %>;"></div>
     <% end %>
   </div>
   <p class="text-sm"><%= number_to_percentage(weight, precision: 2) %></p>

@@ -160,12 +160,13 @@ class Demo::Generator
         id: id,
         name: family_name,
         currency: currency,
-        stripe_subscription_status: require_onboarding ? nil : "active",
         locale: "en",
         country: "US",
         timezone: "America/New_York",
         date_format: "%m-%d-%Y"
       )
+
+      family.start_subscription!("sub_1234567890")
 
       family.users.create! \
         email: user_email,

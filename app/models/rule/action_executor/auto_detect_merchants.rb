@@ -11,7 +11,7 @@ class Rule::ActionExecutor::AutoDetectMerchants < Rule::ActionExecutor
     enrichable_transactions = transaction_scope.enrichable(:merchant_id)
 
     if enrichable_transactions.empty?
-      Rails.logger.info("No transactions to auto-detect merchants for #{rule.title} #{rule.id}")
+      Rails.logger.info("No transactions to auto-detect merchants for #{rule.id}")
       return
     end
 
