@@ -47,7 +47,7 @@ class PlaidItem < ApplicationRecord
 
       # Schedule account syncs
       accounts.each do |account|
-        account.sync_later(start_date: start_date)
+        account.sync_later(start_date: start_date, parent_sync: sync)
       end
 
       Rails.logger.info("Plaid data fetched and loaded")
