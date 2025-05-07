@@ -2,8 +2,6 @@ module Account::Linkable
   extend ActiveSupport::Concern
 
   included do
-    before_destroy :restrict_linked_account_deletion
-
     belongs_to :plaid_account, optional: true
   end
 
@@ -17,12 +15,4 @@ module Account::Linkable
   def unlinked?
     !linked?
   end
-
-  private
-    def restrict_linked_account_deletion
-      if linked?
-        errors.add(:base, "Cannot delete a linked account")
-        throw(:abort)
-      end
-    end
 end
