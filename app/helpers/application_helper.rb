@@ -45,10 +45,6 @@ module ApplicationHelper
     content_for(:header_description) { page_description }
   end
 
-  def family_stream
-    turbo_stream_from Current.family if Current.family
-  end
-
   def page_active?(path)
     current_page?(path) || (request.path.start_with?(path) && path != "/")
   end
