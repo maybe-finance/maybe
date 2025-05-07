@@ -1,4 +1,4 @@
-<%= tag.div data: { controller: "menu", menu_disable_on_mobile_value: true, menu_placement_value: placement, menu_offset_value: offset, testid: testid } do %>
+<%= tag.div data: { controller: "menu", menu_placement_value: placement, menu_offset_value: offset, testid: testid } do %>
   <% if variant == :icon %>
     <%= render ButtonComponent.new(variant: "icon", icon: icon_vertical ? "more-vertical" : "more-horizontal", data: { menu_target: "button" }) %>
   <% elsif variant == :button %>
