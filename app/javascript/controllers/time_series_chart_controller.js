@@ -138,36 +138,48 @@ export default class extends Controller {
       .attr("x1", this._d3XScale.range()[0])
       .attr("x2", this._d3XScale.range()[1]);
 
+    // First stop - solid trend color
     gradient
       .append("stop")
       .attr("class", "start-color")
       .attr("offset", "0%")
       .attr("stop-color", this.dataValue.trend.color);
 
+    // Second stop - trend color right before split
     gradient
       .append("stop")
-      .attr("class", "middle-color")
+      .attr("class", "split-before")
       .attr("offset", "100%")
       .attr("stop-color", this.dataValue.trend.color);
 
+    // Third stop - gray color right after split
+    gradient
+      .append("stop")
+      .attr("class", "split-after")
+      .attr("offset", "100%")
+      .attr("stop-color", "var(--color-gray-400)");
+
+    // Fourth stop - solid gray to end
     gradient
       .append("stop")
       .attr("class", "end-color")
       .attr("offset", "100%")
-      .attr("class", "fg-subdued")
-      .attr("stop-color", "currentColor");
+      .attr("stop-color", "var(--color-gray-400)");
   }
 
   _setTrendlineSplitAt(percent) {
+    const position = percent * 100;
+
+    // Update both stops at the split point
     this._d3Svg
       .select(`#${this.element.id}-split-gradient`)
-      .select(".middle-color")
-      .attr("offset", `${percent * 100}%`);
+      .select(".split-before")
+      .attr("offset", `${position}%`);
 
     this._d3Svg
       .select(`#${this.element.id}-split-gradient`)
-      .select(".end-color")
-      .attr("offset", `${percent * 100}%`);
+      .select(".split-after")
+      .attr("offset", `${position}%`);
 
     this._d3Svg
       .select(`#${this.element.id}-trendline-gradient-rect`)

@@ -4,9 +4,12 @@
   <% path = chat.new_record? ? chats_path : chats_path(previous_chat_id: chat.id) %>
 
   <div class="flex items-center gap-2 grow">
-    <%= link_to path, id: "chat-nav-back", class: "w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-hover" do %>
-      <%= icon("menu", color: "gray" ) %>
-    <% end %>
+    <%= render LinkComponent.new(
+      id: "chat-nav-back",
+      variant: "icon",
+      icon: "menu",
+      href: path,
+    ) %>
 
     <div class="grow">
       <%= render "chats/chat_title", chat: chat, ctx: "chat" %>
