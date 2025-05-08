@@ -25,15 +25,15 @@ class PlaidInvestmentSync
     # Maybe clearly distinguishes between "brokerage cash" vs. "holdings (i.e. invested cash)"
     # For this reason, we must back out cash + cash equivalent holdings from the reported cash balance to avoid double counting
     def normalize_cash_balance!
-      non_cash_holdings = holdings.reject do |h|
-        _internal_security, plaid_security = get_security(h.security_id, securities)
-        plaid_security&.type == "cash"
+      excludable_cash_holdings = holdings.select do |h|
+        internal_security, plaid_security = get_security(h.security_id, securities)
+        internal_security.present? && (plaid_security&.is_cash_equivalent || plaid_security&.type == "cash")
       end
 
-      non_cash_holdings_value = non_cash_holdings.sum { |h| h.quantity * h.institution_price }
+      excludable_cash_holdings_value = excludable_cash_holdings.sum { |h| h.quantity * h.institution_price }
 
       plaid_account.account.update!(
-        cash_balance: plaid_account.account.cash_balance - non_cash_holdings_value
+        cash_balance: plaid_account.account.cash_balance - excludable_cash_holdings_value
       )
     end
 

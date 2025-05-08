@@ -24,7 +24,7 @@ class Balance::ReverseCalculator < Balance::BaseCalculator
           # If date is today, we don't distinguish cash vs. total since provider's are inconsistent with treatment
           # of the cash component.  Instead, just set the balance equal to the "total value" reported by the provider
           if date == Date.current
-            @balances << build_balance(date, account.balance, 0)
+            @balances << build_balance(date, account.cash_balance, account.balance - account.cash_balance)
           else
             @balances << build_balance(date, current_cash_balance, holdings_value)
           end
