@@ -3,9 +3,9 @@
 %>
 
 <% if self_hosted_first_login? %>
-  <div class="fixed inset-0 w-full h-fit bg-gray-25 p-5 border-b border-secondary flex flex-col gap-3 items-center text-center mb-12">
-    <h2 class="font-bold text-xl"><%= t(".welcome_title") %></h2>
-    <p class="text-secondary text-sm"><%= t(".welcome_body") %></p>
+  <div class="fixed inset-0 w-full h-fit bg-container p-5 border-b border-secondary flex flex-col gap-3 items-center text-center mb-12">
+    <h2 class="font-bold text-primary text-xl"><%= t(".welcome_title") %></h2>
+    <p class="text-secondary text-secondary text-sm"><%= t(".welcome_body") %></p>
   </div>
 <% elsif @invitation %>
   <div class="space-y-1 mb-6 text-center">
