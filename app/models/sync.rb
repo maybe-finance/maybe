@@ -19,8 +19,7 @@ class Sync < ApplicationRecord
       start!
 
       begin
-        data = syncable.sync_data(self, start_date: start_date)
-        update!(data: data) if data
+        syncable.sync_data(self, start_date: start_date)
 
         unless has_pending_child_syncs?
           complete!
