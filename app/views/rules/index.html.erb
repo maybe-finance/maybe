@@ -58,11 +58,11 @@
         </div>
       </div>
       <div class="p-1">
-        <div class="flex flex-col bg-container rounded-xl border border-secondary first_child:rounded-t-xl last_child:rounded-b-xl">
+        <div class="flex flex-col bg-container rounded-xl shadow-border-xs first_child:rounded-t-xl last_child:rounded-b-xl">
           <% @rules.each_with_index do |rule, idx| %>
             <%= render "rule", rule: rule%>
             <% unless idx == @rules.size - 1 %>
-              <div class="border-b border-secondary"></div>
+              <div class="h-px bg-alpha-black-50 ml-4 mr-6"></div>
             <% end %>
           <% end %>
         </div>
