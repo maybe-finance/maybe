@@ -39,12 +39,12 @@
           <p><%= @rules.count %></p>
         </div>
         <div class="flex items-center gap-1">
-          <span class="text-secondary pr-2">Sort by:</span>
-          <%= form_with url: rules_path, method: :get, local: true, class: "flex items-center gap-2", data: { controller: "auto-submit-form" } do |form| %>
+          <span class="text-secondary">Sort by:</span>
+          <%= form_with url: rules_path, method: :get, local: true, class: "flex items-center", data: { controller: "auto-submit-form" } do |form| %>
             <%= form.select :sort_by,
                       options_for_select([["Name", "name"], ["Updated At", "updated_at"]], @sort_by),
                       {},
-                      class: "min-w-[120px] bg-container rounded border-primary cursor-pointer text-primary text-sm w-auto",
+                      class: "min-w-[120px] bg-transparent rounded border-none cursor-pointer text-primary uppercase text-xs w-auto",
                       data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
             <%= form.hidden_field :direction, value: @direction %>
           <% end %>
@@ -52,6 +52,7 @@
             href: rules_path(direction: @direction == "asc" ? "desc" : "asc", sort_by: @sort_by),
             variant: "icon",
             icon: "arrow-up-down",
+            size: :sm,
             title: "Toggle sort direction"
           ) %>
         </div>
