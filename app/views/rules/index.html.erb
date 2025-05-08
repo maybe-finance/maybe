@@ -46,17 +46,14 @@
                       {},
                       class: "min-w-[120px] bg-container rounded border-primary cursor-pointer text-primary text-sm w-auto",
                       data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
-            <%= form.hidden_field :direction, value: (@direction == "asc" ? "desc" : "asc") %>
-            <%= render ButtonComponent.new(
-                variant: :icon,
-                icon: "arrow-up-down",
-                size: :sm,
-                type: "submit",
-                title: "Toggle sort direction"
-              ) do %>
-              <span class="sr-only">Toggle sort direction</span>
-            <% end %>
+            <%= form.hidden_field :direction, value: @direction %>
           <% end %>
+          <%= render LinkComponent.new(
+            href: rules_path(direction: @direction == "asc" ? "desc" : "asc", sort_by: @sort_by),
+            variant: "icon",
+            icon: "arrow-up-down",
+            title: "Toggle sort direction"
+          ) %>
         </div>
       </div>
       <div class="p-1">
