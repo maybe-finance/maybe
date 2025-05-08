@@ -106,8 +106,8 @@ class PlaidInvestmentSync
 
       # Find any matching security
       security = Security.find_or_create_by!(
-        ticker: plaid_security.ticker_symbol,
-        exchange_operating_mic: operating_mic
+        ticker: plaid_security.ticker_symbol&.upcase,
+        exchange_operating_mic: operating_mic&.upcase
       )
 
       [ security, plaid_security ]
