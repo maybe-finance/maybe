@@ -18,7 +18,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_status", ["ok", "syncing", "error"]
-  create_enum "user_role", ["admin", "member"]
 
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subtype"
