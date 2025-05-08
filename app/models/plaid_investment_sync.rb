@@ -11,6 +11,7 @@ class PlaidInvestmentSync
     @securities = securities
 
     PlaidAccount.transaction do
+      normalize_cash_balance!
       sync_transactions!
       sync_holdings!
     end
@@ -18,6 +19,23 @@ class PlaidInvestmentSync
 
   private
     attr_reader :transactions, :holdings, :securities
+
+    # Plaid considers "brokerage cash" and "cash equivalent holdings" to all be part of "cash balance"
+    # Internally, we DO NOT.
+    # Maybe clearly distinguishes between "brokerage cash" vs. "holdings (i.e. invested cash)"
+    # For this reason, we must back out cash + cash equivalent holdings from the reported cash balance to avoid double counting
+    def normalize_cash_balance!
+      non_cash_holdings = holdings.reject do |h|
+        _internal_security, plaid_security = get_security(h.security_id, securities)
+        plaid_security&.type == "cash"
+      end
+
+      non_cash_holdings_value = non_cash_holdings.sum { |h| h.quantity * h.institution_price }
+
+      plaid_account.account.update!(
+        cash_balance: plaid_account.account.cash_balance - non_cash_holdings_value
+      )
+    end
 
     def sync_transactions!
       transactions.each do |transaction|

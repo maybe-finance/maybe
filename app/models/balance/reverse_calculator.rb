@@ -21,7 +21,13 @@ class Balance::ReverseCalculator < Balance::BaseCalculator
         if valuation.present?
           @balances << build_balance(date, previous_cash_balance, holdings_value)
         else
-          @balances << build_balance(date, current_cash_balance, holdings_value)
+          # If date is today, we don't distinguish cash vs. total since provider's are inconsistent with treatment
+          # of the cash component.  Instead, just set the balance equal to the "total value" reported by the provider
+          if date == Date.current
+            @balances << build_balance(date, account.balance, 0)
+          else
+            @balances << build_balance(date, current_cash_balance, holdings_value)
+          end
         end
 
         current_cash_balance = previous_cash_balance
