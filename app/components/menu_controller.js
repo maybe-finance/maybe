@@ -16,7 +16,7 @@ export default class extends Controller {
   static values = {
     show: Boolean,
     placement: { type: String, default: "bottom-end" },
-    offset: { type: Number, default: 6 },
+    offset: { type: Number, default: 6 }
   };
 
   connect() {
