@@ -22,9 +22,8 @@ class Sync < ApplicationRecord
         data = syncable.sync_data(self, start_date: start_date)
         update!(data: data) if data
 
-        complete! unless has_pending_child_syncs?
-
         unless has_pending_child_syncs?
+          complete!
           Rails.logger.info("Sync completed, starting post-sync")
           syncable.post_sync(self)
           Rails.logger.info("Post-sync completed")
@@ -33,10 +32,7 @@ class Sync < ApplicationRecord
         fail! error
         raise error if Rails.env.development?
       ensure
-        if has_parent?
-          Rails.logger.info("notifying parent sync id=#{parent_id} of completion")
-          notify_parent_of_completion!
-        end
+        notify_parent_of_completion! if has_parent?
       end
     end
   end
@@ -49,6 +45,10 @@ class Sync < ApplicationRecord
 
       unless has_pending_child_syncs?
         complete!
+
+        # If this sync is both a child and a parent, we need to notify the parent of completion
+        notify_parent_of_completion! if has_parent?
+
         syncable.post_sync(self)
       end
     end
