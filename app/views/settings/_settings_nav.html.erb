@@ -1,3 +1,36 @@
+<%
+nav_sections = [
+  {
+    header: t('.general_section_title'),
+    items: [
+      { label: t('.profile_label'), path: settings_profile_path, icon: 'circle-user' },
+      { label: t('.preferences_label'), path: settings_preferences_path, icon: 'bolt' },
+      { label: t('.security_label'), path: settings_security_path, icon: 'shield-check' },
+      { label: t('.self_hosting_label'), path: settings_hosting_path, icon: 'database', if: self_hosted? },
+      { label: t('.billing_label'), path: settings_billing_path, icon: 'circle-dollar-sign', if: !self_hosted? },
+      { label: t('.accounts_label'), path: accounts_path, icon: 'layers' },
+      { label: t('.imports_label'), path: imports_path, icon: 'download' }
+    ]
+  },
+  {
+    header: t('.transactions_section_title'),
+    items: [
+      { label: t('.tags_label'), path: tags_path, icon: 'tags' },
+      { label: t('.categories_label'), path: categories_path, icon: 'shapes' },
+      { label: t('.rules_label'), path: rules_path, icon: 'git-branch' },
+      { label: t('.merchants_label'), path: family_merchants_path, icon: 'store' }
+    ]
+  },
+  {
+    header: t('.other_section_title'),
+    items: [
+      { label: t('.whats_new_label'), path: changelog_path, icon: 'box' },
+      { label: t('.feedback_label'), path: feedback_path, icon: 'megaphone' }
+    ]
+  }
+]
+%>
+
 <div class="space-y-4">
   <div class="hidden lg:flex items-center gap-2 p-1.5">
     <%= render LinkComponent.new(
@@ -6,86 +39,27 @@
       href: previous_path,
       variant: "ghost",
     ) %>
-
     <%= link_to previous_path, class: "hidden md:block uppercase bg-surface-inset-hover rounded-sm px-1 py-0.5 text-xs text-secondary shadow-sm ml-1 pointer-events-none", data: { controller: "hotkey", hotkey: "Escape" } do %>
       <kbd>esc</kbd>
     <% end %>
   </div>
-
   <nav class="space-y-4 hidden md:block">
-    <section class="space-y-2">
-      <div class="flex items-center gap-2 px-3">
-        <h3 class="uppercase text-secondary font-medium text-xs"><%= t(".general_section_title") %></h3>
-        <div class="h-px bg-alpha-black-100 w-full"></div>
-      </div>
-      <ul class="space-y-1">
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
-        </li>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" %>
-        </li>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".security_label"), path: settings_security_path, icon: "shield-check" %>
-        </li>
-
-        <% if self_hosted? %>
-          <li>
-            <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
-          </li>
-        <% end %>
-        <% unless self_hosted? %>
-          <li>
-            <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
-          </li>
-        <% end %>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>
-        </li>
-
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".imports_label"), path: imports_path, icon: "download" %>
-        </li>
-      </ul>
-    </section>
-
-    <section class="space-y-2">
-      <div class="flex items-center gap-2 px-3">
-        <h3 class="uppercase text-secondary font-medium text-xs"><%= t(".transactions_section_title") %></h3>
-        <div class="h-px bg-alpha-black-100 w-full"></div>
-      </div>
-      <ul class="space-y-1">
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".tags_label"), path: tags_path, icon: "tags" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: "Rules", path: rules_path, icon: "git-branch" %>
-        </li>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: family_merchants_path, icon: "store" %>
-        </li>
-      </ul>
-    </section>
-
-    <section class="space-y-2">
-      <div class="flex items-center gap-2 px-3">
-        <h3 class="uppercase text-secondary font-medium text-xs"><%= t(".other_section_title") %></h3>
-        <div class="h-px bg-alpha-black-100 w-full"></div>
-      </div>
-      <ul class="space-y-1">
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".whats_new_label"), path: changelog_path, icon: "box" %>
-          <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
-        </li>
-      </ul>
-    </section>
-
+    <% nav_sections.each do |section| %>
+      <section class="space-y-2">
+        <div class="flex items-center gap-2 px-3">
+          <h3 class="uppercase text-secondary font-medium text-xs"><%= section[:header] %></h3>
+          <div class="h-px bg-alpha-black-100 w-full"></div>
+        </div>
+        <ul class="space-y-1">
+          <% section[:items].each do |item| %>
+            <% next if item[:if] == false %>
+            <li>
+              <%= render "settings/settings_nav_item", name: item[:label], path: item[:path], icon: item[:icon] %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
     <section>
       <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
         <%= icon("log-out", color: "current") %>
@@ -93,7 +67,6 @@
       <% end %>
     </section>
   </nav>
-
   <nav class="space-y-4 overflow-y-auto md:hidden" id="mobile-settings-nav">
     <ul class="flex space-y-1">
       <li>
@@ -104,61 +77,18 @@
           variant: "ghost",
         ) %>
       </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".profile_label"), path: settings_profile_path, icon: "circle-user" %>
-      </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" %>
-      </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".security_label"), path: settings_security_path, icon: "shield-check" %>
-      </li>
-
-      <% if self_hosted? %>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".self_hosting_label"), path: settings_hosting_path, icon: "database" %>
-        </li>
+      <% nav_sections.each do |section| %>
+        <% section[:items].each do |item| %>
+          <% next if item[:if] == false %>
+          <li>
+            <%= render "settings/settings_nav_item", name: item[:label], path: item[:path], icon: item[:icon] %>
+          </li>
+        <% end %>
       <% end %>
-      <% unless self_hosted? %>
-        <li>
-          <%= render "settings/settings_nav_item", name: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign" %>
-        </li>
-      <% end %>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".accounts_label"), path: accounts_path, icon: "layers" %>
-      </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".imports_label"), path: imports_path, icon: "download" %>
-      </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".tags_label"), path: tags_path, icon: "tags" %>
-      </li>
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".categories_label"), path: categories_path, icon: "shapes" %>
-      </li>
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".merchants_label"), path: family_merchants_path, icon: "store" %>
-      </li>
-
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".whats_new_label"), path: changelog_path, icon: "box" %>
-      </li>
-      <li>
-        <%= render "settings/settings_nav_item", name: t(".feedback_label"), path: feedback_path, icon: "megaphone" %>
-      </li>
-
       <%= button_to session_path(Current.session), method: :delete, class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-surface-hover w-full" do %>
         <%= icon("log-out", color: "current") %>
         <span><%= t(".logout") %></span>
       <% end %>
-
     </ul>
-
   </nav>
 </div>
