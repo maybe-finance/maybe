@@ -1,0 +1,70 @@
+<%# locals: @simple_fin_accounts %>
+
+<%= render layout: "accounts/new/container", locals: { title: "Select SimpleFIN Accounts", back_path: new_account_path } do %>
+  <% if @simple_fin_accounts.blank? %>
+    <div class="text-center text-gray-500 py-8">
+      <p>No accounts found matching this type from SimpleFIN.</p>
+      <p>Please ensure your SimpleFIN subscription is active.</p>
+      <%= link_to "Try Again", new_simple_fin_connection_path(accountable_type: @accountable_type), class: "mt-4 inline-block text-primary hover:underline" %>
+    </div>
+  <% else %>
+    <%= styled_form_with url: simple_fin_connections_path(accountable_type: @accountable_type), method: :post, data: { turbo: false } do |form| %>
+      <%# Render each account option parsed from SimpleFIN %>
+      <% @simple_fin_accounts.each_with_index do |account, index| %>
+        <div class="mb-4">
+          <label class="flex items-start justify-between p-4 hover:bg-surface rounded-lg border border-gray-200 cursor-pointer">
+            <div class="flex items-center gap-3">
+              <%= check_box_tag 'selected_account_ids[]', account["id"], class: "border-gray-300 rounded" -%>
+              <div class="flex-grow">
+                <%# Account Name %>
+                <div class="font-medium text-primary"><%= account["name"] %></div>
+                <%# Account Source %>
+                <% if account.dig("org", "name").present? %>
+                  <div class="text-xs text-gray-400 mt-0.5">
+                    Source:
+                    <% if account.dig("org", "url").present? %>
+                      <%= link_to account.dig("org", "name"), account.dig("org", "url"), target: "_blank", rel: "noopener noreferrer", class: "hover:underline" %>
+                    <% else %>
+                      <%= account.dig("org", "name") %>
+                    <% end %>
+                  </div>
+                <% end %>
+                
+                <%# SimpleFIN has a tough time determining account types. Let the user fill them out here. %>
+                <div class="mt-2">
+                  <% if @accountable_type == "Depository" %>
+                    <%= form.select "account[#{account['id']}][subtype]",
+                          Depository::SUBTYPES.map { |k, v| [v[:long], k] },
+                          { label: "Subtype", prompt: t("depositories.form.subtype_prompt"), include_blank: t("depositories.form.none") } %>
+                  <% elsif @accountable_type == "Investment" %>
+                    <%= form.select "account[#{account['id']}][subtype]",
+                          Investment::SUBTYPES.map { |k, v| [v[:long], k] },
+                          { label: "Subtype", prompt: t("investments.form.subtype_prompt"), include_blank: t("investments.form.none") } %>
+                  <% end %>
+                </div>
+                
+              </div>
+            </div>
+
+            <%# Current balance %>
+            <% currency_unit = Money::Currency.all_instances.find { |currency| currency.iso_code == account["currency"] }.symbol %>
+            <% balance_color_class = account["balance"].to_f < 0 ? "text-red-500" : "text-green-500" %>
+            <div class="text-sm text-gray-700 font-medium">
+              <span class="<%= balance_color_class %>">
+                <%= number_to_currency(account["balance"], unit: currency_unit || "$") %>
+              </span>
+            </div>
+          </label>
+        </div>
+      <% end %>
+
+
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <%= form.submit t("simple_fin.form.add_accounts"), class: "w-full btn btn-primary",
+          data: {
+            disable_with: "Adding Accounts..."
+          } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

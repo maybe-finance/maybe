@@ -28,6 +28,7 @@ en:
       method_selector:
         connected_entry: Link account
         connected_entry_eu: Link EU account
+        connected_simple_fin: Link SimpleFIN account
         manual_entry: Enter account balance
         title: How would you like to add it?
       title: What would you like to add?

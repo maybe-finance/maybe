@@ -200,6 +200,17 @@ Rails.application.routes.draw do
     end
   end
 
+  # SimpleFIN routes
+  namespace :simple_fin do
+   resources :connections, only: [ :new, :create, :sync ], controller: "/simple_fin"
+ end
+
+  # SimpleFIN routes (controller: SimpleFinController)
+  get "simple_fin/select_accounts", to: "simple_fin#select_accounts", as: "select_simple_fin_accounts"
+  # Defines POST /simple_fin/create_selected_accounts -> simple_fin#create_selected_accounts
+  post "simple_fin/create_selected_accounts", to: "simple_fin#create_selected_accounts", as: "create_selected_simple_fin_accounts"
+
+
   namespace :webhooks do
     post "plaid"
     post "plaid_eu"

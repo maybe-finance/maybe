@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.datetime "last_synced_at"
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
+    t.bigint "simple_fin_account_id"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -44,6 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.index ["family_id"], name: "index_accounts_on_family_id"
     t.index ["import_id"], name: "index_accounts_on_import_id"
     t.index ["plaid_account_id"], name: "index_accounts_on_plaid_account_id"
+    t.index ["simple_fin_account_id"], name: "index_accounts_on_simple_fin_account_id"
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -551,6 +553,36 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
+  create_table "simple_fin_accounts", force: :cascade do |t|
+    t.bigint "simple_fin_connection_id", null: false
+    t.string "external_id", null: false
+    t.decimal "current_balance", precision: 19, scale: 4
+    t.decimal "available_balance", precision: 19, scale: 4
+    t.string "currency"
+    t.string "sf_type"
+    t.string "sf_subtype"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["simple_fin_connection_id", "external_id"], name: "index_sfa_on_sfc_id_and_external_id", unique: true
+    t.index ["simple_fin_connection_id"], name: "index_simple_fin_accounts_on_simple_fin_connection_id"
+  end
+
+  create_table "simple_fin_connections", force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "name"
+    t.string "institution_id"
+    t.string "institution_name"
+    t.string "institution_url"
+    t.string "institution_domain"
+    t.string "status", default: "good"
+    t.datetime "last_synced_at"
+    t.boolean "scheduled_for_deletion", default: false
+    t.string "api_versions_supported", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_simple_fin_connections_on_family_id"
+  end
+
   create_table "stock_exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "acronym"
@@ -721,6 +753,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
   add_foreign_key "accounts", "families"
   add_foreign_key "accounts", "imports"
   add_foreign_key "accounts", "plaid_accounts"
+  add_foreign_key "accounts", "simple_fin_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "balances", "accounts", on_delete: :cascade
@@ -753,6 +786,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
   add_foreign_key "security_prices", "securities"
   add_foreign_key "sessions", "impersonation_sessions", column: "active_impersonator_session_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "simple_fin_accounts", "simple_fin_connections"
+  add_foreign_key "simple_fin_connections", "families"
   add_foreign_key "subscriptions", "families"
   add_foreign_key "syncs", "syncs", column: "parent_id"
   add_foreign_key "taggings", "tags"

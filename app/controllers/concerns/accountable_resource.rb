@@ -6,6 +6,8 @@ module AccountableResource
 
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_token, only: :new
+    before_action :set_accountable_type
+    before_action :set_simple_fin_avail
   end
 
   class_methods do
@@ -55,6 +57,17 @@ module AccountableResource
   end
 
   private
+
+    def set_accountable_type
+      @accountable_type = accountable_type()
+    end
+
+    def set_simple_fin_avail
+      @simple_fin_avail = Current.family.get_simple_fin_available(
+        accountable_type: accountable_type.name,
+      )
+    end
+
     def set_link_token
       @us_link_token = Current.family.get_link_token(
         webhooks_url: plaid_us_webhooks_url,

@@ -16,6 +16,7 @@ class Family < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :plaid_items, dependent: :destroy
+  has_many :simple_fin_connections, dependent: :destroy
   has_many :invitations, dependent: :destroy
 
   has_many :imports, dependent: :destroy
@@ -128,6 +129,12 @@ class Family < ApplicationRecord
       accountable_type: accountable_type,
       access_token: access_token
     ).link_token
+  end
+
+  def get_simple_fin_available(accountable_type: nil)
+    provider = Provider::Registry.get_provider(:simple_fin)
+
+    provider.is_available(id, accountable_type)
   end
 
   def requires_data_provider?

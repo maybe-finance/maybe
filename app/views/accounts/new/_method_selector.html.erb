@@ -1,4 +1,4 @@
-<%# locals: (path:, us_link_token: nil, eu_link_token: nil) %>
+<%# locals: (path:, us_link_token: nil, eu_link_token: nil, simple_fin_avail: nil, accountable_type: nil) %>
 
 <%= render layout: "accounts/new/container", locals: { title: t(".title"), back_path: new_account_path } do %>
   <div class="text-sm">
@@ -7,6 +7,15 @@
         <%= icon("keyboard") %>
       </span>
       <%= t("accounts.new.method_selector.manual_entry") %>
+    <% end %>
+
+    <% if simple_fin_avail %>
+      <%= link_to new_simple_fin_connection_path(accountable_type: @accountable_type), class: "flex items-center gap-4 w-full text-center text-primary focus:outline-hidden focus:bg-surface border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-surface rounded-lg p-2" do %>
+        <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+          <%= image_tag "simple-fin-logo.svg", class: "w-6 h-6" %>
+        </span>
+        <%= t("accounts.new.method_selector.connected_simple_fin") %>
+      <% end %>
     <% end %>
 
     <% if us_link_token %>

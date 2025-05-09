@@ -1,0 +1,8 @@
+---
+en:
+  simple_fin:
+    form:
+      add_accounts: "Add Selected Accounts"
+    create:
+      accounts_created_success: "Accounts Successfully Created"
+      fetch_failed: "Failed to fetch accounts"

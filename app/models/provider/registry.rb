@@ -63,6 +63,14 @@ class Provider::Registry
 
         Provider::Openai.new(access_token)
       end
+
+      def simple_fin
+        config = Rails.application.config.simple_fin
+
+        return nil unless config.present?
+
+        Provider::SimpleFin.new(config, region: :us)
+      end
   end
 
   def initialize(concept)
@@ -94,7 +102,7 @@ class Provider::Registry
       when :llm
         %i[openai]
       else
-        %i[synth plaid_us plaid_eu github openai]
+        %i[synth plaid_us plaid_eu github openai simple_fin]
       end
     end
 end

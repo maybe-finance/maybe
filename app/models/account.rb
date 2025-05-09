@@ -4,6 +4,7 @@ class Account < ApplicationRecord
   validates :name, :balance, :currency, presence: true
 
   belongs_to :family
+  belongs_to :simple_fin_account, optional: true
   belongs_to :import, optional: true
 
   has_many :import_mappings, as: :mappable, dependent: :destroy, class_name: "Import::Mapping"
@@ -22,13 +23,15 @@ class Account < ApplicationRecord
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
-  scope :manual, -> { where(plaid_account_id: nil) }
+  scope :manual, -> { where(plaid_account_id: nil, simple_fin_account_id: nil) }
 
   has_one_attached :logo
 
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   accepts_nested_attributes_for :accountable, update_only: true
+
+  before_destroy :destroy_associated_provider_accounts
 
   class << self
     def create_and_sync(attributes)
@@ -62,17 +65,25 @@ class Account < ApplicationRecord
   end
 
   def institution_domain
-    url_string = plaid_account&.plaid_item&.institution_url
+    url_string = if plaid_account.present?
+      plaid_account.plaid_item&.institution_url
+    elsif simple_fin_account.present?
+      simple_fin_account.simple_fin_connection&.institution_domain
+    end
+
     return nil unless url_string.present?
 
-    begin
-      uri = URI.parse(url_string)
-      # Use safe navigation on .host before calling gsub
-      uri.host&.gsub(/^www\./, "")
-    rescue URI::InvalidURIError
-      # Log a warning if the URL is invalid and return nil
-      Rails.logger.warn("Invalid institution URL encountered for account #{id}: #{url_string}")
-      nil
+    if simple_fin_account.present?
+      # It's already the domain, so just return it.
+      url_string
+    else
+      # It's a full URL (from Plaid), so parse it.
+      begin
+        URI.parse(url_string).host&.gsub(/^www\./, "")
+      rescue URI::InvalidURIError
+        Rails.logger.warn("Invalid institution URL encountered for Plaid account #{id}: #{url_string}")
+        nil
+      end
     end
   end
 
@@ -173,6 +184,10 @@ class Account < ApplicationRecord
   # Get long version of the subtype label
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
+  end
+
+  def destroy_associated_provider_accounts
+    simple_fin_account.destroy if simple_fin_account.present?
   end
 
   private

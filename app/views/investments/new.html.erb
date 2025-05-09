@@ -1,5 +1,5 @@
 <% if params[:step] == "method_select" %>
-  <%= render "accounts/new/method_selector", path: new_investment_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
+  <%= render "accounts/new/method_selector", path: new_investment_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token, simple_fin_avail: @simple_fin_avail, accountable_type: @accountable_type %>
 <% else %>
   <%= render DialogComponent.new do |dialog| %>
     <% dialog.with_header(title: t(".title")) %>

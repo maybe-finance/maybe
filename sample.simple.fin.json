@@ -1,0 +1,333 @@
+{
+    "errors": [
+        "Connection to Fidelity Investments may need attention"
+    ],
+    "accounts": [
+        {
+            "org": {
+                "domain": "www.chase.com",
+                "name": "Chase Bank",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.chase.com",
+                "id": "www.chase.com"
+            },
+            "id": "ACT-RANDOM-CHASE-CREDIT-001",
+            "name": "Credit Card Account",
+            "currency": "USD",
+            "balance": "-250.75",
+            "available-balance": "5000.00",
+            "balance-date": 1700000001,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.chase.com",
+                "name": "Chase Bank",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.chase.com",
+                "id": "www.chase.com"
+            },
+            "id": "ACT-RANDOM-CHASE-LOAN-002",
+            "name": "Loan Account",
+            "currency": "USD",
+            "balance": "-150320.90",
+            "available-balance": "0.00",
+            "balance-date": 1700000002,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.fidelity.com",
+                "name": "Fidelity Investments",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.fidelity.com",
+                "id": "www.fidelity.com"
+            },
+            "id": "ACT-RANDOM-FIDELITY-INVEST-003",
+            "name": "Brokerage Investment Account",
+            "currency": "USD",
+            "balance": "5873.12",
+            "available-balance": "5873.12",
+            "balance-date": 1700000003,
+            "transactions": [],
+            "holdings": [
+                {
+                    "id": "HOL-RANDOM-FBTC-001",
+                    "created": 1700000101,
+                    "currency": "USD",
+                    "cost_basis": "150.00",
+                    "description": "Generic Bitcoin Fund",
+                    "market_value": "180.25",
+                    "purchase_price": "50.00",
+                    "shares": "3.00",
+                    "symbol": "GBTCF"
+                },
+                {
+                    "id": "HOL-RANDOM-SPAXX-002",
+                    "created": 1700000102,
+                    "currency": "USD",
+                    "cost_basis": "0.00",
+                    "description": "Generic Money Market Fund",
+                    "market_value": "50.10",
+                    "purchase_price": "1.00",
+                    "shares": "50.10",
+                    "symbol": "GMMF"
+                },
+                {
+                    "id": "HOL-RANDOM-VXUS-003",
+                    "created": 1700000103,
+                    "currency": "USD",
+                    "cost_basis": "350.50",
+                    "description": "Generic International Stock Fund",
+                    "market_value": "400.75",
+                    "purchase_price": "55.00",
+                    "shares": "7.00",
+                    "symbol": "GISF"
+                },
+                {
+                    "id": "HOL-RANDOM-VOO-004",
+                    "created": 1700000104,
+                    "currency": "USD",
+                    "cost_basis": "500.00",
+                    "description": "Generic S&P 500 ETF",
+                    "market_value": "550.80",
+                    "purchase_price": "450.00",
+                    "shares": "1.10",
+                    "symbol": "GSPX"
+                }
+            ]
+        },
+        {
+            "org": {
+                "domain": "www.fidelity.com",
+                "name": "Fidelity Investments",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.fidelity.com",
+                "id": "www.fidelity.com"
+            },
+            "id": "ACT-RANDOM-FIDELITY-RETIRE-004",
+            "name": "Retirement Account",
+            "currency": "USD",
+            "balance": "25050.30",
+            "available-balance": "150.30",
+            "balance-date": 1700000004,
+            "transactions": [],
+            "holdings": [
+                {
+                    "id": "HOL-RANDOM-FXAIX-005",
+                    "created": 1700000105,
+                    "currency": "USD",
+                    "cost_basis": "10000.00",
+                    "description": "Generic 500 Index Fund",
+                    "market_value": "11500.00",
+                    "purchase_price": "150.00",
+                    "shares": "70.00",
+                    "symbol": "G500IF"
+                },
+                {
+                    "id": "HOL-RANDOM-FMCSX-006",
+                    "created": 1700000106,
+                    "currency": "USD",
+                    "cost_basis": "3000.00",
+                    "description": "Generic Mid Cap Stock Fund",
+                    "market_value": "3300.00",
+                    "purchase_price": "30.00",
+                    "shares": "100.00",
+                    "symbol": "GMCSF"
+                },
+                {
+                    "id": "HOL-RANDOM-SPAXX-007",
+                    "created": 1700000107,
+                    "currency": "USD",
+                    "cost_basis": "0.00",
+                    "description": "Generic Money Market Fund",
+                    "market_value": "150.30",
+                    "purchase_price": "1.00",
+                    "shares": "150.30",
+                    "symbol": "GMMF"
+                },
+                {
+                    "id": "HOL-RANDOM-FBGRX-008",
+                    "created": 1700000108,
+                    "currency": "USD",
+                    "cost_basis": "5000.00",
+                    "description": "Generic Blue Chip Growth Fund",
+                    "market_value": "5800.00",
+                    "purchase_price": "180.00",
+                    "shares": "25.00",
+                    "symbol": "GBCGF"
+                },
+                {
+                    "id": "HOL-RANDOM-NVDA-009",
+                    "created": 1700000109,
+                    "currency": "USD",
+                    "cost_basis": "1000.00",
+                    "description": "Generic Tech Stock",
+                    "market_value": "1200.00",
+                    "purchase_price": "100.00",
+                    "shares": "10.00",
+                    "symbol": "GTECH"
+                }
+            ]
+        },
+        {
+            "org": {
+                "domain": "www.fidelity.com",
+                "name": "Fidelity Investments",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.fidelity.com",
+                "id": "www.fidelity.com"
+            },
+            "id": "ACT-RANDOM-FIDELITY-TARGET-005",
+            "name": "Target Date Fund Account",
+            "currency": "USD",
+            "balance": "150000.00",
+            "available-balance": "0.00",
+            "balance-date": 1700000005,
+            "transactions": [],
+            "holdings": [
+                {
+                    "id": "HOL-RANDOM-RFKTX-010",
+                    "created": 1700000110,
+                    "currency": "USD",
+                    "cost_basis": "120000.00",
+                    "description": "Generic Target Date 2055 Fund",
+                    "market_value": "150000.00",
+                    "purchase_price": "20.00",
+                    "shares": "6000.00",
+                    "symbol": "GTD55"
+                }
+            ]
+        },
+        {
+            "org": {
+                "domain": "www.fidelity.com",
+                "name": "Fidelity Investments",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.fidelity.com",
+                "id": "www.fidelity.com"
+            },
+            "id": "ACT-RANDOM-FIDELITY-HSA-006",
+            "name": "Health Savings Account",
+            "currency": "USD",
+            "balance": "3050.75",
+            "available-balance": "50.75",
+            "balance-date": 1700000006,
+            "transactions": [],
+            "holdings": [
+                {
+                    "id": "HOL-RANDOM-FXAIX-011",
+                    "created": 1700000111,
+                    "currency": "USD",
+                    "cost_basis": "2800.00",
+                    "description": "Generic 500 Index Fund",
+                    "market_value": "3000.00",
+                    "purchase_price": "180.00",
+                    "shares": "15.00",
+                    "symbol": "G500IF"
+                },
+                {
+                    "id": "HOL-RANDOM-FDRXX-012",
+                    "created": 1700000112,
+                    "currency": "USD",
+                    "cost_basis": "0.00",
+                    "description": "Generic Cash Reserves Fund",
+                    "market_value": "50.75",
+                    "purchase_price": "1.00",
+                    "shares": "50.75",
+                    "symbol": "GCRF"
+                }
+            ]
+        },
+        {
+            "org": {
+                "domain": "www.wpcu.coop",
+                "name": "Wright-Patt Credit Union",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.wpcu.coop/Index.aspx",
+                "id": "www.wpcu.coop"
+            },
+            "id": "ACT-RANDOM-WPCU-SAVINGS-007",
+            "name": "Savings Account",
+            "currency": "USD",
+            "balance": "1234.56",
+            "available-balance": "1200.00",
+            "balance-date": 1700000007,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.wpcu.coop",
+                "name": "Wright-Patt Credit Union",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.wpcu.coop/Index.aspx",
+                "id": "www.wpcu.coop"
+            },
+            "id": "ACT-RANDOM-WPCU-CHECKING-008",
+            "name": "Checking Account",
+            "currency": "USD",
+            "balance": "3456.78",
+            "available-balance": "3456.78",
+            "balance-date": 1700000008,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.wpcu.coop",
+                "name": "Wright-Patt Credit Union",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.wpcu.coop/Index.aspx",
+                "id": "www.wpcu.coop"
+            },
+            "id": "ACT-RANDOM-WPCU-MMA-009",
+            "name": "Money Market Account",
+            "currency": "USD",
+            "balance": "25000.00",
+            "available-balance": "24900.00",
+            "balance-date": 1700000009,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.toyotafinancial.com",
+                "name": "Toyota Financial",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.toyotafinancial.com",
+                "id": "www.toyotafinancial.com"
+            },
+            "id": "ACT-RANDOM-TOYOTA-LOAN-010",
+            "name": "Auto Loan",
+            "currency": "USD",
+            "balance": "-25000.50",
+            "available-balance": "0.00",
+            "balance-date": 1700000010,
+            "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.discover.com",
+                "name": "Discover Credit Card",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.discover.com",
+                "id": "www.discover.com"
+            },
+            "id": "ACT-RANDOM-DISCOVER-CREDIT-CARD",
+            "name": "Discover Credit Card",
+            "currency": "USD",
+            "balance": "-10000",
+            "available-balance": "0.00",
+            "balance-date": 1746720778,
+            "transactions": [],
+            "holdings": []
+        }
+    ],
+    "x-api-message": [
+        "Sample data generated. Provide a 'start-date' parameter to receive transactions prior to a specific date."
+    ]
+}

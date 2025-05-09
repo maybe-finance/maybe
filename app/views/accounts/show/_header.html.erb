@@ -19,6 +19,7 @@
       </div>
     <% end %>
 
+
     <div class="flex items-center gap-1 ml-auto">
       <% if account.plaid_account_id.present? %>
         <% if Rails.env.development? %>
@@ -31,6 +32,11 @@
             frame: :_top
           ) %>
         <% end %>
+      <% elsif account.simple_fin_account_id.present? %>
+        <%# SimpleFIN information %>
+        <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN" %>
+        <%# TODO: Add manual sync %>
+        
       <% else %>
         <%= icon(
           "refresh-cw",
