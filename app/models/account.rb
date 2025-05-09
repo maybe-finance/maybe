@@ -82,8 +82,6 @@ class Account < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    raise "Artifical error for testing"
-
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
   end
