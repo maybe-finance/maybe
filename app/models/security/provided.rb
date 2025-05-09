@@ -29,8 +29,6 @@ module Security::Provided
   end
 
   def sync_provider_prices(start_date:, end_date: Date.current)
-    return 0 unless ENV["PROVIDER_PRICE_SYNC_ENABLED"] == "true"
-
     unless has_prices?
       Rails.logger.warn("Security id=#{id} ticker=#{ticker} is not known by provider, skipping price sync")
       return 0
