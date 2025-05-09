@@ -13,6 +13,8 @@ ENV["RAILS_ENV"] ||= "test"
 # https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049
 ENV["PGGSSENCMODE"] = "disable"
 
+ENV["PROVIDER_PRICE_SYNC_ENABLED"] = "true"
+
 require "rails/test_help"
 require "minitest/mock"
 require "minitest/autorun"
