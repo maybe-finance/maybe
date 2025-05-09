@@ -64,20 +64,7 @@ module Security::Provided
     end
 
     valid_prices.each_slice(100) do |batch|
-      retries ||= 0
-
-      begin
-        Security::Price.upsert_all(batch, unique_by: %i[security_id date currency])
-      rescue => e
-        if retries < 3
-          retries += 1
-          sleep(1)
-          Rails.logger.warn("Retrying upsert of #{batch.size} prices for security_id=#{id} ticker=#{ticker} retry=#{retries} error=#{e.message}")
-          retry
-        else
-          raise e
-        end
-      end
+      Security::Price.upsert_all(batch, unique_by: %i[security_id date currency])
     end
   end
 
