@@ -59,6 +59,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - maybe_net
 
   worker:
     image: ghcr.io/maybe-finance/maybe:latest
@@ -69,6 +71,8 @@ services:
         condition: service_healthy
     environment:
       <<: *rails_env
+    networks:
+      - maybe_net
 
   db:
     image: postgres:16
@@ -82,11 +86,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - maybe_net
 
   redis:
     image: redis:latest
-    ports:
-      - 6379:6379
     restart: unless-stopped
     volumes:
       - redis-data:/data
@@ -95,8 +99,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - maybe_net
 
 volumes:
   app-storage:
   postgres-data:
   redis-data:
+
+networks:
+  maybe_net:
+    driver: bridge
