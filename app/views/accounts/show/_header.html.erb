@@ -34,9 +34,7 @@
         <% end %>
       <% elsif account.simple_fin_account_id.present? %>
         <%# SimpleFIN information %>
-        <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN" %>
-        <%# TODO: Add manual sync %>
-        
+        <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN. This account will auto refresh." %>
       <% else %>
         <%= icon(
           "refresh-cw",

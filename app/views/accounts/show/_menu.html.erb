@@ -13,7 +13,7 @@
     ) %>
   <% end %>
 
-  <% unless account.linked? %>
+  <% if account.can_delete? %>
     <% menu.with_item(
       variant: "button",
       text: "Delete account",

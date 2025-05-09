@@ -5,10 +5,10 @@
     <div class="text-center text-gray-500 py-8">
       <p>No accounts found matching this type from SimpleFIN.</p>
       <p>Please ensure your SimpleFIN subscription is active.</p>
-      <%= link_to "Try Again", new_simple_fin_connection_path(accountable_type: @accountable_type), class: "mt-4 inline-block text-primary hover:underline" %>
+      <%= link_to "Try Again", new_simple_fin_path(accountable_type: @accountable_type), class: "mt-4 inline-block text-primary hover:underline" %>
     </div>
   <% else %>
-    <%= styled_form_with url: simple_fin_connections_path(accountable_type: @accountable_type), method: :post, data: { turbo: false } do |form| %>
+    <%= styled_form_with url: simple_fin_index_path(accountable_type: @accountable_type), method: :post, data: { turbo: false } do |form| %>
       <%# Render each account option parsed from SimpleFIN %>
       <% @simple_fin_accounts.each_with_index do |account, index| %>
         <div class="mb-4">

@@ -6,3 +6,4 @@ en:
     create:
       accounts_created_success: "Accounts Successfully Created"
       fetch_failed: "Failed to fetch accounts"
+      no_acc_selected: "No accounts were selected to add"

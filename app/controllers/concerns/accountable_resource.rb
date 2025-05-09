@@ -52,7 +52,7 @@ module AccountableResource
   end
 
   def destroy
-    if @account.linked?
+    if !@account.can_delete?
       redirect_to account_path(@account), alert: "Cannot delete a linked account"
     else
       @account.destroy_later

@@ -21,18 +21,11 @@ class SimpleFinController < ApplicationController
     Current.family.accounts.find_by(name: acc["name"])
   end
 
-
-  ##
-  # Starts a sync across all SimpleFIN accounts
-  def sync
-    puts "Should sync"
-  end
-
   def create
     selected_ids = params[:selected_account_ids]
     if selected_ids.blank?
       Rails.logger.error "No accounts were selected."
-      redirect_to new_simple_fin_connection_path(accountable_type: @accountable_type)
+      redirect_to root_path, alert: t(".no_acc_selected")
       return
     end
 
@@ -65,24 +58,20 @@ class SimpleFinController < ApplicationController
 
 
         # Create SimpleFinAccount and its associated Account
-        SimpleFinAccount.find_or_create_from_simple_fin_data!(
+        simple_fin_account = SimpleFinAccount.find_or_create_from_simple_fin_data!(
           acc_detail,
           simple_fin_connection
         )
 
-        # Optionally, trigger an initial sync for the new account if needed,
-        # though find_or_create_from_simple_fin_data! already populates it.
-        # simple_fin_account.sync_account_data!(acc_detail)
-
-        # The Account record is created via accepts_nested_attributes_for in SimpleFinAccount
-        # or by the logic within find_or_create_from_simple_fin_data!
+        # Trigger an account sync of our data
+        simple_fin_account.sync_account_data!(acc_detail)
       end
     end
 
     redirect_to root_path, notice: t(".accounts_created_success")
   rescue StandardError => e
     Rails.logger.error "SimpleFIN: Failed to create accounts - #{e.message}"
-    redirect_to new_simple_fin_connection_path
+    redirect_to new_simple_fin_path
   end
 
   private

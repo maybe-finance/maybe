@@ -10,6 +10,7 @@ class FamilyResetJob < ApplicationJob
       family.tags.destroy_all
       family.merchants.destroy_all
       family.plaid_items.destroy_all
+      family.simple_fin_connections.destroy_all
       family.imports.destroy_all
       family.budgets.destroy_all
 

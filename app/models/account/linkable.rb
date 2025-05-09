@@ -6,6 +6,14 @@ module Account::Linkable
     belongs_to :simple_fin_account, optional: true
   end
 
+  def can_delete?
+    # SimpleFIN accounts can be removed and re-added
+    if simple_fin_account_id.present?
+      return true
+    end
+    !linked?
+  end
+
   # A "linked" account gets transaction and balance data from a third party like Plaid
   def linked?
     plaid_account_id.present? || simple_fin_account_id.present?

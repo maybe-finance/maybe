@@ -15,6 +15,9 @@ class SimpleFinAccount < ApplicationRecord
   validates :external_id, presence: true, uniqueness: true
   validates :simple_fin_connection_id, presence: true
 
+  after_destroy :cleanup_connection_if_orphaned
+
+
   class << self
     def find_or_create_from_simple_fin_data!(sf_account_data, sfc)
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
@@ -35,66 +38,129 @@ class SimpleFinAccount < ApplicationRecord
         # sfa.sf_subtype = sf_account_data["name"]&.include?("Credit") ? "Credit Card" : accountable_klass.name
       end
     end
+    def family
+      simple_fin_connection&.family
+    end
   end
 
   # sf_account_data is a hash from Provider::SimpleFin#get_available_accounts
   def sync_account_data!(sf_account_data)
     # Ensure accountable_attributes has the ID for updates
-    accountable_attributes = { id: account.accountable_id }
+    # 'account' here refers to self.account (the associated Account instance)
+    accountable_attributes = { id: self.account.accountable_id }
 
-    # Example: Update specific accountable types like PlaidAccount does
-    # This will depend on the structure of sf_account_data and your Accountable models
-    # case account.accountable_type
-    # when "CreditCard"
-    #   accountable_attributes.merge!(
-    #     # minimum_payment: sf_account_data.dig("credit_details", "minimum_payment"),
-    #     # apr: sf_account_data.dig("credit_details", "apr")
-    #   )
-    # when "Loan"
-    #   accountable_attributes.merge!(
-    #     # interest_rate: sf_account_data.dig("loan_details", "interest_rate")
-    #   )
-    # end
-
-    update!(
+    self.update!(
       current_balance: sf_account_data["balance"].to_d,
       available_balance: sf_account_data["available-balance"]&.to_d,
       currency: sf_account_data["currency"],
-      # sf_type: derive_sf_type(sf_account_data), # Potentially update type/subtype
-      # sf_subtype: derive_sf_subtype(sf_account_data),
-      simple_fin_errors: sf_account_data["errors"] || [], # Assuming errors might come on account data
+      # simple_fin_errors: sf_account_data["errors"] || [],
       account_attributes: {
-        id: account.id,
+        id: self.account.id,
         balance: sf_account_data["balance"].to_d,
-        # cash_balance: derive_sf_cash_balance(sf_account_data), # If applicable
         last_synced_at: Time.current,
         accountable_attributes: accountable_attributes
       }
     )
+
+    # Sync transactions if present in the data
+    if sf_account_data["transactions"].is_a?(Array)
+      sync_transactions!(sf_account_data["transactions"])
+    end
+
+    # Sync holdings if present in the data and it's an investment account
+    if self.account&.investment? && sf_account_data["holdings"].is_a?(Array)
+      sync_holdings!(sf_account_data["holdings"])
+    end
   end
 
-  # TODO: Implement if SimpleFIN provides investment transactions/holdings
-  # def sync_investments!(transactions:, holdings:, securities:)
-  #   # Similar to PlaidInvestmentSync.new(self).sync!(...)
-  # end
+  # sf_holdings_data is an array of holding hashes from SimpleFIN for this specific account
+  def sync_holdings!(sf_holdings_data)
+    # 'account' here refers to self.account
+    return unless self.account.present? && self.account.investment? && sf_holdings_data.is_a?(Array)
+    Rails.logger.info "SimpleFinAccount (#{self.account.id}): Entering sync_holdings! with #{sf_holdings_data.length} items."
 
-  # TODO: Implement if SimpleFIN provides transactions
-  # def sync_transactions!(added:, modified:, removed:)
-  #   # Similar to PlaidAccount's sync_transactions!
-  # end
+    # Get existing SimpleFIN holding IDs for this account to detect deletions
+    existing_provider_holding_ids = self.account.holdings.where.not(simple_fin_holding_id: nil).pluck(:simple_fin_holding_id)
+    current_provider_holding_ids = sf_holdings_data.map { |h_data| h_data["id"] }
 
-  def family
-    simple_fin_connection&.family
+    # Delete holdings that are no longer present in SimpleFIN's data
+    holdings_to_delete_ids = existing_provider_holding_ids - current_provider_holding_ids
+    Rails.logger.info "SimpleFinAccount (#{self.account.id}): Will delete SF holding IDs: #{holdings_to_delete_ids}"
+    self.account.holdings.where(simple_fin_holding_id: holdings_to_delete_ids).destroy_all
+
+    sf_holdings_data.each do |holding_data|
+      # Find or create the Security based on the holding data
+      security = find_or_create_security_from_holding_data(holding_data)
+      next unless security # Skip if we can't determine a security
+
+      Rails.logger.info "SimpleFinAccount (#{self.account.id}): Processing SF holding ID #{holding_data['id']}"
+      existing_holding = self.account.holdings.find_or_initialize_by(
+          security: security,
+          date: Date.current,
+          currency: holding_data["currency"]
+        )
+
+      existing_holding.qty = holding_data["shares"]&.to_d
+      existing_holding.price = holding_data["purchase_price"]&.to_d
+      existing_holding.amount = holding_data["market_value"]&.to_d
+      # Cost basis is at holding level, not per share
+      # existing_holding.cost_basis = holding_data["cost_basis"]&.to_d
+      existing_holding.save!
+    end
+  end
+
+  # sf_transactions_data is an array of transaction hashes from SimpleFIN for this specific account
+  def sync_transactions!(sf_transactions_data)
+    # 'account' here refers to self.account
+    return unless self.account.present? && sf_transactions_data.is_a?(Array)
+
+    sf_transactions_data.each do |transaction_data|
+      entry = self.account.entries.find_or_initialize_by(simple_fin_transaction_id: transaction_data["id"])
+
+      entry.assign_attributes(
+        name: transaction_data["description"],
+        amount: transaction_data["amount"].to_d,
+        currency: self.account.currency,
+        date: Time.at(transaction_data["posted"].to_i).to_date,
+        source: "simple_fin"
+      )
+
+      entry.entryable ||= Transaction.new
+      unless entry.entryable.is_a?(Transaction)
+        entry.entryable = Transaction.new
+      end
+
+      entry.entryable.simple_fin_category = transaction_data.dig("extra", "category") if entry.entryable.respond_to?(:simple_fin_category=)
+
+      if entry.changed? || entry.entryable.changed? # Check if entryable also changed
+        entry.save!
+      else
+        Rails.logger.info "SimpleFinAccount (#{self.account.id}): Entry for SF transaction ID #{transaction_data['id']} not changed, not saving."
+      end
+    end
+  end
+
+  ##
+  # Helper to find or create a Security record based on SimpleFIN holding data
+  # SimpleFIN data is less detailed than Plaid securities, often just providing symbol and description.
+  def find_or_create_security_from_holding_data(holding_data)
+    symbol = holding_data["symbol"]&.upcase
+    description = holding_data["description"]
+
+    # We need at least a symbol or description to create/find a security
+    return nil unless symbol.present? || description.present?
+
+    # Try finding by ticker first, then by name (description) if no ticker
+    Security.find_or_create_by!(ticker: symbol) do |sec|
+      sec.name = description if description.present?
+    end
   end
 
   private
 
-  # Example helper, if needed
-  # def derive_sf_cash_balance(sf_balances)
-  #   if account.investment?
-  #     sf_balances["available-balance"]&.to_d || 0
-  #   else
-  #     sf_balances["balance"]&.to_d
-  #   end
-  # end
+    def cleanup_connection_if_orphaned
+      # Reload the connection to get the most up-to-date count of associated accounts
+      connection = simple_fin_connection.reload
+      connection.destroy_later if connection.simple_fin_accounts.empty?
+    end
 end

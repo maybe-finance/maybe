@@ -202,8 +202,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
     t.boolean "excluded", default: false
     t.string "plaid_id"
     t.jsonb "locked_attributes", default: {}
+    t.string "simple_fin_transaction_id"
+    t.string "source"
     t.index ["account_id"], name: "index_entries_on_account_id"
     t.index ["import_id"], name: "index_entries_on_import_id"
+    t.index ["simple_fin_transaction_id"], name: "index_entries_on_simple_fin_transaction_id", unique: true, where: "(simple_fin_transaction_id IS NOT NULL)"
   end
 
   create_table "exchange_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -243,9 +246,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
     t.string "currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "simple_fin_holding_id"
+    t.string "source"
     t.index ["account_id", "security_id", "date", "currency"], name: "idx_on_account_id_security_id_date_currency_5323e39f8b", unique: true
     t.index ["account_id"], name: "index_holdings_on_account_id"
     t.index ["security_id"], name: "index_holdings_on_security_id"
+    t.index ["simple_fin_holding_id"], name: "index_holdings_on_simple_fin_holding_id", unique: true, where: "(simple_fin_holding_id IS NOT NULL)"
   end
 
   create_table "impersonation_session_logs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -561,6 +567,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
     t.string "currency"
     t.string "sf_type"
     t.string "sf_subtype"
+    t.string "simple_fin_errors", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["simple_fin_connection_id", "external_id"], name: "index_sfa_on_sfc_id_and_external_id", unique: true
@@ -685,6 +692,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
     t.jsonb "locked_attributes", default: {}
     t.string "plaid_category"
     t.string "plaid_category_detailed"
+    t.string "simple_fin_category"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
   end

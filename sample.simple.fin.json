@@ -17,7 +17,38 @@
             "balance": "-250.75",
             "available-balance": "5000.00",
             "balance-date": 1700000001,
-            "transactions": [],
+            "transactions": [
+                {
+                    "id": "TRN-CHASE-CREDIT-001-A",
+                    "posted": 1699910000,
+                    "amount": "-25.50",
+                    "description": "Corner Cafe Lunch",
+                    "pending": false,
+                    "extra": {
+                        "category": "Food & Dining"
+                    }
+                },
+                {
+                    "id": "TRN-CHASE-CREDIT-001-B",
+                    "posted": 1699810000,
+                    "amount": "-75.00",
+                    "description": "Online Shopping - Books",
+                    "pending": true,
+                    "extra": {
+                        "category": "Shopping"
+                    }
+                },
+                {
+                    "id": "TRN-CHASE-CREDIT-001-C",
+                    "posted": 1699710000,
+                    "amount": "100.00",
+                    "description": "Payment Received - Thank You!",
+                    "pending": false,
+                    "extra": {
+                        "category": "Payments"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
@@ -34,7 +65,28 @@
             "balance": "-150320.90",
             "available-balance": "0.00",
             "balance-date": 1700000002,
-            "transactions": [],
+            "transactions": [
+                {
+                    "id": "TRN-CHASE-LOAN-002-A",
+                    "posted": 1699510000,
+                    "amount": "-1200.00",
+                    "description": "Monthly Loan Payment",
+                    "pending": false,
+                    "extra": {
+                        "category": "Loan Payments"
+                    }
+                },
+                {
+                    "id": "TRN-CHASE-LOAN-002-B",
+                    "posted": 1699410000,
+                    "amount": "-5.20",
+                    "description": "Interest Charge",
+                    "pending": false,
+                    "extra": {
+                        "category": "Fees & Charges"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
@@ -255,7 +307,28 @@
             "balance": "1234.56",
             "available-balance": "1200.00",
             "balance-date": 1700000007,
-            "transactions": [],
+            "transactions": [
+                {
+                    "id": "TRN-WPCU-SAVINGS-007-A",
+                    "posted": 1699310000,
+                    "amount": "50.00",
+                    "description": "Transfer from Checking",
+                    "pending": false,
+                    "extra": {
+                        "category": "Transfers"
+                    }
+                },
+                {
+                    "id": "TRN-WPCU-SAVINGS-007-B",
+                    "posted": 1699210000,
+                    "amount": "0.25",
+                    "description": "Monthly Interest Earned",
+                    "pending": false,
+                    "extra": {
+                        "category": "Interest Income"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
@@ -272,7 +345,38 @@
             "balance": "3456.78",
             "available-balance": "3456.78",
             "balance-date": 1700000008,
-            "transactions": [],
+            "transactions": [
+                {
+                    "id": "TRN-WPCU-CHECKING-008-A",
+                    "posted": 1699110000,
+                    "amount": "-45.99",
+                    "description": "Grocery Store Run",
+                    "pending": false,
+                    "extra": {
+                        "category": "Groceries"
+                    }
+                },
+                {
+                    "id": "TRN-WPCU-CHECKING-008-B",
+                    "posted": 1699010000,
+                    "amount": "-12.50",
+                    "description": "Coffee Shop Visit",
+                    "pending": true,
+                    "extra": {
+                        "category": "Food & Dining"
+                    }
+                },
+                {
+                    "id": "TRN-WPCU-CHECKING-008-C",
+                    "posted": 1698910000,
+                    "amount": "1500.00",
+                    "description": "Direct Deposit - Paycheck",
+                    "pending": false,
+                    "extra": {
+                        "category": "Income"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
@@ -289,7 +393,18 @@
             "balance": "25000.00",
             "available-balance": "24900.00",
             "balance-date": 1700000009,
-            "transactions": [],
+            "transactions": [
+                {
+                    "id": "TRN-WPCU-MMA-009-A",
+                    "posted": 1698810000,
+                    "amount": "200.00",
+                    "description": "Transfer to Savings",
+                    "pending": false,
+                    "extra": {
+                        "category": "Transfers"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
@@ -307,6 +422,34 @@
             "available-balance": "0.00",
             "balance-date": 1700000010,
             "transactions": [],
+            "holdings": []
+        },
+        {
+            "org": {
+                "domain": "www.discover.com",
+                "name": "Discover Credit Card",
+                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
+                "url": "https://www.discover.com",
+                "id": "www.discover.com"
+            },
+            "id": "ACT-RANDOM-DISCOVER-CREDIT-CARD",
+            "name": "Discover Credit Card",
+            "currency": "USD",
+            "balance": "-10000",
+            "available-balance": "0.00",
+            "balance-date": 1746720778,
+            "transactions": [
+                {
+                    "id": "TRN-TOYOTA-LOAN-010-A",
+                    "posted": 1698710000,
+                    "amount": "-550.75",
+                    "description": "Car Payment - November",
+                    "pending": false,
+                    "extra": {
+                        "category": "Auto Payment"
+                    }
+                }
+            ],
             "holdings": []
         },
         {
