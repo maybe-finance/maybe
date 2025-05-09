@@ -21,23 +21,44 @@ class SimpleFinAccount < ApplicationRecord
   class << self
     def find_or_create_from_simple_fin_data!(sf_account_data, sfc)
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
-        sfa.account = sfc.family.accounts.new(
+        new_account = sfc.family.accounts.new(
           name: sf_account_data["name"],
           balance: sf_account_data["balance"].to_d,
           currency: sf_account_data["currency"],
           accountable: TYPE_MAPPING[sf_account_data["type"]].new,
           subtype: sf_account_data["subtype"],
           simple_fin_account: sfa, # Explicitly associate back
-          last_synced_at: Time.current # Mark as synced upon creation
+          last_synced_at: Time.current, # Mark as synced upon creation
+          # Set cash_balance similar to how Account.create_and_sync might
+          cash_balance: sf_account_data["balance"].to_d
         )
-        # Populate other fields on sfa from sf_account_data if needed
-        # sfa.current_balance = sf_account_data["balance"].to_d
-        # sfa.available_balance = sf_account_data["available-balance"]&.to_d
-        # sfa.currency = sf_account_data["currency"]
-        # sfa.sf_type = accountable_type
-        # sfa.sf_subtype = sf_account_data["name"]&.include?("Credit") ? "Credit Card" : accountable_klass.name
+
+        # Add initial valuations
+        current_balance_amount = new_account.balance
+
+        new_account.entries.build(
+          name: "Current Balance",
+          date: Date.current,
+          amount: current_balance_amount,
+          currency: new_account.currency,
+          entryable: Valuation.new
+        )
+        new_account.entries.build(
+          name: "Initial Balance", # This will be the balance as of "yesterday"
+          date: 1.day.ago.to_date,
+          amount: 0,
+          currency: new_account.currency,
+          entryable: Valuation.new
+        )
+
+        sfa.save!
+        new_account.save!
+        new_account.sync_later
+        sfa.account = new_account
       end
     end
+
+
     def family
       simple_fin_connection&.family
     end
