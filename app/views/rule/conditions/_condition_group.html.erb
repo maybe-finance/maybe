@@ -11,7 +11,11 @@
     <div class="flex items-center gap-2">
       <% unless form.index == 0 %>
         <div class="pl-2">
-          <span class="font-medium uppercase text-xs">and</span>
+          <span class="font-medium uppercase text-xs" data-condition-prefix>and</span>
+        </div>
+      <% else %>
+        <div class="pl-2">
+          <span class="font-medium uppercase text-xs hidden" data-condition-prefix>and</span>
         </div>
       <% end %>
       <p class="text-sm text-secondary">match</p>

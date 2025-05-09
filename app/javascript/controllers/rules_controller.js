@@ -16,6 +16,7 @@ export default class extends Controller {
       this.conditionGroupTemplateTarget,
       this.conditionsListTarget,
     );
+    this.updateConditionPrefixes();
   }
 
   addCondition() {
@@ -23,6 +24,7 @@ export default class extends Controller {
       this.conditionTemplateTarget,
       this.conditionsListTarget,
     );
+    this.updateConditionPrefixes();
   }
 
   addAction() {
@@ -44,5 +46,16 @@ export default class extends Controller {
 
   #uniqueKey() {
     return Date.now();
+  }
+
+  updateConditionPrefixes() {
+    const items = this.conditionsListTarget.querySelectorAll('[data-condition-prefix]');
+    items.forEach((el, idx) => {
+      if (idx === 0) {
+        el.classList.add('hidden');
+      } else {
+        el.classList.remove('hidden');
+      }
+    });
   }
 }
