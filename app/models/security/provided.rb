@@ -63,7 +63,21 @@ module Security::Provided
       is_invalid
     end
 
-    Security::Price.upsert_all(valid_prices, unique_by: %i[security_id date currency])
+    valid_prices.each_slice(100) do |batch|
+      retries ||= 0
+
+      begin
+        Security::Price.upsert_all(batch, unique_by: %i[security_id date currency])
+      rescue => e
+        if retries < 3
+          retries += 1
+          sleep(1)
+          retry
+        else
+          raise e
+        end
+      end
+    end
   end
 
   def find_or_fetch_price(date: Date.current, cache: true)
