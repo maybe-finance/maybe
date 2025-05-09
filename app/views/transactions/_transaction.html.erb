@@ -4,12 +4,11 @@
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(transaction) do %>
-    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 md:p-4
+    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 lg:p-4
                 <%= @focused_record == entry || @focused_record == transaction ?
                     "border border-gray-900 rounded-lg" : "" %>">
 
-      <div class="pr-4 md:pr-10 flex items-center gap-3 md:gap-4
-                  <%= balance_trend ? "col-span-8 md:col-span-6" : "col-span-8" %>">
+      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 lg:col-span-6">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer?,
             class: "checkbox checkbox--light",
@@ -58,7 +57,7 @@
                   <% end %>
                 </div>
 
-                <div class="text-secondary text-xs font-normal hidden md:block">
+                <div class="text-secondary text-xs font-normal hidden lg:block">
                   <% if transaction.transfer? %>
                     <%= render "transfers/account_links",
                         transfer: transaction.transfer,
@@ -76,26 +75,24 @@
         </div>
       </div>
 
-      <div class="hidden md:flex items-center gap-1 col-span-2">
+      <div class="hidden lg:flex items-center gap-1 col-span-2">
         <%= render "transactions/transaction_category", transaction: transaction %>
       </div>
 
-      <div class="col-span-4 md:col-span-2 ml-auto text-right">
+      <div class="col-span-4 lg:col-span-2 ml-auto text-right">
         <%= content_tag :p,
             transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>
       </div>
 
-      <% if balance_trend %>
-        <div class="col-span-2 justify-self-end hidden md:block">
-          <% if balance_trend.trend %>
-            <%= tag.p format_money(balance_trend.trend.current),
+      <div class="col-span-2 justify-self-end hidden lg:block">
+        <% if balance_trend&.trend %>
+          <%= tag.p format_money(balance_trend.trend.current),
                 class: "font-medium text-sm text-primary" %>
-          <% else %>
-            <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
-          <% end %>
-        </div>
-      <% end %>
+        <% else %>
+          <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 <% end %>
