@@ -72,6 +72,7 @@ module Security::Provided
         if retries < 3
           retries += 1
           sleep(1)
+          Rails.logger.warn("Retrying upsert of #{batch.size} prices for security_id=#{id} ticker=#{ticker} retry=#{retries} error=#{e.message}")
           retry
         else
           raise e
