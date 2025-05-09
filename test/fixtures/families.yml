@@ -1,8 +1,5 @@
 empty:
   name: Family
-  last_synced_at: <%= Time.now %>
 
 dylan_family:
   name: The Dylan Family
-  last_synced_at: <%= Time.now %>
-

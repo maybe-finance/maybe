@@ -28,8 +28,7 @@ class Sync < ApplicationRecord
           Rails.logger.info("Post-sync completed")
         end
       rescue StandardError => error
-        fail! error
-        raise error if Rails.env.development?
+        fail! error, report_error: true
       ensure
         notify_parent_of_completion! if has_parent?
       end
@@ -43,7 +42,11 @@ class Sync < ApplicationRecord
       self.lock!
 
       unless has_pending_child_syncs?
-        complete!
+        if has_failed_child_syncs?
+          fail!(Error.new("One or more child syncs failed"))
+        else
+          complete!
+        end
 
         # If this sync is both a child and a parent, we need to notify the parent of completion
         notify_parent_of_completion! if has_parent?
@@ -56,6 +59,10 @@ class Sync < ApplicationRecord
   private
     def has_pending_child_syncs?
       children.where(status: [ :pending, :syncing ]).any?
+    end
+
+    def has_failed_child_syncs?
+      children.where(status: :failed).any?
     end
 
     def has_parent?
@@ -76,12 +83,14 @@ class Sync < ApplicationRecord
       update! status: :completed, last_ran_at: Time.current
     end
 
-    def fail!(error)
+    def fail!(error, report_error: false)
       Rails.logger.error("Sync failed: #{error.message}")
 
-      Sentry.capture_exception(error) do |scope|
-        scope.set_context("sync", { id: id, syncable_type: syncable_type, syncable_id: syncable_id })
-        scope.set_tags(sync_id: id)
+      if report_error
+        Sentry.capture_exception(error) do |scope|
+          scope.set_context("sync", { id: id, syncable_type: syncable_type, syncable_id: syncable_id })
+          scope.set_tags(sync_id: id)
+        end
       end
 
       update!(

@@ -82,7 +82,7 @@ class Account < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    update!(last_synced_at: Time.current)
+    raise "Artifical error for testing"
 
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances

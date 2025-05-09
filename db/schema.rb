@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_09_182903) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -34,7 +34,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
-    t.datetime "last_synced_at"
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
@@ -225,7 +224,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.string "stripe_customer_id"
     t.string "date_format", default: "%m-%d-%Y"
     t.string "country", default: "US"
-    t.datetime "last_synced_at"
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
@@ -445,7 +443,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_02_164951) do
     t.datetime "updated_at", null: false
     t.string "available_products", default: [], array: true
     t.string "billed_products", default: [], array: true
-    t.datetime "last_synced_at"
     t.string "plaid_region", default: "us", null: false
     t.string "institution_url"
     t.string "institution_id"

@@ -66,8 +66,6 @@ class Family < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    update!(last_synced_at: Time.current)
-
     # We don't rely on this value to guard the app, but keep it eventually consistent
     sync_trial_status!
 
