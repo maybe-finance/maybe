@@ -82,8 +82,6 @@ class Account < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    update!(last_synced_at: Time.current)
-
     Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
     sync_balances
   end
