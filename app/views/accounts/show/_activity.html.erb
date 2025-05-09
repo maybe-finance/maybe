@@ -77,10 +77,11 @@
         <div>
           <div class="rounded-tl-lg rounded-tr-lg bg-container border-alpha-black-25 shadow-xs">
             <div class="space-y-4">
-              <% calculator = Balance::TrendCalculator.for(@entries) %>
+              <% calculator = Balance::TrendCalculator.new(@account.balances) %>
+
               <%= entries_by_date(@entries) do |entries| %>
-                <% entries.each do |entry| %>
-                  <%= render entry, balance_trend: calculator&.trend_for(entry), view_ctx: "account" %>
+                <% entries.each_with_index do |entry, index| %>
+                  <%= render entry, balance_trend: index == 0 ? calculator.trend_for(entry.date) : nil, view_ctx: "account" %>
                 <% end %>
               <% end %>
             </div>

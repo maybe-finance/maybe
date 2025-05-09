@@ -90,7 +90,7 @@ class TradeImport < Import
       return internal_security if internal_security.present?
 
       # If security prices provider isn't properly configured or available, create with nil exchange_operating_mic
-      return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) unless Security.provider.present?
+      return Security.find_or_create_by!(ticker: ticker&.upcase, exchange_operating_mic: nil) unless Security.provider.present?
 
       # Cache provider responses so that when we're looping through rows and importing,
       # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
@@ -104,9 +104,9 @@ class TradeImport < Import
         ).first
       end
 
-      return Security.find_or_create_by!(ticker: ticker, exchange_operating_mic: nil) if provider_security.nil?
+      return Security.find_or_create_by!(ticker: ticker&.upcase, exchange_operating_mic: nil) if provider_security.nil?
 
-      Security.find_or_create_by!(ticker: provider_security[:ticker], exchange_operating_mic: provider_security[:exchange_operating_mic]) do |security|
+      Security.find_or_create_by!(ticker: provider_security[:ticker]&.upcase, exchange_operating_mic: provider_security[:exchange_operating_mic]&.upcase) do |security|
         security.name = provider_security[:name]
         security.country_code = provider_security[:country_code]
         security.logo_url = provider_security[:logo_url]

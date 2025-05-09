@@ -136,13 +136,13 @@ export default class extends Controller {
       .attr("fill", function () {
         if (this.dataset.segmentId === segmentId) {
           if (this.dataset.segmentId === unusedSegmentId) {
-            return "#A3A3A3";
+            return "var(--budget-unused-fill)";
           }
 
           return this.dataset.originalColor;
         }
 
-        return "#F0F0F0";
+        return "var(--budget-unallocated-fill)";
       });
 
     this.defaultContentTarget.classList.add("hidden");

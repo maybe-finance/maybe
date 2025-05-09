@@ -97,15 +97,15 @@ class Family < ApplicationRecord
     broadcast_refresh
   end
 
-  # If family has any syncs pending/syncing within the last hour, we show a persistent "syncing" notice.
-  # Ignore syncs older than 1 hour as they are considered "stale"
+  # If family has any syncs pending/syncing within the last 10 minutes, we show a persistent "syncing" notice.
+  # Ignore syncs older than 10 minutes as they are considered "stale"
   def syncing?
     Sync.where(
       "(syncable_type = 'Family' AND syncable_id = ?) OR
        (syncable_type = 'Account' AND syncable_id IN (SELECT id FROM accounts WHERE family_id = ? AND plaid_account_id IS NULL)) OR
        (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?))",
       id, id, id
-    ).where(status: [ "pending", "syncing" ], created_at: 1.hour.ago..).exists?
+    ).where(status: [ "pending", "syncing" ], created_at: 10.minutes.ago..).exists?
   end
 
   def eu?

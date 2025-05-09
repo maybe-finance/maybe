@@ -42,16 +42,15 @@ class PlaidItem < ApplicationRecord
 
     begin
       Rails.logger.info("Fetching and loading Plaid data")
-      plaid_data = fetch_and_load_plaid_data
+      fetch_and_load_plaid_data(sync)
       update!(status: :good) if requires_update?
 
       # Schedule account syncs
       accounts.each do |account|
-        account.sync_later(start_date: start_date)
+        account.sync_later(start_date: start_date, parent_sync: sync)
       end
 
       Rails.logger.info("Plaid data fetched and loaded")
-      plaid_data
     rescue Plaid::ApiError => e
       handle_plaid_error(e)
       raise e
@@ -120,7 +119,7 @@ class PlaidItem < ApplicationRecord
   end
 
   private
-    def fetch_and_load_plaid_data
+    def fetch_and_load_plaid_data(sync)
       data = {}
 
       # Log what we're about to fetch
@@ -147,6 +146,7 @@ class PlaidItem < ApplicationRecord
       # Accounts
       fetched_accounts = plaid_provider.get_item_accounts(self).accounts
       data[:accounts] = fetched_accounts || []
+      sync.update!(data: data)
       Rails.logger.info "Processing Plaid accounts (count: #{fetched_accounts.size})"
 
       internal_plaid_accounts = fetched_accounts.map do |account|
@@ -158,6 +158,7 @@ class PlaidItem < ApplicationRecord
       # Transactions
       fetched_transactions = safe_fetch_plaid_data(:get_item_transactions)
       data[:transactions] = fetched_transactions || []
+      sync.update!(data: data)
 
       if fetched_transactions
         Rails.logger.info "Processing Plaid transactions (added: #{fetched_transactions.added.size}, modified: #{fetched_transactions.modified.size}, removed: #{fetched_transactions.removed.size})"
@@ -177,6 +178,7 @@ class PlaidItem < ApplicationRecord
       # Investments
       fetched_investments = safe_fetch_plaid_data(:get_item_investments)
       data[:investments] = fetched_investments || []
+      sync.update!(data: data)
 
       if fetched_investments
         Rails.logger.info "Processing Plaid investments (transactions: #{fetched_investments.transactions.size}, holdings: #{fetched_investments.holdings.size}, securities: #{fetched_investments.securities.size})"
@@ -194,6 +196,7 @@ class PlaidItem < ApplicationRecord
       # Liabilities
       fetched_liabilities = safe_fetch_plaid_data(:get_item_liabilities)
       data[:liabilities] = fetched_liabilities || []
+      sync.update!(data: data)
 
       if fetched_liabilities
         Rails.logger.info "Processing Plaid liabilities (credit: #{fetched_liabilities.credit&.size || 0}, mortgage: #{fetched_liabilities.mortgage&.size || 0}, student: #{fetched_liabilities.student&.size || 0})"
@@ -209,8 +212,6 @@ class PlaidItem < ApplicationRecord
           end
         end
       end
-
-      data
     end
 
     def safe_fetch_plaid_data(method)

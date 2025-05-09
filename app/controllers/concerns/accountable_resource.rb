@@ -52,8 +52,12 @@ module AccountableResource
   end
 
   def destroy
-    @account.destroy_later
-    redirect_to accounts_path, notice: t("accounts.destroy.success", type: accountable_type.name.underscore.humanize)
+    if @account.linked?
+      redirect_to account_path(@account), alert: "Cannot delete a linked account"
+    else
+      @account.destroy_later
+      redirect_to accounts_path, notice: t("accounts.destroy.success", type: accountable_type.name.underscore.humanize)
+    end
   end
 
   private

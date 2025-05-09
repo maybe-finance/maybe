@@ -26,6 +26,11 @@
   --color-destructive: var(--color-red-600);
   --color-shadow: --alpha(var(--color-black) / 6%);
 
+  /* Colors used in Stimulus controllers with SVGs (easier to define light/dark mode here than toggle within the controllers) */
+  /* See @layer base block below for dark mode overrides */
+  --budget-unused-fill: var(--color-gray-200);
+  --budget-unallocated-fill: var(--color-gray-50);
+
   /* Gray scale */
   --color-gray-25: #FAFAFA;
   --color-gray-50: #F7F7F7;
@@ -250,6 +255,10 @@
     --color-destructive: var(--color-red-400);
     --color-shadow: --alpha(var(--color-white) / 8%);
 
+    /* Dark mode overrides for colors used in Stimulus controllers with SVGs */
+    --budget-unused-fill: var(--color-gray-500);
+    --budget-unallocated-fill: var(--color-gray-700);
+
     --shadow-xs: 0px 1px 2px 0px --alpha(var(--color-white) / 8%);
     --shadow-sm: 0px 1px 6px 0px --alpha(var(--color-white) / 8%);
     --shadow-md: 0px 4px 8px -2px --alpha(var(--color-white) / 8%);
@@ -330,7 +339,7 @@
   }
 
   .form-field__input {
-    @apply text-primary border-none bg-transparent text-sm opacity-100 w-full p-0;
+    @apply text-primary border-none bg-container text-sm opacity-100 w-full p-0;
     @apply focus:opacity-100 focus:outline-hidden focus:ring-0;
     @apply placeholder-shown:opacity-50;
     @apply disabled:text-subdued;
@@ -348,8 +357,6 @@
         cursor: pointer;
       }
     }
-
-
   }
 
   .form-field__radio {

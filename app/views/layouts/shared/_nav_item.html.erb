@@ -6,7 +6,7 @@
 
     <%= tag.div class: class_names(
       "w-8 h-8 flex items-center justify-center mx-auto rounded-lg",
-      active ? "bg-container shadow-xs text-primary" : "group-hover:bg-container-hover text-secondary"
+      active ? "bg-container shadow-xs text-primary" : "group-hover:bg-surface-hover text-secondary"
     ) do %>
       <%= icon(icon, color: active ? "current" : "default", custom: icon_custom) %>
     <% end %>

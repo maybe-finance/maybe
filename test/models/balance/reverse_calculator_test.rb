@@ -120,4 +120,23 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
 
     assert_equal expected, calculated
   end
+
+  test "uses provider reported holdings and cash value on current day" do
+    aapl = securities(:aapl)
+
+    # Implied holdings value of $1,000 from provider
+    @account.update!(cash_balance: 19000, balance: 20000)
+
+    # Create a holding that differs in value from provider ($2,000 vs. the $1,000 reported by provider)
+    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 10, price: 100, amount: 2000, currency: "USD")
+    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 10, price: 100, amount: 2000, currency: "USD")
+
+    # Today reports the provider value.  Yesterday, provider won't give us any data, so we MUST look at the generated holdings value
+    # to calculate the end balance ($19,000 cash + $2,000 holdings = $21,000 total value)
+    expected = [ 21000, 20000 ]
+
+    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+
+    assert_equal expected, calculated
+  end
 end

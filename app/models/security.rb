@@ -1,7 +1,7 @@
 class Security < ApplicationRecord
   include Provided
 
-  before_save :upcase_ticker
+  before_validation :upcase_symbols
 
   has_many :trades, dependent: :nullify, class_name: "Trade"
   has_many :prices, dependent: :destroy
@@ -29,8 +29,8 @@ class Security < ApplicationRecord
   end
 
   private
-
-    def upcase_ticker
+    def upcase_symbols
       self.ticker = ticker.upcase
+      self.exchange_operating_mic = exchange_operating_mic.upcase if exchange_operating_mic.present?
     end
 end

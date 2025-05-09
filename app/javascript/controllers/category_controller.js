@@ -1,22 +1,36 @@
-import { Controller } from "@hotwired/stimulus"
-import Pickr from '@simonwep/pickr'
+import { Controller } from "@hotwired/stimulus";
+import Pickr from "@simonwep/pickr";
 
 export default class extends Controller {
-  static targets = ["pickerBtn", "colorInput", "colorsSection", "paletteSection", "pickerSection", "colorPreview", "avatar", "details", "icon","validationMessage","selection","colorPickerRadioBtn"];
+  static targets = [
+    "pickerBtn",
+    "colorInput",
+    "colorsSection",
+    "paletteSection",
+    "pickerSection",
+    "colorPreview",
+    "avatar",
+    "details",
+    "icon",
+    "validationMessage",
+    "selection",
+    "colorPickerRadioBtn",
+  ];
+
   static values = {
     presetColors: Array,
   };
 
   initialize() {
-    this.pickerBtnTarget.addEventListener('click', () => {
+    this.pickerBtnTarget.addEventListener("click", () => {
       this.showPaletteSection();
     });
 
-    this.colorInputTarget.addEventListener('input', (e) => {
+    this.colorInputTarget.addEventListener("input", (e) => {
       this.picker.setColor(e.target.value);
     });
 
-    this.detailsTarget.addEventListener('toggle', (e) => {
+    this.detailsTarget.addEventListener("toggle", (e) => {
       if (!this.colorInputTarget.checkValidity()) {
         e.preventDefault();
         this.colorInputTarget.reportValidity();
@@ -38,7 +52,7 @@ export default class extends Controller {
 
     this.picker = Pickr.create({
       el: this.pickerBtnTarget,
-      theme: 'monolith',
+      theme: "monolith",
       container: ".pickerContainer",
       useAsButton: true,
       showAlways: true,
@@ -48,7 +62,7 @@ export default class extends Controller {
       },
     });
 
-    this.picker.on('change', (color) => {
+    this.picker.on("change", (color) => {
       const hexColor = color.toHEXA().toString();
       const rgbacolor = color.toRGBA();
 
@@ -74,23 +88,26 @@ export default class extends Controller {
   handleIconColorChange(e) {
     const selectedIcon = e.target;
     this.selectedIcon = selectedIcon;
-    
+
     const currentColor = this.colorInputTarget.value;
-    
-    this.iconTargets.forEach(icon => {
+
+    this.iconTargets.forEach((icon) => {
       const iconWrapper = icon.nextElementSibling;
-      iconWrapper.style.removeProperty("background-color")
-      iconWrapper.style.color = "black";
+      iconWrapper.style.removeProperty("background-color");
+      iconWrapper.style.removeProperty("color");
     });
 
     this.updateSelectedIconColor(currentColor);
   }
 
   handleIconChange(e) {
-    const iconSVG = e.currentTarget.closest('label').querySelector('svg').cloneNode(true);
-    this.avatarTarget.innerHTML = '';
-    iconSVG.style.padding = "0px"
-    iconSVG.classList.add("w-8","h-8")
+    const iconSVG = e.currentTarget
+      .closest("label")
+      .querySelector("svg")
+      .cloneNode(true);
+    this.avatarTarget.innerHTML = "";
+    iconSVG.style.padding = "0px";
+    iconSVG.classList.add("w-8", "h-8");
     this.avatarTarget.appendChild(iconSVG);
   }
 
@@ -112,7 +129,9 @@ export default class extends Controller {
 
   handleContrastValidation(contrastRatio) {
     if (contrastRatio < 4.5) {
-      this.colorInputTarget.setCustomValidity("Poor contrast, choose darker color or auto-adjust.");
+      this.colorInputTarget.setCustomValidity(
+        "Poor contrast, choose darker color or auto-adjust.",
+      );
 
       this.validationMessageTarget.classList.remove("hidden");
     } else {
@@ -121,7 +140,7 @@ export default class extends Controller {
     }
   }
 
-  autoAdjust(e){
+  autoAdjust(e) {
     const currentRGBA = this.picker.getColor();
     const adjustedRGBA = this.darkenColor(currentRGBA).toString();
     this.picker.setColor(adjustedRGBA);
@@ -129,22 +148,29 @@ export default class extends Controller {
 
   handleParentChange(e) {
     const parent = e.currentTarget.value;
-    const display = typeof parent === "string" && parent !== "" ? "none" : "flex";
+    const display =
+      typeof parent === "string" && parent !== "" ? "none" : "flex";
     this.selectionTarget.style.display = display;
   }
 
-  backgroundColor([r,g,b,a], percentage) {
-    const mixedR = Math.round((r * (percentage / 100)) + (255 * (1 - percentage / 100)));
-    const mixedG = Math.round((g * (percentage / 100)) + (255 * (1 - percentage / 100)));
-    const mixedB = Math.round((b * (percentage / 100)) + (255 * (1 - percentage / 100)));
+  backgroundColor([r, g, b, a], percentage) {
+    const mixedR = Math.round(
+      r * (percentage / 100) + 255 * (1 - percentage / 100),
+    );
+    const mixedG = Math.round(
+      g * (percentage / 100) + 255 * (1 - percentage / 100),
+    );
+    const mixedB = Math.round(
+      b * (percentage / 100) + 255 * (1 - percentage / 100),
+    );
     return [mixedR, mixedG, mixedB];
   }
 
-  luminance([r,g,b]) {
-    const toLinear = c => {
+  luminance([r, g, b]) {
+    const toLinear = (c) => {
       const scaled = c / 255;
-      return scaled <= 0.04045 
-        ? scaled / 12.92 
+      return scaled <= 0.04045
+        ? scaled / 12.92
         : ((scaled + 0.055) / 1.055) ** 2.4;
     };
     return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
@@ -162,12 +188,15 @@ export default class extends Controller {
     const backgroundColor = this.backgroundColor(darkened, 10);
     let contrastRatio = this.contrast(darkened, backgroundColor);
 
-    while (contrastRatio < 4.5 && (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)) {
+    while (
+      contrastRatio < 4.5 &&
+      (darkened[0] > 0 || darkened[1] > 0 || darkened[2] > 0)
+    ) {
       darkened = [
         Math.max(0, darkened[0] - 10),
         Math.max(0, darkened[1] - 10),
         Math.max(0, darkened[2] - 10),
-        darkened[3]
+        darkened[3],
       ];
       contrastRatio = this.contrast(darkened, backgroundColor);
     }
@@ -177,23 +206,23 @@ export default class extends Controller {
 
   showPaletteSection() {
     this.initPicker();
-    this.colorsSectionTarget.classList.add('hidden');
-    this.paletteSectionTarget.classList.remove('hidden');
-    this.pickerSectionTarget.classList.remove('hidden');
+    this.colorsSectionTarget.classList.add("hidden");
+    this.paletteSectionTarget.classList.remove("hidden");
+    this.pickerSectionTarget.classList.remove("hidden");
     this.picker.show();
   }
 
   showColorsSection() {
-    this.colorsSectionTarget.classList.remove('hidden');
-    this.paletteSectionTarget.classList.add('hidden');
-    this.pickerSectionTarget.classList.add('hidden');
+    this.colorsSectionTarget.classList.remove("hidden");
+    this.paletteSectionTarget.classList.add("hidden");
+    this.pickerSectionTarget.classList.add("hidden");
     if (this.picker) {
       this.picker.destroyAndRemove();
     }
   }
 
   toggleSections() {
-    if (this.colorsSectionTarget.classList.contains('hidden')) {
+    if (this.colorsSectionTarget.classList.contains("hidden")) {
       this.showColorsSection();
     } else {
       this.showPaletteSection();

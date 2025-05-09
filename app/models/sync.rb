@@ -19,33 +19,35 @@ class Sync < ApplicationRecord
       start!
 
       begin
-        data = syncable.sync_data(self, start_date: start_date)
-        update!(data: data) if data
+        syncable.sync_data(self, start_date: start_date)
 
-        complete! unless has_pending_child_syncs?
-
-        Rails.logger.info("Sync completed, starting post-sync")
-
-        syncable.post_sync(self) unless has_pending_child_syncs?
-
-        if has_parent?
-          notify_parent_of_completion!
+        unless has_pending_child_syncs?
+          complete!
+          Rails.logger.info("Sync completed, starting post-sync")
+          syncable.post_sync(self)
+          Rails.logger.info("Post-sync completed")
         end
-
-        Rails.logger.info("Post-sync completed")
       rescue StandardError => error
         fail! error
         raise error if Rails.env.development?
+      ensure
+        notify_parent_of_completion! if has_parent?
       end
     end
   end
 
   def handle_child_completion_event
-    unless has_pending_child_syncs?
-      if has_failed_child_syncs?
-        fail!(Error.new("One or more child syncs failed"))
-      else
+    Sync.transaction do
+      # We need this to ensure 2 child syncs don't update the parent at the exact same time with different results
+      # and cause the sync to hang in "syncing" status indefinitely
+      self.lock!
+
+      unless has_pending_child_syncs?
         complete!
+
+        # If this sync is both a child and a parent, we need to notify the parent of completion
+        notify_parent_of_completion! if has_parent?
+
         syncable.post_sync(self)
       end
     end
@@ -54,10 +56,6 @@ class Sync < ApplicationRecord
   private
     def has_pending_child_syncs?
       children.where(status: [ :pending, :syncing ]).any?
-    end
-
-    def has_failed_child_syncs?
-      children.where(status: :failed).any?
     end
 
     def has_parent?

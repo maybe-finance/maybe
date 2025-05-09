@@ -21,16 +21,17 @@
     </details>
   <% end %>
 
-  <%= render TabsComponent.new(active_tab: active_account_group_tab, url_param_key: "account_group_tab", testid: "account-sidebar-tabs") do |tabs| %>
-    <% tabs.with_nav do |nav| %>
-      <% nav.with_btn(id: "assets", label: "Assets") %>
-      <% nav.with_btn(id: "debts", label: "Debts") %>
-      <% nav.with_btn(id: "all", label: "All") %>
-    <% end %>
+  <div data-controller="sidebar-tabs">
+    <%= render TabsComponent.new(active_tab: active_account_group_tab, url_param_key: "account_group_tab", testid: "account-sidebar-tabs") do |tabs| %>
+      <% tabs.with_nav do |nav| %>
+        <% nav.with_btn(id: "assets", label: "Assets") %>
+        <% nav.with_btn(id: "debts", label: "Debts") %>
+        <% nav.with_btn(id: "all", label: "All") %>
+      <% end %>
 
-    <% tabs.with_panel(tab_id: "assets") do %>
-      <div class="space-y-2">
-        <%= render LinkComponent.new(
+      <% tabs.with_panel(tab_id: "assets") do %>
+        <div class="space-y-2">
+          <%= render LinkComponent.new(
         text: "New asset",
         variant: "ghost",
         href: new_account_path(step: "method_select", classification: "asset"),
@@ -40,17 +41,17 @@
         class: "justify-start"
       ) %>
 
-        <div>
-          <% family.balance_sheet.account_groups("asset").each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
-          <% end %>
+          <div>
+            <% family.balance_sheet.account_groups("asset").each do |group| %>
+              <%= render "accounts/accountable_group", account_group: group %>
+            <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
 
-    <% tabs.with_panel(tab_id: "debts") do %>
-      <div class="space-y-2">
-        <%= render LinkComponent.new(
+      <% tabs.with_panel(tab_id: "debts") do %>
+        <div class="space-y-2">
+          <%= render LinkComponent.new(
           text: "New debt",
           variant: "ghost",
           href: new_account_path(step: "method_select", classification: "liability"),
@@ -60,17 +61,17 @@
         class: "justify-start"
       ) %>
 
-        <div>
-          <% family.balance_sheet.account_groups("liability").each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
-          <% end %>
+          <div>
+            <% family.balance_sheet.account_groups("liability").each do |group| %>
+              <%= render "accounts/accountable_group", account_group: group %>
+            <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
 
-    <% tabs.with_panel(tab_id: "all") do %>
-      <div class="space-y-2">
-        <%= render LinkComponent.new(
+      <% tabs.with_panel(tab_id: "all") do %>
+        <div class="space-y-2">
+          <%= render LinkComponent.new(
           text: "New account",
           variant: "ghost",
           full_width: true,
@@ -80,12 +81,13 @@
         class: "justify-start"
       ) %>
 
-        <div>
-          <% family.balance_sheet.account_groups.each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
-          <% end %>
+          <div>
+            <% family.balance_sheet.account_groups.each do |group| %>
+              <%= render "accounts/accountable_group", account_group: group %>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>

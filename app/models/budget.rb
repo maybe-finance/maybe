@@ -131,14 +131,14 @@ class Budget < ApplicationRecord
     unused_segment_id = "unused"
 
     # Continuous gray segment for empty budgets
-    return [ { color: "#F0F0F0", amount: 1, id: unused_segment_id } ] unless allocations_valid?
+    return [ { color: "var(--budget-unallocated-fill)", amount: 1, id: unused_segment_id } ] unless allocations_valid?
 
     segments = budget_categories.map do |bc|
       { color: bc.category.color, amount: budget_category_actual_spending(bc), id: bc.id }
     end
 
     if available_to_spend.positive?
-      segments.push({ color: "#F0F0F0", amount: available_to_spend, id: unused_segment_id })
+      segments.push({ color: "var(--budget-unallocated-fill)", amount: available_to_spend, id: unused_segment_id })
     end
 
     segments
