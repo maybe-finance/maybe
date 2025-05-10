@@ -3,7 +3,7 @@
 <% condition = form.object %>
 <% rule = condition.rule %>
 
-<li data-controller="rule--conditions element-removal" class="border border-secondary rounded-md p-4 space-y-3">
+<li data-controller="rule--conditions" class="border border-secondary rounded-md p-4 space-y-3">
 
   <%= form.hidden_field :condition_type, value: "compound" %>
 
@@ -20,9 +20,9 @@
 
     <%= icon(
       "trash-2",
-      size: "sm",
       as_button: true,
-      data: { action: "element-removal#remove" }
+      size: "sm",
+      data: { action: "rule--conditions#remove" }
     ) %>
   </div>
 
