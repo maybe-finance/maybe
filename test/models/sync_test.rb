@@ -7,7 +7,7 @@ class SyncTest < ActiveSupport::TestCase
   end
 
   test "runs successful sync" do
-    @sync.syncable.expects(:sync_data).with(@sync, start_date: @sync.start_date).once
+    Account::Syncer.any_instance.expects(:perform_sync).with(@sync, start_date: @sync.start_date).once
 
     assert_equal "pending", @sync.status
 
@@ -20,7 +20,7 @@ class SyncTest < ActiveSupport::TestCase
   end
 
   test "handles sync errors" do
-    @sync.syncable.expects(:sync_data).with(@sync, start_date: @sync.start_date).raises(StandardError.new("test sync error"))
+    Account::Syncer.any_instance.expects(:perform_sync).with(@sync, start_date: @sync.start_date).raises(StandardError.new("test sync error"))
 
     assert_equal "pending", @sync.status
     previously_ran_at = @sync.last_ran_at
@@ -42,10 +42,10 @@ class SyncTest < ActiveSupport::TestCase
     child2 = Sync.create!(syncable: family.accounts.second, parent: parent)
     grandchild = Sync.create!(syncable: family.accounts.last, parent: child2)
 
-    parent.syncable.expects(:sync_data).returns([]).once
-    child1.syncable.expects(:sync_data).returns([]).once
-    child2.syncable.expects(:sync_data).returns([]).once
-    grandchild.syncable.expects(:sync_data).returns([]).once
+    Family::Syncer.any_instance.expects(:perform_sync).with(parent, start_date: parent.start_date).once
+    Account::Syncer.any_instance.expects(:perform_sync).with(child1, start_date: parent.start_date).once
+    Account::Syncer.any_instance.expects(:perform_sync).with(child2, start_date: parent.start_date).once
+    Account::Syncer.any_instance.expects(:perform_sync).with(grandchild, start_date: parent.start_date).once
 
     assert_equal "pending", parent.status
     assert_equal "pending", child1.status

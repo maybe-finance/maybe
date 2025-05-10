@@ -17,8 +17,4 @@ module SyncableInterfaceTest
       @syncable.sync(start_date: 2.days.ago.to_date)
     end
   end
-
-  test "implements sync_data" do
-    assert_respond_to @syncable, :sync_data
-  end
 end

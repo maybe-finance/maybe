@@ -19,12 +19,12 @@ class Sync < ApplicationRecord
       start!
 
       begin
-        syncable.sync_data(self, start_date: start_date)
+        syncer.perform_sync(self, start_date: start_date)
 
         unless has_pending_child_syncs?
           complete!
           Rails.logger.info("Sync completed, starting post-sync")
-          syncable.post_sync(self)
+          syncer.perform_post_sync(self)
           Rails.logger.info("Post-sync completed")
         end
       rescue StandardError => error
@@ -51,12 +51,16 @@ class Sync < ApplicationRecord
         # If this sync is both a child and a parent, we need to notify the parent of completion
         notify_parent_of_completion! if has_parent?
 
-        syncable.post_sync(self)
+        syncer.perform_post_sync(self)
       end
     end
   end
 
   private
+    def syncer
+      "#{syncable_type}::Syncer".constantize.new(syncable)
+    end
+
     def has_pending_child_syncs?
       children.where(status: [ :pending, :syncing ]).any?
     end
