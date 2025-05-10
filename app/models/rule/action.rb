@@ -1,5 +1,5 @@
 class Rule::Action < ApplicationRecord
-  belongs_to :rule
+  belongs_to :rule, touch: true
 
   validates :action_type, presence: true
 

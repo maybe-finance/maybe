@@ -1,7 +1,15 @@
 <%= link_to "Back to rules", rules_path %>
 
 <%= render DialogComponent.new do |dialog| %>
-  <% dialog.with_header(title: "Edit #{@rule.resource_type} rule") %>
+  <% 
+    title = if @rule.name.present?
+              "Edit #{@rule.resource_type} rule \"#{@rule.name}\""
+            else
+              "Edit #{@rule.resource_type} rule"
+            end
+  %>
+  <% dialog.with_header(title: title) %>
+
   <% dialog.with_body do %>
     <%= render "rules/form", rule: @rule %>
   <% end %>
