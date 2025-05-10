@@ -29,13 +29,13 @@
   <%# Sub-condition template, used by Stimulus controller to add new sub-conditions dynamically %>
   <template data-rule--conditions-target="subConditionTemplate">
     <%= form.fields_for :sub_conditions, Rule::Condition.new(parent: condition, condition_type: rule.condition_filters.first.key), child_index: "IDX_PLACEHOLDER" do |scf| %>
-      <%= render "rule/conditions/condition", form: scf %>
+      <%= render "rule/conditions/condition", form: scf, show_prefix: false %>
     <% end %>
   </template>
 
   <ul data-rule--conditions-target="subConditionsList" class="space-y-3">
     <%= form.fields_for :sub_conditions do |scf| %>
-      <%= render "rule/conditions/condition", form: scf %>
+      <%= render "rule/conditions/condition", form: scf, show_prefix: false %>
     <% end %>
   </ul>
 

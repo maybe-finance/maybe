@@ -32,7 +32,7 @@ export default class extends Controller {
       this.element.remove();
     }
 
-    // Update the prefixes of all siblings from the parent rules controller
+    // Update the prefixes of all conditions from the parent rules controller
     if (rulesEl) {
       const rulesController = this.application.getControllerForElementAndIdentifier(rulesEl, "rules");
       if (rulesController && typeof rulesController.updateConditionPrefixes === "function") {
