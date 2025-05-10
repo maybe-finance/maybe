@@ -11,6 +11,11 @@ export default class extends Controller {
     "effectiveDateInput",
   ];
 
+  connect() {
+    // Update condition prefixes on first connection (form render)
+    this.updateConditionPrefixes();
+  }
+
   addConditionGroup() {
     this.#appendTemplate(
       this.conditionGroupTemplateTarget,
