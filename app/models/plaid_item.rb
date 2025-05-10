@@ -22,21 +22,6 @@ class PlaidItem < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
   scope :needs_update, -> { where(status: :requires_update) }
 
-  class << self
-    def create_from_public_token(token, item_name:, region:)
-      response = plaid_provider_for_region(region).exchange_public_token(token)
-
-      new_plaid_item = create!(
-        name: item_name,
-        plaid_id: response.item_id,
-        access_token: response.access_token,
-        plaid_region: region
-      )
-
-      new_plaid_item.sync_later
-    end
-  end
-
   def sync_data(sync, start_date: nil)
     begin
       Rails.logger.info("Fetching and loading Plaid data")
