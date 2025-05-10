@@ -81,21 +81,6 @@ class Account < ApplicationRecord
     DestroyJob.perform_later(self)
   end
 
-  def sync_data(sync, start_date: nil)
-    Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
-    sync_balances
-  end
-
-  def post_sync(sync)
-    family.remove_syncing_notice!
-
-    accountable.post_sync(sync)
-
-    unless sync.child?
-      family.auto_match_transfers!
-    end
-  end
-
   def current_holdings
     holdings.where(currency: currency, date: holdings.maximum(:date)).order(amount: :desc)
   end
@@ -172,10 +157,4 @@ class Account < ApplicationRecord
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
   end
-
-  private
-    def sync_balances
-      strategy = linked? ? :reverse : :forward
-      Balance::Syncer.new(self, strategy: strategy).sync_balances
-    end
 end

@@ -1,8 +1,7 @@
 module Family::Syncable
   extend ActiveSupport::Concern
 
-  # Top-level, generic Syncable concern
-  include ::Syncable
+  include Syncable
 
   def sync_data(sync, start_date: nil)
     # We don't rely on this value to guard the app, but keep it eventually consistent
