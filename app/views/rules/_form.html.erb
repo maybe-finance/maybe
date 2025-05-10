@@ -12,7 +12,7 @@
   <section class="space-y-4">
     <h3 class="text-sm font-medium text-primary">If <%= rule.resource_type %></h3>
 
-    <%# Condition template, used by Stimulus controller to add new conditions dynamically %>
+    <%# Condition Group template, used by Stimulus controller to add new conditions dynamically %>
     <template data-rules-target="conditionGroupTemplate">
       <%= f.fields_for :conditions, Rule::Condition.new(rule: rule, condition_type: "compound", operator: "and"), child_index: "IDX_PLACEHOLDER" do |cf| %>
         <%= render "rule/conditions/condition_group", form: cf %>
