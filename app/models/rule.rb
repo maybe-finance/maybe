@@ -46,6 +46,18 @@ class Rule < ApplicationRecord
     RuleJob.perform_later(self, ignore_attribute_locks: ignore_attribute_locks)
   end
 
+  def primary_condition_title
+    return "No conditions" if conditions.none?
+
+    first_condition = conditions.first
+    if first_condition.compound? && first_condition.sub_conditions.any?
+      first_sub_condition = first_condition.sub_conditions.first
+      "If #{first_sub_condition.filter.label.downcase} #{first_sub_condition.operator} #{first_sub_condition.value_display}"
+    else
+      "If #{first_condition.filter.label.downcase} #{first_condition.operator} #{first_condition.value_display}"
+    end
+  end
+
   private
     def matching_resources_scope
       scope = registry.resource_scope
