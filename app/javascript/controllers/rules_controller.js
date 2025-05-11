@@ -56,9 +56,7 @@ export default class extends Controller {
   // Updates the prefix visibility of all conditions and condition groups
   // This is also called by the rule/conditions_controller when a subcondition is removed
   updateConditionPrefixes() {
-    // Update conditions
     const conditions = Array.from(this.conditionsListTarget.children);
-
     let conditionIndex = 0;
 
     conditions.forEach((condition) => {
