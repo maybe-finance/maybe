@@ -72,14 +72,18 @@ export default class extends Controller {
     const items = Array.from(listEl.children);
     let conditionIdx = 0;
     items.forEach((item) => {
-      const prefixEl = item.querySelector('[data-condition-prefix]');
-      if (prefixEl) {
-        if (conditionIdx === 0) {
-          prefixEl.classList.add('hidden');
-        } else {
-          prefixEl.classList.remove('hidden');
+      // Only process visible items, this prevents conditions that are marked for removal and hidden
+      // from being added to the index. This is important when editing a rule.
+      if (!item.classList.contains('hidden')) {
+        const prefixEl = item.querySelector('[data-condition-prefix]');
+        if (prefixEl) {
+          if (conditionIdx === 0) {
+            prefixEl.classList.add('hidden');
+          } else {
+            prefixEl.classList.remove('hidden');
+          }
+          conditionIdx++;
         }
-        conditionIdx++;
       }
     });
   }
