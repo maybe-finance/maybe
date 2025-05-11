@@ -5,15 +5,15 @@ class PlaidItem::Syncer
     @plaid_item = plaid_item
   end
 
-  def child_syncables
-    plaid_item.accounts
-  end
-
-  def perform_sync(start_date: nil)
+  def perform_sync(sync:, start_date: nil)
     begin
       Rails.logger.info("Fetching and loading Plaid data")
       fetch_and_load_plaid_data
       plaid_item.update!(status: :good) if plaid_item.requires_update?
+
+      plaid_item.accounts.each do |account|
+        account.sync_later(start_date: start_date, parent_sync: sync)
+      end
 
       Rails.logger.info("Plaid data fetched and loaded")
     rescue Plaid::ApiError => e

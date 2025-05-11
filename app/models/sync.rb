@@ -1,111 +1,87 @@
 class Sync < ApplicationRecord
-  Error = Class.new(StandardError)
+  include AASM
 
   belongs_to :syncable, polymorphic: true
 
   belongs_to :parent, class_name: "Sync", optional: true
   has_many :children, class_name: "Sync", foreign_key: :parent_id, dependent: :destroy
 
-  enum :status, { pending: "pending", syncing: "syncing", completed: "completed", failed: "failed" }
-
   scope :ordered, -> { order(created_at: :desc) }
+  scope :incomplete, -> { where(status: [ :pending, :syncing ]) }
 
-  def child?
-    parent_id.present?
-  end
+  # Sync state machine
+  aasm column: :status do
+    state :pending, initial: true
+    state :syncing
+    state :completed
+    state :failed
 
-  def perform
-    Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
-      start!
+    event :start, after_commit: :handle_start do
+      transitions from: :pending, to: :syncing
+    end
 
-      begin
-        syncer.perform_sync(start_date: start_date)
+    event :complete, after_commit: :handle_finalization do
+      transitions from: :syncing, to: :completed
+    end
 
-        # Schedule child syncables to sync later
-        syncer.child_syncables.each do |child_syncable|
-          child_syncable.sync_later(start_date: start_date, parent_sync: self)
-        end
-
-        unless has_pending_child_syncs?
-          complete!
-          Rails.logger.info("Sync completed, starting post-sync")
-          syncer.perform_post_sync
-          Rails.logger.info("Post-sync completed")
-        end
-      rescue StandardError => error
-        fail! error, report_error: true
-      ensure
-        notify_parent_of_completion! if has_parent?
-      end
+    event :fail, after_commit: :handle_finalization do
+      transitions from: :syncing, to: :failed
     end
   end
 
-  def handle_child_completion_event
+  def perform(start_date: nil)
+    start!
+
+    begin
+      syncable.perform_sync(sync: self, start_date: start_date)
+      attempt_finalization
+    rescue => e
+      fail!
+      handle_error(e)
+    end
+  end
+
+  # If the sync doesn't have any in-progress children, finalize it.
+  def attempt_finalization
     Sync.transaction do
-      # We need this to ensure 2 child syncs don't update the parent at the exact same time with different results
-      # and cause the sync to hang in "syncing" status indefinitely
-      self.lock!
+      lock!
 
-      unless has_pending_child_syncs?
-        if has_failed_child_syncs?
-          fail!(Error.new("One or more child syncs failed"))
-        else
-          complete!
-        end
+      return unless all_children_finalized?
 
-        # If this sync is both a child and a parent, we need to notify the parent of completion
-        notify_parent_of_completion! if has_parent?
-
-        syncer.perform_post_sync
+      if has_failed_children?
+        fail!
+      else
+        complete!
       end
     end
   end
 
   private
-    def syncer
-      "#{syncable_type}::Syncer".constantize.new(syncable)
+    def has_failed_children?
+      children.failed.any?
     end
 
-    def has_pending_child_syncs?
-      children.where(status: [ :pending, :syncing ]).any?
+    def all_children_finalized?
+      children.incomplete.empty?
     end
 
-    def has_failed_child_syncs?
-      children.where(status: :failed).any?
-    end
+    # Once sync finalizes, notify its parent and run its post-sync logic.
+    def handle_finalization
+      syncable.perform_post_sync
 
-    def has_parent?
-      parent_id.present?
-    end
-
-    def notify_parent_of_completion!
-      parent.handle_child_completion_event
-    end
-
-    def start!
-      Rails.logger.info("Starting sync")
-      update! status: :syncing
-    end
-
-    def complete!
-      Rails.logger.info("Sync completed")
-      update! status: :completed, last_ran_at: Time.current
-    end
-
-    def fail!(error, report_error: false)
-      Rails.logger.error("Sync failed: #{error.message}")
-
-      if report_error
-        Sentry.capture_exception(error) do |scope|
-          scope.set_context("sync", { id: id, syncable_type: syncable_type, syncable_id: syncable_id })
-          scope.set_tags(sync_id: id)
-        end
+      if parent
+        parent.attempt_finalization
       end
+    end
 
-      update!(
-        status: :failed,
-        error: error.message,
-        last_ran_at: Time.current
-      )
+    def handle_error(error)
+      update!(error: error.message)
+      Sentry.capture_exception(error) do |scope|
+        scope.set_tags(sync_id: id)
+      end
+    end
+
+    def handle_start
+      update!(last_ran_at: Time.current)
     end
 end

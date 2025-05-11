@@ -6,7 +6,7 @@ module Syncable
   end
 
   def syncing?
-    syncs.where(status: [ :syncing, :pending ]).any?
+    syncs.incomplete.any?
   end
 
   def sync_later(start_date: nil, parent_sync: nil)
@@ -14,8 +14,12 @@ module Syncable
     SyncJob.perform_later(new_sync)
   end
 
-  def sync(start_date: nil)
-    syncs.create!(start_date: start_date).perform
+  def perform_sync(sync:, start_date: nil)
+    syncer.perform_sync(sync: sync, start_date: start_date)
+  end
+
+  def perform_post_sync
+    syncer.perform_post_sync
   end
 
   def sync_error
@@ -28,6 +32,10 @@ module Syncable
 
   private
     def latest_sync
-      syncs.order(created_at: :desc).first
+      syncs.ordered.first
+    end
+
+    def syncer
+      self.class::Syncer.new(self)
     end
 end
