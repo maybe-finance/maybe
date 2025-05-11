@@ -19,12 +19,17 @@ class Sync < ApplicationRecord
       start!
 
       begin
-        syncer.perform_sync(self, start_date: start_date)
+        syncer.perform_sync(start_date: start_date)
+
+        # Schedule child syncables to sync later
+        syncer.child_syncables.each do |child_syncable|
+          child_syncable.sync_later(start_date: start_date, parent_sync: self)
+        end
 
         unless has_pending_child_syncs?
           complete!
           Rails.logger.info("Sync completed, starting post-sync")
-          syncer.perform_post_sync(self)
+          syncer.perform_post_sync
           Rails.logger.info("Post-sync completed")
         end
       rescue StandardError => error
@@ -51,7 +56,7 @@ class Sync < ApplicationRecord
         # If this sync is both a child and a parent, we need to notify the parent of completion
         notify_parent_of_completion! if has_parent?
 
-        syncer.perform_post_sync(self)
+        syncer.perform_post_sync
       end
     end
   end

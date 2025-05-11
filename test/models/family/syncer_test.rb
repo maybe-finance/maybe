@@ -11,14 +11,9 @@ class Family::SyncerTest < ActiveSupport::TestCase
     manual_accounts_count = @family.accounts.manual.count
     items_count = @family.plaid_items.count
 
-    Account.any_instance.expects(:sync_later)
-      .with(start_date: nil, parent_sync: family_sync)
-      .times(manual_accounts_count)
+    syncer = Family::Syncer.new(@family)
+    syncer.perform_sync(start_date: family_sync.start_date)
 
-    PlaidItem.any_instance.expects(:sync_later)
-      .with(start_date: nil, parent_sync: family_sync)
-      .times(items_count)
-
-    Family::Syncer.new(@family).perform_sync(family_sync, start_date: family_sync.start_date)
+    assert_equal manual_accounts_count + items_count, syncer.child_syncables.count
   end
 end
