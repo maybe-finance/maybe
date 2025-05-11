@@ -24,7 +24,6 @@ export default class extends Controller {
     // Find the parent rules controller before removing the condition
     const rulesEl = this.element.closest('[data-controller~="rules"]');
 
-    // Remove the condition
     if (e.params.destroy) {
       this.destroyFieldTarget.value = true;
       this.element.classList.add("hidden");
@@ -37,7 +36,6 @@ export default class extends Controller {
       const rulesController = this.application.getControllerForElementAndIdentifier(rulesEl, "rules");
       if (rulesController && typeof rulesController.updateConditionPrefixes === "function") {
         rulesController.updateConditionPrefixes();
-        console.log("updated prefixes")
       }
     }
   }

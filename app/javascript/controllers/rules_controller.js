@@ -12,7 +12,7 @@ export default class extends Controller {
   ];
 
   connect() {
-    // Update condition prefixes on first connection (form render)
+    // Update condition prefixes on first connection (form render on edit)
     this.updateConditionPrefixes();
   }
 
@@ -57,32 +57,22 @@ export default class extends Controller {
   // This is also called by the rule/conditions_controller when a subcondition is removed
   updateConditionPrefixes() {
     // Update conditions
-    this.#updatePrefixesForList(this.conditionsListTarget);
+    const conditions = Array.from(this.conditionsListTarget.children);
 
-    // Update subconditions for each condition group
-    // We currently only support a single level of subconditions
-    const groupSubLists = this.conditionsListTarget.querySelectorAll('[data-rule--conditions-target="subConditionsList"]');
-    groupSubLists.forEach((subList) => {
-      this.#updatePrefixesForList(subList);
-    });
-  }
+    let conditionIndex = 0;
 
-  // Helper to update prefixes for a given list
-  #updatePrefixesForList(listEl) {
-    const items = Array.from(listEl.children);
-    let conditionIdx = 0;
-    items.forEach((item) => {
-      // Only process visible items, this prevents conditions that are marked for removal and hidden
+    conditions.forEach((condition) => {
+      // Only process visible conditions, this prevents conditions that are marked for removal and hidden
       // from being added to the index. This is important when editing a rule.
-      if (!item.classList.contains('hidden')) {
-        const prefixEl = item.querySelector('[data-condition-prefix]');
+      if (!condition.classList.contains('hidden')) {
+        const prefixEl = condition.querySelector('[data-condition-prefix]');
         if (prefixEl) {
-          if (conditionIdx === 0) {
+          if (conditionIndex === 0) {
             prefixEl.classList.add('hidden');
           } else {
             prefixEl.classList.remove('hidden');
           }
-          conditionIdx++;
+          conditionIndex++;
         }
       }
     });
