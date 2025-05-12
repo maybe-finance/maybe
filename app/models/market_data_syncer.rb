@@ -20,6 +20,11 @@ class MarketDataSyncer
     @account = account
   end
 
+  def sync_all(full_history: false)
+    sync_exchange_rates(full_history: full_history)
+    sync_prices(full_history: full_history)
+  end
+
   def sync_exchange_rates(full_history: false)
     unless rate_provider
       Rails.logger.warn("No rate provider configured for MarketDataSyncer.sync_exchange_rates, skipping sync")
