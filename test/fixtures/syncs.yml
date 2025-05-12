@@ -1,17 +1,17 @@
 account:
   syncable_type: Account
   syncable: depository
-  last_ran_at: <%= Time.now %>
   status: completed
+  completed_at: <%= Time.now %>
 
 plaid_item:
   syncable_type: PlaidItem
   syncable: one
-  last_ran_at: <%= Time.now %>
   status: completed
+  completed_at: <%= Time.now %>
 
 family:
   syncable_type: Family
   syncable: dylan_family
-  last_ran_at: <%= Time.now %>
   status: completed
+  completed_at: <%= Time.now %>

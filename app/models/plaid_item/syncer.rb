@@ -5,14 +5,14 @@ class PlaidItem::Syncer
     @plaid_item = plaid_item
   end
 
-  def perform_sync(sync:, start_date: nil)
+  def perform_sync(sync)
     begin
       Rails.logger.info("Fetching and loading Plaid data")
       fetch_and_load_plaid_data
       plaid_item.update!(status: :good) if plaid_item.requires_update?
 
       plaid_item.accounts.each do |account|
-        account.sync_later(start_date: start_date, parent_sync: sync)
+        account.sync_later(parent_sync: sync, window_start_date: sync.window_start_date, window_end_date: sync.window_end_date)
       end
 
       Rails.logger.info("Plaid data fetched and loaded")
@@ -42,9 +42,9 @@ class PlaidItem::Syncer
 
     def safe_fetch_plaid_data(method)
       begin
-        plaid.send(method, self)
+        plaid.send(method, plaid_item)
       rescue Plaid::ApiError => e
-        Rails.logger.warn("Error fetching #{method} for item #{id}: #{e.message}")
+        Rails.logger.warn("Error fetching #{method} for item #{plaid_item.id}: #{e.message}")
         nil
       end
     end
@@ -53,7 +53,7 @@ class PlaidItem::Syncer
       error_body = JSON.parse(error.response_body)
 
       if error_body["error_code"] == "ITEM_LOGIN_REQUIRED"
-        update!(status: :requires_update)
+        plaid_item.update!(status: :requires_update)
       end
     end
 
@@ -64,14 +64,14 @@ class PlaidItem::Syncer
       Rails.logger.info "Starting Plaid data fetch (accounts, transactions, investments, liabilities)"
 
       item = plaid.get_item(plaid_item.access_token).item
-      update!(available_products: item.available_products, billed_products: item.billed_products)
+      plaid_item.update!(available_products: item.available_products, billed_products: item.billed_products)
 
       # Institution details
       if item.institution_id.present?
         begin
           Rails.logger.info "Fetching Plaid institution details for #{item.institution_id}"
           institution = plaid.get_institution(item.institution_id)
-          update!(
+          plaid_item.update!(
             institution_id: item.institution_id,
             institution_url: institution.institution.url,
             institution_color: institution.institution.primary_color
@@ -98,7 +98,7 @@ class PlaidItem::Syncer
 
       if fetched_transactions
         Rails.logger.info "Processing Plaid transactions (added: #{fetched_transactions.added.size}, modified: #{fetched_transactions.modified.size}, removed: #{fetched_transactions.removed.size})"
-        transaction do
+        PlaidItem.transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             added = fetched_transactions.added.select { |t| t.account_id == internal_plaid_account.plaid_id }
             modified = fetched_transactions.modified.select { |t| t.account_id == internal_plaid_account.plaid_id }
@@ -107,7 +107,7 @@ class PlaidItem::Syncer
             internal_plaid_account.sync_transactions!(added:, modified:, removed:)
           end
 
-          update!(next_cursor: fetched_transactions.cursor)
+          plaid_item.update!(next_cursor: fetched_transactions.cursor)
         end
       end
 
@@ -117,7 +117,7 @@ class PlaidItem::Syncer
 
       if fetched_investments
         Rails.logger.info "Processing Plaid investments (transactions: #{fetched_investments.transactions.size}, holdings: #{fetched_investments.holdings.size}, securities: #{fetched_investments.securities.size})"
-        transaction do
+        PlaidItem.transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             transactions = fetched_investments.transactions.select { |t| t.account_id == internal_plaid_account.plaid_id }
             holdings = fetched_investments.holdings.select { |h| h.account_id == internal_plaid_account.plaid_id }
@@ -134,7 +134,7 @@ class PlaidItem::Syncer
 
       if fetched_liabilities
         Rails.logger.info "Processing Plaid liabilities (credit: #{fetched_liabilities.credit&.size || 0}, mortgage: #{fetched_liabilities.mortgage&.size || 0}, student: #{fetched_liabilities.student&.size || 0})"
-        transaction do
+        PlaidItem.transaction do
           internal_plaid_accounts.each do |internal_plaid_account|
             credit = fetched_liabilities.credit&.find { |l| l.account_id == internal_plaid_account.plaid_id }
             mortgage = fetched_liabilities.mortgage&.find { |l| l.account_id == internal_plaid_account.plaid_id }

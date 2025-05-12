@@ -5,7 +5,7 @@ class Account::Syncer
     @account = account
   end
 
-  def perform_sync(sync:, start_date: nil)
+  def perform_sync(sync)
     Rails.logger.info("Processing balances (#{account.linked? ? 'reverse' : 'forward'})")
     sync_balances
   end

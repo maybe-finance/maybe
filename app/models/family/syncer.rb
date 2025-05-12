@@ -5,7 +5,7 @@ class Family::Syncer
     @family = family
   end
 
-  def perform_sync(sync:, start_date: nil)
+  def perform_sync(sync)
     # We don't rely on this value to guard the app, but keep it eventually consistent
     family.sync_trial_status!
 
@@ -16,7 +16,7 @@ class Family::Syncer
 
     # Schedule child syncs
     child_syncables.each do |syncable|
-      syncable.sync_later(start_date: start_date, parent_sync: sync)
+      syncable.sync_later(parent_sync: sync, window_start_date: sync.window_start_date, window_end_date: sync.window_end_date)
     end
   end
 

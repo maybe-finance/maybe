@@ -9,13 +9,13 @@ module Syncable
     syncs.incomplete.any?
   end
 
-  def sync_later(start_date: nil, parent_sync: nil)
-    new_sync = syncs.create!(start_date: start_date, parent: parent_sync)
+  def sync_later(parent_sync: nil, window_start_date: nil, window_end_date: nil)
+    new_sync = syncs.create!(parent: parent_sync, window_start_date: window_start_date, window_end_date: window_end_date)
     SyncJob.perform_later(new_sync)
   end
 
-  def perform_sync(sync:, start_date: nil)
-    syncer.perform_sync(sync: sync, start_date: start_date)
+  def perform_sync(sync)
+    syncer.perform_sync(sync)
   end
 
   def perform_post_sync
@@ -27,7 +27,7 @@ module Syncable
   end
 
   def last_synced_at
-    latest_sync&.last_ran_at
+    latest_sync&.completed_at
   end
 
   private

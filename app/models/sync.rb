@@ -9,14 +9,16 @@ class Sync < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
   scope :incomplete, -> { where(status: [ :pending, :syncing ]) }
 
+  validate :window_valid
+
   # Sync state machine
-  aasm column: :status do
+  aasm column: :status, timestamps: true do
     state :pending, initial: true
     state :syncing
     state :completed
     state :failed
 
-    event :start, after_commit: :handle_start do
+    event :start do
       transitions from: :pending, to: :syncing
     end
 
@@ -29,11 +31,11 @@ class Sync < ApplicationRecord
     end
   end
 
-  def perform(start_date: nil)
+  def perform(window_start_date: nil, window_end_date: nil)
     start!
 
     begin
-      syncable.perform_sync(sync: self, start_date: start_date)
+      syncable.perform_sync(self)
       attempt_finalization
     rescue => e
       fail!
@@ -81,7 +83,9 @@ class Sync < ApplicationRecord
       end
     end
 
-    def handle_start
-      update!(last_ran_at: Time.current)
+    def window_valid
+      if window_start_date && window_end_date && window_start_date > window_end_date
+        errors.add(:window_end_date, "must be greater than window_start_date")
+      end
     end
 end

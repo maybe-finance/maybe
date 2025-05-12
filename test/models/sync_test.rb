@@ -5,32 +5,29 @@ class SyncTest < ActiveSupport::TestCase
 
   test "runs successful sync" do
     syncable = accounts(:depository)
-    sync = Sync.create!(syncable: syncable, last_ran_at: 1.day.ago)
+    sync = Sync.create!(syncable: syncable)
 
-    syncable.expects(:perform_sync).with(sync: sync, start_date: sync.start_date).once
+    syncable.expects(:perform_sync).with(sync).once
 
     assert_equal "pending", sync.status
 
-    previously_ran_at = sync.last_ran_at
-
     sync.perform
 
-    assert sync.last_ran_at > previously_ran_at
+    assert sync.completed_at < Time.now
     assert_equal "completed", sync.status
   end
 
   test "handles sync errors" do
     syncable = accounts(:depository)
-    sync = Sync.create!(syncable: syncable, last_ran_at: 1.day.ago)
+    sync = Sync.create!(syncable: syncable)
 
-    syncable.expects(:perform_sync).with(sync: sync, start_date: sync.start_date).raises(StandardError.new("test sync error"))
+    syncable.expects(:perform_sync).with(sync).raises(StandardError.new("test sync error"))
 
     assert_equal "pending", sync.status
-    previously_ran_at = sync.last_ran_at
 
     sync.perform
 
-    assert sync.last_ran_at > previously_ran_at
+    assert sync.failed_at < Time.now
     assert_equal "failed", sync.status
     assert_equal "test sync error", sync.error
   end
@@ -48,20 +45,20 @@ class SyncTest < ActiveSupport::TestCase
     assert_equal "pending", plaid_item_sync.status
     assert_equal "pending", account_sync.status
 
-    family.expects(:perform_sync).with(sync: family_sync, start_date: family_sync.start_date).once
+    family.expects(:perform_sync).with(family_sync).once
 
     family_sync.perform
 
     assert_equal "syncing", family_sync.reload.status
 
-    plaid_item.expects(:perform_sync).with(sync: plaid_item_sync, start_date: plaid_item_sync.start_date).once
+    plaid_item.expects(:perform_sync).with(plaid_item_sync).once
 
     plaid_item_sync.perform
 
     assert_equal "syncing", family_sync.reload.status
     assert_equal "syncing", plaid_item_sync.reload.status
 
-    account.expects(:perform_sync).with(sync: account_sync, start_date: account_sync.start_date).once
+    account.expects(:perform_sync).with(account_sync).once
 
     # Since these are accessed through `parent`, they won't necessarily be the same
     # instance we configured above

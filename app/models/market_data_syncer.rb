@@ -91,17 +91,25 @@ class MarketDataSyncer
       )
 
       unless fetched_prices.success?
-        message = "#{PRICE_PROVIDER_NAME} could not fetch security price for: #{security.ticker} between: #{start_date} and: #{Date.current}.  Provider error: #{fetched_prices.error.message}"
-        Rails.logger.warn(message)
-        Sentry.capture_exception(MissingSecurityPriceError.new(message))
+        error = MissingSecurityPriceError.new(
+          "#{PRICE_PROVIDER_NAME} could not fetch security price for: #{security.ticker} between: #{start_date} and: #{Date.current}.  Provider error: #{fetched_prices.error.message}"
+        )
+
+        Rails.logger.warn(error.message)
+        Sentry.capture_exception(error, level: :warning)
+
         return
       end
 
       prices_for_upsert = fetched_prices.data.map do |price|
         if price.security.nil? || price.date.nil? || price.price.nil? || price.currency.nil?
-          message = "#{PRICE_PROVIDER_NAME} returned invalid price data for security: #{security.ticker} on: #{price.date}.  Price data: #{price.inspect}"
-          Rails.logger.warn(message)
-          Sentry.capture_exception(InvalidSecurityPriceDataError.new(message))
+          error = InvalidSecurityPriceDataError.new(
+            "#{PRICE_PROVIDER_NAME} returned invalid price data for security: #{security.ticker} on: #{price.date}.  Price data: #{price.inspect}"
+          )
+
+          Rails.logger.warn(error.message)
+          Sentry.capture_exception(error, level: :warning)
+
           next
         end
 

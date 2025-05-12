@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_09_182903) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_12_171654) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -586,15 +586,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_182903) do
   create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "syncable_type", null: false
     t.uuid "syncable_id", null: false
-    t.datetime "last_ran_at"
-    t.date "start_date"
     t.string "status", default: "pending"
     t.string "error"
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "error_backtrace", array: true
     t.uuid "parent_id"
+    t.datetime "pending_at"
+    t.datetime "syncing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.date "window_start_date"
+    t.date "window_end_date"
     t.index ["parent_id"], name: "index_syncs_on_parent_id"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end
