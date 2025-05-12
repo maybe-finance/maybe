@@ -31,7 +31,14 @@ class Sync < ApplicationRecord
     end
   end
 
-  def perform(window_start_date: nil, window_end_date: nil)
+  class << self
+    # By default, we sync the "visible" window of data (user sees 30 day graphs by default)
+    def create_with_defaults!(parent: nil)
+      create!(parent: parent, window_start_date: 30.days.ago.to_date)
+    end
+  end
+
+  def perform
     start!
 
     begin
