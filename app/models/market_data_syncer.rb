@@ -85,7 +85,7 @@ class MarketDataSyncer
       Rails.logger.info("Syncing security price for: #{security.ticker}, start_date: #{start_date}, end_date: #{end_date}")
 
       fetched_prices = price_provider.fetch_security_prices(
-        security.ticker,
+        security,
         start_date: start_date,
         end_date: end_date
       )

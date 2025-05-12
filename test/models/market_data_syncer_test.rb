@@ -54,7 +54,7 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
     end_date = Date.current.in_time_zone("America/New_York").to_date
 
     mock_provider.expects(:fetch_security_prices)
-                 .with("AAPL", start_date: start_date, end_date: end_date)
+                 .with(aapl, start_date: start_date, end_date: end_date)
                  .returns(provider_success_response([ OpenStruct.new(security: aapl, date: start_date, price: 100, currency: "USD") ]))
 
     assert_difference "Security::Price.count", 1 do
