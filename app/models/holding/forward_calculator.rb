@@ -7,7 +7,17 @@ class Holding::ForwardCalculator
 
   def calculate
     Rails.logger.tagged("Holding::ForwardCalculator") do
-      holdings = calculate_holdings
+      current_portfolio = generate_starting_portfolio
+      next_portfolio = {}
+      holdings = []
+
+      account.start_date.upto(Date.current).each do |date|
+        trades = portfolio_cache.get_trades(date: date)
+        next_portfolio = transform_portfolio(current_portfolio, trades, direction: :forward)
+        holdings += build_holdings(next_portfolio, date)
+        current_portfolio = next_portfolio
+      end
+
       Holding.gapfill(holdings)
     end
   end
@@ -58,20 +68,5 @@ class Holding::ForwardCalculator
           amount: qty * price.price
         )
       end.compact
-    end
-
-    def calculate_holdings
-      current_portfolio = generate_starting_portfolio
-      next_portfolio = {}
-      holdings = []
-
-      account.start_date.upto(Date.current).each do |date|
-        trades = portfolio_cache.get_trades(date: date)
-        next_portfolio = transform_portfolio(current_portfolio, trades, direction: :forward)
-        holdings += build_holdings(next_portfolio, date)
-        current_portfolio = next_portfolio
-      end
-
-      holdings
     end
 end

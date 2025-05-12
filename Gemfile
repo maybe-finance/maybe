@@ -29,6 +29,7 @@ gem "hotwire_combobox"
 
 # Background Jobs
 gem "sidekiq"
+gem "sidekiq-cron"
 
 # Monitoring
 gem "vernier"

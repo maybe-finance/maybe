@@ -1,6 +1,7 @@
 concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
 queues:
-  - [high_priority, 6]
+  - [scheduled, 10] # For cron-like jobs (e.g. "daily market data sync")
+  - [high_priority, 4]
   - [medium_priority, 2]
   - [low_priority, 1]
   - [default, 1]

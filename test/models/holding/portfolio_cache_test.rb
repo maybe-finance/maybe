@@ -28,37 +28,18 @@ class Holding::PortfolioCacheTest < ActiveSupport::TestCase
       price: db_price
     )
 
-    expect_provider_prices([], start_date: @account.start_date)
-
     cache = Holding::PortfolioCache.new(@account)
     assert_equal db_price, cache.get_price(@security.id, Date.current).price
   end
 
-  test "if no price in DB, try fetching from provider" do
-    Security::Price.delete_all
-
-    provider_price = Security::Price.new(
-      security: @security,
-      date: Date.current,
-      price: 220,
-      currency: "USD"
-    )
-
-    expect_provider_prices([ provider_price ], start_date: @account.start_date)
-
-    cache = Holding::PortfolioCache.new(@account)
-    assert_equal provider_price.price, cache.get_price(@security.id, Date.current).price
-  end
-
-  test "if no price from db or provider, try getting the price from trades" do
+  test "if no price from db, try getting the price from trades" do
     Security::Price.destroy_all
-    expect_provider_prices([], start_date: @account.start_date)
 
     cache = Holding::PortfolioCache.new(@account)
     assert_equal @trade.price, cache.get_price(@security.id, @trade.entry.date).price
   end
 
-  test "if no price from db, provider, or trades, search holdings" do
+  test "if no price from db or trades, search holdings" do
     Security::Price.delete_all
     Entry.delete_all
 
@@ -72,16 +53,7 @@ class Holding::PortfolioCacheTest < ActiveSupport::TestCase
       currency: "USD"
     )
 
-    expect_provider_prices([], start_date: @account.start_date)
-
     cache = Holding::PortfolioCache.new(@account, use_holdings: true)
     assert_equal holding.price, cache.get_price(@security.id, holding.date).price
   end
-
-  private
-    def expect_provider_prices(prices, start_date:, end_date: Date.current)
-      @provider.expects(:fetch_security_prices)
-               .with(@security, start_date: start_date, end_date: end_date)
-               .returns(provider_success_response(prices))
-    end
 end
