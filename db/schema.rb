@@ -580,7 +580,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_12_171654) do
     t.datetime "trial_ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["family_id"], name: "index_subscriptions_on_family_id"
+    t.index ["family_id"], name: "index_subscriptions_on_family_id", unique: true
   end
 
   create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
