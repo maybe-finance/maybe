@@ -92,13 +92,16 @@ class Provider::SimpleFin
     # TODO: Remove JSON Reading for real requests. Disabled currently due to preventing rate limits.
     json_file_path =  Rails.root.join("sample.simple.fin.json")
     accounts = []
+    error_messages = []
     if File.exist?(json_file_path)
       file_content = File.read(json_file_path)
       parsed_json = JSON.parse(file_content)
       accounts = parsed_json["accounts"] || []
+      error_messages = parsed_json["errors"] || []
     else
       Rails.logger.warn "SimpleFIN: Sample JSON file not found at #{json_file_path}. Returning empty accounts."
     end
+
 
     # The only way we can really determine types right now is by some properties. Try and set their types
     accounts.each do |account|
@@ -112,10 +115,22 @@ class Provider::SimpleFin
       else
         account["type"] = "Depository" # Default for positive balance
       end
+
+      # Set error messages if related
+      account["org"]["institution_errors"] = []
+      error_messages.each do |error|
+        if error.include? account["org"]["name"]
+          account["org"]["institution_errors"].push(error)
+        end
+      end
     end
 
-    # Update accounts to only include relevant accounts to the typ
-    accounts.filter { |acc|  acc["type"] == accountable_type }
+    if accountable_type == nil
+      accounts
+    else
+      # Update accounts to only include relevant accounts to the type
+      accounts.filter { |acc|  acc["type"] == accountable_type }
+    end
   end
 
   # Returns if this is a supported API of SimpleFIN by the access url in the config.

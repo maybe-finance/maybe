@@ -15,21 +15,30 @@
 
   <div class="space-y-1">
     <% account_group.accounts.each do |account| %>
-      <%= link_to account_path(account), 
-                  class: class_names(
-                    "block flex items-center gap-2 px-3 py-2 rounded-lg",
-                    page_active?(account_path(account)) ? "bg-container" : "hover:bg-surface-hover"
-                  ), 
-                  data: { sidebar_tabs_target: "account", action: "click->sidebar-tabs#select" },
-                  title: account.name do %>
-        <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
-        <div class="min-w-0 grow">
-          <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
-          <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
-        </div>
+      <div style="width: 100%;"
+           class="<%= class_names(
+             "block flex items-center gap-2 px-3 py-2 rounded-lg",
+             page_active?(account_path(account)) ? "bg-container" : "hover:bg-surface-hover"
+           ) %>"
+           data-sidebar-tabs-target="account">
 
-        <div class="ml-auto text-right grow h-10">
+        <%= link_to account_path(account),
+                    style: "overflow: hidden;",
+                    class: "flex items-center gap-2 grow",
+                    title: account.name,
+                    data: { action: "click->sidebar-tabs#select" } do %>
+          <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
+
+          <div style="max-width: 80%;">
+            <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
+            <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
+          </div>
+          <%# Render account error warnings %>
+          <%= render "accounts/account_error", account: account, given_title: "Account has an error", link_to_path: account_path(account) %>
+        <% end %>
+
+        <div class="ml-auto text-right h-10 shrink-0">
           <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
 
           <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
@@ -38,7 +47,7 @@
             </div>
           <% end %>
         </div>
-      <% end %>
+      </div>
     <% end %>
   </div>
 

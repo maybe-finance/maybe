@@ -16,7 +16,7 @@ class Family < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :plaid_items, dependent: :destroy
-  has_many :simple_fin_connections, dependent: :destroy
+  has_many :simple_fin_items, dependent: :destroy
   has_many :invitations, dependent: :destroy
 
   has_many :imports, dependent: :destroy
@@ -82,6 +82,11 @@ class Family < ApplicationRecord
       plaid_item.sync_later(start_date: start_date, parent_sync: sync)
     end
 
+    Rails.logger.info("Syncing simple_fin items for family #{id}")
+    simple_fin_items.each do |simple_fin_item|
+      simple_fin_item.sync_later(start_date: start_date, parent_sync: sync)
+    end
+
     Rails.logger.info("Applying rules for family #{id}")
     rules.each do |rule|
       rule.apply_later
@@ -103,8 +108,9 @@ class Family < ApplicationRecord
     Sync.where(
       "(syncable_type = 'Family' AND syncable_id = ?) OR
        (syncable_type = 'Account' AND syncable_id IN (SELECT id FROM accounts WHERE family_id = ? AND plaid_account_id IS NULL)) OR
-       (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?))",
-      id, id, id
+       (syncable_type = 'PlaidItem' AND syncable_id IN (SELECT id FROM plaid_items WHERE family_id = ?)) OR
+       (syncable_type = 'SimpleFinItem' AND syncable_id IN (SELECT id FROM simple_fin_items WHERE family_id = ?))",
+      id, id, id, id
     ).where(status: [ "pending", "syncing" ], created_at: 10.minutes.ago..).exists?
   end
 

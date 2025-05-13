@@ -14,21 +14,19 @@
       <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
     </div>
 
-    <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-      <div class="flex items-center gap-2">
+    <%= styled_form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
+      <div class="flex items-center gap-2 w-[25rem]">
         <% if chart_view.present? %>
           <%= form.select :chart_view,
             [["Total value", "balance"], ["Holdings", "holdings_balance"], ["Cash", "cash_balance"]],
             { selected: chart_view },
-            class: "border border-secondary rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0",
             data: { "auto-submit-form-target": "auto" } %>
         <% end %>
 
         <%= form.select :period,
                     Period.as_options,
                     { selected: period.key },
-                    data: { "auto-submit-form-target": "auto" },
-                    class: "bg-container border border-secondary rounded-lg px-3 py-2 text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0" %>
+                    data: { "auto-submit-form-target": "auto" } %>
       </div>
     <% end %>
   </div>

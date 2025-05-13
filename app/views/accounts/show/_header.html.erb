@@ -20,6 +20,13 @@
     <% end %>
 
 
+    <%# Show error warnings %>
+    <% if account.simple_fin_account_id.present? %>
+      <div style="color: red; text-align: center;">
+        <%= account.simple_fin_account.simple_fin_item.institution_errors.join(",") %>
+      </div>
+    <% end %>
+
     <div class="flex items-center gap-1 ml-auto">
       <% if account.plaid_account_id.present? %>
         <% if Rails.env.development? %>
@@ -33,8 +40,17 @@
           ) %>
         <% end %>
       <% elsif account.simple_fin_account_id.present? %>
-        <%# SimpleFIN information %>
         <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN. This account will auto refresh." %>
+        <%= render "accounts/account_error", account: account, link_to_path: "https://beta-bridge.simplefin.org/my-account", given_title: "This account has issues in SimpleFIN bridge. Update it and then re-sync.", target: :_blank %>
+        <%# Re sync button. Will sync all SimpleFIN accounts %>
+        <%= icon(
+          "refresh-cw",
+          as_button: true,
+          size: "sm",
+          href: sync_simple_fin_path(account.simple_fin_account.simple_fin_item),
+          disabled: account.syncing?,
+          frame: :_top
+        ) %>
       <% else %>
         <%= icon(
           "refresh-cw",

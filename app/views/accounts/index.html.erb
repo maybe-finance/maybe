@@ -23,7 +23,7 @@
   </div>
 </header>
 
-<% if @manual_accounts.empty? && @plaid_items.empty? && @simple_fin_connections.empty? %>
+<% if @manual_accounts.empty? && @plaid_items.empty? && @simple_fin_items.empty? %>
   <%= render "empty" %>
 <% else %>
   <div class="space-y-2">
@@ -31,8 +31,8 @@
       <%= render @plaid_items.sort_by(&:created_at) %>
     <% end %>
 
-    <% if @simple_fin_connections.any? %>
-      <%= render @simple_fin_connections.sort_by(&:created_at) %>
+    <% if @simple_fin_items.any? %>
+      <%= render @simple_fin_items.sort_by(&:created_at) %>
     <% end %>
 
     <% if @manual_accounts.any? %>

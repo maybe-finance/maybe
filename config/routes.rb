@@ -202,6 +202,9 @@ Rails.application.routes.draw do
 
   # SimpleFIN routes
   resources :simple_fin, only: %i[create new] do
+    member do
+      post :sync
+    end
   end
 
 

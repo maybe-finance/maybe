@@ -30,6 +30,8 @@
       <% end %>
     </div>
     <div class="flex items-center gap-8">
+      <%= render "accounts/account_error", account: account, given_title: "Account has an error", link_to_path: account_path(account, return_to: return_to) %>
+
       <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
         <%= format_money account.balance_money %>
       </p>

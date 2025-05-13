@@ -68,7 +68,7 @@ class Account < ApplicationRecord
     url_string = if plaid_account.present?
       plaid_account.plaid_item&.institution_url
     elsif simple_fin_account.present?
-      simple_fin_account.simple_fin_connection&.institution_domain
+      simple_fin_account.simple_fin_item&.institution_domain
     end
 
     return nil unless url_string.present?

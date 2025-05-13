@@ -3,8 +3,8 @@
 class SimpleFinController < ApplicationController
   before_action :set_accountable_type
   before_action :authenticate_user!
-  before_action :set_simple_fin_provider
-  before_action :require_simple_fin_provider
+  before_action :set_simple_fin_provider, only: %i[create new]
+  before_action :require_simple_fin_provider, only: %i[create new]
 
   def new
     @simple_fin_accounts = @simple_fin_provider.get_available_accounts(@accountable_type)
@@ -19,6 +19,20 @@ class SimpleFinController < ApplicationController
   # Returns if an account exists for this family and this ID
   def account_exists(acc)
     Current.family.accounts.find_by(name: acc["name"])
+  end
+
+  ##
+  # Requests all accounts to be re-synced
+  def sync
+    @simple_fin_item = Current.family.simple_fin_items.find(params[:id])
+    unless @simple_fin_item.syncing?
+      @simple_fin_item.sync_later
+    end
+
+    respond_to do |format|
+      format.html { redirect_back_or_to accounts_path }
+      format.json { head :ok }
+    end
   end
 
   def create
@@ -39,17 +53,17 @@ class SimpleFinController < ApplicationController
       first_sf_account = sf_accounts_for_institution.first # Use data from the first account for connection details
       org_details = first_sf_account["org"]
 
-      # Find or Create the SimpleFinConnection for this institution
-      simple_fin_connection = Current.family.simple_fin_connections.find_or_create_by!(institution_id: institution_id) do |sfc|
-        sfc.name = org_details["name"] || "SimpleFIN Connection"
+      # Find or Create the SimpleFinItem for this institution
+      simple_fin_item = Current.family.simple_fin_items.find_or_create_by!(institution_id: institution_id) do |sfc|
         sfc.institution_name = org_details["name"]
         sfc.institution_url = org_details["url"]
         sfc.institution_domain = org_details["domain"]
-        sfc.last_synced_at = Time.current # Mark as synced upon creation
+        # TODO: Fix
+        sfc.last_sync_count_reset_at = Time.current # Mark as synced upon creation
       end
 
       sf_accounts_for_institution.each do |acc_detail|
-        next if simple_fin_connection.simple_fin_accounts.exists?(external_id: acc_detail["id"])
+        next if simple_fin_item.simple_fin_accounts.exists?(external_id: acc_detail["id"])
         next if account_exists(acc_detail)
 
         # Get sub type for this account from params
@@ -60,7 +74,7 @@ class SimpleFinController < ApplicationController
         # Create SimpleFinAccount and its associated Account
         simple_fin_account = SimpleFinAccount.find_or_create_from_simple_fin_data!(
           acc_detail,
-          simple_fin_connection
+          simple_fin_item
         )
 
         # Trigger an account sync of our data
@@ -75,7 +89,6 @@ class SimpleFinController < ApplicationController
   end
 
   private
-
     def set_accountable_type
       @accountable_type = params[:accountable_type]
     end

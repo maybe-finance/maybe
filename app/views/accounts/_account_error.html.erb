@@ -1,0 +1,34 @@
+<%# locals: (account:, link_to_path: nil, given_title: nil, target: nil) %>
+
+<%# Flag indicators of account issues %>
+<% if account.simple_fin_account.simple_fin_item.status == "requires_update" %>
+    <%= link_to link_to_path, target: target do %>
+        <%= icon(
+            "alert-triangle",
+            id: "account-issue-icon",
+            as_button: true,
+            size: "sm",
+            rel: "noopener noreferrer",
+            disabled: account.syncing?,
+            title: given_title
+            ) %>  
+    <% end %>
+<% end %>
+
+<%# Force some styling that keeps getting overwritten %>
+<style>
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  #account-issue-icon * {
+    color: red;
+  }
+
+  #account-issue-icon {
+    animation: pulse 2s infinite;
+  }
+
+</style>

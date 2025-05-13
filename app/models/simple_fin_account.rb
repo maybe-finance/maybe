@@ -7,13 +7,13 @@ class SimpleFinAccount < ApplicationRecord
     "Other" => OtherAsset
   }
 
-  belongs_to :simple_fin_connection
+  belongs_to :simple_fin_item
   has_one :account, dependent: :destroy, foreign_key: :simple_fin_account_id, inverse_of: :simple_fin_account
 
   accepts_nested_attributes_for :account
 
   validates :external_id, presence: true, uniqueness: true
-  validates :simple_fin_connection_id, presence: true
+  validates :simple_fin_item_id, presence: true
 
   after_destroy :cleanup_connection_if_orphaned
 
@@ -60,7 +60,7 @@ class SimpleFinAccount < ApplicationRecord
 
 
     def family
-      simple_fin_connection&.family
+      simple_fin_item&.family
     end
   end
 
@@ -69,6 +69,8 @@ class SimpleFinAccount < ApplicationRecord
     # Ensure accountable_attributes has the ID for updates
     # 'account' here refers to self.account (the associated Account instance)
     accountable_attributes = { id: self.account.accountable_id }
+
+    puts "SFA #{sf_account_data}"
 
     self.update!(
       current_balance: sf_account_data["balance"].to_d,
@@ -81,6 +83,12 @@ class SimpleFinAccount < ApplicationRecord
         last_synced_at: Time.current,
         accountable_attributes: accountable_attributes
       }
+    )
+
+    self.simple_fin_item.update!(
+      institution_errors: sf_account_data["org"]["institution_errors"],
+      status: sf_account_data["org"]["institution_errors"].empty? ? :good : :requires_update
+
     )
 
     # Sync transactions if present in the data
@@ -181,7 +189,7 @@ class SimpleFinAccount < ApplicationRecord
 
     def cleanup_connection_if_orphaned
       # Reload the connection to get the most up-to-date count of associated accounts
-      connection = simple_fin_connection.reload
+      connection = simple_fin_item.reload
       connection.destroy_later if connection.simple_fin_accounts.empty?
     end
 end
