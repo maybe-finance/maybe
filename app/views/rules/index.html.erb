@@ -62,7 +62,7 @@
           <% @rules.each_with_index do |rule, idx| %>
             <%= render "rule", rule: rule%>
             <% unless idx == @rules.size - 1 %>
-              <div class="h-px bg-alpha-black-50 ml-4 mr-6"></div>
+              <div class="h-px bg-divider ml-4 mr-6"></div>
             <% end %>
           <% end %>
         </div>

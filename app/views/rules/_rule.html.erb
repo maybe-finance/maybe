@@ -1,8 +1,8 @@
 <%# locals: (rule:) %>
-<div class="flex justify-between items-center p-4 <%= 'text-secondary' unless rule.active? %>">
+<div class="flex justify-between items-center p-4 <%= rule.active? ? 'text-primary' : 'text-secondary' %>">
   <div class="text-sm space-y-1.5">
     <% if rule.name.present? %>
-      <h3 class="font-medium text-md text-primary"><%= rule.name %></h3>
+      <h3 class="font-medium text-md"><%= rule.name %></h3>
     <% end %>
     <% if rule.conditions.any? %>
       <div class="flex items-center gap-2 mt-1">
