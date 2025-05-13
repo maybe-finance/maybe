@@ -34,6 +34,10 @@ module Syncable
     latest_sync&.last_ran_at
   end
 
+  def last_sync_created_at
+    latest_sync&.created_at
+  end
+
   private
     def latest_sync
       syncs.order(created_at: :desc).first
