@@ -1,6 +1,6 @@
 <%# locals: (rule:) %>
 
-<%= styled_form_with model: rule, class: "space-y-4",
+<%= styled_form_with model: rule, class: "space-y-6",
                      data: { controller: "rules", rule_registry_value: rule.registry.to_json } do |f| %>
 
   <%= f.hidden_field :resource_type, value: rule.resource_type %>
@@ -10,7 +10,19 @@
   <% end %>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium text-primary">If <%= rule.resource_type %></h3>
+    <div class="flex items-center gap-1 text-secondary">
+      <%= icon "tag", size: "sm" %>
+      <h3 class="text-sm font-medium text-primary">Rule name (optional)</h3>
+    </div>
+    <div class="ml-6">
+      <%= f.text_field :name, placeholder: "Enter a name for this rule", class: "form-field__input" %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div class="flex items-center gap-1 text-secondary">
+      <h3 class="text-sm font-medium text-primary">IF</h3>
+    </div>
 
     <%# Condition Group template, used by Stimulus controller to add new conditions dynamically %>
     <template data-rules-target="conditionGroupTemplate">
@@ -26,24 +38,27 @@
       <% end %>
     </template>
 
-    <ul data-rules-target="conditionsList" class="space-y-3 mb-4">
-      <%= f.fields_for :conditions do |cf| %>
-        <% if cf.object.compound? %>
-          <%= render "rule/conditions/condition_group", form: cf %>
-        <% else %>
-          <%= render "rule/conditions/condition", form: cf %>
+    <div class="ml-6 space-y-4">
+      <ul data-rules-target="conditionsList" class="space-y-3">
+        <%= f.fields_for :conditions do |cf| %>
+          <% if cf.object.compound? %>
+            <%= render "rule/conditions/condition_group", form: cf %>
+          <% else %>
+            <%= render "rule/conditions/condition", form: cf %>
+          <% end %>
         <% end %>
-      <% end %>
-    </ul>
+      </ul>
 
     <div class="flex items-center gap-2">
       <%= render ButtonComponent.new(text: "Add condition", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addCondition" }) %>
-      <%= render ButtonComponent.new(text: "Add condition group", icon: "boxes", variant: "ghost", type: "button", data: { action: "rules#addConditionGroup" }) %>
+      <%= render ButtonComponent.new(text: "Add condition group", icon: "copy-plus", variant: "ghost", type: "button", data: { action: "rules#addConditionGroup" }) %>
     </div>
   </section>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium text-primary">Then</h3>
+    <div class="flex items-center gap-1 text-secondary">
+      <h3 class="text-sm font-medium text-primary">THEN</h3>
+    </div>
 
     <%# Action template, used by Stimulus controller to add new actions dynamically %>
     <template data-rules-target="actionTemplate">
@@ -52,22 +67,25 @@
       <% end %>
     </template>
 
-    <ul data-rules-target="actionsList" class="space-y-3">
-      <%= f.fields_for :actions do |af| %>
-        <%= render "rule/actions/action", form: af %>
-      <% end %>
-    </ul>
+    <div class="ml-6 space-y-4">
+      <ul data-rules-target="actionsList" class="space-y-3">
+        <%= f.fields_for :actions do |af| %>
+          <%= render "rule/actions/action", form: af %>
+        <% end %>
+      </ul>
 
     <%= render ButtonComponent.new(text: "Add action", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addAction" }) %>
   </section>
 
   <section class="space-y-4">
-    <h3 class="text-sm font-medium text-primary">Apply this</h3>
+    <div class="flex items-center gap-1 text-secondary">
+      <h3 class="text-sm font-medium text-primary">FOR</h3>
+    </div>
 
-    <div class="space-y-2">
+    <div class="ml-6 space-y-3">
       <div class="flex items-center gap-2">
         <%= f.radio_button :effective_date_enabled, false, checked: rule.effective_date.nil?, data: { action: "rules#clearEffectiveDate" } %>
-        <%= f.label :effective_date_enabled_false, "To all past and future #{rule.resource_type}s", class: "text-sm text-primary" %>
+        <%= f.label :effective_date_enabled_false, "All past and future #{rule.resource_type}s", class: "text-sm text-primary" %>
       </div>
 
       <div class="flex items-center gap-2">

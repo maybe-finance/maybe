@@ -32,8 +32,6 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "users who have already trialed cannot create a new subscription" do
-    @family.start_trial_subscription!
-
     assert_no_difference "Subscription.count" do
       post subscription_path
     end

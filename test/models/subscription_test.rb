@@ -2,7 +2,7 @@ require "test_helper"
 
 class SubscriptionTest < ActiveSupport::TestCase
   setup do
-    @family = families(:empty)
+    @family = Family.create!(name: "Test Family")
   end
 
   test "can create subscription without stripe details if trial" do

@@ -8,7 +8,10 @@ class Rule < ApplicationRecord
   accepts_nested_attributes_for :conditions, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
 
+  before_validation :normalize_name
+
   validates :resource_type, presence: true
+  validates :name, length: { minimum: 1 }, allow_nil: true
   validate :no_nested_compound_conditions
 
   # Every rule must have at least 1 action
@@ -98,5 +101,9 @@ class Rule < ApplicationRecord
           end
         end
       end
+    end
+
+    def normalize_name
+      self.name = nil if name.is_a?(String) && name.strip.empty?
     end
 end
