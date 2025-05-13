@@ -4,7 +4,6 @@
     <% if rule.name.present? %>
       <h3 class="font-medium text-md text-primary"><%= rule.name %></h3>
     <% end %>
-
     <% if rule.conditions.any? %>
       <div class="flex items-center gap-2 mt-1">
         <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
@@ -24,7 +23,6 @@
         </p>
       </div>
     <% end %>
-
     <div class="flex items-center gap-2 mt-1">
       <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
         <span class="font-mono text-xs">THEN</span>
@@ -42,7 +40,6 @@
         <% end %>
       </p>
     </div>
-
     <div class="flex items-center gap-2 mt-1">
       <div class="flex items-center gap-1 text-secondary w-16 shrink-0">
         <span class="font-mono text-xs">FOR</span>
@@ -58,12 +55,10 @@
       </p>
     </div>
   </div>
-
   <div class="flex items-center gap-4">
     <%= styled_form_with model: rule, data: { controller: "auto-submit-form" } do |f| %>
       <%= f.toggle :active, { data: { auto_submit_form_target: "auto" } } %>
     <% end %>
-
     <%= render MenuComponent.new do |menu| %>
       <% menu.with_item(variant: "link", text: "Edit", href: edit_rule_path(rule), icon: "pencil", data: { turbo_frame: "modal" }) %>
       <% menu.with_item(variant: "link", text: "Re-apply rule", href: confirm_rule_path(rule), icon: "refresh-cw", data: { turbo_frame: "modal" }) %>

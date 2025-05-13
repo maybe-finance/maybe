@@ -4,8 +4,11 @@
 <% rule = condition.rule %>
 
 <li data-controller="rule--conditions" data-rule--conditions-condition-filters-value="<%= rule.condition_filters.to_json %>" class="flex items-center gap-3">
-  <% if form.index.to_i > 0 && show_prefix %>
-    <div class="pl-4">
+
+  <%# Conditionally render the prefix %>
+  <%# Condition groups pass in show_prefix: false for subconditions since the ANY/ALL selector makes that clear %>
+  <% if show_prefix %>
+    <div class="pl-2" data-condition-prefix>
       <span class="font-medium uppercase text-xs">and</span>
     </div>
   <% end %>

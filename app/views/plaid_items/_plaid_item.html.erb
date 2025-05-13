@@ -92,7 +92,7 @@
               </div>
             </div>
           <% end %>
-        <% else %>
+        <% elsif Rails.env.development? %>
           <%= icon(
             "refresh-cw",
             as_button: true,
