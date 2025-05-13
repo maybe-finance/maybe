@@ -78,6 +78,14 @@
   }
 }
 
+@utility bg-divider {
+  @apply bg-alpha-black-100;
+
+  @variant theme-dark {
+    @apply bg-alpha-white-100;
+  }
+}
+
 @utility bg-overlay {
   background-color: --alpha(var(--color-gray-100) / 50%);
 

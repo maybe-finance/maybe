@@ -8,7 +8,10 @@ class Rule < ApplicationRecord
   accepts_nested_attributes_for :conditions, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
 
+  before_validation :normalize_name
+
   validates :resource_type, presence: true
+  validates :name, length: { minimum: 1 }, allow_nil: true
   validate :no_nested_compound_conditions
 
   # Every rule must have at least 1 action
@@ -44,6 +47,18 @@ class Rule < ApplicationRecord
 
   def apply_later(ignore_attribute_locks: false)
     RuleJob.perform_later(self, ignore_attribute_locks: ignore_attribute_locks)
+  end
+
+  def primary_condition_title
+    return "No conditions" if conditions.none?
+
+    first_condition = conditions.first
+    if first_condition.compound? && first_condition.sub_conditions.any?
+      first_sub_condition = first_condition.sub_conditions.first
+      "If #{first_sub_condition.filter.label.downcase} #{first_sub_condition.operator} #{first_sub_condition.value_display}"
+    else
+      "If #{first_condition.filter.label.downcase} #{first_condition.operator} #{first_condition.value_display}"
+    end
   end
 
   private
@@ -86,5 +101,9 @@ class Rule < ApplicationRecord
           end
         end
       end
+    end
+
+    def normalize_name
+      self.name = nil if name.is_a?(String) && name.strip.empty?
     end
 end

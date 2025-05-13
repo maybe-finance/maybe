@@ -3,17 +3,16 @@
 <% condition = form.object %>
 <% rule = condition.rule %>
 
-<li data-controller="rule--conditions element-removal" class="border border-secondary rounded-md p-4 space-y-3">
+<li data-controller="rule--conditions" class="border border-secondary rounded-md p-4 space-y-3">
 
   <%= form.hidden_field :condition_type, value: "compound" %>
 
   <div class="flex items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <% unless form.index == 0 %>
-        <div class="pl-2">
-          <span class="font-medium uppercase text-xs">and</span>
-        </div>
-      <% end %>
+      <%# Show prefix on condition groups, except the first one %>
+      <div class="pl-2" data-condition-prefix>
+        <span class="font-medium uppercase text-xs">and</span>
+      </div>
       <p class="text-sm text-secondary">match</p>
       <%= form.select :operator, [["all", "and"], ["any", "or"]], { container_class: "w-fit" }, data: { rules_target: "operatorField" } %>
       <p class="text-sm text-secondary">of the following conditions</p>
@@ -21,16 +20,16 @@
 
     <%= icon(
       "trash-2",
-      size: "sm",
       as_button: true,
-      data: { action: "element-removal#remove" }
+      size: "sm",
+      data: { action: "rule--conditions#remove" }
     ) %>
   </div>
 
   <%# Sub-condition template, used by Stimulus controller to add new sub-conditions dynamically %>
   <template data-rule--conditions-target="subConditionTemplate">
     <%= form.fields_for :sub_conditions, Rule::Condition.new(parent: condition, condition_type: rule.condition_filters.first.key), child_index: "IDX_PLACEHOLDER" do |scf| %>
-      <%= render "rule/conditions/condition", form: scf %>
+      <%= render "rule/conditions/condition", form: scf, show_prefix: false %>
     <% end %>
   </template>
 
@@ -44,6 +43,7 @@
     text: "Add condition",
     leading_icon: "plus",
     variant: "ghost",
+    type: "button",
     data: { action: "rule--conditions#addSubCondition" }
   ) %>
 </li>
