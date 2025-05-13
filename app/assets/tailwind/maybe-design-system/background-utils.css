@@ -85,3 +85,7 @@
     background-color: var(--color-alpha-black-900);
   }
 }
+
+@utility bg-loader {
+  @apply bg-surface-inset animate-pulse;
+}

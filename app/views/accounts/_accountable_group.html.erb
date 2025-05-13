@@ -3,12 +3,20 @@
 <%= render DisclosureComponent.new(title: account_group.name, align: :left, open: account_group.accounts.any? { |account| page_active?(account_path(account)) }) do |disclosure| %>
   <% disclosure.with_summary_content do %>
     <div class="ml-auto text-right grow">
-      <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
-
-      <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy" do %>
-        <div class="flex items-center w-8 h-4 ml-auto">
-          <div class="w-6 h-px bg-surface-inset"></div>
+      <% if account_group.syncing? %>
+        <div class="space-y-1">
+          <div class="h-5 w-24 rounded ml-auto bg-loader"></div>
+          <div class="flex items-center w-8 h-4 ml-auto">
+            <div class="w-6 h-px bg-loader"></div>
+          </div>
         </div>
+      <% else %>
+        <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
+        <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy" do %>
+          <div class="flex items-center w-8 h-4 ml-auto">
+            <div class="w-6 h-px bg-loader"></div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   <% end %>
@@ -29,15 +37,26 @@
           <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
         </div>
 
-        <div class="ml-auto text-right grow h-10">
-          <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
-
-          <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
-            <div class="flex items-center w-8 h-5 ml-auto">
-              <div class="w-6 h-px bg-surface-inset"></div>
+        <% if account_group.syncing? %>
+          <div class="ml-auto text-right grow h-10">
+            <div class="space-y-1">
+              <div class="h-5 w-24 bg-loader rounded ml-auto"></div>
+              <div class="flex items-center w-8 h-4 ml-auto">
+                <div class="w-6 h-px bg-loader"></div>
+              </div>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% else %>
+          <div class="ml-auto text-right grow h-10">
+            <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
+
+            <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
+              <div class="flex items-center w-8 h-4 ml-auto">
+                <div class="w-6 h-px bg-loader"></div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>

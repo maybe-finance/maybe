@@ -15,9 +15,4 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     post sync_account_path(@account)
     assert_redirected_to account_path(@account)
   end
-
-  test "can sync all accounts" do
-    post sync_all_accounts_path
-    assert_redirected_to accounts_path
-  end
 end

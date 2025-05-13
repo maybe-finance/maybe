@@ -1,6 +1,6 @@
 <%# locals: (balance_sheet:) %>
 
-<div class="space-y-4 overflow-x-auto p-0.5">
+<div class="space-y-4">
   <% balance_sheet.classification_groups.each do |classification_group| %>
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
       <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
@@ -11,26 +11,38 @@
         <% if classification_group.account_groups.any? %>
           <span class="text-secondary">&middot;</span>
 
-          <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
+          <% if classification_group.syncing? %>
+            <div class="flex items-center w-8 h-4 ml-auto">
+              <div class="bg-loader w-full h-full rounded-md"></div>
+            </div>
+          <% else %>
+            <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
+          <% end %>
         <% end %>
       </h2>
 
       <% if classification_group.account_groups.any? %>
+
         <div class="space-y-4">
           <div class="flex gap-1">
             <% classification_group.account_groups.each do |account_group| %>
               <div class="h-1.5 rounded-sm" style="width: <%= account_group.weight %>%; background-color: <%= account_group.color %>;"></div>
             <% end %>
           </div>
-          <div class="flex flex-wrap gap-4">
-            <% classification_group.account_groups.each do |account_group| %>
-              <div class="flex items-center gap-2 text-sm">
-                <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
-                <p class="text-secondary"><%= account_group.name %></p>
-                <p class="text-primary font-mono"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
-              </div>
-            <% end %>
-          </div>
+
+          <% if classification_group.syncing? %>
+            <p class="text-xs text-subdued animate-pulse">Calculating latest balance data...</p>
+          <% else %>
+            <div class="flex flex-wrap gap-4">
+              <% classification_group.account_groups.each do |account_group| %>
+                <div class="flex items-center gap-2 text-sm">
+                  <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
+                  <p class="text-secondary"><%= account_group.name %></p>
+                  <p class="text-primary font-mono"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
+                </div>
+              <% end %>
+            </div>
+          <% end%>
         </div>
 
         <div class="bg-surface rounded-xl p-1 space-y-1 overflow-x-auto">
@@ -56,15 +68,27 @@
                     <p><%= account_group.name %></p>
                   </div>
 
-                  <div class="flex items-center justify-between text-right gap-6">
-                    <div class="w-28 shrink-0 flex items-center justify-end gap-2">
-                      <%= render "pages/dashboard/group_weight", weight: account_group.weight, color: account_group.color %>
-                    </div>
+                  <% if account_group.syncing? %>
+                    <div class="flex items-center justify-between text-right gap-6">
+                      <div class="w-28 shrink-0 flex items-center justify-end gap-2">
+                        <div class="bg-loader rounded-md h-4 w-12"></div>
+                      </div>
 
-                    <div class="w-40 shrink-0">
-                      <p><%= format_money(account_group.total_money) %></p>
+                      <div class="w-40 shrink-0 flex justify-end">
+                        <div class="bg-loader rounded-md h-4 w-12"></div>
+                      </div>
                     </div>
-                  </div>
+                  <% else %>
+                    <div class="flex items-center justify-between text-right gap-6">
+                      <div class="w-28 shrink-0 flex items-center justify-end gap-2">
+                        <%= render "pages/dashboard/group_weight", weight: account_group.weight, color: account_group.color %>
+                      </div>
+
+                      <div class="w-40 shrink-0">
+                        <p><%= format_money(account_group.total_money) %></p>
+                      </div>
+                    </div>
+                  <% end %>
                 </summary>
 
                 <div>
@@ -76,15 +100,27 @@
                         <%= link_to account.name, account_path(account) %>
                       </div>
 
-                      <div class="ml-auto flex items-center text-right gap-6">
-                        <div class="w-28 shrink-0 flex items-center justify-end gap-2">
-                          <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
-                        </div>
+                      <% if account.syncing? %>
+                        <div class="ml-auto flex items-center text-right gap-6">
+                          <div class="w-28 shrink-0 flex items-center justify-end gap-2">
+                            <div class="bg-loader rounded-md h-4 w-12"></div>
+                          </div>
 
-                        <div class="w-40 shrink-0">
-                          <p><%= format_money(account.balance_money) %></p>
+                          <div class="w-40 shrink-0 flex justify-end">
+                            <div class="bg-loader rounded-md h-4 w-12"></div>
+                          </div>
                         </div>
-                      </div>
+                      <% else %>
+                        <div class="ml-auto flex items-center text-right gap-6">
+                          <div class="w-28 shrink-0 flex items-center justify-end gap-2">
+                            <%= render "pages/dashboard/group_weight", weight: account.weight, color: account_group.color %>
+                          </div>
+
+                          <div class="w-40 shrink-0">
+                            <p><%= format_money(account.balance_money) %></p>
+                          </div>
+                        </div>
+                      <% end %>
                     </div>
 
                     <% if idx < account_group.accounts.size - 1 %>

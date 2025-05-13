@@ -52,6 +52,14 @@ class PlaidItem < ApplicationRecord
     DestroyJob.perform_later(self)
   end
 
+  def syncing?
+    Sync.joins("LEFT JOIN accounts a ON a.id = syncs.syncable_id AND syncs.syncable_type = 'Account'")
+        .joins("LEFT JOIN plaid_accounts pa ON pa.id = a.plaid_account_id")
+        .where("syncs.syncable_id = ? OR pa.plaid_item_id = ?", id, id)
+        .incomplete
+        .exists?
+  end
+
   def auto_match_categories!
     if family.categories.none?
       family.categories.bootstrap!

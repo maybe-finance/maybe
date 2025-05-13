@@ -20,6 +20,8 @@ class Sync < ApplicationRecord
     state :completed
     state :failed
 
+    after_all_transitions :log_status_change
+
     event :start, after_commit: :report_warnings do
       transitions from: :pending, to: :syncing
     end
@@ -41,14 +43,16 @@ class Sync < ApplicationRecord
   end
 
   def perform
-    start!
+    Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
+      start!
 
-    begin
-      syncable.perform_sync(self)
-      attempt_finalization
-    rescue => e
-      fail!
-      handle_error(e)
+      begin
+        syncable.perform_sync(self)
+        attempt_finalization
+      rescue => e
+        fail!
+        handle_error(e)
+      end
     end
   end
 
@@ -68,6 +72,10 @@ class Sync < ApplicationRecord
   end
 
   private
+    def log_status_change
+      Rails.logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")
+    end
+
     def has_failed_children?
       children.failed.any?
     end

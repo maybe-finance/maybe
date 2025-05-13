@@ -105,10 +105,6 @@ Rails.application.routes.draw do
   end
 
   resources :accounts, only: %i[index new], shallow: true do
-    collection do
-      post :sync_all
-    end
-
     member do
       post :sync
       get :chart

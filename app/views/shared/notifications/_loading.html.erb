@@ -1,9 +1,0 @@
-<%# locals: (message:, id: nil) %>
-
-<%= tag.div id: id, class: "flex gap-3 rounded-lg bg-container p-4 group w-full md:max-w-80 shadow-border-xs" do %>
-  <div class="h-5 w-5 shrink-0 p-px text-primary">
-    <%= icon "loader", class: "animate-pulse" %>
-  </div>
-
-  <%= tag.p message, class: "text-primary text-sm font-medium" %>
-<% end %>
