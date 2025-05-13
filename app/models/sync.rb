@@ -1,6 +1,8 @@
 class Sync < ApplicationRecord
   include AASM
 
+  Error = Class.new(StandardError)
+
   belongs_to :syncable, polymorphic: true
 
   belongs_to :parent, class_name: "Sync", optional: true
@@ -18,7 +20,7 @@ class Sync < ApplicationRecord
     state :completed
     state :failed
 
-    event :start do
+    event :start, after_commit: :report_warnings do
       transitions from: :pending, to: :syncing
     end
 
@@ -87,6 +89,17 @@ class Sync < ApplicationRecord
       update!(error: error.message)
       Sentry.capture_exception(error) do |scope|
         scope.set_tags(sync_id: id)
+      end
+    end
+
+    def report_warnings
+      todays_sync_count = syncable.syncs.where(created_at: Date.current.all_day).count
+
+      if todays_sync_count > 10
+        Sentry.capture_exception(
+          Error.new("#{syncable_type} (#{syncable.id}) has exceeded 10 syncs today (count: #{todays_sync_count})"),
+          level: :warning
+        )
       end
     end
 
