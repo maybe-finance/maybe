@@ -30,6 +30,10 @@ module Syncable
     latest_sync&.completed_at
   end
 
+  def last_sync_created_at
+    latest_sync&.created_at
+  end
+
   private
     def latest_sync
       syncs.ordered.first
