@@ -6,8 +6,8 @@
       <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
 
       <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy" do %>
-        <div class="flex items-center w-8 h-4 ml-auto">
-          <div class="w-6 h-px bg-surface-inset"></div>
+        <div class="flex items-center w-16 h-4 ml-auto">
+          <%= render "shared/ruler", classes: "w-full" %>
         </div>
       <% end %>
     </div>
@@ -33,9 +33,7 @@
           <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
 
           <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
-            <div class="flex items-center w-8 h-5 ml-auto">
-              <div class="w-6 h-px bg-surface-inset"></div>
-            </div>
+            <%= render "shared/ruler", classes: "w-6" %>
           <% end %>
         </div>
       <% end %>

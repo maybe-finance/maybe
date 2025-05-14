@@ -34,9 +34,7 @@
           </div>
         </div>
 
-        <div class="px-4">
-          <div class="h-px w-full bg-alpha-black-50"></div>
-        </div>
+        <%= render "shared/ruler" %>
       <% end %>
 
       <%= render "budget_categories/budget_category", budget_category: budget.uncategorized_budget_category %>

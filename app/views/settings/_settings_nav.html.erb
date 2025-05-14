@@ -48,7 +48,7 @@ nav_sections = [
       <section class="space-y-2">
         <div class="flex items-center gap-2 px-3">
           <h3 class="uppercase text-secondary font-medium text-xs"><%= section[:header] %></h3>
-          <div class="h-px bg-alpha-black-100 w-full"></div>
+          <%= render "shared/ruler", classes: "w-full" %>
         </div>
         <ul class="space-y-1">
           <% section[:items].each do |item| %>
