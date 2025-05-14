@@ -88,9 +88,7 @@
                     </div>
 
                     <% if idx < account_group.accounts.size - 1 %>
-                      <div class="pl-[84px] pr-40">
-                        <div class="w-full border-subdued border-b"></div>
-                      </div>
+                      <%= render "shared/ruler", classes: "ml-12 mr-4" %>
                     <% end %>
                   <% end %>
                 </div>
