@@ -28,7 +28,6 @@
                     "block flex items-center gap-2 px-3 py-2 rounded-lg",
                     page_active?(account_path(account)) ? "bg-container" : "hover:bg-surface-hover"
                   ),
-                  data: { sidebar_tabs_target: "account", action: "click->sidebar-tabs#select" },
                   title: account.name do %>
         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
@@ -37,7 +36,7 @@
           <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
         </div>
 
-        <% if account_group.syncing? %>
+        <% if account.syncing? %>
           <div class="ml-auto text-right grow h-10">
             <div class="space-y-1">
               <div class="h-5 w-24 bg-loader rounded ml-auto"></div>

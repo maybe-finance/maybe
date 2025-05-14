@@ -11,9 +11,8 @@ class Account::Syncer
   end
 
   def perform_post_sync
-    account.family.remove_syncing_notice!
-    account.accountable.post_sync
     account.family.auto_match_transfers!
+    account.family.broadcast_refresh
   end
 
   private

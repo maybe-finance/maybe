@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
-  include Onboardable, Localize, AutoSync, Authentication, Invitable, SelfHostable, StoreLocation, Impersonatable, Breadcrumbable, FeatureGuardable, Notifiable
+  include Onboardable, Localize, AutoSync, Authentication, Invitable,
+          SelfHostable, StoreLocation, Impersonatable, Breadcrumbable,
+          FeatureGuardable, Notifiable, AccountGroupable
+
   include Pagy::Backend
 
   before_action :detect_os

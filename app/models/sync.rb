@@ -26,11 +26,11 @@ class Sync < ApplicationRecord
       transitions from: :pending, to: :syncing
     end
 
-    event :complete, after_commit: :handle_finalization do
+    event :complete do
       transitions from: :syncing, to: :completed
     end
 
-    event :fail, after_commit: :handle_finalization do
+    event :fail do
       transitions from: :syncing, to: :failed
     end
   end
@@ -46,29 +46,40 @@ class Sync < ApplicationRecord
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
       start!
 
+      sleep 10
+
       begin
         syncable.perform_sync(self)
-        attempt_finalization
       rescue => e
-        fail!
-        handle_error(e)
+        fail_and_report_error(e)
+      ensure
+        finalize_if_all_children_finalized
       end
     end
   end
 
-  # If the sync doesn't have any in-progress children, finalize it.
-  def attempt_finalization
+  # Finalizes the current sync AND parent (if it exists)
+  def finalize_if_all_children_finalized
     Sync.transaction do
       lock!
 
+      # If this is the "parent" and there are still children running, don't finalize.
       return unless all_children_finalized?
 
-      if has_failed_children?
-        fail!
-      else
-        complete!
+      # If we make it here, the sync is finalized.  Run post-sync, regardless of failure/success.
+      perform_post_sync
+
+      if syncing?
+        if has_failed_children?
+          fail!
+        else
+          complete!
+        end
       end
     end
+
+    # If this sync has a parent, try to finalize it so the child status propagates up the chain.
+    parent&.finalize_if_all_children_finalized
   end
 
   private
@@ -84,17 +95,15 @@ class Sync < ApplicationRecord
       children.incomplete.empty?
     end
 
-    # Once sync finalizes, notify its parent and run its post-sync logic.
-    def handle_finalization
+    def perform_post_sync
       syncable.perform_post_sync
-
-      if parent
-        parent.attempt_finalization
-      end
+    rescue => e
+      fail_and_report_error(e)
     end
 
-    def handle_error(error)
-      update!(error: error.message)
+    def fail_and_report_error(error)
+      fail!
+      update(error: error.message)
       Sentry.capture_exception(error) do |scope|
         scope.set_tags(sync_id: id)
       end

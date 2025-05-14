@@ -61,10 +61,6 @@ class Account < ApplicationRecord
     end
   end
 
-  def syncing?
-    true
-  end
-
   def institution_domain
     url_string = plaid_account&.plaid_item&.institution_url
     return nil unless url_string.present?

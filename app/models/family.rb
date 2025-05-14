@@ -35,10 +35,6 @@ class Family < ApplicationRecord
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :date_format, inclusion: { in: DATE_FORMATS.map(&:last) }
 
-  def remove_syncing_notice!
-    broadcast_remove target: "syncing-notice"
-  end
-
   # If any accounts or plaid items are syncing, the family is also syncing, even if a formal "Family Sync" is not running.
   def syncing?
     Sync.joins("LEFT JOIN plaid_items ON plaid_items.id = syncs.syncable_id AND syncs.syncable_type = 'PlaidItem'")
