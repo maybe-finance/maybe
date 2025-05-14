@@ -44,6 +44,14 @@ class Family < ApplicationRecord
         .exists?
   end
 
+  def broadcast_sidebar_refresh
+    broadcast_replace(
+      target: "account-sidebar-tabs",
+      partial: "accounts/sidebar_tabs",
+      locals: { family: self, active_account_group_tab: "all" }
+    )
+  end
+
   def assigned_merchants
     merchant_ids = transactions.where.not(merchant_id: nil).pluck(:merchant_id).uniq
     Merchant.where(id: merchant_ids)

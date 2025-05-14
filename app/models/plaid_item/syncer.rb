@@ -24,7 +24,7 @@ class PlaidItem::Syncer
 
   def perform_post_sync
     plaid_item.auto_match_categories!
-    plaid_item.family.broadcast_refresh
+    plaid_item.family.broadcast_sidebar_refresh
   end
 
   private

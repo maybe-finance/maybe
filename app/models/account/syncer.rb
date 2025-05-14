@@ -12,7 +12,8 @@ class Account::Syncer
 
   def perform_post_sync
     account.family.auto_match_transfers!
-    account.family.broadcast_refresh
+    account.broadcast_refresh
+    account.family.broadcast_sidebar_refresh
   end
 
   private
