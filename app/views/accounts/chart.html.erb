@@ -2,7 +2,7 @@
 <% trend = series.trend %>
 
 <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
-  <% if @account.syncing?%>
+  <% if @account.syncing? %>
     <%= render "accounts/chart_loader" %>
   <% else %>
     <div class="px-4">

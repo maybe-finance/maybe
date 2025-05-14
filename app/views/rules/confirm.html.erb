@@ -1,5 +1,5 @@
 <%= render DialogComponent.new(reload_on_close: true) do |dialog| %>
-  <% 
+  <%
     title = if @rule.name.present?
               "Confirm changes to \"#{@rule.name}\""
             else
@@ -7,7 +7,7 @@
             end
   %>
   <% dialog.with_header(title: title) %>
-  
+
   <% dialog.with_body do %>
     <p class="text-secondary text-sm mb-4">
       You are about to apply this rule to

@@ -3,8 +3,8 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="tabs--components"
 export default class extends Controller {
   static classes = ["navBtnActive", "navBtnInactive"];
-  static targets = ["panel", "navBtn"];
-  static values = { urlParamKey: String };
+  static targets = ["panel", "navBtn", "persistSelectionForm", "selectionInput"];
+  static values = { sessionKey: String, urlParamKey: String };
 
   show(e) {
     const btn = e.target.closest("button");
@@ -28,11 +28,16 @@ export default class extends Controller {
       }
     });
 
-    // Update URL with the selected tab
     if (this.urlParamKeyValue) {
       const url = new URL(window.location.href);
       url.searchParams.set(this.urlParamKeyValue, selectedTabId);
       window.history.replaceState({}, "", url);
+    }
+
+    // Update URL with the selected tab
+    if (this.sessionKeyValue) {
+      this.selectionInputTarget.value = selectedTabId;
+      this.persistSelectionFormTarget.requestSubmit();
     }
   } 
 }

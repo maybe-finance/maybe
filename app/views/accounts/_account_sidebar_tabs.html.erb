@@ -21,7 +21,7 @@
     </details>
   <% end %>
 
-  <%= render TabsComponent.new(active_tab: active_account_group_tab, testid: "account-sidebar-tabs") do |tabs| %>
+  <%= render TabsComponent.new(active_tab: active_account_group_tab, session_key: "account_group_tab", testid: "account-sidebar-tabs") do |tabs| %>
     <% tabs.with_nav do |nav| %>
       <% nav.with_btn(id: "asset", label: "Assets") %>
       <% nav.with_btn(id: "liability", label: "Debts") %>

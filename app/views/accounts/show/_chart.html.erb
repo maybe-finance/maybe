@@ -14,7 +14,7 @@
         <% end %>
       </div>
 
-      <% if account.syncing?  %>
+      <% if account.syncing? %>
         <div class="bg-loader rounded-md h-7 w-20"></div>
       <% else %>
         <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>

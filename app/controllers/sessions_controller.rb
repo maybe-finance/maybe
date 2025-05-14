@@ -31,4 +31,8 @@ class SessionsController < ApplicationController
     def set_session
       @session = Current.user.sessions.find(params[:id])
     end
+
+    def session_params
+      params.require(:session).permit(:tab_key, :tab_value)
+    end
 end

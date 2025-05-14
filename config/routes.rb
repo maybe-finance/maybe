@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
 
+  resource :cookie_session, only: %i[update]
+
   resource :registration, only: %i[new create]
   resources :sessions, only: %i[new create destroy]
   resource :password_reset, only: %i[new create edit update]

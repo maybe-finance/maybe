@@ -26,7 +26,7 @@
       <%= render(
         "accounts/account_sidebar_tabs",
         family: Current.family,
-        active_account_group_tab: params[:account_group_tab] || "assets"
+        active_account_group_tab: @account_group_tab
       ) %>
     </div>
 
@@ -81,7 +81,7 @@
       <% else %>
         <div class="h-full flex flex-col">
           <div class="overflow-y-auto grow">
-            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
+            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: @account_group_tab %>
           </div>
 
           <% if Current.family.trialing? && !self_hosted? %>

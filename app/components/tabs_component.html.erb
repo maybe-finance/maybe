@@ -1,6 +1,7 @@
 <%= tag.div data: {
   controller: "tabs",
   testid: testid,
+  tabs_session_key_value: session_key,
   tabs_url_param_key_value: url_param_key,
   tabs_nav_btn_active_class: active_btn_classes,
   tabs_nav_btn_inactive_class: inactive_btn_classes
@@ -9,6 +10,11 @@
     <%= content %>
   <% else %>
     <%= nav %>
+
+    <%= form_with url: cookie_session_path, scope: :cookie_session, method: :put, data: { tabs_target: "persistSelectionForm" } do |f| %>
+      <%= f.hidden_field :tab_key, value: "account_group_tab" %>
+      <%= f.hidden_field :tab_value, value: "all", data: { tabs_target: "selectionInput" } %>
+    <% end %>
 
     <% panels.each do |panel| %>
       <%= panel %>

@@ -48,9 +48,10 @@ class BalanceSheet
   def account_groups(classification = nil)
     classification_accounts = classification ? totals_query.filter { |t| t.classification == classification } : totals_query
     classification_total = classification_accounts.sum(&:converted_balance)
-    account_groups = classification_accounts.group_by(&:accountable_type).transform_keys { |k| Accountable.from_type(k) }
+    account_groups = classification_accounts.group_by(&:accountable_type)
+                                            .transform_keys { |k| Accountable.from_type(k) }
 
-    account_groups.map do |accountable, accounts|
+    groups = account_groups.map do |accountable, accounts|
       group_total = accounts.sum(&:converted_balance)
 
       AccountGroup.new(
@@ -71,7 +72,13 @@ class BalanceSheet
           account
         end.sort_by(&:weight).reverse
       )
-    end.sort_by(&:weight).reverse
+    end
+
+    groups.sort_by do |group|
+      manual_order = Accountable::TYPES
+      type_name = group.key.camelize
+      manual_order.index(type_name) || Float::INFINITY
+    end
   end
 
   def net_worth_series(period: Period.last_30_days)
