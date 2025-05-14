@@ -240,16 +240,7 @@
     100% {
       stroke-dashoffset: 0;
     }
-  }
-
-  @keyframes shiny-wave {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
+  } 
 }
 
 /* Specific override for strong tags in prose under dark mode */

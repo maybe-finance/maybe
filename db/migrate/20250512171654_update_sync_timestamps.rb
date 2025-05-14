@@ -28,6 +28,20 @@ class UpdateSyncTimestamps < ActiveRecord::Migration[7.2]
           UPDATE syncs
           SET window_start_date = start_date
         SQL
+
+        # Due to some recent bugs, some self hosters have syncs that are stuck.
+        # This manually fails those syncs so they stop seeing syncing UI notices.
+        if Rails.application.config.app_mode.self_hosted?
+          puts "Self hosted: Fail syncs older than 2 hours"
+          execute <<-SQL
+            UPDATE syncs
+            SET status = 'failed'
+            WHERE (
+              status = 'syncing' AND
+              created_at < NOW() - INTERVAL '2 hours'
+            )
+          SQL
+        end
       end
 
       dir.down do
