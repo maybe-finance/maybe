@@ -59,7 +59,7 @@
       </div>
       <div class="p-1">
         <div class="flex flex-col bg-container rounded-xl shadow-border-xs first_child:rounded-t-xl last_child:rounded-b-xl">
-          <%= render partial: @rules, spacer_template: "shared/ruler" %>
+          <%= render partial: "rule", collection: @rules, spacer_template: "shared/ruler" %>
         </div>
       </div>
     </div>
