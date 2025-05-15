@@ -69,9 +69,6 @@ class SimpleFinAccount < ApplicationRecord
     # Ensure accountable_attributes has the ID for updates
     # 'account' here refers to self.account (the associated Account instance)
     accountable_attributes = { id: self.account.accountable_id }
-
-    puts "SFA #{sf_account_data}"
-
     self.update!(
       current_balance: sf_account_data["balance"].to_d,
       available_balance: sf_account_data["available-balance"]&.to_d,
@@ -85,10 +82,11 @@ class SimpleFinAccount < ApplicationRecord
       }
     )
 
-    self.simple_fin_item.update!(
-      institution_errors: sf_account_data["org"]["institution_errors"],
-      status: sf_account_data["org"]["institution_errors"].empty? ? :good : :requires_update
+    institution_errors = sf_account_data["org"]["institution_errors"]
 
+    self.simple_fin_item.update!(
+      institution_errors: institution_errors.empty? ? []: institution_errors,
+      status: institution_errors.empty? ? :good : :requires_update
     )
 
     # Sync transactions if present in the data

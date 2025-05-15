@@ -115,7 +115,7 @@ class SimpleFinItem < ApplicationRecord
       # These could be marked as closed, archived, etc. For example:
       # simple_fin_accounts.where.not(external_id: current_provider_external_ids).find_each(&:archive!)
 
-      update!(status: :good) # Mark connection as successfully synced.
+      # update!(status: :good) # Mark connection as successfully synced.
       Rails.logger.info("SimpleFinConnection: Sync completed for connection ID #{id}")
 
     # rescue Provider::SimpleFin::AuthenticationError => e # Catch specific auth errors if your provider defines them.

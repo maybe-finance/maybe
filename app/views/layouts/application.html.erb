@@ -80,7 +80,7 @@
         <%= yield :sidebar %>
       <% else %>
         <div class="h-full flex flex-col">
-          <div class="overflow-y-auto grow" id="account-sidebar-tabs" data-turbo-permanent>
+          <div class="overflow-y-auto grow" id="account-sidebar-tabs">
             <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
           </div>
 

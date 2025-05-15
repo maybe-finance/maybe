@@ -26,7 +26,7 @@ class SimpleFinController < ApplicationController
   def sync
     @simple_fin_item = Current.family.simple_fin_items.find(params[:id])
     unless @simple_fin_item.syncing?
-      @simple_fin_item.sync_later
+      @simple_fin_item.sync
     end
 
     respond_to do |format|
