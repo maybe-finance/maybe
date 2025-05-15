@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="tabs--components"
 export default class extends Controller {
   static classes = ["navBtnActive", "navBtnInactive"];
-  static targets = ["panel", "navBtn", "persistSelectionForm", "selectionInput"];
+  static targets = ["panel", "navBtn"];
   static values = { sessionKey: String, urlParamKey: String };
 
   show(e) {

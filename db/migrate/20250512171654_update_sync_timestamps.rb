@@ -48,7 +48,7 @@ class UpdateSyncTimestamps < ActiveRecord::Migration[7.2]
         execute <<-SQL
           UPDATE syncs
           SET
-            last_ran_at = completed_at
+            last_ran_at = COALESCE(completed_at, failed_at)
         SQL
 
         execute <<-SQL
