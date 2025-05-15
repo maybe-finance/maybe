@@ -35,13 +35,6 @@ class Sync < ApplicationRecord
     end
   end
 
-  class << self
-    # By default, we sync the "visible" window of data (user sees 30 day graphs by default)
-    def create_with_defaults!(parent: nil)
-      create!(parent: parent, window_start_date: 30.days.ago.to_date)
-    end
-  end
-
   def perform
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
       start!

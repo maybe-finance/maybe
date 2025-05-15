@@ -2,7 +2,7 @@
 
 <%= turbo_stream_from account %>
 
-<%= turbo_frame_tag dom_id(account) do %>
+<%= turbo_frame_tag dom_id(account, :container) do %>
   <%= tag.div class: "space-y-4 pb-32" do %>
     <% if header.present? %>
       <%= header %>
