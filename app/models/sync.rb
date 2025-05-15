@@ -39,8 +39,6 @@ class Sync < ApplicationRecord
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
       start!
 
-      sleep 10
-
       begin
         syncable.perform_sync(self)
       rescue => e
