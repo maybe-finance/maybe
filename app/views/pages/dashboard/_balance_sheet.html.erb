@@ -27,6 +27,7 @@
               <div class="flex items-center gap-2 text-sm">
                 <div class="h-2.5 w-2.5 rounded-full" style="background-color: <%= account_group.color %>;"></div>
                 <p class="text-secondary"><%= account_group.name %></p>
+                <span class="text-secondary">&middot;</span>
                 <p class="text-primary font-mono"><%= number_to_percentage(account_group.weight, precision: 0) %></p>
               </div>
             <% end %>
@@ -46,10 +47,10 @@
             </div>
           </div>
 
-          <div class="shadow-border-xs rounded-lg bg-container min-w-fit">
+          <div class="shadow-border-xs rounded-lg font-medium text-sm bg-container min-w-fit">
             <% classification_group.account_groups.each do |account_group| %>
-              <details class="group rounded-lg open:bg-surface font-medium text-sm">
-                <summary class="focus-visible:outline-none focus-visible:ring-0 cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
+              <details class="group">
+                <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
                   <div class="w-40 shrink-0 flex items-center gap-4">
                     <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
@@ -69,7 +70,7 @@
 
                 <div>
                   <% account_group.accounts.each_with_index do |account, idx| %>
-                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
+                    <div class="pl-12 pr-4 py-3 flex items-center bg-container justify-between text-sm font-medium">
                       <div class="flex items-center gap-3">
                         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
