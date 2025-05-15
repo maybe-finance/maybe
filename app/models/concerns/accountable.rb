@@ -68,15 +68,6 @@ module Accountable
     end
   end
 
-  def post_sync(sync)
-    broadcast_replace_to(
-      account,
-      target: "chart_account_#{account.id}",
-      partial: "accounts/show/chart",
-      locals: { account: account }
-    )
-  end
-
   def display_name
     self.class.display_name
   end

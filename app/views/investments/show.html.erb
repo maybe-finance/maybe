@@ -1,25 +1,7 @@
-<%= turbo_stream_from @account %>
-
-<%= turbo_frame_tag dom_id(@account) do %>
-  <%= tag.div class: "space-y-4" do %>
-    <%= render "accounts/show/header", account: @account %>
-
-    <%= render "accounts/show/chart",
-               account: @account,
-               title: t(".chart_title"),
-               chart_view: @chart_view,
-               tooltip: render(
-                 "investments/value_tooltip",
-                 balance: @account.balance_money,
-                 holdings: @account.balance_money - @account.cash_balance_money,
-                 cash: @account.cash_balance_money
-               ) %>
-
-    <div class="min-h-[800px]">
-      <%= render "accounts/show/tabs", account: @account, tabs: [
-        { key: "activity", contents: render("accounts/show/activity", account: @account) },
-        { key: "holdings", contents: render("investments/holdings_tab", account: @account) },
-      ] %>
-    </div>
-  <% end %>
-<% end %>
+<%= render "accounts/show/template",
+           account: @account,
+           chart_view: @chart_view,
+           tabs: render("accounts/show/tabs", account: @account, tabs: [
+            { key: "activity", contents: render("accounts/show/activity", account: @account) },
+            { key: "holdings", contents: render("investments/holdings_tab", account: @account) },
+           ]) %>

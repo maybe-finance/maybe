@@ -17,6 +17,7 @@ class Subscription < ApplicationRecord
 
   validates :stripe_id, presence: true, if: :active?
   validates :trial_ends_at, presence: true, if: :trialing?
+  validates :family_id, uniqueness: true
 
   class << self
     def new_trial_ends_at

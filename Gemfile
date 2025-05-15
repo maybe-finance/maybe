@@ -29,6 +29,7 @@ gem "hotwire_combobox"
 
 # Background Jobs
 gem "sidekiq"
+gem "sidekiq-cron"
 
 # Monitoring
 gem "vernier"
@@ -62,6 +63,10 @@ gem "plaid"
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 3.0"
 gem "activerecord-import"
+
+# State machines
+gem "aasm"
+gem "after_commit_everywhere", "~> 1.0"
 
 # AI
 gem "ruby-openai"

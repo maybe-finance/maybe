@@ -1,5 +1,5 @@
 <%# locals: (rule:) %>
-<div class="flex justify-between items-center p-4 <%= rule.active? ? 'text-primary' : 'text-secondary' %>">
+<div class="flex justify-between items-center p-4 <%= rule.active? ? "text-primary" : "text-secondary" %>">
   <div class="text-sm space-y-1.5">
     <% if rule.name.present? %>
       <h3 class="font-medium text-md"><%= rule.name %></h3>
@@ -49,7 +49,7 @@
           <% if rule.effective_date.nil? %>
             All past and future <%= rule.resource_type.pluralize %>
           <% else %>
-            <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date.strftime('%b %-d, %Y') %>
+            <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date.strftime("%b %-d, %Y") %>
           <% end %>
         </span>
       </p>

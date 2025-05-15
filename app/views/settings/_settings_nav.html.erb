@@ -1,31 +1,31 @@
 <%
 nav_sections = [
   {
-    header: t('.general_section_title'),
+    header: t(".general_section_title"),
     items: [
-      { label: t('.profile_label'), path: settings_profile_path, icon: 'circle-user' },
-      { label: t('.preferences_label'), path: settings_preferences_path, icon: 'bolt' },
-      { label: t('.security_label'), path: settings_security_path, icon: 'shield-check' },
-      { label: t('.self_hosting_label'), path: settings_hosting_path, icon: 'database', if: self_hosted? },
-      { label: t('.billing_label'), path: settings_billing_path, icon: 'circle-dollar-sign', if: !self_hosted? },
-      { label: t('.accounts_label'), path: accounts_path, icon: 'layers' },
-      { label: t('.imports_label'), path: imports_path, icon: 'download' }
+      { label: t(".profile_label"), path: settings_profile_path, icon: "circle-user" },
+      { label: t(".preferences_label"), path: settings_preferences_path, icon: "bolt" },
+      { label: t(".security_label"), path: settings_security_path, icon: "shield-check" },
+      { label: t(".self_hosting_label"), path: settings_hosting_path, icon: "database", if: self_hosted? },
+      { label: t(".billing_label"), path: settings_billing_path, icon: "circle-dollar-sign", if: !self_hosted? },
+      { label: t(".accounts_label"), path: accounts_path, icon: "layers" },
+      { label: t(".imports_label"), path: imports_path, icon: "download" }
     ]
   },
   {
-    header: t('.transactions_section_title'),
+    header: t(".transactions_section_title"),
     items: [
-      { label: t('.tags_label'), path: tags_path, icon: 'tags' },
-      { label: t('.categories_label'), path: categories_path, icon: 'shapes' },
-      { label: t('.rules_label'), path: rules_path, icon: 'git-branch' },
-      { label: t('.merchants_label'), path: family_merchants_path, icon: 'store' }
+      { label: t(".tags_label"), path: tags_path, icon: "tags" },
+      { label: t(".categories_label"), path: categories_path, icon: "shapes" },
+      { label: t(".rules_label"), path: rules_path, icon: "git-branch" },
+      { label: t(".merchants_label"), path: family_merchants_path, icon: "store" }
     ]
   },
   {
-    header: t('.other_section_title'),
+    header: t(".other_section_title"),
     items: [
-      { label: t('.whats_new_label'), path: changelog_path, icon: 'box' },
-      { label: t('.feedback_label'), path: feedback_path, icon: 'megaphone' }
+      { label: t(".whats_new_label"), path: changelog_path, icon: "box" },
+      { label: t(".feedback_label"), path: feedback_path, icon: "megaphone" }
     ]
   }
 ]

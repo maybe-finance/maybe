@@ -83,9 +83,6 @@ class Holding::PortfolioCache
       securities.each do |security|
         Rails.logger.info "Loading security: ID=#{security.id} Ticker=#{security.ticker}"
 
-        # Load prices from provider to DB
-        security.sync_provider_prices(start_date: account.start_date)
-
         # High priority prices from DB (synced from provider)
         db_prices = security.prices.where(date: account.start_date..Date.current).map do |price|
           PriceWithPriority.new(

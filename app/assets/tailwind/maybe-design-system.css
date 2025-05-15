@@ -240,7 +240,7 @@
     100% {
       stroke-dashoffset: 0;
     }
-  }
+  } 
 }
 
 /* Specific override for strong tags in prose under dark mode */
@@ -428,6 +428,4 @@
 
   }
 }
-
-
 
