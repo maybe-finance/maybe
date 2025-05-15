@@ -6,7 +6,7 @@ module Syncable
   end
 
   def syncing?
-    syncs.incomplete.any?
+    raise NotImplementedError, "Subclasses must implement the syncing? method"
   end
 
   def sync_later(parent_sync: nil, window_start_date: nil, window_end_date: nil)
