@@ -1,6 +1,8 @@
 class Account::SyncCompleteEvent
   attr_reader :account
 
+  Error = Class.new(StandardError)
+
   def initialize(account)
     @account = account
   end
@@ -38,7 +40,12 @@ class Account::SyncCompleteEvent
     # The sidebar will show the account in both its classification tab and the "all" tab,
     # so we need to broadcast to both.
     def account_group_ids
-      return [] unless account_group.present?
+      unless account_group.present?
+        error = Error.new("Account #{account.id} is not part of an account group")
+        Rails.logger.warn(error.message)
+        Sentry.capture_exception(error, level: :warning)
+        return []
+      end
 
       id = account_group.id
       [ id, "#{account_group.classification}_#{id}" ]
