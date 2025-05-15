@@ -6,9 +6,6 @@ class Account::SyncCompleteEvent
   end
 
   def broadcast
-    # Refresh entire account page (only applies if currently viewing this account)
-    account.broadcast_refresh
-
     # Replace account row in accounts list
     account.broadcast_replace_to(
       account.family,
@@ -32,6 +29,9 @@ class Account::SyncCompleteEvent
     unless account.linked?
       account.family.broadcast_sync_complete
     end
+
+    # Refresh entire account page (only applies if currently viewing this account)
+    account.broadcast_refresh
   end
 
   private
