@@ -46,8 +46,6 @@ module Notifiable
         [ { partial: "shared/notifications/alert", locals: { message: data } } ]
       when "cta"
         [ resolve_cta(data) ]
-      when "loading"
-        [ { partial: "shared/notifications/loading", locals: { message: data } } ]
       when "notice"
         messages = Array(data)
         messages.map { |message| { partial: "shared/notifications/notice", locals: { message: message } } }

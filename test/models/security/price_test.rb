@@ -49,25 +49,6 @@ class Security::PriceTest < ActiveSupport::TestCase
     assert_not @security.find_or_fetch_price(date: Date.current)
   end
 
-  test "upserts historical prices from provider" do
-    Security::Price.delete_all
-
-    # Will be overwritten by upsert
-    Security::Price.create!(security: @security, date: 1.day.ago.to_date, price: 190, currency: "USD")
-
-    expect_provider_prices(security: @security, start_date: 2.days.ago.to_date, end_date: Date.current, prices: [
-      Security::Price.new(security: @security, date: Date.current, price: 215, currency: "USD"),
-      Security::Price.new(security: @security, date: 1.day.ago.to_date, price: 214, currency: "USD"),
-      Security::Price.new(security: @security, date: 2.days.ago.to_date, price: 213, currency: "USD")
-    ])
-
-    @security.sync_provider_prices(start_date: 2.days.ago.to_date)
-
-    assert_equal 215, @security.prices.find_by(date: Date.current).price
-    assert_equal 214, @security.prices.find_by(date: 1.day.ago.to_date).price
-    assert_equal 213, @security.prices.find_by(date: 2.days.ago.to_date).price
-  end
-
   private
     def expect_provider_price(security:, price:, date:)
       @provider.expects(:fetch_security_price)

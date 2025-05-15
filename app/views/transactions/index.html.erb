@@ -4,9 +4,6 @@
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-2">
         <%= render MenuComponent.new do |menu| %>
-          <% if Rails.env.development? %>
-            <% menu.with_item(variant: "button", text: "Dev only: Sync all", href: sync_all_accounts_path, method: :post, icon: "refresh-cw") %>
-          <% end %>
           <% menu.with_item(variant: "link", text: "New rule", href: new_rule_path(resource_type: "transaction"), icon: "plus", data: { turbo_frame: :modal }) %>
           <% menu.with_item(variant: "link", text: "Edit rules", href: rules_path, icon: "git-branch", data: { turbo_frame: :_top }) %>
           <% menu.with_item(variant: "link", text: "Edit categories", href: categories_path, icon: "shapes", data: { turbo_frame: :_top }) %>

@@ -1,17 +1,24 @@
-<%# locals: (account:, title: nil, tooltip: nil, chart_view: nil, **args) %>
+<%# locals: (account:, tooltip: nil, chart_view: nil, **args) %>
 
 <% period =  @period || Period.last_30_days %>
 <% default_value_title = account.asset? ? t(".balance") : t(".owed") %>
 
-<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-xs rounded-xl border border-alpha-black-25 rounded-lg space-y-2">
+<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-border-xs rounded-xl space-y-2">
   <div class="flex justify-between flex-col-reverse lg:flex-row gap-2 px-4 pt-4 mb-2">
     <div class="space-y-2 w-full">
       <div class="flex items-center gap-1">
-        <%= tag.p title || default_value_title, class: "text-sm font-medium text-secondary" %>
-        <%= tooltip %>
+        <%= tag.p account.investment? ? "Total value" : default_value_title, class: "text-sm font-medium text-secondary" %>
+
+        <% if !account.syncing? && account.investment? %>
+          <%= render "investments/value_tooltip", balance: account.balance_money, holdings: account.balance_money - account.cash_balance_money, cash: account.cash_balance_money %>
+        <% end %>
       </div>
 
-      <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
+      <% if account.syncing? %>
+        <div class="bg-loader rounded-md h-7 w-20"></div>
+      <% else %>
+        <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
+      <% end %>
     </div>
 
     <%= form_with url: request.path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
