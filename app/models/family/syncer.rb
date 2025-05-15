@@ -22,7 +22,6 @@ class Family::Syncer
 
   def perform_post_sync
     family.auto_match_transfers!
-    family.broadcast_refresh
   end
 
   private

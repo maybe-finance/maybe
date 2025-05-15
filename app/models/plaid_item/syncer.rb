@@ -24,13 +24,6 @@ class PlaidItem::Syncer
 
   def perform_post_sync
     plaid_item.auto_match_categories!
-    SyncCompleteEvent.new(plaid_item.family, accounts: plaid_item.accounts).broadcast
-    plaid_item.broadcast_replace_to(
-      plaid_item.family,
-      target: "plaid_item_#{plaid_item.id}",
-      partial: "plaid_items/plaid_item",
-      locals: { plaid_item: plaid_item }
-    )
   end
 
   private

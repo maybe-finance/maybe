@@ -39,6 +39,8 @@ class Sync < ApplicationRecord
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
       start!
 
+      sleep 10
+
       begin
         syncable.perform_sync(self)
       rescue => e
@@ -89,8 +91,11 @@ class Sync < ApplicationRecord
     end
 
     def perform_post_sync
+      Rails.logger.info("Performing post-sync for #{syncable_type} (#{syncable.id})")
       syncable.perform_post_sync
+      syncable.broadcast_sync_complete
     rescue => e
+      Rails.logger.error("Error performing post-sync for #{syncable_type} (#{syncable.id}): #{e.message}")
       report_error(e)
     end
 

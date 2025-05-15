@@ -63,8 +63,11 @@ class SyncTest < ActiveSupport::TestCase
     # Since these are accessed through `parent`, they won't necessarily be the same
     # instance we configured above
     Account.any_instance.expects(:perform_post_sync).once
+    Account.any_instance.expects(:broadcast_sync_complete).once
     PlaidItem.any_instance.expects(:perform_post_sync).once
+    PlaidItem.any_instance.expects(:broadcast_sync_complete).once
     Family.any_instance.expects(:perform_post_sync).once
+    Family.any_instance.expects(:broadcast_sync_complete).once
 
     account_sync.perform
 
@@ -108,6 +111,10 @@ class SyncTest < ActiveSupport::TestCase
     PlaidItem.any_instance.expects(:perform_post_sync).once
     Family.any_instance.expects(:perform_post_sync).once
 
+    Account.any_instance.expects(:broadcast_sync_complete).once
+    PlaidItem.any_instance.expects(:broadcast_sync_complete).once
+    Family.any_instance.expects(:broadcast_sync_complete).once
+
     account_sync.perform
 
     assert_equal "failed", plaid_item_sync.reload.status
@@ -149,6 +156,10 @@ class SyncTest < ActiveSupport::TestCase
     Account.any_instance.expects(:perform_post_sync).once
     PlaidItem.any_instance.expects(:perform_post_sync).once
     Family.any_instance.expects(:perform_post_sync).once
+
+    Account.any_instance.expects(:broadcast_sync_complete).once
+    PlaidItem.any_instance.expects(:broadcast_sync_complete).once
+    Family.any_instance.expects(:broadcast_sync_complete).once
 
     account_sync.perform
 

@@ -12,14 +12,6 @@ class Account::Syncer
 
   def perform_post_sync
     account.family.auto_match_transfers!
-    account.broadcast_refresh
-    SyncCompleteEvent.new(account.family, accounts: [ account ]).broadcast
-    account.broadcast_replace_to(
-      account.family,
-      target: "account_#{account.id}",
-      partial: "accounts/account",
-      locals: { account: account }
-    )
   end
 
   private

@@ -22,6 +22,10 @@ module Syncable
     syncer.perform_post_sync
   end
 
+  def broadcast_sync_complete
+    sync_broadcaster.broadcast
+  end
+
   def sync_error
     latest_sync&.error
   end
@@ -41,5 +45,9 @@ module Syncable
 
     def syncer
       self.class::Syncer.new(self)
+    end
+
+    def sync_broadcaster
+      self.class::SyncCompleteEvent.new(self)
     end
 end
