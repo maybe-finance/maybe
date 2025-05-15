@@ -49,7 +49,9 @@ class Sync < ApplicationRecord
       begin
         syncable.perform_sync(self)
       rescue => e
-        fail_and_report_error(e)
+        fail!
+        update(error: e.message)
+        report_error(e)
       ensure
         finalize_if_all_children_finalized
       end
@@ -64,9 +66,6 @@ class Sync < ApplicationRecord
       # If this is the "parent" and there are still children running, don't finalize.
       return unless all_children_finalized?
 
-      # If we make it here, the sync is finalized.  Run post-sync, regardless of failure/success.
-      perform_post_sync
-
       if syncing?
         if has_failed_children?
           fail!
@@ -74,6 +73,9 @@ class Sync < ApplicationRecord
           complete!
         end
       end
+
+      # If we make it here, the sync is finalized.  Run post-sync, regardless of failure/success.
+      perform_post_sync
     end
 
     # If this sync has a parent, try to finalize it so the child status propagates up the chain.
@@ -96,12 +98,10 @@ class Sync < ApplicationRecord
     def perform_post_sync
       syncable.perform_post_sync
     rescue => e
-      fail_and_report_error(e)
+      report_error(e)
     end
 
-    def fail_and_report_error(error)
-      fail!
-      update(error: error.message)
+    def report_error(error)
       Sentry.capture_exception(error) do |scope|
         scope.set_tags(sync_id: id)
       end

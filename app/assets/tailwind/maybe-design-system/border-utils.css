@@ -1,7 +1,6 @@
 /* Custom shadow borders used for surfaces / containers  */
 @utility shadow-border-xs {
   box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-black-50);
-  transform: translateZ(0);
 
   @variant theme-dark {
     box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--color-alpha-white-50);
@@ -10,7 +9,6 @@
 
 @utility shadow-border-sm {
   box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-black-50);
-  transform: translateZ(0);
 
   @variant theme-dark {
     box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--color-alpha-white-50);
@@ -19,7 +17,6 @@
 
 @utility shadow-border-md {
   box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-black-50);
-  transform: translateZ(0);
 
   @variant theme-dark {
     box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--color-alpha-white-50);
@@ -28,7 +25,6 @@
 
 @utility shadow-border-lg {
   box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-black-50);
-  transform: translateZ(0);
 
   @variant theme-dark {
     box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--color-alpha-white-50);
@@ -37,7 +33,6 @@
 
 @utility shadow-border-xl {
   box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-black-50);
-  transform: translateZ(0);
 
   @variant theme-dark {
     box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--color-alpha-white-50);

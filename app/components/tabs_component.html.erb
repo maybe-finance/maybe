@@ -11,11 +11,6 @@
   <% else %>
     <%= nav %>
 
-    <%= form_with url: cookie_session_path, scope: :cookie_session, method: :put, data: { tabs_target: "persistSelectionForm" } do |f| %>
-      <%= f.hidden_field :tab_key, value: "account_group_tab" %>
-      <%= f.hidden_field :tab_value, value: "all", data: { tabs_target: "selectionInput" } %>
-    <% end %>
-
     <% panels.each do |panel| %>
       <%= panel %>
     <% end %>

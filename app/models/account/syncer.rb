@@ -13,7 +13,7 @@ class Account::Syncer
   def perform_post_sync
     account.family.auto_match_transfers!
     account.broadcast_refresh
-    account.family.broadcast_sidebar_refresh
+    SyncCompleteEvent.new(account.family, accounts: [ account ]).broadcast
   end
 
   private

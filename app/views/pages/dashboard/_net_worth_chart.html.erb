@@ -1,54 +1,55 @@
-<%# locals: (balance_sheet:, period:) %>
+<%# locals: (balance_sheet:, period:, **args) %>
 
-<% series = balance_sheet.net_worth_series(period: period) %>
-
-<div class="flex justify-between gap-4 px-4">
-  <div class="space-y-2">
+<div id="net-worth-chart">
+  <% series = balance_sheet.net_worth_series(period: period) %>
+  <div class="flex justify-between gap-4 px-4">
     <div class="space-y-2">
-      <p class="text-sm text-secondary font-medium"><%= t(".title") %></p>
+      <div class="space-y-2">
+        <p class="text-sm text-secondary font-medium"><%= t(".title") %></p>
 
-      <% if balance_sheet.syncing? %>
-        <div class="flex flex-col gap-2">
-          <div class="bg-loader rounded-md h-7 w-20"></div>
-          <div class="bg-loader rounded-md h-5 w-32"></div>
-        </div>
-      <% else %>
-        <p class="text-primary -space-x-0.5 text-3xl font-medium">
-          <%= series.current.format %>
-        </p>
-
-        <% if series.trend.nil? %>
-          <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
+        <% if balance_sheet.syncing? %>
+          <div class="flex flex-col gap-2">
+            <div class="bg-loader rounded-md h-7 w-20"></div>
+            <div class="bg-loader rounded-md h-5 w-32"></div>
+          </div>
         <% else %>
-          <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
+          <p class="text-primary -space-x-0.5 text-3xl font-medium">
+            <%= series.current.format %>
+          </p>
 
-  <%= form_with url: root_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
-    <%= form.select :period,
+          <% if series.trend.nil? %>
+            <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
+          <% else %>
+            <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form_with url: root_path, method: :get, data: { controller: "auto-submit-form" } do |form| %>
+      <%= form.select :period,
                     Period.as_options,
                     { selected: period.key },
                     data: { "auto-submit-form-target": "auto" },
                     class: "bg-container border border-secondary font-medium rounded-lg px-3 py-2 text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0" %>
-  <% end %>
-</div>
-
-<% if balance_sheet.syncing? %>
-  <div class="w-full flex items-center justify-center p-4 h-52">
-    <div class="bg-loader rounded-md h-full w-full"></div>
+    <% end %>
   </div>
-<% else %>
-  <% if series.any? %>
-    <div
+
+  <% if balance_sheet.syncing? %>
+    <div class="w-full flex items-center justify-center p-4 h-52">
+      <div class="bg-loader rounded-md h-full w-full"></div>
+    </div>
+  <% else %>
+    <% if series.any? %>
+      <div
     id="netWorthChart"
     class="w-full flex-1 min-h-52"
     data-controller="time-series-chart"
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
-  <% else %>
-    <div class="w-full h-full flex items-center justify-center">
-      <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
-    </div>
+    <% else %>
+      <div class="w-full h-full flex items-center justify-center">
+        <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
+</div>

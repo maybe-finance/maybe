@@ -36,8 +36,22 @@ export default class extends Controller {
 
     // Update URL with the selected tab
     if (this.sessionKeyValue) {
-      this.selectionInputTarget.value = selectedTabId;
-      this.persistSelectionFormTarget.requestSubmit();
+      this.#updateSessionPreference(selectedTabId);
     }
   } 
+
+  #updateSessionPreference(selectedTabId) {
+    fetch("/current_session", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
+        Accept: "application/json",
+      },
+      body: new URLSearchParams({
+        "current_session[tab_key]": this.sessionKeyValue,
+        "current_session[tab_value]": selectedTabId,
+      }).toString(),
+    });
+  }
 }

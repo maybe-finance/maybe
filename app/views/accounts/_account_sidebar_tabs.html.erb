@@ -1,4 +1,4 @@
-<%# locals: (family:, active_account_group_tab: "asset") %>
+<%# locals: (family:, active_tab:, mobile: false) %>
 
 <div id="account-sidebar-tabs">
   <% if family.missing_data_provider? %>
@@ -21,7 +21,7 @@
     </details>
   <% end %>
 
-  <%= render TabsComponent.new(active_tab: active_account_group_tab, session_key: "account_group_tab", testid: "account-sidebar-tabs") do |tabs| %>
+  <%= render TabsComponent.new(active_tab: active_tab, session_key: "account_sidebar_tab", testid: "account-sidebar-tabs") do |tabs| %>
     <% tabs.with_nav do |nav| %>
       <% nav.with_btn(id: "asset", label: "Assets") %>
       <% nav.with_btn(id: "liability", label: "Debts") %>
@@ -42,7 +42,7 @@
 
         <div>
           <% family.balance_sheet.account_groups("asset").each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
+            <%= render "accounts/accountable_group", account_group: group, mobile: mobile %>
           <% end %>
         </div>
       </div>
@@ -62,7 +62,7 @@
 
         <div>
           <% family.balance_sheet.account_groups("liability").each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
+            <%= render "accounts/accountable_group", account_group: group, mobile: mobile %>
           <% end %>
         </div>
       </div>
@@ -82,7 +82,7 @@
 
         <div>
           <% family.balance_sheet.account_groups.each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group %>
+            <%= render "accounts/accountable_group", account_group: group, mobile: mobile %>
           <% end %>
         </div>
       </div>

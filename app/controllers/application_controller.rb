@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
-  include Onboardable, Localize, AutoSync, Authentication, Invitable,
+  include RestoreLayoutPreferences, Onboardable, Localize, AutoSync, Authentication, Invitable,
           SelfHostable, StoreLocation, Impersonatable, Breadcrumbable,
-          FeatureGuardable, Notifiable, AccountGroupable
+          FeatureGuardable, Notifiable
 
   include Pagy::Backend
 

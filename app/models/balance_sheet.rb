@@ -54,8 +54,11 @@ class BalanceSheet
     groups = account_groups.map do |accountable, accounts|
       group_total = accounts.sum(&:converted_balance)
 
+      key = accountable.model_name.param_key
+
       AccountGroup.new(
-        key: accountable.model_name.param_key,
+        id: classification ? "#{classification}_#{key}_group" : "#{key}_group",
+        key: key,
         name: accountable.display_name,
         classification: accountable.classification,
         total: group_total,
@@ -95,7 +98,7 @@ class BalanceSheet
 
   private
     ClassificationGroup = Struct.new(:key, :display_name, :icon, :total_money, :account_groups, :syncing?, keyword_init: true)
-    AccountGroup = Struct.new(:key, :name, :accountable_type, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, :syncing?, keyword_init: true)
+    AccountGroup = Struct.new(:id, :key, :name, :accountable_type, :classification, :total, :total_money, :weight, :accounts, :color, :missing_rates?, :syncing?, keyword_init: true)
 
     def active_accounts
       family.accounts.active.with_attached_logo

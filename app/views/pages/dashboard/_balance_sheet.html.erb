@@ -1,6 +1,6 @@
-<%# locals: (balance_sheet:) %>
+<%# locals: (balance_sheet:, **args) %>
 
-<div class="space-y-4">
+<div class="space-y-4" id="balance-sheet">
   <% balance_sheet.classification_groups.each do |classification_group| %>
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
       <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
