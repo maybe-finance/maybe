@@ -20,26 +20,26 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
 
   test "holding generation respects user timezone and last generated date is current user date" do
     # Simulate user in EST timezone
-    Time.zone = "America/New_York"
+    Time.use_zone("America/New_York") do
+      # Set current time to 1am UTC on Jan 5, 2025
+      # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate holdings for)
+      travel_to Time.utc(2025, 01, 05, 1, 0, 0)
 
-    # Set current time to 1am UTC on Jan 5, 2025
-    # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate holdings for)
-    travel_to Time.utc(2025, 01, 05, 1, 0, 0)
+      voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
+      Security::Price.create!(security: voo, date: "2025-01-02", price: 500)
+      Security::Price.create!(security: voo, date: "2025-01-03", price: 500)
+      Security::Price.create!(security: voo, date: "2025-01-04", price: 500)
 
-    voo = Security.create!(ticker: "VOO", name: "Vanguard S&P 500 ETF")
-    Security::Price.create!(security: voo, date: "2025-01-02", price: 500)
-    Security::Price.create!(security: voo, date: "2025-01-03", price: 500)
-    Security::Price.create!(security: voo, date: "2025-01-04", price: 500)
+      # Today's holdings (provided)
+      @account.holdings.create!(security: voo, date: "2025-01-04", qty: 10, price: 500, amount: 5000, currency: "USD")
 
-    # Today's holdings (provided)
-    @account.holdings.create!(security: voo, date: "2025-01-04", qty: 10, price: 500, amount: 5000, currency: "USD")
+      create_trade(voo, qty: 10, date: "2025-01-03", price: 500, account: @account)
 
-    create_trade(voo, qty: 10, date: "2025-01-03", price: 500, account: @account)
+      expected = [ [ "2025-01-02", 0 ], [ "2025-01-03", 5000 ], [ "2025-01-04", 5000 ] ]
+      calculated = Holding::ReverseCalculator.new(@account).calculate
 
-    expected = [ [ "2025-01-02", 0 ], [ "2025-01-03", 5000 ], [ "2025-01-04", 5000 ] ]
-    calculated = Holding::ReverseCalculator.new(@account).calculate
-
-    assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.amount ] }
+      assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.amount ] }
+    end
   end
 
   # Should be able to handle this case, although we should not be reverse-syncing an account without provided current day holdings
