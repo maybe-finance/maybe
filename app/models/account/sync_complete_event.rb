@@ -38,6 +38,8 @@ class Account::SyncCompleteEvent
     # The sidebar will show the account in both its classification tab and the "all" tab,
     # so we need to broadcast to both.
     def account_group_ids
+      return [] unless account_group.present?
+
       id = account_group.id
       [ id, "#{account_group.classification}_#{id}" ]
     end
