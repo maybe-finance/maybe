@@ -3,6 +3,8 @@ class Provider::Synth < Provider
 
   # Subclass so errors caught in this provider are raised as Provider::Synth::Error
   Error = Class.new(Provider::Error)
+  InvalidExchangeRateError = Class.new(Error)
+  InvalidSecurityPriceError = Class.new(Error)
 
   def initialize(api_key)
     @api_key = api_key
@@ -65,8 +67,18 @@ class Provider::Synth < Provider
       end
 
       data.paginated.map do |rate|
-        Rate.new(date: rate.dig("date"), from:, to:, rate: rate.dig("rates", to))
-      end
+        date = rate.dig("date")
+        rate = rate.dig("rates", to)
+
+        if date.nil? || rate.nil?
+          message = "#{self.class.name} returned invalid rate data for pair from: #{from} to: #{to} on: #{date}.  Rate data: #{rate.inspect}"
+          Rails.logger.warn(message)
+          Sentry.capture_exception(InvalidExchangeRateError.new(message), level: :warning)
+          next
+        end
+
+        Rate.new(date:, from:, to:, rate:)
+      end.compact
     end
   end
 
@@ -149,13 +161,23 @@ class Provider::Synth < Provider
       exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
 
       data.paginated.map do |price|
+        date = price.dig("date")
+        price = price.dig("close") || price.dig("open")
+
+        if date.nil? || price.nil?
+          message = "#{self.class.name} returned invalid price data for security #{security.ticker} on: #{date}.  Price data: #{price.inspect}"
+          Rails.logger.warn(message)
+          Sentry.capture_exception(InvalidSecurityPriceError.new(message), level: :warning)
+          next
+        end
+
         Price.new(
           security: security,
-          date: price.dig("date"),
-          price: price.dig("close") || price.dig("open"),
+          date: date,
+          price: price,
           currency: currency
         )
-      end
+      end.compact
     end
   end
 
