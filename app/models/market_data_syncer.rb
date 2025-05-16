@@ -101,14 +101,14 @@ class MarketDataSyncer
     def get_first_required_price_date(security)
       return default_start_date if snapshot?
 
-      Trade.with_entry.where(security: security).minimum(:date)
+      Trade.with_entry.where(security: security).minimum(:date) || default_start_date
     end
 
     # An approximation that grabs more than we likely need, but simplifies the logic
     def get_first_required_exchange_rate_date(from_currency:)
       return default_start_date if snapshot?
 
-      Entry.where(currency: from_currency).minimum(:date)
+      Entry.where(currency: from_currency).minimum(:date) || default_start_date
     end
 
     def default_start_date
