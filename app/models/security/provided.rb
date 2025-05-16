@@ -49,6 +49,42 @@ module Security::Provided
     price
   end
 
+  def sync_provider_details(clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.sync_provider_details")
+      return
+    end
+
+    if self.name.present? && self.logo_url.present? && !clear_cache
+      return
+    end
+
+    details = provider.fetch_security_info(
+      symbol: ticker,
+      exchange_operating_mic: exchange_operating_mic
+    )
+
+    update(
+      name: details.name,
+      logo_url: details.logo_url,
+    )
+  end
+
+  def sync_provider_prices(start_date:, end_date:, clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.sync_provider_prices")
+      return 0
+    end
+
+    Security::Price::Syncer.new(
+      security: self,
+      security_provider: provider,
+      start_date: start_date,
+      end_date: end_date,
+      clear_cache: clear_cache
+    ).sync_provider_prices
+  end
+
   private
     def provider
       self.class.provider

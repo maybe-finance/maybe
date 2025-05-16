@@ -7,7 +7,7 @@ module SecurityProviderInterfaceTest
     aapl = securities(:aapl)
 
     VCR.use_cassette("#{vcr_key_prefix}/security_price") do
-      response = @subject.fetch_security_price(aapl, date: Date.iso8601("2024-08-01"))
+      response = @subject.fetch_security_price(symbol: aapl.ticker, exchange_operating_mic: aapl.exchange_operating_mic, date: Date.iso8601("2024-08-01"))
 
       assert response.success?
       assert response.data.present?
@@ -19,7 +19,8 @@ module SecurityProviderInterfaceTest
 
     VCR.use_cassette("#{vcr_key_prefix}/security_prices") do
       response = @subject.fetch_security_prices(
-        aapl,
+        symbol: aapl.ticker,
+        exchange_operating_mic: aapl.exchange_operating_mic,
         start_date: Date.iso8601("2024-01-01"),
         end_date: Date.iso8601("2024-08-01")
       )
@@ -44,7 +45,11 @@ module SecurityProviderInterfaceTest
     aapl = securities(:aapl)
 
     VCR.use_cassette("#{vcr_key_prefix}/security_info") do
-      response = @subject.fetch_security_info(aapl)
+      response = @subject.fetch_security_info(
+        symbol: aapl.ticker,
+        exchange_operating_mic: aapl.exchange_operating_mic
+      )
+
       info = response.data
 
       assert_equal "AAPL", info.symbol

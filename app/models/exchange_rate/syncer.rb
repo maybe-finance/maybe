@@ -66,13 +66,19 @@ class ExchangeRate::Syncer
     def upsert_rows(rows)
       batch_size = 200
 
+      total_upsert_count = 0
+
       rows.each_slice(batch_size) do |batch|
-        ExchangeRate.upsert_all(
+        upserted_ids = ExchangeRate.upsert_all(
           batch,
           unique_by: %i[from_currency to_currency date],
-          returning: false
+          returning: [ "id" ]
         )
+
+        total_upsert_count += upserted_ids.count
       end
+
+      total_upsert_count
     end
 
     # Since provider may not return values on weekends and holidays, we grab the first rate from the provider that is on or before the start date

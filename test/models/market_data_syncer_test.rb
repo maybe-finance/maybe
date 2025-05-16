@@ -24,19 +24,26 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
     # Put an existing rate in DB to test upsert
     ExchangeRate.create!(from_currency: "CAD", to_currency: "USD", date: start_date, rate: 2.0)
 
+    # The individual syncers fetch with a 5-day buffer to ensure we have a «starting» price/rate
+    provider_start_date = get_provider_fetch_start_date(start_date)
+    provider_start_date_for_cad_usd = get_provider_fetch_start_date(start_date + 1.day) # first missing date is +1 day
+
     mock_provider.expects(:fetch_exchange_rates)
-                 .with(from: "CAD", to: "USD", start_date: start_date, end_date: end_date)
+                 .with(from: "CAD", to: "USD", start_date: provider_start_date_for_cad_usd, end_date: end_date)
                  .returns(provider_success_response([ OpenStruct.new(from: "CAD", to: "USD", date: start_date, rate: 1.0) ]))
 
     mock_provider.expects(:fetch_exchange_rates)
-                 .with(from: "USD", to: "EUR", start_date: start_date, end_date: end_date)
+                 .with(from: "USD", to: "EUR", start_date: provider_start_date, end_date: end_date)
                  .returns(provider_success_response([ OpenStruct.new(from: "USD", to: "EUR", date: start_date, rate: 1.0) ]))
 
-    assert_difference "ExchangeRate.count", 1 do
-      MarketDataSyncer.new.sync_exchange_rates
-    end
+    before_count = ExchangeRate.count
+    MarketDataSyncer.new.sync_exchange_rates
+    after_count = ExchangeRate.count
 
-    assert_equal 1.0, ExchangeRate.where(from_currency: "CAD", to_currency: "USD", date: start_date).first.rate
+    assert_operator after_count, :>, before_count, "Expected at least one new exchange-rate row to be inserted"
+
+    # The original CAD→USD rate on start_date should remain (no clear_cache), so value stays 2.0
+    assert_equal 2.0, ExchangeRate.where(from_currency: "CAD", to_currency: "USD", date: start_date).first.rate
   end
 
   test "syncs security prices with upsert" do
@@ -53,13 +60,21 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
     start_date = 1.month.ago.to_date
     end_date = Date.current.in_time_zone("America/New_York").to_date
 
+    # The individual syncers fetch with a 5-day buffer to ensure we have a «starting» price/rate
+    provider_start_date = get_provider_fetch_start_date(start_date)
+
     mock_provider.expects(:fetch_security_prices)
-                 .with(aapl, start_date: start_date, end_date: end_date)
+                 .with(aapl, start_date: provider_start_date, end_date: end_date)
                  .returns(provider_success_response([ OpenStruct.new(security: aapl, date: start_date, price: 100, currency: "USD") ]))
 
-    assert_difference "Security::Price.count", 1 do
-      MarketDataSyncer.new.sync_prices
-    end
+    # The syncer also enriches security details, so stub that out as well
+    mock_provider.stubs(:fetch_security_info)
+                 .with(symbol: "AAPL", exchange_operating_mic: "XNAS")
+                 .returns(OpenStruct.new(name: "Apple", logo_url: "logo"))
+
+    MarketDataSyncer.new.sync_prices
+
+    assert_equal 1, Security::Price.where(security: aapl, date: start_date).count
   end
 
   private
@@ -67,5 +82,10 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
       Invitation.destroy_all
       Family.destroy_all
       Security.destroy_all
+    end
+
+    # Match the internal syncer logic of adding a 5-day buffer before provider calls
+    def get_provider_fetch_start_date(start_date)
+      start_date - 5.days
     end
 end

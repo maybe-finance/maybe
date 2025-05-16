@@ -11,6 +11,7 @@ module Account::Convertible
       from: currency,
       to: target_currency,
       start_date: start_date,
+      end_date: Date.current
     )
 
     Rails.logger.info("Synced #{affected_row_count} exchange rates for account #{id}")

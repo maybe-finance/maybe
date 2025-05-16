@@ -27,6 +27,7 @@ module ExchangeRate::Provided
       rate
     end
 
+    # @return [Integer] The number of exchange rates synced
     def sync_provider_rates(from:, to:, start_date:, end_date:, clear_cache: false)
       unless provider.present?
         Rails.logger.warn("No provider configured for ExchangeRate.sync_provider_rates")

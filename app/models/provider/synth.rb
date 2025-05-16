@@ -109,55 +109,52 @@ class Provider::Synth < Provider
     end
   end
 
-  def fetch_security_info(security)
+  def fetch_security_info(symbol:, exchange_operating_mic:)
     with_provider_response do
-      response = client.get("#{base_url}/tickers/#{security.ticker}") do |req|
-        req.params["mic_code"] = security.exchange_mic if security.exchange_mic.present?
-        req.params["operating_mic"] = security.exchange_operating_mic if security.exchange_operating_mic.present?
+      response = client.get("#{base_url}/tickers/#{symbol}") do |req|
+        req.params["operating_mic"] = exchange_operating_mic
       end
 
       data = JSON.parse(response.body).dig("data")
 
       SecurityInfo.new(
-        symbol: data.dig("ticker"),
+        symbol: symbol,
         name: data.dig("name"),
         links: data.dig("links"),
         logo_url: data.dig("logo_url"),
         description: data.dig("description"),
-        kind: data.dig("kind")
+        kind: data.dig("kind"),
+        exchange_operating_mic: exchange_operating_mic
       )
     end
   end
 
-  def fetch_security_price(security, date:)
+  def fetch_security_price(symbol:, exchange_operating_mic:, date:)
     with_provider_response do
-      historical_data = fetch_security_prices(security, start_date: date, end_date: date)
+      historical_data = fetch_security_prices(symbol:, exchange_operating_mic:, start_date: date, end_date: date)
 
-      raise ProviderError, "No prices found for security #{security.ticker} on date #{date}" if historical_data.data.empty?
+      raise ProviderError, "No prices found for security #{symbol} on date #{date}" if historical_data.data.empty?
 
       historical_data.data.first
     end
   end
 
-  def fetch_security_prices(security, start_date:, end_date:)
+  def fetch_security_prices(symbol:, exchange_operating_mic:, start_date:, end_date:)
     with_provider_response do
       params = {
         start_date: start_date,
-        end_date: end_date
+        end_date: end_date,
+        operating_mic_code: exchange_operating_mic
       }
 
-      params[:operating_mic_code] = security.exchange_operating_mic if security.exchange_operating_mic.present?
-
       data = paginate(
-        "#{base_url}/tickers/#{security.ticker}/open-close",
+        "#{base_url}/tickers/#{symbol}/open-close",
         params
       ) do |body|
         body.dig("prices")
       end
 
       currency = data.first_page.dig("currency")
-      country_code = data.first_page.dig("exchange", "country_code")
-      exchange_mic = data.first_page.dig("exchange", "mic_code")
       exchange_operating_mic = data.first_page.dig("exchange", "operating_mic_code")
 
       data.paginated.map do |price|
@@ -165,17 +162,18 @@ class Provider::Synth < Provider
         price = price.dig("close") || price.dig("open")
 
         if date.nil? || price.nil?
-          message = "#{self.class.name} returned invalid price data for security #{security.ticker} on: #{date}.  Price data: #{price.inspect}"
+          message = "#{self.class.name} returned invalid price data for security #{symbol} on: #{date}.  Price data: #{price.inspect}"
           Rails.logger.warn(message)
           Sentry.capture_exception(InvalidSecurityPriceError.new(message), level: :warning)
           next
         end
 
         Price.new(
-          security: security,
+          symbol: symbol,
           date: date,
           price: price,
-          currency: currency
+          currency: currency,
+          exchange_operating_mic: exchange_operating_mic
         )
       end.compact
     end

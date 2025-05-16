@@ -32,7 +32,7 @@ class Account::ConvertibleTest < ActiveSupport::TestCase
     )
 
     @provider.expects(:fetch_exchange_rates)
-             .with(from: "EUR", to: "USD", start_date: 2.days.ago.to_date, end_date: Date.current)
+             .with(from: "EUR", to: "USD", start_date: 2.days.ago.to_date - 5.days, end_date: Date.current)
              .returns(provider_response)
 
     assert_difference "ExchangeRate.count", 3 do
