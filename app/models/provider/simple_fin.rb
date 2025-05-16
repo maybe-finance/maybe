@@ -1,10 +1,19 @@
 class Provider::SimpleFin
   attr_reader :client, :region
 
+  # Error subclasses
+  Error = Class.new(Provider::Error)
+  RateLimitExceededError = Class.new(Error)
+
   # SimpleFIN only supports these account types
   MAYBE_SUPPORTED_SIMPLE_FIN_PRODUCTS = %w[Depository Investment Loan CreditCard].freeze
-  # TODO
-  MAX_HISTORY_DAYS = 1
+
+  class << self
+    # Helper class method to access the SimpleFin specific configuration
+    def provider_config
+      Rails.application.config.simple_fin
+    end
+  end
 
   def initialize(config, region: :us)
     @region = region
@@ -22,7 +31,7 @@ class Provider::SimpleFin
     return false unless is_supported_account_type
 
     # Verify it is configured
-    config = Rails.application.config.simple_fin
+    config = Provider::SimpleFin.provider_config
     return false unless config.present?
 
     # Make sure this API version is supported
@@ -37,8 +46,8 @@ class Provider::SimpleFin
   # @param [Boolean] include_creds Controls if credentials should be included or if this request should be anonymous. Default true.
   def send_request_to_sf(path, include_creds = true)
     # Grab access URL from the env
-    config = Rails.application.config.simple_fin
-    access_url = config["ACCESS_URL"]
+    config = Provider::SimpleFin.provider_config
+    access_url = config.access_url
     # Add the access URL to the path
     uri = URI.parse(access_url + path)
     # Setup the request
@@ -77,6 +86,7 @@ class Provider::SimpleFin
   # @param [int?] trans_end_date A linux epoch of the end date to get transactions between.
   # @param [Boolean] trans_pending If we should include pending transactions. Default is true.
   def get_available_accounts(accountable_type, trans_start_date = nil, trans_end_date = nil, trans_pending = true)
+    check_rate_limit
     endpoint = "/accounts?pending=#{trans_pending}"
 
     # Add any parameters we care about
@@ -133,10 +143,30 @@ class Provider::SimpleFin
     end
   end
 
+  ##
+  # Increments the call count for tracking rate limiting of SimpleFIN.
+  #
+  # @raises [RateLimitExceededError] if the daily API call limit has been reached.
+  def check_rate_limit
+    today = Date.current
+    # Find or initialize the rate limit record for the family for today
+    rate_limit_record = SimpleFinRateLimit.find_or_initialize_by(date: today)
+
+    # Determine the actual limit: from config
+    limit = Provider::SimpleFin.provider_config.rate_limit
+
+    if rate_limit_record.call_count >= limit
+      raise RateLimitExceededError, "SimpleFIN API daily rate limit exceeded. Limit: #{limit} calls."
+    end
+
+    # Increment the call count for today. This also saves the record if new or updates if existing.
+    rate_limit_record.update!(call_count: rate_limit_record.call_count + 1)
+  end
+
   # Returns if this is a supported API of SimpleFIN by the access url in the config.
   def is_supported_api
     # Make sure the config is loaded since this is called early
-    config = Rails.application.config.simple_fin
+    config = Provider::SimpleFin.provider_config
     return false unless config.present?
 
     get_api_versions().include?("1.0")

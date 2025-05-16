@@ -580,11 +580,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_09_134646) do
     t.string "status", default: "good"
     t.string "institution_errors", default: [], array: true
     t.boolean "scheduled_for_deletion", default: false
-    t.integer "syncs_today_count", default: 0, null: false
-    t.datetime "last_sync_count_reset_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_simple_fin_items_on_family_id"
+  end
+
+  create_table "simple_fin_rate_limits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "date", null: false
+    t.integer "call_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_sfrl_on_date", unique: true
   end
 
   create_table "stock_exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

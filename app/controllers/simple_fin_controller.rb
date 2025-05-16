@@ -12,7 +12,7 @@ class SimpleFinController < ApplicationController
     @simple_fin_accounts = @simple_fin_accounts.filter { |acc| !account_exists(acc) }
   rescue StandardError => e
     Rails.logger.error "SimpleFIN: Failed to fetch accounts - #{e.message}"
-    redirect_to new_account_path, alert: t(".fetch_failed")
+    redirect_to root_path, alert: t(".fetch_failed")
   end
 
   ##
@@ -26,7 +26,7 @@ class SimpleFinController < ApplicationController
   def sync
     @simple_fin_item = Current.family.simple_fin_items.find(params[:id])
     unless @simple_fin_item.syncing?
-      @simple_fin_item.sync
+      @simple_fin_item.sync_later
     end
 
     respond_to do |format|
@@ -58,8 +58,6 @@ class SimpleFinController < ApplicationController
         sfc.institution_name = org_details["name"]
         sfc.institution_url = org_details["url"]
         sfc.institution_domain = org_details["domain"]
-        # TODO: Fix
-        sfc.last_sync_count_reset_at = Time.current # Mark as synced upon creation
       end
 
       sf_accounts_for_institution.each do |acc_detail|

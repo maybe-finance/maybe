@@ -21,6 +21,10 @@ class SimpleFinAccount < ApplicationRecord
   class << self
     def find_or_create_from_simple_fin_data!(sf_account_data, sfc)
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
+        sfa.current_balance = sf_account_data["balance"].to_d
+        sfa.available_balance = sf_account_data["balance"].to_d
+        sfa.currency = sf_account_data["currency"]
+
         new_account = sfc.family.accounts.new(
           name: sf_account_data["name"],
           balance: sf_account_data["balance"].to_d,
@@ -64,16 +68,15 @@ class SimpleFinAccount < ApplicationRecord
     end
   end
 
+  ##
+  # Syncs all account data for the given sf_account_data parameter
   # sf_account_data is a hash from Provider::SimpleFin#get_available_accounts
   def sync_account_data!(sf_account_data)
-    # Ensure accountable_attributes has the ID for updates
-    # 'account' here refers to self.account (the associated Account instance)
     accountable_attributes = { id: self.account.accountable_id }
     self.update!(
       current_balance: sf_account_data["balance"].to_d,
       available_balance: sf_account_data["available-balance"]&.to_d,
       currency: sf_account_data["currency"],
-      # simple_fin_errors: sf_account_data["errors"] || [],
       account_attributes: {
         id: self.account.id,
         balance: sf_account_data["balance"].to_d,

@@ -9,9 +9,6 @@ class SimpleFinIntegration < ActiveRecord::Migration[7.2]
       t.string :status, default: "good" # e.g., good, requires_update
       t.string :institution_errors, array: true, default: []
       t.boolean :scheduled_for_deletion, default: false
-      # Columns for rate limiting
-      t.integer :syncs_today_count, default: 0, null: false
-      t.datetime :last_sync_count_reset_at
 
       t.timestamps
     end
@@ -37,5 +34,13 @@ class SimpleFinIntegration < ActiveRecord::Migration[7.2]
     add_column :holdings, :simple_fin_holding_id, :string
     add_index :holdings, :simple_fin_holding_id, unique: true, where: "simple_fin_holding_id IS NOT NULL"
     add_column :holdings, :source, :string
+
+    create_table :simple_fin_rate_limits, id: :uuid do |t|
+      t.date :date, null: false
+      t.integer :call_count, null: false, default: 0
+
+      t.timestamps
+    end
+    add_index :simple_fin_rate_limits, [ :date ], unique: true, name: 'index_sfrl_on_date'
   end
 end

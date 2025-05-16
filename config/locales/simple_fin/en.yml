@@ -3,6 +3,8 @@ en:
   simple_fin:
     form:
       add_accounts: "Add Selected Accounts"
+    new:
+      fetch_failed: "Failed to fetch accounts"
     create:
       accounts_created_success: "Accounts Successfully Created"
       fetch_failed: "Failed to fetch accounts"

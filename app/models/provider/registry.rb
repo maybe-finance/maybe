@@ -13,6 +13,7 @@ class Provider::Registry
     end
 
     def get_provider(name)
+      puts "NAME: #{name}"
       send(name)
     rescue NoMethodError
       raise Error.new("Provider '#{name}' not found in registry")
@@ -65,7 +66,7 @@ class Provider::Registry
       end
 
       def simple_fin
-        config = Rails.application.config.simple_fin
+        config = Provider::SimpleFin.provider_config
 
         return nil unless config.present?
 
