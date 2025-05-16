@@ -12,7 +12,6 @@
   <%= summary_card title: t(".interest_rate") do %>
     <% if account.loan.interest_rate.present? %>
       <%= number_to_percentage(account.loan.interest_rate, precision: 3) %>
-      
     <% else %>
       <%= t(".unknown") %>
     <% end %>
