@@ -70,7 +70,6 @@ class SimpleFinAccount < ApplicationRecord
 
   ##
   # Syncs all account data for the given sf_account_data parameter
-  # sf_account_data is a hash from Provider::SimpleFin#get_available_accounts
   def sync_account_data!(sf_account_data)
     accountable_attributes = { id: self.account.accountable_id }
     self.update!(
@@ -107,7 +106,7 @@ class SimpleFinAccount < ApplicationRecord
   def sync_holdings!(sf_holdings_data)
     # 'account' here refers to self.account
     return unless self.account.present? && self.account.investment? && sf_holdings_data.is_a?(Array)
-    Rails.logger.info "SimpleFinAccount (#{self.account.id}): Entering sync_holdings! with #{sf_holdings_data.length} items."
+    Rails.logger.info "SimpleFINAccount (#{self.account.id}): Entering sync_holdings! with #{sf_holdings_data.length} items."
 
     # Get existing SimpleFIN holding IDs for this account to detect deletions
     existing_provider_holding_ids = self.account.holdings.where.not(simple_fin_holding_id: nil).pluck(:simple_fin_holding_id)
@@ -115,7 +114,7 @@ class SimpleFinAccount < ApplicationRecord
 
     # Delete holdings that are no longer present in SimpleFIN's data
     holdings_to_delete_ids = existing_provider_holding_ids - current_provider_holding_ids
-    Rails.logger.info "SimpleFinAccount (#{self.account.id}): Will delete SF holding IDs: #{holdings_to_delete_ids}"
+    Rails.logger.info "SimpleFINAccount (#{self.account.id}): Will delete SF holding IDs: #{holdings_to_delete_ids}"
     self.account.holdings.where(simple_fin_holding_id: holdings_to_delete_ids).destroy_all
 
     sf_holdings_data.each do |holding_data|
@@ -123,7 +122,7 @@ class SimpleFinAccount < ApplicationRecord
       security = find_or_create_security_from_holding_data(holding_data)
       next unless security # Skip if we can't determine a security
 
-      Rails.logger.info "SimpleFinAccount (#{self.account.id}): Processing SF holding ID #{holding_data['id']}"
+      Rails.logger.info "SimpleFINAccount (#{self.account.id}): Processing SF holding ID #{holding_data['id']}"
       existing_holding = self.account.holdings.find_or_initialize_by(
           security: security,
           date: Date.current,
@@ -165,7 +164,7 @@ class SimpleFinAccount < ApplicationRecord
       if entry.changed? || entry.entryable.changed? # Check if entryable also changed
         entry.save!
       else
-        Rails.logger.info "SimpleFinAccount (#{self.account.id}): Entry for SF transaction ID #{transaction_data['id']} not changed, not saving."
+        Rails.logger.info "SimpleFINAccount (#{self.account.id}): Entry for SF transaction ID #{transaction_data['id']} not changed, not saving."
       end
     end
   end

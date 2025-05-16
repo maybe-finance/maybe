@@ -452,23 +452,6 @@
                 }
             ],
             "holdings": []
-        },
-        {
-            "org": {
-                "domain": "www.discover.com",
-                "name": "Discover Credit Card",
-                "sfin-url": "https://beta-bridge.simplefin.org/simplefin",
-                "url": "https://www.discover.com",
-                "id": "www.discover.com"
-            },
-            "id": "ACT-RANDOM-DISCOVER-CREDIT-CARD",
-            "name": "Discover Credit Card",
-            "currency": "USD",
-            "balance": "-10000",
-            "available-balance": "0.00",
-            "balance-date": 1746720778,
-            "transactions": [],
-            "holdings": []
         }
     ],
     "x-api-message": [

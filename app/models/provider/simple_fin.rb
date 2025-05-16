@@ -81,6 +81,8 @@ class Provider::SimpleFin
   ##
   # Sends a request to get all available accounts from SimpleFIN
   #
+  # For more spec information, see: https://www.simplefin.org/protocol.html#setup-token
+  #
   # @param [str] accountable_type The name of the account type we're looking for.
   # @param [int?] trans_start_date A linux epoch of the start date to get transactions of.
   # @param [int?] trans_end_date A linux epoch of the end date to get transactions between.
@@ -161,6 +163,9 @@ class Provider::SimpleFin
 
     # Increment the call count for today. This also saves the record if new or updates if existing.
     rate_limit_record.update!(call_count: rate_limit_record.call_count + 1)
+
+    # Cleanup old records
+    SimpleFinRateLimit.where("date < ?", today).delete_all
   end
 
   # Returns if this is a supported API of SimpleFIN by the access url in the config.

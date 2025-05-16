@@ -65,7 +65,7 @@ class SimpleFinController < ApplicationController
         next if account_exists(acc_detail)
 
         # Get sub type for this account from params
-        sub_type = params[:account][acc_detail["id"]]["subtype"]
+        sub_type = params.dig(:account, acc_detail["id"], :subtype)
         acc_detail["subtype"] = sub_type
 
 
@@ -74,7 +74,6 @@ class SimpleFinController < ApplicationController
           acc_detail,
           simple_fin_item
         )
-
         # Trigger an account sync of our data
         simple_fin_account.sync_account_data!(acc_detail)
       end
