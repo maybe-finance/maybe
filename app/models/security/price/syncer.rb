@@ -66,7 +66,8 @@ class Security::Price::Syncer
         provider_fetch_start_date = effective_start_date - 5.days
 
         response = security_provider.fetch_security_prices(
-          security,
+          symbol: security.ticker,
+          exchange_operating_mic: security.exchange_operating_mic,
           start_date: provider_fetch_start_date,
           end_date:   end_date
         )

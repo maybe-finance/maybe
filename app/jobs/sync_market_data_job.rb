@@ -10,7 +10,11 @@
 class SyncMarketDataJob < ApplicationJob
   queue_as :scheduled
 
-  def perform(mode: :full, clear_cache: false)
-    MarketDataSyncer.new.sync_all(mode: mode, clear_cache: clear_cache)
+  def perform(opts)
+    opts = opts.symbolize_keys
+    mode = opts.fetch(:mode, :full)
+    clear_cache = opts.fetch(:clear_cache, false)
+
+    MarketDataSyncer.new(mode: mode, clear_cache: clear_cache).sync
   end
 end

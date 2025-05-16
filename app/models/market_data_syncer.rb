@@ -1,45 +1,51 @@
 class MarketDataSyncer
-  DEFAULT_HISTORY_DAYS = 30
-  RATE_PROVIDER_NAME = :synth
-  PRICE_PROVIDER_NAME = :synth
+  # By default, our graphs show 1M as the view, so by fetching 31 days,
+  # we ensure we can always show an accurate default graph
+  SNAPSHOT_DAYS = 31
 
-  # Syncer can optionally be scoped.  Otherwise, it syncs all user data
-  def initialize(family: nil, account: nil)
-    @family = family
-    @account = account
+  InvalidModeError = Class.new(StandardError)
+
+  def initialize(mode: :full, clear_cache: false)
+    @mode = set_mode!(mode)
+    @clear_cache = clear_cache
   end
 
-  def sync_all(full_history: false, clear_cache: false)
-    sync_exchange_rates(full_history: full_history, clear_cache: clear_cache)
-    sync_prices(full_history: full_history, clear_cache: clear_cache)
+  def sync
+    sync_prices
+    sync_exchange_rates
   end
 
-  def sync_exchange_rates(full_history: false, clear_cache: false)
-    unless rate_provider
-      Rails.logger.warn("No rate provider configured for MarketDataSyncer.sync_exchange_rates, skipping sync")
+  # Syncs historical security prices (and details)
+  def sync_prices
+    unless Security.provider
+      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_prices, skipping sync")
       return
     end
 
-    # Finds distinct currency pairs
-    entry_pairs = entries_scope.joins(:account)
-                                  .where.not("entries.currency = accounts.currency")
-                                  .select("entries.currency as source, accounts.currency as target")
-                                  .distinct
+    Security.where.not(exchange_operating_mic: nil).find_each do |security|
+      security.sync_provider_prices(
+        start_date: get_first_required_price_date(security),
+        end_date: end_date,
+        clear_cache: clear_cache
+      )
 
-    # All accounts in currency not equal to the family currency require exchange rates to show a normalized historical graph
-    account_pairs = accounts_scope.joins(:family)
-                                  .where.not("families.currency = accounts.currency")
-                                  .select("accounts.currency as source, families.currency as target")
-                                  .distinct
+      security.sync_provider_details(clear_cache: clear_cache)
+    end
+  end
 
-    pairs = (entry_pairs + account_pairs).uniq
+  def sync_exchange_rates
+    unless ExchangeRate.provider
+      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_exchange_rates, skipping sync")
+      return
+    end
 
-    pairs.each do |pair|
-      start_date = full_history ? find_oldest_required_rate(from_currency: pair.source) : default_start_date
+    required_exchange_rate_pairs.each do |pair|
+      # pair is a Hash with keys :source, :target, and :start_date
+      start_date = snapshot? ? default_start_date : pair[:start_date]
 
       ExchangeRate.sync_provider_rates(
-        from: pair.source,
-        to: pair.target,
+        from: pair[:source],
+        to: pair[:target],
         start_date: start_date,
         end_date: end_date,
         clear_cache: clear_cache
@@ -47,61 +53,80 @@ class MarketDataSyncer
     end
   end
 
-  def sync_prices(full_history: false, clear_cache: false)
-    unless price_provider
-      Rails.logger.warn("No price provider configured for MarketDataSyncer.sync_prices, skipping sync")
-      nil
-    end
-
-    securities_scope.each do |security|
-      start_date = full_history ? find_oldest_required_price(security: security) : default_start_date
-
-      security.sync_provider_prices(start_date: start_date, end_date: end_date, clear_cache: clear_cache)
-      security.sync_provider_details(clear_cache: clear_cache)
-    end
-  end
-
   private
-    attr_reader :family, :account
+    attr_reader :mode, :clear_cache
 
-    def accounts_scope
-      return Account.where(id: account.id) if account
-      return family.accounts if family
-      Account.all
+    def snapshot?
+      mode.to_sym == :snapshot
     end
 
-    def entries_scope
-      account&.entries || family&.entries || Entry.all
-    end
+    # Builds a unique list of currency pairs with the earliest date we need
+    # exchange rates for.
+    #
+    # Returns: Array of Hashes – [{ source:, target:, start_date: }, ...]
+    def required_exchange_rate_pairs
+      pair_dates = {} # { [source, target] => earliest_date }
 
-    def securities_scope
-      if account
-        account.trades.joins(:security).where.not(securities: { exchange_operating_mic: nil })
-      elsif family
-        family.trades.joins(:security).where.not(securities: { exchange_operating_mic: nil })
-      else
-        Security.where.not(exchange_operating_mic: nil)
+      # 1. ENTRY-BASED PAIRS – we need rates from the first entry date
+      Entry.joins(:account)
+           .where.not("entries.currency = accounts.currency")
+           .group("entries.currency", "accounts.currency")
+           .minimum("entries.date")
+           .each do |(source, target), date|
+        key = [ source, target ]
+        pair_dates[key] = [ pair_dates[key], date ].compact.min
+      end
+
+      # 2. ACCOUNT-BASED PAIRS – use the account's oldest entry date
+      account_first_entry_dates = Entry.group(:account_id).minimum(:date)
+
+      Account.joins(:family)
+             .where.not("families.currency = accounts.currency")
+             .select("accounts.id, accounts.currency AS source, families.currency AS target")
+             .find_each do |account|
+        earliest_entry_date = account_first_entry_dates[account.id]
+
+        chosen_date = [ earliest_entry_date, default_start_date ].compact.min
+
+        key = [ account.source, account.target ]
+        pair_dates[key] = [ pair_dates[key], chosen_date ].compact.min
+      end
+
+      # Convert to array of hashes for ease of use
+      pair_dates.map do |(source, target), date|
+        { source: source, target: target, start_date: date }
       end
     end
 
-    def rate_provider
-      Provider::Registry.for_concept(:exchange_rates).get_provider(RATE_PROVIDER_NAME)
+    def get_first_required_price_date(security)
+      return default_start_date if snapshot?
+
+      Trade.with_entry.where(security: security).minimum(:date)
     end
 
-    def price_provider
-      Provider::Registry.for_concept(:securities).get_provider(PRICE_PROVIDER_NAME)
-    end
+    # An approximation that grabs more than we likely need, but simplifies the logic
+    def get_first_required_exchange_rate_date(from_currency:)
+      return default_start_date if snapshot?
 
-    def find_oldest_required_rate(from_currency:)
-      entries_scope.where(currency: from_currency).minimum(:date) || default_start_date
+      Entry.where(currency: from_currency).minimum(:date)
     end
 
     def default_start_date
-      DEFAULT_HISTORY_DAYS.days.ago.to_date
+      SNAPSHOT_DAYS.days.ago.to_date
     end
 
     # Since we're querying market data from a US-based API, end date should always be today (EST)
     def end_date
       Date.current.in_time_zone("America/New_York").to_date
+    end
+
+    def set_mode!(mode)
+      valid_modes = [ :full, :snapshot ]
+
+      unless valid_modes.include?(mode.to_sym)
+        raise InvalidModeError, "Invalid mode for MarketDataSyncer, can only be :full or :snapshot, but was #{mode}"
+      end
+
+      mode.to_sym
     end
 end

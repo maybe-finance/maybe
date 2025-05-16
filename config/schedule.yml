@@ -1,5 +1,9 @@
 sync_market_data:
-  cron: "0 22 * * 1-5" # 5:00 PM EST / 6:00 PM EDT (NY time)
+  # cron: "0 22 * * 1-5" # 5:00 PM EST / 6:00 PM EDT (NY time)
+  cron: "* * * * *" # every minute
   class: "SyncMarketDataJob"
   queue: "scheduled"
   description: "Syncs market data daily at 5:00 PM EST (1 hour after market close)"
+  args:
+    mode: "full"
+    clear_cache: false

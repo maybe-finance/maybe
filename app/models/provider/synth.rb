@@ -50,7 +50,7 @@ class Provider::Synth < Provider
 
       rates = JSON.parse(response.body).dig("data", "rates")
 
-      Rate.new(date:, from:, to:, rate: rates.dig(to))
+      Rate.new(date: date.to_date, from:, to:, rate: rates.dig(to))
     end
   end
 
@@ -77,7 +77,7 @@ class Provider::Synth < Provider
           next
         end
 
-        Rate.new(date:, from:, to:, rate:)
+        Rate.new(date: date.to_date, from:, to:, rate:)
       end.compact
     end
   end
@@ -170,7 +170,7 @@ class Provider::Synth < Provider
 
         Price.new(
           symbol: symbol,
-          date: date,
+          date: date.to_date,
           price: price,
           currency: currency,
           exchange_operating_mic: exchange_operating_mic

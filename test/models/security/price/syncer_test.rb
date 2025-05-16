@@ -19,7 +19,8 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
     ])
 
     @provider.expects(:fetch_security_prices)
-             .with(@security, start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
+             .with(symbol: @security.ticker, exchange_operating_mic: @security.exchange_operating_mic,
+                   start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
     Security::Price::Syncer.new(
@@ -47,7 +48,8 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
     ])
 
     @provider.expects(:fetch_security_prices)
-             .with(@security, start_date: get_provider_fetch_start_date(1.day.ago.to_date), end_date: Date.current)
+             .with(symbol: @security.ticker, exchange_operating_mic: @security.exchange_operating_mic,
+                   start_date: get_provider_fetch_start_date(1.day.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
     Security::Price::Syncer.new(
@@ -94,7 +96,8 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
     ])
 
     @provider.expects(:fetch_security_prices)
-             .with(@security, start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
+             .with(symbol: @security.ticker, exchange_operating_mic: @security.exchange_operating_mic,
+                   start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
     Security::Price::Syncer.new(
@@ -119,7 +122,8 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
     ])
 
     @provider.expects(:fetch_security_prices)
-             .with(@security, start_date: get_provider_fetch_start_date(Date.current), end_date: Date.current)
+             .with(symbol: @security.ticker, exchange_operating_mic: @security.exchange_operating_mic,
+                   start_date: get_provider_fetch_start_date(Date.current), end_date: Date.current)
              .returns(provider_response)
 
     Security::Price::Syncer.new(

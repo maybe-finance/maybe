@@ -26,6 +26,7 @@ module SecurityProviderInterfaceTest
       )
 
       assert response.success?
+      assert response.data.first.date.is_a?(Date)
       assert_equal 147, response.data.count # Synth won't return prices on weekends / holidays, so less than total day count of 213
     end
   end

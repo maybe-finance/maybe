@@ -59,15 +59,21 @@ module Security::Provided
       return
     end
 
-    details = provider.fetch_security_info(
+    response = provider.fetch_security_info(
       symbol: ticker,
       exchange_operating_mic: exchange_operating_mic
     )
 
-    update(
-      name: details.name,
-      logo_url: details.logo_url,
-    )
+    if response.success?
+      update(
+        name: response.data.name,
+        logo_url: response.data.logo_url,
+      )
+    else
+      err = StandardError.new("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
+      Rails.logger.warn(err.message)
+      Sentry.capture_exception(err, level: :warning)
+    end
   end
 
   def sync_provider_prices(start_date:, end_date:, clear_cache: false)
