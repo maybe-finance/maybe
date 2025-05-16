@@ -4,7 +4,7 @@
   <div class="bg-container p-5 shadow-border-xs rounded-xl" data-controller="focus-record" data-focus-record-id-value="<%= @focused_record ? dom_id(@focused_record) : nil %>">
     <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
-      <% unless @account.plaid_account_id.present? %>
+      <% unless (@account.plaid_account_id.present? || @account.simple_fin_account.present?) %>
         <%= render MenuComponent.new(variant: "button") do |menu| %>
           <% menu.with_button(text: "New", variant: "secondary", icon: "plus") %>
 

@@ -19,31 +19,41 @@ class SimpleFinAccount < ApplicationRecord
 
 
   class << self
+    # Gets what balance we should use as our account balance
+    def get_adjusted_balance(sf_account_data)
+      balance_from_sf = sf_account_data["balance"].to_d
+      account_type = sf_account_data["type"]
+      # Adjust balance: liabilities (CreditCard, Loan) should be negative
+      if [ "CreditCard", "Loan" ].include?(account_type)
+        balance_from_sf * -1
+      else
+        balance_from_sf
+      end
+    end
+
     def find_or_create_from_simple_fin_data!(sf_account_data, sfc)
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
-        sfa.current_balance = sf_account_data["balance"].to_d
-        sfa.available_balance = sf_account_data["balance"].to_d
+        balance = get_adjusted_balance(sf_account_data)
+        sfa.current_balance = balance
+        sfa.available_balance = balance
         sfa.currency = sf_account_data["currency"]
 
         new_account = sfc.family.accounts.new(
           name: sf_account_data["name"],
-          balance: sf_account_data["balance"].to_d,
+          balance: 0,
           currency: sf_account_data["currency"],
           accountable: TYPE_MAPPING[sf_account_data["type"]].new,
           subtype: sf_account_data["subtype"],
           simple_fin_account: sfa, # Explicitly associate back
           last_synced_at: Time.current, # Mark as synced upon creation
           # Set cash_balance similar to how Account.create_and_sync might
-          cash_balance: sf_account_data["balance"].to_d
+          cash_balance: 0
         )
-
-        # Add initial valuations
-        current_balance_amount = new_account.balance
 
         new_account.entries.build(
           name: "Current Balance",
           date: Date.current,
-          amount: current_balance_amount,
+          amount: balance,
           currency: new_account.currency,
           entryable: Valuation.new
         )
@@ -72,13 +82,14 @@ class SimpleFinAccount < ApplicationRecord
   # Syncs all account data for the given sf_account_data parameter
   def sync_account_data!(sf_account_data)
     accountable_attributes = { id: self.account.accountable_id }
+    balance = SimpleFinAccount.get_adjusted_balance(sf_account_data)
     self.update!(
-      current_balance: sf_account_data["balance"].to_d,
+      current_balance: balance,
       available_balance: sf_account_data["available-balance"]&.to_d,
       currency: sf_account_data["currency"],
       account_attributes: {
         id: self.account.id,
-        balance: sf_account_data["balance"].to_d,
+        balance: balance,
         last_synced_at: Time.current,
         accountable_attributes: accountable_attributes
       }
@@ -159,7 +170,16 @@ class SimpleFinAccount < ApplicationRecord
         entry.entryable = Transaction.new
       end
 
+
       entry.entryable.simple_fin_category = transaction_data.dig("extra", "category") if entry.entryable.respond_to?(:simple_fin_category=)
+
+      # Auto associate a category to our transaction
+      if entry.entryable.simple_fin_category.present?
+        category_name = entry.entryable.simple_fin_category
+        category = self.account.family.categories.find_or_create_by!(name: category_name)
+        entry.entryable.category = category
+      end
+
 
       if entry.changed? || entry.entryable.changed? # Check if entryable also changed
         entry.save!

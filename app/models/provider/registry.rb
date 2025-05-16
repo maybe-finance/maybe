@@ -13,7 +13,6 @@ class Provider::Registry
     end
 
     def get_provider(name)
-      puts "NAME: #{name}"
       send(name)
     rescue NoMethodError
       raise Error.new("Provider '#{name}' not found in registry")

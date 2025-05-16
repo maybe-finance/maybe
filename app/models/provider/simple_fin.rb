@@ -84,19 +84,27 @@ class Provider::SimpleFin
   # For more spec information, see: https://www.simplefin.org/protocol.html#setup-token
   #
   # @param [str] accountable_type The name of the account type we're looking for.
-  # @param [int?] trans_start_date A linux epoch of the start date to get transactions of.
-  # @param [int?] trans_end_date A linux epoch of the end date to get transactions between.
-  # @param [Boolean] trans_pending If we should include pending transactions. Default is true.
-  def get_available_accounts(accountable_type, trans_start_date = nil, trans_end_date = nil, trans_pending = true)
+  # @param [int?] trans_start_date A linux epoch of the start date to get transactions of. Default is based on the config
+  # @param [int?] trans_end_date A linux epoch of the end date to get transactions between. Default is now.
+  # @param [Boolean] trans_pending If we should include pending transactions. Default is false as I don't think maybe supports pending.
+  def get_available_accounts(accountable_type, trans_start_date = nil, trans_end_date = nil, trans_pending = false)
     check_rate_limit
     endpoint = "/accounts?pending=#{trans_pending}"
 
+    if trans_end_date == nil
+      trans_end_date =  Time.now.to_i
+    end
+
+    if trans_start_date == nil
+      trans_start_date = Provider::SimpleFin.provider_config.look_back_days.days.ago.to_i
+    end
+
     # Add any parameters we care about
     if trans_start_date
-      endpoint += "&trans_start_date=#{trans_start_date}"
+      endpoint += "&start-date=#{trans_start_date}"
     end
     if trans_end_date
-      endpoint += "&trans_end_date=#{trans_end_date}"
+      endpoint += "&end-date=#{trans_end_date}"
     end
 
     # account_info = send_request_to_sf(endpoint)
