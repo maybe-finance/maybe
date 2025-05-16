@@ -121,7 +121,7 @@ class ExchangeRate::Syncer
         else
           message = "#{exchange_rate_provider.class.name} could not fetch exchange rate pair from: #{from} to: #{to} between: #{effective_start_date} and: #{Date.current}.  Provider error: #{provider_response.error.message}"
           Rails.logger.warn(message)
-          Sentry.capture_exception(MissingExchangeRateError.new(message))
+          Sentry.capture_exception(MissingExchangeRateError.new(message), level: :warning)
           {}
         end
       end

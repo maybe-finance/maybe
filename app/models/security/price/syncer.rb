@@ -77,7 +77,7 @@ class Security::Price::Syncer
         else
           msg = "#{security_provider.class.name} could not fetch prices for #{security.ticker} between #{provider_fetch_start_date} and #{end_date}. Provider error: #{response.error.message}"
           Rails.logger.warn(msg)
-          Sentry.capture_exception(MissingSecurityPriceError.new(msg))
+          Sentry.capture_exception(MissingSecurityPriceError.new(msg), level: :warning)
           {}
         end
       end
