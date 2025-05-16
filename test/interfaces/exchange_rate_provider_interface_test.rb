@@ -15,6 +15,7 @@ module ExchangeRateProviderInterfaceTest
 
       assert_equal "USD", rate.from
       assert_equal "GBP", rate.to
+      assert rate.date.is_a?(Date)
       assert_in_delta 0.78, rate.rate, 0.01
     end
   end
@@ -26,6 +27,7 @@ module ExchangeRateProviderInterfaceTest
       )
 
       assert_equal 213, response.data.count # 213 days between 01.01.2024 and 31.07.2024
+      assert response.data.first.date.is_a?(Date)
     end
   end
 

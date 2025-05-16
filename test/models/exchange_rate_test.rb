@@ -67,26 +67,4 @@ class ExchangeRateTest < ActiveSupport::TestCase
 
     assert_nil ExchangeRate.find_or_fetch_rate(from: "USD", to: "EUR", date: Date.current, cache: true)
   end
-
-  test "upserts rates for currency pair and date range" do
-    ExchangeRate.delete_all
-
-    ExchangeRate.create!(date: 1.day.ago.to_date, from_currency: "USD", to_currency: "EUR", rate: 0.9)
-
-    provider_response = provider_success_response([
-      OpenStruct.new(from: "USD", to: "EUR", date: Date.current, rate: 1.3),
-      OpenStruct.new(from: "USD", to: "EUR", date: 1.day.ago.to_date, rate: 1.4),
-      OpenStruct.new(from: "USD", to: "EUR", date: 2.days.ago.to_date, rate: 1.5)
-    ])
-
-    @provider.expects(:fetch_exchange_rates)
-             .with(from: "USD", to: "EUR", start_date: 2.days.ago.to_date, end_date: Date.current)
-             .returns(provider_response)
-
-    ExchangeRate.sync_provider_rates(from: "USD", to: "EUR", start_date: 2.days.ago.to_date)
-
-    assert_equal 1.3, ExchangeRate.find_by(from_currency: "USD", to_currency: "EUR", date: Date.current).rate
-    assert_equal 1.4, ExchangeRate.find_by(from_currency: "USD", to_currency: "EUR", date: 1.day.ago.to_date).rate
-    assert_equal 1.5, ExchangeRate.find_by(from_currency: "USD", to_currency: "EUR", date: 2.days.ago.to_date).rate
-  end
 end

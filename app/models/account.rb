@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Convertible, Enrichable
+  include Syncable, Monetizable, Chartable, Linkable, Enrichable
 
   validates :name, :balance, :currency, presence: true
 

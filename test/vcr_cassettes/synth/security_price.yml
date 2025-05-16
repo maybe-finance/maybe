@@ -14,7 +14,7 @@ http_interactions:
       X-Source-Type:
       - managed
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.13.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 16 Mar 2025 12:08:00 GMT
+      - Fri, 16 May 2025 13:01:36 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,11 +35,11 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Etag:
-      - W/"cdf04c2cd77e230c03117dd13d0921f9"
+      - W/"72340d82266397447b865407dda15492"
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-      - e74b3425-0b7c-447d
+      - 4c3462aa-2471-40b4
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -53,15 +53,15 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-      - b906c5e1-18cc-44cc-9085-313ff066a6ce
+      - bdbc757d-2528-44c3-ae08-9788e8ee15f7
       X-Runtime:
-      - '0.544708'
+      - '0.034898'
       X-Xss-Protection:
       - '0'
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=dZNe6qCGGI2XGXgByLr69%2FYrDQdy2FLtnXafxJnlsvyVjrRFiCvmbbIzgF5CDgtj9HZ8RC5Rh9jbuEI6hPokpa3Al4FEIAZB5AbfZ9toP%2Bc5muG%2FuBgHR%2FnIZpsWG%2BQKmBPu9MBa"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=2Mu4PK4XTsAq%2Bn1%2F2yxy%2Blj7kz3ZCiQ9t8ikr2m19BrhQhrqfeUQfPwxbLc1WIgGMIxpPInKYtDVIX3En%2FGpTNQLAeu%2FpuLKv%2BRmCx%2B7u28od5L%2F9%2BLmEhFWqJjs8Y6C1O2a3SKv"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Speculation-Rules:
@@ -69,15 +69,15 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 921422292d0feacc-ORD
+      - 940b108f29129d03-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
       Server-Timing:
-      - cfL4;desc="?proto=TCP&rtt=30826&min_rtt=26727&rtt_var=12950&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=970&delivery_rate=108354&cwnd=219&unsent_bytes=0&cid=43c717161effdc57&ts=695&x=0"
+      - cfL4;desc="?proto=TCP&rtt=27793&min_rtt=26182&rtt_var=13041&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=970&delivery_rate=74111&cwnd=244&unsent_bytes=0&cid=9bcc030369a615fb&ts=210&x=0"
     body:
       encoding: ASCII-8BIT
       string: '{"ticker":"AAPL","currency":"USD","exchange":{"name":"Nasdaq/Ngs (Global
         Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
-        States","country_code":"US","timezone":"America/New_York"},"prices":[{"date":"2024-08-01","open":224.37,"close":218.36,"high":224.48,"low":217.02,"volume":62501000}],"paging":{"prev":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","next":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","total_records":1,"current_page":1,"per_page":100,"total_pages":1},"meta":{"credits_used":1,"credits_remaining":249807}}'
-  recorded_at: Sun, 16 Mar 2025 12:08:00 GMT
+        States","country_code":"US","timezone":"America/New_York"},"prices":[{"date":"2024-08-01","open":224.37,"close":218.36,"high":224.48,"low":217.02,"volume":62501000}],"paging":{"prev":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","next":"/tickers/AAPL/open-close?end_date=2024-08-01\u0026operating_mic_code=XNAS\u0026page=\u0026start_date=2024-08-01","total_records":1,"current_page":1,"per_page":100,"total_pages":1},"meta":{"total_records":1,"credits_used":1,"credits_remaining":249738}}'
+  recorded_at: Fri, 16 May 2025 13:01:36 GMT
 recorded_with: VCR 6.3.1

@@ -14,7 +14,7 @@ http_interactions:
       X-Source-Type:
       - managed
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.13.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 16 Mar 2025 12:04:12 GMT
+      - Fri, 16 May 2025 13:01:37 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,11 +35,11 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Etag:
-      - W/"a9deeb6437d359f080be449b9b2c547b"
+      - W/"75f336ad88e262c72044e8b865265298"
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-      - 1e77ae49-050a-45fc
+      - ba973abf-7d96-4a9a
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -53,15 +53,15 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-      - 222dacf1-37f3-4eb8-91d5-edf13d732d46
+      - 76cb13a6-0d7e-4c36-8df9-bb63110d9e2a
       X-Runtime:
-      - '0.059222'
+      - '0.099716'
       X-Xss-Protection:
       - '0'
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2BLW%2Fd%2BbcNg4%2FleO6ECyB4RJBMbm6vWG3%2FX4oKQXfn1ROSPVrISc3ZFVlXfITGW4XYJSPyUDF%2FXrrRF6p3Wzow07QamOrsux7sxBMvtWmcubgpCMFI4zgnhESklW6KcmAefwrgj9i"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=aDn7ApAO9Ma86gZ%2BJKCUCFjH2Re%2BtXdB5gcqYj2KTGXJKNpgf5TNgzbrp5%2Bw%2FGL5nTvtp%2B7cxT8MMcLWjAV6Ne1r6z5YBFq1K4W7Zw5m1lhMiqYLnTnEs2Oq85TjzOvpsE%2BmC33d"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Speculation-Rules:
@@ -69,11 +69,11 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 92141c97bfd9124c-ORD
+      - 940b10910abdd2ec-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
       Server-Timing:
-      - cfL4;desc="?proto=TCP&rtt=27459&min_rtt=26850&rtt_var=11288&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2828&recv_bytes=905&delivery_rate=91272&cwnd=104&unsent_bytes=0&cid=ccd6aa7e48e4b0eb&ts=287&x=0"
+      - cfL4;desc="?proto=TCP&rtt=28163&min_rtt=27237&rtt_var=12066&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=905&delivery_rate=83590&cwnd=239&unsent_bytes=0&cid=7ef62bd693b52ccd&ts=240&x=0"
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"ticker":"AAPL","name":"Apple Inc.","links":{"homepage_url":"https://www.apple.com"},"logo_url":"https://logo.synthfinance.com/ticker/AAPL","description":"Apple
@@ -100,6 +100,6 @@ http_interactions:
         Apple Park Way","city":"Cupertino","state":"CA","postal_code":"95014"},"exchange":{"name":"Nasdaq/Ngs
         (Global Select Market)","mic_code":"XNGS","operating_mic_code":"XNAS","acronym":"NGS","country":"United
         States","country_code":"US","timezone":"America/New_York"},"ceo":"Mr. Timothy
-        D. Cook","founding_year":1976,"industry":"Consumer Electronics","sector":"Technology","phone":"408-996-1010","total_employees":161000,"composite_figi":"BBG000B9Y5X2","market_data":{"high_today":213.95,"low_today":209.58,"open_today":211.25,"close_today":213.49,"volume_today":60060200.0,"fifty_two_week_high":260.1,"fifty_two_week_low":164.08,"average_volume":62848099.37313433,"price_change":0.0,"percent_change":0.0}},"meta":{"credits_used":1,"credits_remaining":249808}}'
-  recorded_at: Sun, 16 Mar 2025 12:04:12 GMT
+        D. Cook","founding_year":1976,"industry":"Consumer Electronics","sector":"Technology","phone":"408-996-1010","total_employees":161000,"composite_figi":"BBG000B9Y5X2","market_data":{"high_today":212.96,"low_today":209.54,"open_today":210.95,"close_today":211.45,"volume_today":44979900.0,"fifty_two_week_high":260.1,"fifty_two_week_low":169.21,"average_volume":61769396.875,"price_change":0.0,"percent_change":0.0}},"meta":{"credits_used":1,"credits_remaining":249737}}'
+  recorded_at: Fri, 16 May 2025 13:01:37 GMT
 recorded_with: VCR 6.3.1
