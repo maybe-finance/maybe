@@ -170,14 +170,13 @@ class SimpleFinAccount < ApplicationRecord
     sf_transactions_data.each do |transaction_data|
       entry = self.account.entries.find_or_initialize_by(simple_fin_transaction_id: transaction_data["id"])
 
-      amount_from_sf = transaction_data["amount"].to_d
-      account_type = self.account.accountable_type
-      amount = SimpleFinAccount.get_adjusted_number(amount_from_sf, account_type)
-      puts "AMOUNT #{amount} #{amount_from_sf} #{transaction_data}"
+      # SimpleFIN is always the inverse of maybe's transaction amount. I have no idea why.
+      amount_from_sf = transaction_data["amount"].to_d * -1
+      # account_type = self.account.accountable_type
 
       entry.assign_attributes(
         name: transaction_data["description"],
-        amount: amount,
+        amount: amount_from_sf,
         currency: self.account.currency,
         date: Time.at(transaction_data["posted"].to_i).to_date,
         source: "simple_fin"
