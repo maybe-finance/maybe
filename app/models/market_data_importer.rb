@@ -1,4 +1,4 @@
-class MarketDataSyncer
+class MarketDataImporter
   # By default, our graphs show 1M as the view, so by fetching 31 days,
   # we ensure we can always show an accurate default graph
   SNAPSHOT_DAYS = 31
@@ -10,32 +10,32 @@ class MarketDataSyncer
     @clear_cache = clear_cache
   end
 
-  def sync
-    sync_prices
-    sync_exchange_rates
+  def import_all
+    import_security_prices
+    import_exchange_rates
   end
 
   # Syncs historical security prices (and details)
-  def sync_prices
+  def import_security_prices
     unless Security.provider
-      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_prices, skipping sync")
+      Rails.logger.warn("No provider configured for MarketDataImporter.import_security_prices, skipping sync")
       return
     end
 
     Security.where.not(exchange_operating_mic: nil).find_each do |security|
-      security.sync_provider_prices(
+      security.import_provider_prices(
         start_date: get_first_required_price_date(security),
         end_date: end_date,
         clear_cache: clear_cache
       )
 
-      security.sync_provider_details(clear_cache: clear_cache)
+      security.import_provider_details(clear_cache: clear_cache)
     end
   end
 
-  def sync_exchange_rates
+  def import_exchange_rates
     unless ExchangeRate.provider
-      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_exchange_rates, skipping sync")
+      Rails.logger.warn("No provider configured for MarketDataImporter.import_exchange_rates, skipping sync")
       return
     end
 
@@ -43,7 +43,7 @@ class MarketDataSyncer
       # pair is a Hash with keys :source, :target, and :start_date
       start_date = snapshot? ? default_start_date : pair[:start_date]
 
-      ExchangeRate.sync_provider_rates(
+      ExchangeRate.import_provider_rates(
         from: pair[:source],
         to: pair[:target],
         start_date: start_date,
@@ -124,7 +124,7 @@ class MarketDataSyncer
       valid_modes = [ :full, :snapshot ]
 
       unless valid_modes.include?(mode.to_sym)
-        raise InvalidModeError, "Invalid mode for MarketDataSyncer, can only be :full or :snapshot, but was #{mode}"
+        raise InvalidModeError, "Invalid mode for MarketDataImporter, can only be :full or :snapshot, but was #{mode}"
       end
 
       mode.to_sym

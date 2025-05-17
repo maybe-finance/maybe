@@ -1,10 +1,10 @@
 require "test_helper"
 require "ostruct"
 
-class MarketDataSyncerTest < ActiveSupport::TestCase
+class MarketDataImporterTest < ActiveSupport::TestCase
   include ProviderTestHelper
 
-  SNAPSHOT_START_DATE = MarketDataSyncer::SNAPSHOT_DAYS.days.ago.to_date
+  SNAPSHOT_START_DATE = MarketDataImporter::SNAPSHOT_DAYS.days.ago.to_date
   PROVIDER_BUFFER     = 5.days
 
   setup do
@@ -47,7 +47,7 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
              ]))
 
     before = ExchangeRate.count
-    MarketDataSyncer.new(mode: :snapshot).sync_exchange_rates
+    MarketDataImporter.new(mode: :snapshot).import_exchange_rates
     after  = ExchangeRate.count
 
     assert_operator after, :>, before, "Should insert at least one new exchange-rate row"
@@ -78,7 +78,7 @@ class MarketDataSyncerTest < ActiveSupport::TestCase
     # Ignore exchange rate calls for this test
     @provider.stubs(:fetch_exchange_rates).returns(provider_success_response([]))
 
-    MarketDataSyncer.new(mode: :snapshot).sync_prices
+    MarketDataImporter.new(mode: :snapshot).import_security_prices
 
     assert_equal 1, Security::Price.where(security: security, date: SNAPSHOT_START_DATE).count
   end

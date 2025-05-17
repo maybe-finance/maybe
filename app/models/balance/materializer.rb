@@ -1,4 +1,4 @@
-class Balance::Syncer
+class Balance::Materializer
   attr_reader :account, :strategy
 
   def initialize(account, strategy:)
@@ -6,9 +6,9 @@ class Balance::Syncer
     @strategy = strategy
   end
 
-  def sync_balances
+  def materialize_balances
     Balance.transaction do
-      sync_holdings
+      materialize_holdings
       calculate_balances
 
       Rails.logger.info("Persisting #{@balances.size} balances")
@@ -23,8 +23,8 @@ class Balance::Syncer
   end
 
   private
-    def sync_holdings
-      @holdings = Holding::Syncer.new(account, strategy: strategy).sync_holdings
+    def materialize_holdings
+      @holdings = Holding::Materializer.new(account, strategy: strategy).materialize_holdings
     end
 
     def update_account_info

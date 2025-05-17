@@ -7,7 +7,7 @@
 # Each individual account sync will still fetch any missing market data that isn't yet synced, but by running
 # this job daily, we significantly reduce overlapping account syncs that both need the same market data (e.g. common security like `AAPL`)
 #
-class SyncMarketDataJob < ApplicationJob
+class ImportMarketDataJob < ApplicationJob
   queue_as :scheduled
 
   def perform(opts)
@@ -15,6 +15,6 @@ class SyncMarketDataJob < ApplicationJob
     mode = opts.fetch(:mode, :full)
     clear_cache = opts.fetch(:clear_cache, false)
 
-    MarketDataSyncer.new(mode: mode, clear_cache: clear_cache).sync
+    MarketDataImporter.new(mode: mode, clear_cache: clear_cache).import_all
   end
 end
