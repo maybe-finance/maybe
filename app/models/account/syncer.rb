@@ -29,7 +29,7 @@ class Account::Syncer
     # We rescue errors here because if this operation fails, we don't want to fail the entire sync since
     # we have reasonable fallbacks for missing market data.
     def sync_market_data
-      Account::MarketDataSyncer.new(account).sync_market_data
+      Account::MarketDataImporter.new(account).import_all
     rescue => e
       Rails.logger.error("Error syncing market data for account #{account.id}: #{e.message}")
       Sentry.capture_exception(e)

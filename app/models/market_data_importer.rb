@@ -1,4 +1,4 @@
-class MarketDataSyncer
+class MarketDataImporter
   # By default, our graphs show 1M as the view, so by fetching 31 days,
   # we ensure we can always show an accurate default graph
   SNAPSHOT_DAYS = 31
@@ -10,15 +10,15 @@ class MarketDataSyncer
     @clear_cache = clear_cache
   end
 
-  def sync
-    sync_prices
-    sync_exchange_rates
+  def import_all
+    import_security_prices
+    import_exchange_rates
   end
 
   # Syncs historical security prices (and details)
-  def sync_prices
+  def import_security_prices
     unless Security.provider
-      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_prices, skipping sync")
+      Rails.logger.warn("No provider configured for MarketDataImporter.import_security_prices, skipping sync")
       return
     end
 
@@ -33,9 +33,9 @@ class MarketDataSyncer
     end
   end
 
-  def sync_exchange_rates
+  def import_exchange_rates
     unless ExchangeRate.provider
-      Rails.logger.warn("No provider configured for MarketDataSyncer.sync_exchange_rates, skipping sync")
+      Rails.logger.warn("No provider configured for MarketDataImporter.import_exchange_rates, skipping sync")
       return
     end
 
@@ -124,7 +124,7 @@ class MarketDataSyncer
       valid_modes = [ :full, :snapshot ]
 
       unless valid_modes.include?(mode.to_sym)
-        raise InvalidModeError, "Invalid mode for MarketDataSyncer, can only be :full or :snapshot, but was #{mode}"
+        raise InvalidModeError, "Invalid mode for MarketDataImporter, can only be :full or :snapshot, but was #{mode}"
       end
 
       mode.to_sym
