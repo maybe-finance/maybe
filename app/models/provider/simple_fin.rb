@@ -89,7 +89,7 @@ class Provider::SimpleFin
   # @param [Boolean] trans_pending If we should include pending transactions. Default is false as I don't think maybe supports pending.
   def get_available_accounts(accountable_type, trans_start_date = nil, trans_end_date = nil, trans_pending = false)
     check_rate_limit
-    endpoint = "/accounts?pending=#{trans_pending}"
+    endpoint = "/accounts"
 
     if trans_end_date == nil
       trans_end_date =  Time.now.to_i
@@ -100,6 +100,11 @@ class Provider::SimpleFin
     end
 
     # Add any parameters we care about
+    if trans_pending
+      endpoint += "?pending=1"
+    else
+      endpoint += "?"
+    end
     if trans_start_date
       endpoint += "&start-date=#{trans_start_date}"
     end
@@ -107,20 +112,10 @@ class Provider::SimpleFin
       endpoint += "&end-date=#{trans_end_date}"
     end
 
-    # request_content = send_request_to_sf(endpoint)
-    # # TODO: Remove JSON Reading for real requests. Disabled currently due to preventing rate limits.
-    json_file_path =  Rails.root.join("sample.simple.fin.json")
-    accounts = []
-    error_messages = []
-    if File.exist?(json_file_path)
-      request_content = File.read(json_file_path)
-    else
-      Rails.logger.warn "SimpleFIN: Sample JSON file not found at #{json_file_path}. Returning empty accounts."
-    end
+    response = send_request_to_sf(endpoint)
     # Parse our content
-    parsed_json = JSON.parse(request_content)
-    accounts = parsed_json["accounts"] || []
-    error_messages = parsed_json["errors"] || []
+    accounts = response["accounts"] || []
+    error_messages = response["errors"] || []
 
 
     # The only way we can really determine types right now is by some properties. Try and set their types
@@ -128,7 +123,7 @@ class Provider::SimpleFin
       # Accounts can be considered Investment accounts if they have any holdings associated to them
       if account.key?("holdings") && account["holdings"].is_a?(Array) && !account["holdings"].empty?
         account["type"] = "Investment"
-      elsif account["balance"].to_d <= 0 && account["name"]&.downcase&.include?("card")
+      elsif account["balance"].to_d <= 0 && (account["name"]&.downcase&.include?("card") || account["name"]&.downcase&.include?("signature"))
         account["type"] = "CreditCard"
       elsif account["balance"].to_d.negative? # Could be loan or credit card
         account["type"] = "Loan" # Default for negative balance if not clearly a card

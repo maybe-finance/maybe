@@ -19,21 +19,24 @@ class SimpleFinAccount < ApplicationRecord
 
 
   class << self
-    # Gets what balance we should use as our account balance
-    def get_adjusted_balance(sf_account_data)
-      balance_from_sf = sf_account_data["balance"].to_d
-      account_type = sf_account_data["type"]
+    ##
+    # In most instances, SimpleFIN returns either negative or positive values based on the account type. So credit would be negative, cash would be positive.
+    # This is however an issue for this application as it tries to handle that for you. This function is intended just to invert the type, based on the account type.
+    def get_adjusted_number(sf_num, acc_type)
       # Adjust balance: liabilities (CreditCard, Loan) should be negative
-      if [ "CreditCard", "Loan" ].include?(account_type)
-        balance_from_sf * -1
+      if [ "CreditCard", "Loan" ].include?(acc_type)
+        sf_num * -1
       else
-        balance_from_sf
+        sf_num
       end
     end
 
     def find_or_create_from_simple_fin_data!(sf_account_data, sfc)
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
-        balance = get_adjusted_balance(sf_account_data)
+        balance_from_sf = sf_account_data["balance"].to_d
+        account_type = sf_account_data["type"]
+        balance = get_adjusted_number(balance_from_sf, account_type)
+
         sfa.current_balance = balance
         sfa.available_balance = sf_account_data["available-balance"]&.to_d
         sfa.currency = sf_account_data["currency"]
@@ -93,8 +96,9 @@ class SimpleFinAccount < ApplicationRecord
   ##
   # Syncs all account data for the given sf_account_data parameter
   def sync_account_data!(sf_account_data)
-    balance = SimpleFinAccount.get_adjusted_balance(sf_account_data)
-    puts "SFA #{sf_account_data} #{self.account.inspect}"
+    balance_from_sf = sf_account_data["balance"].to_d
+    account_type = sf_account_data["type"]
+    balance = SimpleFinAccount.get_adjusted_number(balance_from_sf, account_type)
     self.update!(
       current_balance: balance,
       available_balance: sf_account_data["available-balance"]&.to_d
@@ -166,9 +170,14 @@ class SimpleFinAccount < ApplicationRecord
     sf_transactions_data.each do |transaction_data|
       entry = self.account.entries.find_or_initialize_by(simple_fin_transaction_id: transaction_data["id"])
 
+      amount_from_sf = transaction_data["amount"].to_d
+      account_type = self.account.accountable_type
+      amount = SimpleFinAccount.get_adjusted_number(amount_from_sf, account_type)
+      puts "AMOUNT #{amount} #{amount_from_sf} #{transaction_data}"
+
       entry.assign_attributes(
         name: transaction_data["description"],
-        amount: transaction_data["amount"].to_d,
+        amount: amount,
         currency: self.account.currency,
         date: Time.at(transaction_data["posted"].to_i).to_date,
         source: "simple_fin"

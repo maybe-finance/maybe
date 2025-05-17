@@ -75,6 +75,11 @@ class Family < ApplicationRecord
       account.sync_later(start_date: start_date, parent_sync: sync)
     end
 
+    Rails.logger.info("Syncing simple_fin items for family #{id}")
+    simple_fin_items.each do |simple_fin_item|
+      simple_fin_item.sync_later(start_date: start_date, parent_sync: sync)
+    end
+
     Rails.logger.info("Applying rules for family #{id}")
     rules.each do |rule|
       rule.apply_later
