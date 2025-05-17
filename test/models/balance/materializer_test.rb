@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Balance::SyncerTest < ActiveSupport::TestCase
+class Balance::MaterializerTest < ActiveSupport::TestCase
   include EntriesTestHelper
 
   setup do
@@ -14,7 +14,7 @@ class Balance::SyncerTest < ActiveSupport::TestCase
   end
 
   test "syncs balances" do
-    Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+    Holding::Materializer.any_instance.expects(:materialize_holdings).returns([]).once
 
     @account.expects(:start_date).returns(2.days.ago.to_date)
 
@@ -26,7 +26,7 @@ class Balance::SyncerTest < ActiveSupport::TestCase
     )
 
     assert_difference "@account.balances.count", 2 do
-      Balance::Syncer.new(@account, strategy: :forward).sync_balances
+      Balance::Materializer.new(@account, strategy: :forward).materialize_balances
     end
   end
 
@@ -45,7 +45,7 @@ class Balance::SyncerTest < ActiveSupport::TestCase
     )
 
     assert_difference "@account.balances.count", 3 do
-      Balance::Syncer.new(@account, strategy: :forward).sync_balances
+      Balance::Materializer.new(@account, strategy: :forward).materialize_balances
     end
   end
 end
