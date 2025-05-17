@@ -107,7 +107,11 @@ class BalanceSheet
     def totals_query
       @totals_query ||= active_accounts
             .joins(ActiveRecord::Base.sanitize_sql_array([ "LEFT JOIN exchange_rates ON exchange_rates.date = CURRENT_DATE AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?", currency ]))
-            .joins("LEFT JOIN syncs ON syncs.syncable_id = accounts.id AND syncs.syncable_type = 'Account' AND (syncs.status = 'pending' OR syncs.status = 'syncing')")
+            .joins(ActiveRecord::Base.sanitize_sql_array([
+              "LEFT JOIN syncs ON syncs.syncable_id = accounts.id AND syncs.syncable_type = 'Account' AND syncs.status IN (?) AND syncs.created_at > ?",
+              %w[pending syncing],
+              Sync::VISIBLE_FOR.ago
+            ]))
             .select(
               "accounts.*",
               "SUM(accounts.balance * COALESCE(exchange_rates.rate, 1)) as converted_balance",

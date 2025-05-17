@@ -10,8 +10,19 @@ module Syncable
   end
 
   def sync_later(parent_sync: nil, window_start_date: nil, window_end_date: nil)
-    new_sync = syncs.create!(parent: parent_sync, window_start_date: window_start_date, window_end_date: window_end_date)
-    SyncJob.perform_later(new_sync)
+    Sync.transaction do
+      # Expire any previous in-flight syncs for this record that exceeded the
+      # global staleness window.
+      syncs.stale_candidates.find_each(&:mark_stale!)
+
+      new_sync = syncs.create!(
+        parent: parent_sync,
+        window_start_date: window_start_date,
+        window_end_date: window_end_date
+      )
+
+      SyncJob.perform_later(new_sync)
+    end
   end
 
   def perform_sync(sync)

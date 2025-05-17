@@ -1,4 +1,11 @@
 class Sync < ApplicationRecord
+  # We run a cron that marks any syncs that have been running > 2 hours as "stale"
+  # Syncs often become stale when new code is deployed and the worker restarts
+  STALE_AFTER = 2.hours
+
+  # The max time that a sync will show in the UI (after 5 minutes)
+  VISIBLE_FOR = 5.minutes
+
   include AASM
 
   Error = Class.new(StandardError)
@@ -9,7 +16,11 @@ class Sync < ApplicationRecord
   has_many :children, class_name: "Sync", foreign_key: :parent_id, dependent: :destroy
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :incomplete, -> { where(status: [ :pending, :syncing ]) }
+  scope :incomplete, -> { where("syncs.status IN (?)", %w[pending syncing]) }
+  scope :visible, -> { incomplete.where("syncs.created_at > ?", VISIBLE_FOR.ago) }
+
+  # In-flight records that have exceeded the allowed runtime
+  scope :stale_candidates, -> { incomplete.where("syncs.created_at < ?", STALE_AFTER.ago) }
 
   validate :window_valid
 
@@ -19,6 +30,7 @@ class Sync < ApplicationRecord
     state :syncing
     state :completed
     state :failed
+    state :stale
 
     after_all_transitions :log_status_change
 
@@ -32,6 +44,17 @@ class Sync < ApplicationRecord
 
     event :fail do
       transitions from: :syncing, to: :failed
+    end
+
+    # Marks a sync that never completed within the expected time window
+    event :mark_stale do
+      transitions from: %i[pending syncing], to: :stale
+    end
+  end
+
+  class << self
+    def clean
+      stale_candidates.find_each(&:mark_stale!)
     end
   end
 
