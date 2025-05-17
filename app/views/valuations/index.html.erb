@@ -27,7 +27,7 @@
           <%= render partial: "valuations/valuation",
                      collection:      @entries,
                      as:              :entry,
-                     spacer_template: "entries/ruler" %>
+                     spacer_template: "shared/ruler" %>
         <% else %>
           <p class="text-secondary text-sm p-4"><%= t(".no_valuations") %></p>
         <% end %>

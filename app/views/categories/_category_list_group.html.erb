@@ -17,7 +17,7 @@
         <% end %>
 
         <% unless idx == Category::Group.for(categories).count - 1 %>
-          <%= render "categories/ruler" %>
+          <%= render "shared/ruler" %>
         <% end %>
       <% end %>
     </div>
