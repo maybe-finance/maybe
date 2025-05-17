@@ -16,8 +16,9 @@ class Sync < ApplicationRecord
   has_many :children, class_name: "Sync", foreign_key: :parent_id, dependent: :destroy
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :incomplete, -> { where("syncs.status IN (?)", [ :pending, :syncing ]) }
+  scope :incomplete, -> { where("syncs.status IN (?)", %w[pending syncing]) }
   scope :visible, -> { incomplete.where("syncs.created_at > ?", VISIBLE_FOR.ago) }
+
   # In-flight records that have exceeded the allowed runtime
   scope :stale_candidates, -> { incomplete.where("syncs.created_at < ?", STALE_AFTER.ago) }
 
