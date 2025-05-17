@@ -12,7 +12,7 @@ class Security::Price::Importer
 
   # Constructs a daily series of prices for a single security over the date range.
   # Returns the number of rows upserted.
-  def sync_provider_prices
+  def import_provider_prices
     if !clear_cache && all_prices_exist?
       Rails.logger.info("No new prices to sync for #{security.ticker} between #{start_date} and #{end_date}, skipping")
       return 0

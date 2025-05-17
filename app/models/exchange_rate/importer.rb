@@ -12,7 +12,7 @@ class ExchangeRate::Importer
   end
 
   # Constructs a daily series of rates for the given currency pair for date range
-  def sync_provider_rates
+  def import_provider_rates
     if !clear_cache && all_rates_exist?
       Rails.logger.info("No new rates to sync for #{from} to #{to} between #{start_date} and #{end_date}, skipping")
       return

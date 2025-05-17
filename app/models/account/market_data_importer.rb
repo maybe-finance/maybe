@@ -33,7 +33,7 @@ class Account::MarketDataImporter
     end
 
     pair_dates.each do |(source, target), start_date|
-      ExchangeRate.sync_provider_rates(
+      ExchangeRate.import_provider_rates(
         from: source,
         to: target,
         start_date: start_date,
@@ -50,12 +50,12 @@ class Account::MarketDataImporter
     return if account_securities.empty?
 
     account_securities.each do |security|
-      security.sync_provider_prices(
+      security.import_provider_prices(
         start_date: first_required_price_date(security),
         end_date: Date.current
       )
 
-      security.sync_provider_details
+      security.import_provider_details
     end
   end
 

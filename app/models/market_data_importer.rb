@@ -23,13 +23,13 @@ class MarketDataImporter
     end
 
     Security.where.not(exchange_operating_mic: nil).find_each do |security|
-      security.sync_provider_prices(
+      security.import_provider_prices(
         start_date: get_first_required_price_date(security),
         end_date: end_date,
         clear_cache: clear_cache
       )
 
-      security.sync_provider_details(clear_cache: clear_cache)
+      security.import_provider_details(clear_cache: clear_cache)
     end
   end
 
@@ -43,7 +43,7 @@ class MarketDataImporter
       # pair is a Hash with keys :source, :target, and :start_date
       start_date = snapshot? ? default_start_date : pair[:start_date]
 
-      ExchangeRate.sync_provider_rates(
+      ExchangeRate.import_provider_rates(
         from: pair[:source],
         to: pair[:target],
         start_date: start_date,

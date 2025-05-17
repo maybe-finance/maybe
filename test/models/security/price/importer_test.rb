@@ -28,7 +28,7 @@ class Security::Price::ImporterTest < ActiveSupport::TestCase
       security_provider: @provider,
       start_date: 2.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_prices
+    ).import_provider_prices
 
     db_prices = Security::Price.where(security: @security, date: 2.days.ago.to_date..Date.current).order(:date)
 
@@ -57,7 +57,7 @@ class Security::Price::ImporterTest < ActiveSupport::TestCase
       security_provider: @provider,
       start_date: 3.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_prices
+    ).import_provider_prices
 
     db_prices = Security::Price.where(security: @security).order(:date)
     assert_equal 4, db_prices.count
@@ -78,7 +78,7 @@ class Security::Price::ImporterTest < ActiveSupport::TestCase
       security_provider: @provider,
       start_date: 3.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_prices
+    ).import_provider_prices
   end
 
   test "full upsert if clear_cache is true" do
@@ -106,7 +106,7 @@ class Security::Price::ImporterTest < ActiveSupport::TestCase
       start_date: 2.days.ago.to_date,
       end_date: Date.current,
       clear_cache: true
-    ).sync_provider_prices
+    ).import_provider_prices
 
     db_prices = Security::Price.where(security: @security).order(:date)
     assert_equal [ 150, 155, 160 ], db_prices.map(&:price)
@@ -131,7 +131,7 @@ class Security::Price::ImporterTest < ActiveSupport::TestCase
       security_provider: @provider,
       start_date: Date.current,
       end_date: future_date
-    ).sync_provider_prices
+    ).import_provider_prices
 
     assert_equal 1, Security::Price.count
   end
