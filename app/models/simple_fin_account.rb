@@ -49,7 +49,6 @@ class SimpleFinAccount < ApplicationRecord
             accountable: TYPE_MAPPING[sf_account_data["type"]].new,
             subtype: sf_account_data["subtype"],
             simple_fin_account: sfa, # Explicitly associate back
-            last_synced_at: Time.current, # Mark as synced upon creation
             # Set cash_balance similar to how Account.create_and_sync might
             cash_balance: sfa.available_balance
           )

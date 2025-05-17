@@ -28,7 +28,7 @@
     <% end %>
 
     <div class="flex items-center gap-1 ml-auto">
-      <% if Rails.env.development? %>
+      <% if Rails.env.development? && account.plaid_account %>
         <%= icon(
             "refresh-cw",
             as_button: true,
@@ -38,8 +38,8 @@
             frame: :_top,
             title: "Refresh all SimpleFIN accounts"
           ) %>
-        <% end %>
-      <% elsif account.simple_fin_account_id.present? %>
+      <% end %>
+      <% if account.simple_fin_account_id.present? %>
         <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN. This account will auto refresh." %>
         <%= render "accounts/account_error", account: account, link_to_path: "https://beta-bridge.simplefin.org/my-account", given_title: "This account has issues in SimpleFIN bridge. Update it and then re-sync.", target: :_blank %>
         <%# Re sync button. Will sync all SimpleFIN accounts %>
@@ -48,15 +48,6 @@
           as_button: true,
           size: "sm",
           href: sync_simple_fin_path(account.simple_fin_account.simple_fin_item),
-          disabled: account.syncing?,
-          frame: :_top
-        ) %>
-      <% else %>
-        <%= icon(
-          "refresh-cw",
-          as_button: true,
-          size: "sm",
-          href: sync_account_path(account),
           disabled: account.syncing?,
           frame: :_top
         ) %>
