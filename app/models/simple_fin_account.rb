@@ -174,8 +174,11 @@ class SimpleFinAccount < ApplicationRecord
       amount_from_sf = transaction_data["amount"].to_d * -1
       # account_type = self.account.accountable_type
 
+      # Try to determine name from best option
+      name = transaction_data["description"].presence || "Transaction"
+
       entry.assign_attributes(
-        name: transaction_data["description"],
+        name: name,
         amount: amount_from_sf,
         currency: self.account.currency,
         date: Time.at(transaction_data["posted"].to_i).to_date,

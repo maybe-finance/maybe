@@ -71,5 +71,3 @@ node_modules
 compose.yml
 
 plaid_test_accounts/
-dump.rdb
-dev.docs.md
