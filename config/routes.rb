@@ -201,6 +201,7 @@ Rails.application.routes.draw do
   end
 
   # SimpleFIN routes
+  get "/simple_fin/accounts_list", to: "simple_fin#accounts_list", as: :simple_fin_accounts_list
   resources :simple_fin, only: %i[create new] do
     member do
       post :sync

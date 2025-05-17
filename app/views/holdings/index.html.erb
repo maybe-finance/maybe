@@ -1,17 +1,19 @@
 <%= turbo_frame_tag dom_id(@account, "holdings") do %>
   <div class="bg-container space-y-4 p-5 rounded-xl shadow-border-xs">
-    <div class="flex items-center justify-between">
-      <%= tag.h2 t(".holdings"), class: "font-medium text-lg" %>
-      <%= link_to new_trade_path(account_id: @account.id),
-                  id: dom_id(@account, "new_trade"),
-                  data: { turbo_frame: :modal },
-                  class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg" do %>
-        <span class="text-primary">
-          <%= icon("plus", color: "current") %>
-        </span>
-        <%= tag.span t(".new_holding"), class: "text-sm" %>
-      <% end %>
-    </div>
+    <% unless (@account.plaid_account_id.present? || @account.simple_fin_account_id.present?) %>
+      <div class="flex items-center justify-between">
+        <%= tag.h2 t(".holdings"), class: "font-medium text-lg" %>
+        <%= link_to new_trade_path(account_id: @account.id),
+                    id: dom_id(@account, "new_trade"),
+                    data: { turbo_frame: :modal },
+                    class: "flex gap-1 font-medium items-center bg-gray-50 text-primary p-2 rounded-lg" do %>
+          <span class="text-primary">
+            <%= icon("plus", color: "current") %>
+          </span>
+          <%= tag.span t(".new_holding"), class: "text-sm" %>
+        <% end %>
+      </div>
+    <% end %>
 
     <div class="rounded-xl bg-container-inset p-1">
       <div class="grid grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-4 py-2">

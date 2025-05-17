@@ -1,7 +1,7 @@
 <%# locals: (account:, link_to_path: nil, given_title: nil, target: nil) %>
 
 <%# Flag indicators of account issues %>
-<% if account.simple_fin_account.simple_fin_item.status == "requires_update" %>
+<% if account.simple_fin_account&.simple_fin_item&.status == "requires_update" %>
     <%= link_to link_to_path, target: target do %>
         <%= icon(
             "alert-triangle",

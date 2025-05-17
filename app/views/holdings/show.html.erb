@@ -79,7 +79,7 @@
       </div>
     <% end %>
 
-    <% unless @holding.account.plaid_account_id.present? %>
+    <% unless (@holding.account.plaid_account_id.present? || @holding.account.simple_fin_account_id.present? ) %>
       <% dialog.with_section(title: t(".settings"), open: true) do %>
         <div class="pb-4">
           <div class="flex items-center justify-between gap-2 p-3">

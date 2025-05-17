@@ -3,16 +3,11 @@
 class SimpleFinController < ApplicationController
   before_action :set_accountable_type
   before_action :authenticate_user!
-  before_action :set_simple_fin_provider, only: %i[create new]
-  before_action :require_simple_fin_provider, only: %i[create new]
+  before_action :set_simple_fin_provider, only: %i[create new accounts_list]
+  before_action :require_simple_fin_provider, only: %i[create new accounts_list]
 
   def new
-    @simple_fin_accounts = @simple_fin_provider.get_available_accounts(@accountable_type)
-    # Filter accounts we already have
-    @simple_fin_accounts = @simple_fin_accounts.filter { |acc| !account_exists(acc) }
-  rescue StandardError => e
-    Rails.logger.error "SimpleFIN: Failed to fetch accounts - #{e.message}"
-    redirect_to root_path, alert: t(".fetch_failed")
+    # This action now simply renders the view, which will trigger the Turbo Frame load.
   end
 
   ##
@@ -20,6 +15,23 @@ class SimpleFinController < ApplicationController
   def account_exists(acc)
     Current.family.accounts.find_by(name: acc["name"])
   end
+
+  def accounts_list
+    simple_fin_accounts_data = @simple_fin_provider.get_available_accounts(@accountable_type)
+    # Filter accounts we already have
+    @simple_fin_accounts = simple_fin_accounts_data.filter { |acc| !account_exists(acc) }
+    # Implicitly renders app/views/simple_fin/accounts_list.html.erb
+  rescue Provider::SimpleFin::RateLimitExceededError => e
+    @error_message = t("simple_fin.new.rate_limit_hit")
+    # Implicitly renders app/views/simple_fin/accounts_list.html.erb
+    render :accounts_list # Or just let it render implicitly
+  rescue StandardError => e
+    Rails.logger.error "SimpleFIN: Failed to fetch accounts from accounts_list - #{e.message}"
+    @error_message = t("simple_fin.new.fetch_failed")
+    # Implicitly renders app/views/simple_fin/accounts_list.html.erb
+    render :accounts_list # Or just let it render implicitly
+  end
+
 
   ##
   # Requests all accounts to be re-synced
@@ -80,6 +92,8 @@ class SimpleFinController < ApplicationController
     end
 
     redirect_to root_path, notice: t(".accounts_created_success")
+  rescue Provider::SimpleFin::RateLimitExceededError => e
+    redirect_to new_account_path, alert: t(".rate_limit_hit")
   rescue StandardError => e
     Rails.logger.error "SimpleFIN: Failed to create accounts - #{e.message}"
     redirect_to new_simple_fin_path

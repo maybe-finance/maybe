@@ -5,7 +5,9 @@ en:
       add_accounts: "Add Selected Accounts"
     new:
       fetch_failed: "Failed to fetch accounts"
+      rate_limit_hit: "You've exceeded the SimpleFIN Rate limit for today"
     create:
       accounts_created_success: "Accounts Successfully Created"
       fetch_failed: "Failed to fetch accounts"
       no_acc_selected: "No accounts were selected to add"
+      rate_limit_hit: "You've exceeded the SimpleFIN Rate limit for today"

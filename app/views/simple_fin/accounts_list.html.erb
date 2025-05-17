@@ -1,0 +1,7 @@
+<turbo-frame id="simple_fin_accounts_data">
+  <% if @error_message %>
+    <%= render partial: "simple_fin/error_display", locals: { message: @error_message, accountable_type: @accountable_type } %>
+  <% else %>
+    <%= render partial: "simple_fin/accounts_list_content", locals: { simple_fin_accounts: @simple_fin_accounts, accountable_type: @accountable_type } %>
+  <% end %>
+</turbo-frame>

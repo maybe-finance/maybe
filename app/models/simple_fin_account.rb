@@ -35,40 +35,53 @@ class SimpleFinAccount < ApplicationRecord
       sfc.simple_fin_accounts.find_or_create_by!(external_id: sf_account_data["id"]) do |sfa|
         balance = get_adjusted_balance(sf_account_data)
         sfa.current_balance = balance
-        sfa.available_balance = balance
+        sfa.available_balance = sf_account_data["available-balance"]&.to_d
         sfa.currency = sf_account_data["currency"]
 
-        new_account = sfc.family.accounts.new(
-          name: sf_account_data["name"],
-          balance: 0,
-          currency: sf_account_data["currency"],
-          accountable: TYPE_MAPPING[sf_account_data["type"]].new,
-          subtype: sf_account_data["subtype"],
-          simple_fin_account: sfa, # Explicitly associate back
-          last_synced_at: Time.current, # Mark as synced upon creation
-          # Set cash_balance similar to how Account.create_and_sync might
-          cash_balance: 0
-        )
 
-        new_account.entries.build(
-          name: "Current Balance",
-          date: Date.current,
-          amount: balance,
-          currency: new_account.currency,
-          entryable: Valuation.new
-        )
-        new_account.entries.build(
-          name: "Initial Balance", # This will be the balance as of "yesterday"
-          date: 1.day.ago.to_date,
-          amount: 0,
-          currency: new_account.currency,
-          entryable: Valuation.new
-        )
+        if sfa.account
+          account = sfa.account
+        else
+          sfa.account = sfc.family.accounts.new(
+            name: sf_account_data["name"],
+            balance: sfa.current_balance,
+            currency: sf_account_data["currency"],
+            accountable: TYPE_MAPPING[sf_account_data["type"]].new,
+            subtype: sf_account_data["subtype"],
+            simple_fin_account: sfa, # Explicitly associate back
+            last_synced_at: Time.current, # Mark as synced upon creation
+            # Set cash_balance similar to how Account.create_and_sync might
+            cash_balance: sfa.available_balance
+          )
+          account = sfa.account
+          account.save!
 
+          transaction do
+            # Create 2 valuations for new accounts to establish a value history for users to see
+            account.entries.build(
+              name: "Current Balance",
+              date: Date.current,
+              amount: sfa.current_balance,
+              currency: account.currency,
+              entryable: Valuation.new
+            )
+            account.entries.build(
+              name: "Initial Balance",
+              date: 1.day.ago.to_date,
+              amount: 0,
+              currency: account.currency,
+              entryable: Valuation.new
+            )
+
+            account.save!
+          end
+        end
+
+        # Make sure SFA is up to date
         sfa.save!
-        new_account.save!
-        new_account.sync_later
-        sfa.account = new_account
+        sfa.sync_account_data!(sf_account_data)
+        # Sync this account to trick it into showing a correct current balance
+        account.sync_later
       end
     end
 
@@ -81,18 +94,15 @@ class SimpleFinAccount < ApplicationRecord
   ##
   # Syncs all account data for the given sf_account_data parameter
   def sync_account_data!(sf_account_data)
-    accountable_attributes = { id: self.account.accountable_id }
     balance = SimpleFinAccount.get_adjusted_balance(sf_account_data)
+    puts "SFA #{sf_account_data} #{self.account.inspect}"
     self.update!(
       current_balance: balance,
-      available_balance: sf_account_data["available-balance"]&.to_d,
-      currency: sf_account_data["currency"],
-      account_attributes: {
-        id: self.account.id,
-        balance: balance,
-        last_synced_at: Time.current,
-        accountable_attributes: accountable_attributes
-      }
+      available_balance: sf_account_data["available-balance"]&.to_d
+    )
+
+    self.account.update!(
+      balance: balance
     )
 
     institution_errors = sf_account_data["org"]["institution_errors"]
@@ -107,7 +117,7 @@ class SimpleFinAccount < ApplicationRecord
       sync_transactions!(sf_account_data["transactions"])
     end
 
-    # Sync holdings if present in the data and it's an investment account
+    # Sync holdings if present in the data and it's an investment account. SimpleFIN doesn't support transactions for holdings accounts
     if self.account&.investment? && sf_account_data["holdings"].is_a?(Array)
       sync_holdings!(sf_account_data["holdings"])
     end

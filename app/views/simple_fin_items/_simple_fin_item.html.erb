@@ -1,26 +1,22 @@
 <%# locals: (simple_fin_item:) %>
 
-<div class="group bg-container p-4 shadow-border-xs rounded-xl">
-  <div class="px-4 py-3 sm:px-6 border-b border-gray-200">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <% if simple_fin_item.logo.attached? %>
-          <%= image_tag simple_fin_item.logo, class: "h-8 w-8 rounded-full" %>
-        <% else %>
-          <div>
-            <%= simple_fin_item.institution_name&.first || "?" %>
-          </div>
-        <% end %>
-        <h3 >
-          <%= simple_fin_item.institution_name || "SimpleFIN Connection" %>
-        </h3>
+<% if simple_fin_item.accounts.any? %>
+  <div class="group bg-container p-4 shadow-border-xs rounded-xl">
+    <div class="px-4 py-3 sm:px-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <h3 >
+            <%= simple_fin_item.institution_name || "SimpleFIN Connection" %>
+          </h3>
+        </div>
+        <%= image_tag "simple-fin-logo.svg", class: "h-6 w-auto", title: "Connected via SimpleFIN" %>
       </div>
     </div>
-  </div>
 
-  <ul role="list" class="divide-y divide-gray-200">
-    <% simple_fin_item.accounts.includes(:accountable, :logo_attachment).active.alphabetically.each do |account| %>
-      <%= render "accounts/account", account: account %>
-    <% end %>
-  </ul>
-</div>
+    <ul role="list" class="divide-y divide-gray-200">
+      <% simple_fin_item.accounts.includes(:accountable, :logo_attachment).active.alphabetically.each do |account| %>
+        <%= render "accounts/account", account: account %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

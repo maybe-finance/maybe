@@ -107,20 +107,20 @@ class Provider::SimpleFin
       endpoint += "&end-date=#{trans_end_date}"
     end
 
-    # account_info = send_request_to_sf(endpoint)
-    # accounts = account_info["accounts"]
-    # TODO: Remove JSON Reading for real requests. Disabled currently due to preventing rate limits.
+    # request_content = send_request_to_sf(endpoint)
+    # # TODO: Remove JSON Reading for real requests. Disabled currently due to preventing rate limits.
     json_file_path =  Rails.root.join("sample.simple.fin.json")
     accounts = []
     error_messages = []
     if File.exist?(json_file_path)
-      file_content = File.read(json_file_path)
-      parsed_json = JSON.parse(file_content)
-      accounts = parsed_json["accounts"] || []
-      error_messages = parsed_json["errors"] || []
+      request_content = File.read(json_file_path)
     else
       Rails.logger.warn "SimpleFIN: Sample JSON file not found at #{json_file_path}. Returning empty accounts."
     end
+    # Parse our content
+    parsed_json = JSON.parse(request_content)
+    accounts = parsed_json["accounts"] || []
+    error_messages = parsed_json["errors"] || []
 
 
     # The only way we can really determine types right now is by some properties. Try and set their types

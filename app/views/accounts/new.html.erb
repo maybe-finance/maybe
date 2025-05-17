@@ -1,4 +1,11 @@
 <%= render layout: "accounts/new/container", locals: { title: t(".title") } do %>
+
+<%# Display flash messages, especially alerts for errors %>
+  <% if flash[:alert] %>
+    <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-300" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
   <div class="text-sm">
     <% unless params[:classification] == "liability" %>
       <%= render "account_type", accountable: Depository.new %>
