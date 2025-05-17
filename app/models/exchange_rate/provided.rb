@@ -34,7 +34,7 @@ module ExchangeRate::Provided
         return 0
       end
 
-      ExchangeRate::Syncer.new(
+      ExchangeRate::Importer.new(
         exchange_rate_provider: provider,
         from: from,
         to: to,

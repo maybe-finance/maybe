@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class ExchangeRate::SyncerTest < ActiveSupport::TestCase
+class ExchangeRate::ImporterTest < ActiveSupport::TestCase
   include ProviderTestHelper
 
   setup do
@@ -21,7 +21,7 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
@@ -53,7 +53,7 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(1.day.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
@@ -75,7 +75,7 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
 
     @provider.expects(:fetch_exchange_rates).never
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
@@ -103,7 +103,7 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
@@ -129,7 +129,7 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(Date.current), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",

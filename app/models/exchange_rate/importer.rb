@@ -1,4 +1,4 @@
-class ExchangeRate::Syncer
+class ExchangeRate::Importer
   MissingExchangeRateError = Class.new(StandardError)
   MissingStartRateError = Class.new(StandardError)
 

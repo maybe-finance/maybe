@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class Security::Price::SyncerTest < ActiveSupport::TestCase
+class Security::Price::ImporterTest < ActiveSupport::TestCase
   include ProviderTestHelper
 
   setup do
@@ -23,7 +23,7 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
                    start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: @security,
       security_provider: @provider,
       start_date: 2.days.ago.to_date,
@@ -52,7 +52,7 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
                    start_date: get_provider_fetch_start_date(1.day.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: @security,
       security_provider: @provider,
       start_date: 3.days.ago.to_date,
@@ -73,7 +73,7 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
 
     @provider.expects(:fetch_security_prices).never
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: @security,
       security_provider: @provider,
       start_date: 3.days.ago.to_date,
@@ -100,7 +100,7 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
                    start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: @security,
       security_provider: @provider,
       start_date: 2.days.ago.to_date,
@@ -126,7 +126,7 @@ class Security::Price::SyncerTest < ActiveSupport::TestCase
                    start_date: get_provider_fetch_start_date(Date.current), end_date: Date.current)
              .returns(provider_response)
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: @security,
       security_provider: @provider,
       start_date: Date.current,

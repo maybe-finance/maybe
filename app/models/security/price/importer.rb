@@ -1,4 +1,4 @@
-class Security::Price::Syncer
+class Security::Price::Importer
   MissingSecurityPriceError = Class.new(StandardError)
   MissingStartPriceError    = Class.new(StandardError)
 

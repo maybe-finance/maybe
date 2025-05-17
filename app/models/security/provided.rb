@@ -82,7 +82,7 @@ module Security::Provided
       return 0
     end
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: self,
       security_provider: provider,
       start_date: start_date,
