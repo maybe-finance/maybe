@@ -13,7 +13,7 @@ export default class extends Controller {
 
   addSubCondition() {
     const html = this.subConditionTemplateTarget.innerHTML.replaceAll(
-      "IDX_PLACEHOLDER",
+      "IDX_CHILD_PLACEHOLDER",
       this.#uniqueKey(),
     );
 
@@ -110,6 +110,6 @@ export default class extends Controller {
   }
 
   #uniqueKey() {
-    return Math.random().toString(36).substring(2, 15);
+    return Date.now();
   }
 }
