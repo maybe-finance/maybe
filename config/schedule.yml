@@ -6,3 +6,9 @@ import_market_data:
   args:
     mode: "full"
     clear_cache: false
+  
+clean_syncs:
+  cron: "0 * * * *" # every hour
+  class: "SyncCleanerJob"
+  queue: "scheduled"
+  description: "Cleans up stale syncs"

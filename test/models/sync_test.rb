@@ -167,4 +167,25 @@ class SyncTest < ActiveSupport::TestCase
     assert_equal "failed", family_sync.reload.status
     assert_equal "completed", account_sync.reload.status
   end
+
+  test "clean marks stale incomplete rows" do
+    stale_pending = Sync.create!(
+      syncable: accounts(:depository),
+      status: :pending,
+      created_at: 3.hours.ago
+    )
+
+    stale_syncing = Sync.create!(
+      syncable: accounts(:depository),
+      status: :syncing,
+      created_at: 3.hours.ago,
+      pending_at: 3.hours.ago,
+      syncing_at: 2.hours.ago
+    )
+
+    Sync.clean
+
+    assert_equal "stale", stale_pending.reload.status
+    assert_equal "stale", stale_syncing.reload.status
+  end
 end
