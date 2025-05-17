@@ -21,6 +21,12 @@ en:
         confirm_clear_cache:
           title: Clear data cache?
           body: Are you sure you want to clear the data cache? This will remove all exchange rates, security prices, account balances, and other data. This action cannot be undone.
+        clear_syncs:  Clear syncs cache
+        clear_syncs_warning:  Clearing the syncs cache will remove all syncs enqueued.
+        confirm_clear_syncs:
+          title: Clear syncs cache?
+          body: Are you sure you want to clear the data cache? This will remove all syncs enqueued.
+
       synth_settings:
         api_calls_used: "%{used} / %{limit} API calls used (%{percentage})"
         description: Input the API key provided by Synth
@@ -33,4 +39,6 @@ en:
         success: Settings updated
       clear_cache:
         cache_cleared: Data cache has been cleared. This may take a few moments to complete.
+      clear_syncs:
+        syncs_cleared: Syncs cache has been cleared. This may take a few moments to complete.
       not_authorized: You are not authorized to perform this action

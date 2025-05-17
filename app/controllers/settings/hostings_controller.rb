@@ -3,7 +3,7 @@ class Settings::HostingsController < ApplicationController
 
   guard_feature unless: -> { self_hosted? }
 
-  before_action :ensure_admin, only: :clear_cache
+  before_action :ensure_admin, only: [ :clear_cache, :clear_syncs ]
 
   def show
     synth_provider = Provider::Registry.get_provider(:synth)
@@ -32,6 +32,11 @@ class Settings::HostingsController < ApplicationController
   def clear_cache
     DataCacheClearJob.perform_later(Current.family)
     redirect_to settings_hosting_path, notice: t(".cache_cleared")
+  end
+
+  def clear_syncs
+    SyncsCacheClearJob.perform_later(Current.family)
+    redirect_to settings_hosting_path, notice: t(".syncs_cleared")
   end
 
   private
