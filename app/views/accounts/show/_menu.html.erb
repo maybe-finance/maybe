@@ -3,7 +3,7 @@
 <%= render MenuComponent.new(testid: "account-menu") do |menu| %>
   <% menu.with_item(variant: "link", text: "Edit", href: edit_account_path(account), icon: "pencil-line", data: { turbo_frame: :modal }) %>
 
-  <% unless account.crypto? %>
+  <% unless (account.crypto? || account.simple_fin_account) %>
     <% menu.with_item(
       variant: "link",
       text: "Import transactions",

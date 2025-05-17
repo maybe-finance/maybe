@@ -14,7 +14,7 @@
     </div>
 
     <ul role="list" class="divide-y divide-gray-200">
-      <% simple_fin_item.accounts.includes(:accountable, :logo_attachment).active.alphabetically.each do |account| %>
+      <% simple_fin_item.accounts.includes(:accountable, :logo_attachment).alphabetically.each do |account| %>
         <%= render "accounts/account", account: account %>
       <% end %>
     </ul>
