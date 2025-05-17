@@ -7,7 +7,6 @@ module AutoSync
 
   private
     def sync_family
-      Current.family.update!(last_synced_at: Time.current)
       Current.family.sync_later
     end
 

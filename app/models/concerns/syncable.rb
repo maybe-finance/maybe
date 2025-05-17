@@ -27,7 +27,11 @@ module Syncable
   end
 
   def sync_error
-    latest_sync.error
+    latest_sync&.error
+  end
+
+  def last_synced_at
+    latest_sync&.last_ran_at
   end
 
   private

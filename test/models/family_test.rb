@@ -20,10 +20,6 @@ class FamilyTest < ActiveSupport::TestCase
       .with(start_date: nil, parent_sync: family_sync)
       .times(manual_accounts_count)
 
-    PlaidItem.any_instance.expects(:sync_later)
-      .with(start_date: nil, parent_sync: family_sync)
-      .times(items_count)
-
     @syncable.sync_data(family_sync, start_date: family_sync.start_date)
   end
 end

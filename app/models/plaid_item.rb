@@ -38,8 +38,6 @@ class PlaidItem < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    update!(last_synced_at: Time.current)
-
     begin
       Rails.logger.info("Fetching and loading Plaid data")
       fetch_and_load_plaid_data(sync)

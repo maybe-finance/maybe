@@ -67,24 +67,12 @@ class Family < ApplicationRecord
   end
 
   def sync_data(sync, start_date: nil)
-    update!(last_synced_at: Time.current)
-
     # We don't rely on this value to guard the app, but keep it eventually consistent
     sync_trial_status!
 
     Rails.logger.info("Syncing accounts for family #{id}")
     accounts.manual.each do |account|
       account.sync_later(start_date: start_date, parent_sync: sync)
-    end
-
-    Rails.logger.info("Syncing plaid items for family #{id}")
-    plaid_items.each do |plaid_item|
-      plaid_item.sync_later(start_date: start_date, parent_sync: sync)
-    end
-
-    Rails.logger.info("Syncing simple_fin items for family #{id}")
-    simple_fin_items.each do |simple_fin_item|
-      simple_fin_item.sync_later(start_date: start_date, parent_sync: sync)
     end
 
     Rails.logger.info("Applying rules for family #{id}")

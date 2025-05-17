@@ -28,13 +28,12 @@
     <% end %>
 
     <div class="flex items-center gap-1 ml-auto">
-      <% if account.plaid_account_id.present? %>
-        <% if Rails.env.development? %>
-          <%= icon(
+      <% if Rails.env.development? %>
+        <%= icon(
             "refresh-cw",
             as_button: true,
             size: "sm",
-            href: sync_plaid_item_path(account.plaid_account.plaid_item),
+            href: account.linked? ? sync_plaid_item_path(account.plaid_account.plaid_item) : sync_account_path(account),
             disabled: account.syncing?,
             frame: :_top,
             title: "Refresh all SimpleFIN accounts"
