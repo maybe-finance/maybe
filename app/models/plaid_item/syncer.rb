@@ -10,16 +10,16 @@ class PlaidItem::Syncer
     import_item_data
 
     # Processes the raw Plaid data and updates internal domain objects
-    process_item_data
+    # process_item_data
 
     # All data is synced, so we can now run an account sync to calculate historical balances and more
-    plaid_item.reload.accounts.each do |account|
-      account.sync_later(
-        parent_sync: sync,
-        window_start_date: sync.window_start_date,
-        window_end_date: sync.window_end_date
-      )
-    end
+    # plaid_item.reload.accounts.each do |account|
+    #   account.sync_later(
+    #     parent_sync: sync,
+    #     window_start_date: sync.window_start_date,
+    #     window_end_date: sync.window_end_date
+    #   )
+    # end
   end
 
   def perform_post_sync
@@ -27,12 +27,12 @@ class PlaidItem::Syncer
   end
 
   private
-    def plaid
+    def plaid_provider
       plaid_item.plaid_provider
     end
 
     def import_item_data
-      PlaidItem::Importer.new(plaid_item).import_data
+      PlaidItem::Importer.new(plaid_item, plaid_provider: plaid_provider).import
     end
 
     def process_item_data

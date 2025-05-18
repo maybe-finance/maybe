@@ -1,38 +1,22 @@
 class PlaidItem::Importer
-  def initialize(plaid_item)
+  def initialize(plaid_item, plaid_provider:)
     @plaid_item = plaid_item
+    @plaid_provider = plaid_provider
   end
 
-  def import_data
-    begin
-      import_item_metadata
-    rescue Plaid::ApiError => e
-      handle_plaid_error(e)
-    end
-
+  def import
+    import_item_metadata
+    import_institution_metadata
     import_accounts
-    import_transactions if plaid_item.transactions_enabled?
-    import_investments if plaid_item.investments_enabled?
-    import_liabilities if plaid_item.liabilities_enabled?
+  rescue Plaid::ApiError => e
+    handle_plaid_error(e)
   end
 
   private
-    attr_reader :plaid_item
+    attr_reader :plaid_item, :plaid_provider
 
-    def plaid_provider
-      plaid_item.plaid_provider
-    end
-
-    def import_item_metadata
-      raw_item_data = plaid_provider.get_item(plaid_item.access_token)
-      plaid_item.update!(
-        available_products: raw_item_data.available_products,
-        billed_products: raw_item_data.billed_products
-      )
-    end
-
-    # Re-raise all errors that should halt data importing.  Raising will propagate to
-    # the sync and mark it as failed.
+    # All errors that should halt the import should be re-raised after handling
+    # These errors will propagate up to the Sync record and mark it as failed.
     def handle_plaid_error(error)
       error_body = JSON.parse(error.response_body)
 
@@ -45,19 +29,77 @@ class PlaidItem::Importer
       end
     end
 
+    def import_item_metadata
+      item_response = plaid_provider.get_item(plaid_item.access_token)
+      item_data = item_response.item
+
+      # plaid_item.raw_payload = item_response
+      plaid_item.available_products = item_data.available_products
+      plaid_item.billed_products = item_data.billed_products
+      plaid_item.institution_id = item_data.institution_id
+
+      plaid_item.save!
+    end
+
+    def import_institution_metadata
+      institution_response = plaid_provider.get_institution(plaid_item.institution_id)
+      institution_data = institution_response.institution
+
+      # plaid_item.raw_institution_payload = institution_response
+      plaid_item.institution_id = institution_data.institution_id
+      plaid_item.institution_url = institution_data.url
+      plaid_item.institution_color = institution_data.primary_color
+
+      plaid_item.save!
+    end
+
     def import_accounts
-      PlaidItem::AccountsImporter.new(plaid_item).import
+      accounts_data = plaid_provider.get_item_accounts(plaid_item).accounts
+
+      PlaidItem.transaction do
+        accounts_data.each do |raw_account_payload|
+          plaid_account = plaid_item.plaid_accounts.find_or_initialize_by(
+            plaid_id: raw_account_payload.account_id
+          )
+
+          PlaidAccount::Importer.new(
+            plaid_account,
+            accounts_data: accounts_data,
+            transactions_data: transactions_data,
+            investments_data: investments_data,
+            liabilities_data: liabilities_data
+          ).import
+        end
+      end
     end
 
-    def import_transactions
-      PlaidItem::TransactionsImporter.new(plaid_item).import
+    def transactions_supported?
+      plaid_item.supported_products.include?("transactions")
     end
 
-    def import_investments
-      PlaidItem::InvestmentsImporter.new(plaid_item).import
+    def investments_supported?
+      plaid_item.supported_products.include?("investments")
     end
 
-    def import_liabilities
-      PlaidItem::LiabilitiesImporter.new(plaid_item).import
+    def liabilities_supported?
+      plaid_item.supported_products.include?("liabilities")
+    end
+
+    def transactions_data
+      return nil unless transactions_supported?
+
+      plaid_provider.get_item_transactions(plaid_item).transactions
+    end
+
+    def investments_data
+      return nil unless investments_supported?
+
+      plaid_provider.get_item_investments(plaid_item).investments
+    end
+
+    def liabilities_data
+      return nil unless liabilities_supported?
+
+      plaid_provider.get_item_liabilities(plaid_item).liabilities
     end
 end

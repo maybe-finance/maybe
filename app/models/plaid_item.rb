@@ -60,18 +60,6 @@ class PlaidItem < ApplicationRecord
         .exists?
   end
 
-  def transactions_enabled?
-    true # TODO
-  end
-
-  def investments_enabled?
-    true # TODO
-  end
-
-  def liabilities_enabled?
-    true
-  end
-
   def auto_match_categories!
     if family.categories.none?
       family.categories.bootstrap!
@@ -100,6 +88,13 @@ class PlaidItem < ApplicationRecord
         end
       end
     end
+  end
+
+  # Plaid returns mutually exclusive arrays here.  If the item has made a request for a product,
+  # it is put in the billed_products array.  If it is supported, but not yet used, it goes in the
+  # available_products array.
+  def supported_products
+    available_products + billed_products
   end
 
   private

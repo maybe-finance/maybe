@@ -3,3 +3,5 @@ one:
   plaid_id: "1234567890"
   access_token: encrypted_token_1
   name: "Test Bank"
+  billed_products: ["transactions", "investments", "liabilities"]
+  available_products: []

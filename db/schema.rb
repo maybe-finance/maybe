@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_16_180846) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_18_133020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -429,6 +429,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_16_180846) do
     t.string "mask"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "raw_payload", default: {}
     t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
   end
 
@@ -448,6 +449,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_16_180846) do
     t.string "institution_id"
     t.string "institution_color"
     t.string "status", default: "good", null: false
+    t.jsonb "raw_payload", default: {}
+    t.jsonb "raw_institution_payload", default: {}
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
   end
 
