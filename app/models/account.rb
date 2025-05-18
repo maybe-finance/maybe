@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Convertible, Enrichable
+  include Syncable, Monetizable, Chartable, Linkable, Enrichable
 
   validates :name, :balance, :currency, presence: true
 
@@ -62,7 +62,7 @@ class Account < ApplicationRecord
   end
 
   def syncing?
-    self_syncing = syncs.incomplete.any?
+    self_syncing = syncs.visible.any?
 
     # Since Plaid Items sync as a "group", if the item is syncing, even if the account
     # sync hasn't yet started (i.e. we're still fetching the Plaid data), show it as syncing in UI.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_14_214242) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_16_180846) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -548,27 +548,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_14_214242) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["var"], name: "index_settings_on_var", unique: true
-  end
-
-  create_table "stock_exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "acronym"
-    t.string "mic", null: false
-    t.string "country", null: false
-    t.string "country_code", null: false
-    t.string "city"
-    t.string "website"
-    t.string "timezone_name"
-    t.string "timezone_abbr"
-    t.string "timezone_abbr_dst"
-    t.string "currency_code"
-    t.string "currency_symbol"
-    t.string "currency_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country"], name: "index_stock_exchanges_on_country"
-    t.index ["country_code"], name: "index_stock_exchanges_on_country_code"
-    t.index ["currency_code"], name: "index_stock_exchanges_on_currency_code"
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

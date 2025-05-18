@@ -49,6 +49,48 @@ module Security::Provided
     price
   end
 
+  def import_provider_details(clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.import_provider_details")
+      return
+    end
+
+    if self.name.present? && self.logo_url.present? && !clear_cache
+      return
+    end
+
+    response = provider.fetch_security_info(
+      symbol: ticker,
+      exchange_operating_mic: exchange_operating_mic
+    )
+
+    if response.success?
+      update(
+        name: response.data.name,
+        logo_url: response.data.logo_url,
+      )
+    else
+      err = StandardError.new("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
+      Rails.logger.warn(err.message)
+      Sentry.capture_exception(err, level: :warning)
+    end
+  end
+
+  def import_provider_prices(start_date:, end_date:, clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.import_provider_prices")
+      return 0
+    end
+
+    Security::Price::Importer.new(
+      security: self,
+      security_provider: provider,
+      start_date: start_date,
+      end_date: end_date,
+      clear_cache: clear_cache
+    ).import_provider_prices
+  end
+
   private
     def provider
       self.class.provider
