@@ -1,10 +1,12 @@
-class Holding::Syncer
+# "Materializes" holdings (similar to a DB materialized view, but done at the app level)
+# into a series of records we can easily query and join with other data.
+class Holding::Materializer
   def initialize(account, strategy:)
     @account = account
     @strategy = strategy
   end
 
-  def sync_holdings
+  def materialize_holdings
     calculate_holdings
 
     Rails.logger.info("Persisting #{@holdings.size} holdings")

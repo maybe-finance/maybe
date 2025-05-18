@@ -129,8 +129,9 @@ class TradeBuilder
     def security
       ticker_symbol, exchange_operating_mic = ticker.present? ? ticker.split("|") : [ manual_ticker, nil ]
 
-      Security.find_or_create_by(ticker: ticker_symbol, exchange_operating_mic: exchange_operating_mic) do |s|
-        FetchSecurityInfoJob.perform_later(s.id)
-      end
+      Security.find_or_create_by!(
+        ticker: ticker_symbol,
+        exchange_operating_mic: exchange_operating_mic
+      )
     end
 end

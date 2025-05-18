@@ -7,18 +7,14 @@ module SyncableInterfaceTest
   test "can sync later" do
     assert_difference "@syncable.syncs.count", 1 do
       assert_enqueued_with job: SyncJob do
-        @syncable.sync_later
+        @syncable.sync_later(window_start_date: 2.days.ago.to_date)
       end
     end
   end
 
-  test "can sync" do
-    assert_difference "@syncable.syncs.count", 1 do
-      @syncable.sync(start_date: 2.days.ago.to_date)
-    end
-  end
-
-  test "implements sync_data" do
-    assert_respond_to @syncable, :sync_data
+  test "can perform sync" do
+    mock_sync = mock
+    @syncable.class.any_instance.expects(:perform_sync).with(mock_sync).once
+    @syncable.perform_sync(mock_sync)
   end
 end

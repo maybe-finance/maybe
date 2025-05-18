@@ -2,17 +2,6 @@
   <h1 class="text-xl"><%= t(".accounts") %></h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
-      <% if Rails.env.development? %>
-        <%= render ButtonComponent.new(
-          text: "Sync all",
-          href: sync_all_accounts_path,
-          method: :post,
-          variant: "outline",
-          disabled: Current.family.syncing?,
-          icon: "refresh-cw",
-        ) %>
-      <% end %>
-
       <%= render LinkComponent.new(
         text: "New account",
         href: new_account_path(return_to: accounts_path),

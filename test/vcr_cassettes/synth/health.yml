@@ -14,7 +14,7 @@ http_interactions:
       X-Source-Type:
       - managed
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.13.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sat, 15 Mar 2025 22:18:47 GMT
+      - Fri, 16 May 2025 13:01:39 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,11 +35,11 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Etag:
-      - W/"4ec3e0a20895d90b1e1241ca67f10ca3"
+      - W/"c5c1d51b68b499d00936c9eb1e8bfdbb"
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-      - 0cab64c9-e312-4bec
+      - 3abc1256-5517-44a7
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -53,15 +53,15 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-      - 1958563c-7c18-4201-a03c-a4b343dc68ab
+      - aaf85301-dd16-4b9b-a3a4-c4fbcf1d3f55
       X-Runtime:
-      - '0.014938'
+      - '0.014386'
       X-Xss-Protection:
       - '0'
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=P3OWn4c8LFFWI0Dwr2CSYwHLaNhf9iD9TfAhqdx5PtLoWZ0pSImebfUsh00ZbOmh4r2cRJEQOmvy67wAwl6p0W%2Fx9017EkCnCaXibBBCKqJTBOdGnsSuV%2B45LrHsQmg%2BGeBwrw4b"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=OaVSdNPSl6CQ8gbhnDzkCisX2ILOEWAwweMW3rXXP5rBKuxZoDT024srQWmHKGLsCEhpt4G9mqCthDwlHu2%2BuZ3AyTJQcnBONtE%2FNQ7fKT9x8nLz4mnqL8iyynLuRWQSUJ8SWMj5"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Speculation-Rules:
@@ -69,14 +69,14 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 920f637aa8cf1152-ORD
+      - 940b109d086eb4b8-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
       Server-Timing:
-      - cfL4;desc="?proto=TCP&rtt=25627&min_rtt=25594&rtt_var=9664&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=878&delivery_rate=111991&cwnd=248&unsent_bytes=0&cid=c8e4c4e269114d14&ts=263&x=0"
+      - cfL4;desc="?proto=TCP&rtt=32457&min_rtt=26792&rtt_var=14094&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2826&recv_bytes=878&delivery_rate=108091&cwnd=229&unsent_bytes=0&cid=a6f330e4d5f16682&ts=309&x=0"
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"user_3208c49393f54b3e974795e4bea5b864","email":"test@maybe.co","name":"Test
-        User","plan":"Business","api_calls_remaining":249830,"api_limit":250000,"credits_reset_at":"2025-04-01T00:00:00.000-04:00","current_period_start":"2025-03-01T00:00:00.000-05:00"}'
-  recorded_at: Sat, 15 Mar 2025 22:18:47 GMT
+      string: '{"id":"user_3208c49393f54b3e974795e4bea5b864","email":"zach@maybe.co","name":"Zach
+        Gollwitzer","plan":"Business","api_calls_remaining":249733,"api_limit":250000,"credits_reset_at":"2025-06-01T00:00:00.000-04:00","current_period_start":"2025-05-01T00:00:00.000-04:00"}'
+  recorded_at: Fri, 16 May 2025 13:01:39 GMT
 recorded_with: VCR 6.3.1

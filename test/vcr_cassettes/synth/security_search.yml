@@ -14,7 +14,7 @@ http_interactions:
       X-Source-Type:
       - managed
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.13.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 16 Mar 2025 12:01:58 GMT
+      - Fri, 16 May 2025 13:01:38 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -39,7 +39,7 @@ http_interactions:
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-      - 2effb56b-f67f-402d
+      - 701ae22a-18c8-4e62
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -53,15 +53,15 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-      - 33470619-5119-4923-b4e0-e9a0eeb532a1
+      - edb55bc6-e3ea-470b-b7af-9b4d9883420b
       X-Runtime:
-      - '0.453770'
+      - '0.355152'
       X-Xss-Protection:
       - '0'
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ayZOlXkCwLgUl%2FrB2%2BlqtqR5HCllubf4HLDipEt3klWKyHS4nilHi9XZ1fiEQWx7xwiRMJZ5EW0Xzm7ISoHWTtEbkgMQHWYQwSTeg30ahFFHK1pkOOnET1fuW1UxiZwlJtq1XZGB"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=QGeBWdYED%2F%2FgT9BzborFAnM%2FG6UiNmI0ej212XGHWdFwYXUvTJ2GyqA9hMJrpYIvgbHdQ9Ed0MsQUv3KFb57VXQq0T6UXTNPa%2BFRPepK0hsXeGDLxch04v6KnkTATqcw2M8HuYHS"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Speculation-Rules:
@@ -69,11 +69,11 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 921419514e0a6399-ORD
+      - 940b1097a830f856-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
       Server-Timing:
-      - cfL4;desc="?proto=TCP&rtt=25809&min_rtt=25801&rtt_var=9692&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2829&recv_bytes=939&delivery_rate=111952&cwnd=121&unsent_bytes=0&cid=2beb787f15cd8ab9&ts=610&x=0"
+      - cfL4;desc="?proto=TCP&rtt=26401&min_rtt=25556&rtt_var=11273&sent=5&recv=6&lost=0&retrans=0&sent_bytes=2825&recv_bytes=939&delivery_rate=89615&cwnd=244&unsent_bytes=0&cid=cf6d0758d165295d&ts=500&x=0"
     body:
       encoding: ASCII-8BIT
       string: '{"data":[{"symbol":"AAPL","name":"Apple Inc.","logo_url":"https://logo.synthfinance.com/ticker/AAPL","currency":"USD","exchange":{"name":"Nasdaq/Ngs
@@ -100,5 +100,5 @@ http_interactions:
         Inc.","logo_url":"https://logo.synthfinance.com/ticker/AAPJ","currency":"USD","exchange":{"name":"Otc
         Pink Marketplace","mic_code":"PINX","operating_mic_code":"OTCM","acronym":"","country":"United
         States","country_code":"US","timezone":"America/New_York"}}]}'
-  recorded_at: Sun, 16 Mar 2025 12:01:58 GMT
+  recorded_at: Fri, 16 May 2025 13:01:38 GMT
 recorded_with: VCR 6.3.1

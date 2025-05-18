@@ -72,10 +72,9 @@ module Family::Subscribeable
     (1 - days_left_in_trial.to_f / Subscription::TRIAL_DAYS) * 100
   end
 
-  private
-    def sync_trial_status!
-      if subscription&.status == "trialing" && days_left_in_trial < 0
-        subscription.update!(status: "paused")
-      end
+  def sync_trial_status!
+    if subscription&.status == "trialing" && days_left_in_trial < 0
+      subscription.update!(status: "paused")
     end
+  end
 end

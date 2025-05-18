@@ -1,6 +1,5 @@
 <header class="flex items-center justify-between">
   <h1 class="text-primary text-xl font-medium">Rules</h1>
-
   <div class="flex items-center gap-2">
     <% if @rules.any? %>
       <%= render MenuComponent.new do |menu| %>
@@ -13,7 +12,6 @@
           confirm: CustomConfirm.for_resource_deletion("all rules", high_severity: true)) %>
       <% end %>
     <% end %>
-
     <%= render LinkComponent.new(
       text: "New rule",
       variant: "primary",
@@ -23,7 +21,6 @@
     ) %>
   </div>
 </header>
-
 <% if self_hosted? %>
   <div class="flex items-center gap-2 mb-2 py-4">
     <%= icon("circle-alert", size: "sm") %>
@@ -32,19 +29,43 @@
     </p>
   </div>
 <% end %>
-
 <div class="bg-container shadow-border-xs rounded-xl p-4">
-
   <% if @rules.any? %>
-    <div class="rounded-xl bg-gray-25 space-y-1">
-      <div class="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-secondary uppercase">
-        <p>Rules</p>
-        <span class="text-subdued">&middot;</span>
-        <p><%= @rules.count %></p>
+    <div class="bg-container-inset rounded-xl">
+      <div class="flex justify-between px-4 py-2 text-xs uppercase">
+        <div class="flex items-center gap-1.5 font-medium text-secondary">
+          <p>Rules</p>
+          <span class="text-subdued">&middot;</span>
+          <p><%= @rules.count %></p>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-secondary">Sort by:</span>
+          <%= form_with url: rules_path, method: :get, local: true, class: "flex items-center", data: { controller: "auto-submit-form" } do |form| %>
+            <%= form.select :sort_by,
+                      options_for_select([["Name", "name"], ["Updated At", "updated_at"]], @sort_by),
+                      {},
+                      class: "min-w-[120px] bg-transparent rounded border-none cursor-pointer text-primary uppercase text-xs w-auto",
+                      data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
+            <%= form.hidden_field :direction, value: @direction %>
+          <% end %>
+          <%= render LinkComponent.new(
+            href: rules_path(direction: @direction == "asc" ? "desc" : "asc", sort_by: @sort_by),
+            variant: "icon",
+            icon: "arrow-up-down",
+            size: :sm,
+            title: "Toggle sort direction"
+          ) %>
+        </div>
       </div>
-
-      <div class="space-y-1 p-1">
-        <%= render @rules %>
+      <div class="p-1">
+        <div class="flex flex-col bg-container rounded-xl shadow-border-xs first_child:rounded-t-xl last_child:rounded-b-xl">
+          <% @rules.each_with_index do |rule, idx| %>
+            <%= render "rule", rule: rule %>
+            <% unless idx == @rules.size - 1 %>
+              <div class="h-px bg-divider ml-4 mr-6"></div>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   <% else %>

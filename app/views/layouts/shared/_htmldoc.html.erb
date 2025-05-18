@@ -23,10 +23,6 @@
         <%= render_flash_notifications %>
 
         <div id="cta"></div>
-
-        <% if Current.family&.syncing? %>
-          <%= render "shared/notifications/loading", id: "syncing-notice", message: "Syncing accounts data..." %>
-        <% end %>
       </div>
     </div>
 

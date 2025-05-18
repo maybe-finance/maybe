@@ -27,11 +27,12 @@ class TabsComponent < ViewComponent::Base
     }
   }
 
-  attr_reader :active_tab, :url_param_key, :variant, :testid
+  attr_reader :active_tab, :url_param_key, :session_key, :variant, :testid
 
-  def initialize(active_tab:, url_param_key: nil, variant: :default, active_btn_classes: "", inactive_btn_classes: "", testid: nil)
+  def initialize(active_tab:, url_param_key: nil, session_key: nil, variant: :default, active_btn_classes: "", inactive_btn_classes: "", testid: nil)
     @active_tab = active_tab
     @url_param_key = url_param_key
+    @session_key = session_key
     @variant = variant.to_sym
     @active_btn_classes = active_btn_classes
     @inactive_btn_classes = inactive_btn_classes

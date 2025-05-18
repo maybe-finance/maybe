@@ -506,6 +506,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_17_134646) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["family_id"], name: "index_rules_on_family_id"
   end
 
@@ -544,6 +545,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_17_134646) do
     t.uuid "active_impersonator_session_id"
     t.datetime "subscribed_at"
     t.jsonb "prev_transaction_page_params", default: {}
+    t.jsonb "data", default: {}
     t.index ["active_impersonator_session_id"], name: "index_sessions_on_active_impersonator_session_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
@@ -622,21 +624,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_17_134646) do
     t.datetime "trial_ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["family_id"], name: "index_subscriptions_on_family_id"
+    t.index ["family_id"], name: "index_subscriptions_on_family_id", unique: true
   end
 
   create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "syncable_type", null: false
     t.uuid "syncable_id", null: false
-    t.datetime "last_ran_at"
-    t.date "start_date"
     t.string "status", default: "pending"
     t.string "error"
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "error_backtrace", array: true
     t.uuid "parent_id"
+    t.datetime "pending_at"
+    t.datetime "syncing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.date "window_start_date"
+    t.date "window_end_date"
     t.index ["parent_id"], name: "index_syncs_on_parent_id"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end

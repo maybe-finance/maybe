@@ -28,44 +28,6 @@ module Security::Provided
     end
   end
 
-  def sync_provider_prices(start_date:, end_date: Date.current)
-    unless has_prices?
-      Rails.logger.warn("Security id=#{id} ticker=#{ticker} is not known by provider, skipping price sync")
-      return 0
-    end
-
-    unless provider.present?
-      Rails.logger.warn("No security provider configured, cannot sync prices for id=#{id} ticker=#{ticker}")
-      return 0
-    end
-
-    response = provider.fetch_security_prices(self, start_date: start_date, end_date: end_date)
-
-    unless response.success?
-      Rails.logger.error("Provider error for sync_provider_prices with id=#{id} ticker=#{ticker}: #{response.error}")
-      return 0
-    end
-
-    fetched_prices = response.data.map do |price|
-      {
-        security_id: price.security.id,
-        date: price.date,
-        price: price.price,
-        currency: price.currency
-      }
-    end
-
-    valid_prices = fetched_prices.reject do |price|
-      is_invalid = price[:date].nil? || price[:price].nil? || price[:currency].nil?
-      if is_invalid
-        Rails.logger.warn("Invalid price data for security_id=#{id}: Missing required fields in price record: #{price.inspect}")
-      end
-      is_invalid
-    end
-
-    Security::Price.upsert_all(valid_prices, unique_by: %i[security_id date currency])
-  end
-
   def find_or_fetch_price(date: Date.current, cache: true)
     price = prices.find_by(date: date)
 
@@ -85,6 +47,48 @@ module Security::Provided
       currency: price.currency
     ) if cache
     price
+  end
+
+  def import_provider_details(clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.import_provider_details")
+      return
+    end
+
+    if self.name.present? && self.logo_url.present? && !clear_cache
+      return
+    end
+
+    response = provider.fetch_security_info(
+      symbol: ticker,
+      exchange_operating_mic: exchange_operating_mic
+    )
+
+    if response.success?
+      update(
+        name: response.data.name,
+        logo_url: response.data.logo_url,
+      )
+    else
+      err = StandardError.new("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
+      Rails.logger.warn(err.message)
+      Sentry.capture_exception(err, level: :warning)
+    end
+  end
+
+  def import_provider_prices(start_date:, end_date:, clear_cache: false)
+    unless provider.present?
+      Rails.logger.warn("No provider configured for Security.import_provider_prices")
+      return 0
+    end
+
+    Security::Price::Importer.new(
+      security: self,
+      security_provider: provider,
+      start_date: start_date,
+      end_date: end_date,
+      clear_cache: clear_cache
+    ).import_provider_prices
   end
 
   private

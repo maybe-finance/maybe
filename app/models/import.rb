@@ -62,7 +62,7 @@ class Import < ApplicationRecord
   def publish
     import!
 
-    family.sync
+    family.sync_later
 
     update! status: :complete
   rescue => error
