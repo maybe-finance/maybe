@@ -172,15 +172,15 @@ class SyncTest < ActiveSupport::TestCase
     stale_pending = Sync.create!(
       syncable: accounts(:depository),
       status: :pending,
-      created_at: 3.hours.ago
+      created_at: 25.hours.ago
     )
 
     stale_syncing = Sync.create!(
       syncable: accounts(:depository),
       status: :syncing,
-      created_at: 3.hours.ago,
-      pending_at: 3.hours.ago,
-      syncing_at: 2.hours.ago
+      created_at: 25.hours.ago,
+      pending_at: 24.hours.ago,
+      syncing_at: 23.hours.ago
     )
 
     Sync.clean
