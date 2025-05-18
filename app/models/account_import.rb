@@ -1,5 +1,7 @@
 class AccountImport < Import
   def import!
+    raise "Account import is limited to 50 rows" if rows.count > 50
+
     transaction do
       rows.each do |row|
         mapping = mappings.account_types.find_by(key: row.entity_type)
