@@ -6,19 +6,19 @@ class PlaidItem::Syncer
   end
 
   def perform_sync(sync)
-    begin
-      Rails.logger.info("Fetching and loading Plaid data")
-      fetch_and_load_plaid_data
-      plaid_item.update!(status: :good) if plaid_item.requires_update?
+    # Loads item metadata, accounts, transactions, and other data to our DB
+    import_item_data
 
-      plaid_item.accounts.each do |account|
-        account.sync_later(parent_sync: sync, window_start_date: sync.window_start_date, window_end_date: sync.window_end_date)
-      end
+    # Processes the raw Plaid data and updates internal domain objects
+    process_item_data
 
-      Rails.logger.info("Plaid data fetched and loaded")
-    rescue Plaid::ApiError => e
-      handle_plaid_error(e)
-      raise e
+    # All data is synced, so we can now run an account sync to calculate historical balances and more
+    plaid_item.reload.accounts.each do |account|
+      account.sync_later(
+        parent_sync: sync,
+        window_start_date: sync.window_start_date,
+        window_end_date: sync.window_end_date
+      )
     end
   end
 
@@ -28,15 +28,15 @@ class PlaidItem::Syncer
 
   private
     def plaid
-      plaid_item.plaid_region == "eu" ? plaid_eu : plaid_us
+      plaid_item.plaid_provider
     end
 
-    def plaid_eu
-      @plaid_eu ||= Provider::Registry.get_provider(:plaid_eu)
+    def import_item_data
+      PlaidItem::Importer.new(plaid_item).import_data
     end
 
-    def plaid_us
-      @plaid_us ||= Provider::Registry.get_provider(:plaid_us)
+    def process_item_data
+      PlaidItem::Processor.new(plaid_item).process_data
     end
 
     def safe_fetch_plaid_data(method)

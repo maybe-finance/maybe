@@ -1,5 +1,5 @@
 class PlaidItem < ApplicationRecord
-  include Syncable
+  include Syncable, Provided
 
   enum :plaid_region, { us: "us", eu: "eu" }
   enum :status, { good: "good", requires_update: "requires_update" }, default: :good
@@ -60,6 +60,18 @@ class PlaidItem < ApplicationRecord
         .exists?
   end
 
+  def transactions_enabled?
+    true # TODO
+  end
+
+  def investments_enabled?
+    true # TODO
+  end
+
+  def liabilities_enabled?
+    true
+  end
+
   def auto_match_categories!
     if family.categories.none?
       family.categories.bootstrap!
@@ -91,10 +103,11 @@ class PlaidItem < ApplicationRecord
   end
 
   private
+    # Silently swallow and report error so that we don't block the user from deleting the item
     def remove_plaid_item
       plaid_provider.remove_item(access_token)
     rescue StandardError => e
-      Rails.logger.warn("Failed to remove Plaid item #{id}: #{e.message}")
+      Sentry.capture_exception(e)
     end
 
     class PlaidConnectionLostError < StandardError; end

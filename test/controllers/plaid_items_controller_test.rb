@@ -8,7 +8,7 @@ class PlaidItemsControllerTest < ActionDispatch::IntegrationTest
 
   test "create" do
     @plaid_provider = mock
-    Provider::Registry.expects(:get_provider).with(:plaid_us).returns(@plaid_provider)
+    Provider::Registry.expects(:plaid_provider_for_region).with("us").returns(@plaid_provider)
 
     public_token = "public-sandbox-1234"
 
