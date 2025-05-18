@@ -2,6 +2,17 @@
 
 <%# Flag indicators of account issues %>
 <% if account.simple_fin_account&.simple_fin_item&.status == "requires_update" %>
+  <% if link_to_path == nil %>
+    <%= icon(
+        "alert-triangle",
+        id: "account-issue-icon",
+        as_button: true,
+        size: "sm",
+        rel: "noopener noreferrer",
+        disabled: account.syncing?,
+        title: given_title
+        ) %> 
+  <% elsif %>
     <%= link_to link_to_path, target: target do %>
         <%= icon(
             "alert-triangle",
@@ -13,6 +24,7 @@
             title: given_title
             ) %>  
     <% end %>
+  <% end %>
 <% end %>
 
 <%# Force some styling that keeps getting overwritten %>

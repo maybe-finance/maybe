@@ -70,7 +70,7 @@ class Account < ApplicationRecord
     # Since Plaid Items sync as a "group", if the item is syncing, even if the account
     # sync hasn't yet started (i.e. we're still fetching the Plaid data), show it as syncing in UI.
     if linked?
-      plaid_account&.plaid_item&.syncing? || self_syncing
+      plaid_account&.plaid_item&.syncing? || simple_fin_account&.simple_fin_item&.syncing? || self_syncing
     else
       self_syncing
     end

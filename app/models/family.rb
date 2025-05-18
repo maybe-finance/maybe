@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include PlaidConnectable, Syncable, AutoTransferMatchable, Subscribeable
+  include PlaidConnectable, SimpleFinConnectable, Syncable, AutoTransferMatchable, Subscribeable
 
   DATE_FORMATS = [
     [ "MM-DD-YYYY", "%m-%d-%Y" ],
@@ -38,6 +38,7 @@ class Family < ApplicationRecord
   # If any accounts or plaid items are syncing, the family is also syncing, even if a formal "Family Sync" is not running.
   def syncing?
     Sync.joins("LEFT JOIN plaid_items ON plaid_items.id = syncs.syncable_id AND syncs.syncable_type = 'PlaidItem'")
+        .joins("LEFT JOIN simple_fin_items ON simple_fin_items.id = syncs.syncable_id AND syncs.syncable_type = 'SimpleFinItem'")
         .joins("LEFT JOIN accounts ON accounts.id = syncs.syncable_id AND syncs.syncable_type = 'Account'")
         .where("syncs.syncable_id = ? OR accounts.family_id = ? OR plaid_items.family_id = ?", id, id, id)
         .visible

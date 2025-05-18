@@ -37,6 +37,9 @@
             <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
             <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
           </div>
+          
+          <%# Render account error warnings %>
+          <%= render "accounts/account_error", account: account, given_title: "Account has an error" %>
 
           <% if account.syncing? %>
             <div class="ml-auto text-right grow h-10">
