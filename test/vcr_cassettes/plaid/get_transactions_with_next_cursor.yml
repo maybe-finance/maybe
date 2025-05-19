@@ -1,0 +1,135 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/transactions/sync
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-ffe2eff6-26ab-421e-9e65-92969a070378","count":100,"options":{"include_original_description":true}}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 13:54:01 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '192'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '328'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "accounts": [],
+          "added": [],
+          "has_more": false,
+          "modified": [],
+          "next_cursor": "",
+          "removed": [],
+          "request_id": "w91qd0Xa69KduMa",
+          "transactions_update_status": "NOT_READY"
+        }
+  recorded_at: Mon, 19 May 2025 13:54:01 GMT
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/transactions/sync
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-7dd1d7be-e7de-43bd-bdce-5e2d3d757cb2","count":100,"options":{"include_original_description":true}}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 13:54:31 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '192'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '322'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "accounts": [],
+          "added": [],
+          "has_more": false,
+          "modified": [],
+          "next_cursor": "",
+          "removed": [],
+          "request_id": "KT5sHHvcrYWdNvs",
+          "transactions_update_status": "NOT_READY"
+        }
+  recorded_at: Mon, 19 May 2025 13:54:31 GMT
+recorded_with: VCR 6.3.1

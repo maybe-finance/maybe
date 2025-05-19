@@ -60,6 +60,27 @@ class PlaidItem < ApplicationRecord
         .exists?
   end
 
+  def upsert_plaid_snapshot!(item_snapshot)
+    assign_attributes(
+      available_products: item_snapshot.available_products,
+      billed_products: item_snapshot.billed_products,
+      raw_payload: item_snapshot,
+    )
+
+    save!
+  end
+
+  def upsert_plaid_institution_snapshot!(institution_snapshot)
+    assign_attributes(
+      institution_id: institution_snapshot.institution_id,
+      institution_url: institution_snapshot.url,
+      institution_color: institution_snapshot.primary_color,
+      raw_institution_payload: institution_snapshot
+    )
+
+    save!
+  end
+
   def auto_match_categories!
     if family.categories.none?
       family.categories.bootstrap!
@@ -90,11 +111,8 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  # Plaid returns mutually exclusive arrays here.  If the item has made a request for a product,
-  # it is put in the billed_products array.  If it is supported, but not yet used, it goes in the
-  # available_products array.
-  def supported_products
-    available_products + billed_products
+  def supports_product?(product)
+    supported_products.include?(product)
   end
 
   private
@@ -103,6 +121,13 @@ class PlaidItem < ApplicationRecord
       plaid_provider.remove_item(access_token)
     rescue StandardError => e
       Sentry.capture_exception(e)
+    end
+
+    # Plaid returns mutually exclusive arrays here.  If the item has made a request for a product,
+    # it is put in the billed_products array.  If it is supported, but not yet used, it goes in the
+    # available_products array.
+    def supported_products
+      available_products + billed_products
     end
 
     class PlaidConnectionLostError < StandardError; end

@@ -1,0 +1,2 @@
+class PlaidMock
+end

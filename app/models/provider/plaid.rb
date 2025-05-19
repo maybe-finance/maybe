@@ -111,8 +111,8 @@ class Provider::Plaid
     client.accounts_get(request)
   end
 
-  def get_item_transactions(item)
-    cursor = item.next_cursor
+  def get_transactions(access_token:, next_cursor: nil)
+    cursor = next_cursor
     added = []
     modified = []
     removed = []
@@ -120,7 +120,7 @@ class Provider::Plaid
 
     while has_more
       request = Plaid::TransactionsSyncRequest.new(
-        access_token: item.access_token,
+        access_token: access_token,
         cursor: cursor,
         options: {
           include_original_description: true
@@ -139,18 +139,18 @@ class Provider::Plaid
     TransactionSyncResponse.new(added:, modified:, removed:, cursor:)
   end
 
-  def get_item_investments(item, start_date: nil, end_date: Date.current)
+  def get_item_investments(access_token:, start_date: nil, end_date: Date.current)
     start_date = start_date || MAX_HISTORY_DAYS.days.ago.to_date
-    holdings, holding_securities = get_item_holdings(item)
-    transactions, transaction_securities = get_item_investment_transactions(item, start_date:, end_date:)
+    holdings, holding_securities = get_item_holdings(access_token: access_token)
+    transactions, transaction_securities = get_item_investment_transactions(access_token: access_token, start_date:, end_date:)
 
     merged_securities = ((holding_securities || []) + (transaction_securities || [])).uniq { |s| s.security_id }
 
     InvestmentsResponse.new(holdings:, transactions:, securities: merged_securities)
   end
 
-  def get_item_liabilities(item)
-    request = Plaid::LiabilitiesGetRequest.new({ access_token: item.access_token })
+  def get_item_liabilities(access_token:)
+    request = Plaid::LiabilitiesGetRequest.new({ access_token: access_token })
     response = client.liabilities_get(request)
     response.liabilities
   end
@@ -170,21 +170,21 @@ class Provider::Plaid
     TransactionSyncResponse = Struct.new :added, :modified, :removed, :cursor, keyword_init: true
     InvestmentsResponse = Struct.new :holdings, :transactions, :securities, keyword_init: true
 
-    def get_item_holdings(item)
-      request = Plaid::InvestmentsHoldingsGetRequest.new({ access_token: item.access_token })
+    def get_item_holdings(access_token:)
+      request = Plaid::InvestmentsHoldingsGetRequest.new({ access_token: access_token })
       response = client.investments_holdings_get(request)
 
       [ response.holdings, response.securities ]
     end
 
-    def get_item_investment_transactions(item, start_date:, end_date:)
+    def get_item_investment_transactions(access_token:, start_date:, end_date:)
       transactions = []
       securities = []
       offset = 0
 
       loop do
         request = Plaid::InvestmentsTransactionsGetRequest.new(
-          access_token: item.access_token,
+          access_token: access_token,
           start_date: start_date.to_s,
           end_date: end_date.to_s,
           options: { offset: offset }
