@@ -546,7 +546,7 @@ GEM
     useragent (0.16.11)
     vcr (6.3.1)
       base64
-    vernier (1.7.0)
+    vernier (1.7.1)
     view_component (3.22.0)
       activesupport (>= 5.2.0, < 8.1)
       concurrent-ruby (= 1.3.4)
