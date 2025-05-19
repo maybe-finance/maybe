@@ -18,8 +18,8 @@ class ExchangeRate::Importer
       return
     end
 
-    if clear_cache && provider_rates.empty?
-      Rails.logger.warn("Could not clear cache for #{from} to #{to} between #{start_date} and #{end_date} because provider returned no rates")
+    if provider_rates.empty?
+      Rails.logger.warn("Could not fetch rates for #{from} to #{to} between #{start_date} and #{end_date} because provider returned no rates")
       return
     end
 
