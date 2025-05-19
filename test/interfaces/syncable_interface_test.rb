@@ -17,4 +17,12 @@ module SyncableInterfaceTest
     @syncable.class.any_instance.expects(:perform_sync).with(mock_sync).once
     @syncable.perform_sync(mock_sync)
   end
+
+  test "any prior syncs for the same syncable entity are marked stale when new sync is requested" do
+    stale_sync = @syncable.sync_later
+    new_sync = @syncable.sync_later
+
+    assert_equal "stale", stale_sync.reload.status
+    assert_equal "pending", new_sync.reload.status
+  end
 end

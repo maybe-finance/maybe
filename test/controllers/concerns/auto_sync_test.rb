@@ -38,4 +38,12 @@ class AutoSyncTest < ActionDispatch::IntegrationTest
       get root_path
     end
   end
+
+  test "does not auto-sync if preference is disabled" do
+    @family.update!(auto_sync_on_login: false)
+
+    assert_no_difference "Sync.count" do
+      get root_path
+    end
+  end
 end

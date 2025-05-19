@@ -227,6 +227,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_18_133020) do
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
+    t.boolean "auto_sync_on_login", default: true, null: false
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,7 +1,7 @@
 class Sync < ApplicationRecord
-  # We run a cron that marks any syncs that have been running > 2 hours as "stale"
+  # We run a cron that marks any syncs that have not been resolved in 24 hours as "stale"
   # Syncs often become stale when new code is deployed and the worker restarts
-  STALE_AFTER = 2.hours
+  STALE_AFTER = 24.hours
 
   # The max time that a sync will show in the UI (after 5 minutes)
   VISIBLE_FOR = 5.minutes
@@ -18,9 +18,6 @@ class Sync < ApplicationRecord
   scope :ordered, -> { order(created_at: :desc) }
   scope :incomplete, -> { where("syncs.status IN (?)", %w[pending syncing]) }
   scope :visible, -> { incomplete.where("syncs.created_at > ?", VISIBLE_FOR.ago) }
-
-  # In-flight records that have exceeded the allowed runtime
-  scope :stale_candidates, -> { incomplete.where("syncs.created_at < ?", STALE_AFTER.ago) }
 
   validate :window_valid
 
@@ -54,7 +51,7 @@ class Sync < ApplicationRecord
 
   class << self
     def clean
-      stale_candidates.find_each(&:mark_stale!)
+      incomplete.where("syncs.created_at < ?", STALE_AFTER.ago).find_each(&:mark_stale!)
     end
   end
 

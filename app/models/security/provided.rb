@@ -1,6 +1,8 @@
 module Security::Provided
   extend ActiveSupport::Concern
 
+  SecurityInfoMissingError = Class.new(StandardError)
+
   class_methods do
     def provider
       registry = Provider::Registry.for_concept(:securities)
@@ -70,9 +72,11 @@ module Security::Provided
         logo_url: response.data.logo_url,
       )
     else
-      err = StandardError.new("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
-      Rails.logger.warn(err.message)
-      Sentry.capture_exception(err, level: :warning)
+      Rails.logger.warn("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
+      Sentry.capture_exception(SecurityInfoMissingError.new("Failed to get security info"), level: :warning) do |scope|
+        scope.set_tags(security_id: self.id)
+        scope.set_context("security", { id: self.id, provider_error: response.error.message })
+      end
     end
   end
 

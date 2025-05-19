@@ -71,9 +71,11 @@ class Provider::Synth < Provider
         rate = rate.dig("rates", to)
 
         if date.nil? || rate.nil?
-          message = "#{self.class.name} returned invalid rate data for pair from: #{from} to: #{to} on: #{date}.  Rate data: #{rate.inspect}"
-          Rails.logger.warn(message)
-          Sentry.capture_exception(InvalidExchangeRateError.new(message), level: :warning)
+          Rails.logger.warn("#{self.class.name} returned invalid rate data for pair from: #{from} to: #{to} on: #{date}.  Rate data: #{rate.inspect}")
+          Sentry.capture_exception(InvalidExchangeRateError.new("#{self.class.name} returned invalid rate data"), level: :warning) do |scope|
+            scope.set_context("rate", { from: from, to: to, date: date })
+          end
+
           next
         end
 
@@ -162,9 +164,11 @@ class Provider::Synth < Provider
         price = price.dig("close") || price.dig("open")
 
         if date.nil? || price.nil?
-          message = "#{self.class.name} returned invalid price data for security #{symbol} on: #{date}.  Price data: #{price.inspect}"
-          Rails.logger.warn(message)
-          Sentry.capture_exception(InvalidSecurityPriceError.new(message), level: :warning)
+          Rails.logger.warn("#{self.class.name} returned invalid price data for security #{symbol} on: #{date}.  Price data: #{price.inspect}")
+          Sentry.capture_exception(InvalidSecurityPriceError.new("#{self.class.name} returned invalid security price data"), level: :warning) do |scope|
+            scope.set_context("security", { symbol: symbol, date: date })
+          end
+
           next
         end
 
