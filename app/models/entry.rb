@@ -85,7 +85,7 @@ class Entry < ApplicationRecord
           entry.update! bulk_attributes
 
           entry.lock_saved_attributes!
-          entry.entryable.lock!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
+          entry.entryable.lock_attr!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
         end
       end
 

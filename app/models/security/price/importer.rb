@@ -18,8 +18,8 @@ class Security::Price::Importer
       return 0
     end
 
-    if clear_cache && provider_prices.empty?
-      Rails.logger.warn("Could not clear cache for #{security.ticker} between #{start_date} and #{end_date} because provider returned no prices")
+    if provider_prices.empty?
+      Rails.logger.warn("Could not fetch prices for #{security.ticker} between #{start_date} and #{end_date} because provider returned no prices")
       return 0
     end
 

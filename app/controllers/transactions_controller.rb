@@ -61,7 +61,7 @@ class TransactionsController < ApplicationController
     if @entry.save
       @entry.sync_account_later
       @entry.lock_saved_attributes!
-      @entry.transaction.lock!(:tag_ids) if @entry.transaction.tags.any?
+      @entry.transaction.lock_attr!(:tag_ids) if @entry.transaction.tags.any?
 
       flash[:notice] = "Transaction created"
 
@@ -88,7 +88,7 @@ class TransactionsController < ApplicationController
 
       @entry.sync_account_later
       @entry.lock_saved_attributes!
-      @entry.transaction.lock!(:tag_ids) if @entry.transaction.tags.any?
+      @entry.transaction.lock_attr!(:tag_ids) if @entry.transaction.tags.any?
 
       respond_to do |format|
         format.html { redirect_back_or_to account_path(@entry.account), notice: "Transaction updated" }

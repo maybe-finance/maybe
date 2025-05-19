@@ -42,17 +42,17 @@ module Enrichable
     !locked?(attr)
   end
 
-  def lock!(attr)
+  def lock_attr!(attr)
     update!(locked_attributes: locked_attributes.merge(attr.to_s => Time.current))
   end
 
-  def unlock!(attr)
+  def unlock_attr!(attr)
     update!(locked_attributes: locked_attributes.except(attr.to_s))
   end
 
   def lock_saved_attributes!
     saved_changes.keys.reject { |attr| ignored_enrichable_attributes.include?(attr) }.each do |attr|
-      lock!(attr)
+      lock_attr!(attr)
     end
   end
 
