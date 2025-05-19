@@ -16,7 +16,8 @@ class PlaidItem::ImporterTest < ActiveSupport::TestCase
     assert_equal PlaidMock::ITEM.institution_id, @plaid_item.institution_id
     assert_equal PlaidMock::ITEM.available_products, @plaid_item.available_products
     assert_equal PlaidMock::ITEM.billed_products, @plaid_item.billed_products
-    assert_not_nil @plaid_item.raw_payload
-    assert_not_nil @plaid_item.raw_institution_payload
+
+    assert_equal PlaidMock::ITEM.item_id, @plaid_item.raw_payload["item_id"]
+    assert_equal PlaidMock::INSTITUTION.institution_id, @plaid_item.raw_institution_payload["institution_id"]
   end
 end

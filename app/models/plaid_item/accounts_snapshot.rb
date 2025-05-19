@@ -41,10 +41,14 @@ class PlaidItem::AccountsSnapshot
     def account_scoped_investments_data(account_id)
       return nil unless investments_data
 
+      transactions = investments_data.transactions.select { |t| t.account_id == account_id }
+      holdings = investments_data.holdings.select { |h| h.account_id == account_id }
+      securities = transactions.count > 0 && holdings.count > 0 ? investments_data.securities : []
+
       InvestmentsData.new(
-        transactions: investments_data.transactions.select { |t| t.account_id == account_id },
-        holdings: investments_data.holdings.select { |h| h.account_id == account_id },
-        securities: investments_data.securities
+        transactions: transactions,
+        holdings: holdings,
+        securities: securities
       )
     end
 

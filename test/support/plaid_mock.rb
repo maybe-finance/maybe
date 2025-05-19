@@ -1,11 +1,19 @@
 require "ostruct"
 
+# Lightweight wrapper that allows Ostruct objects to properly serialize to JSON
+# for storage on PlaidItem / PlaidAccount JSONB columns
+class MockData < OpenStruct
+  def as_json(options = {})
+    @table.as_json(options)
+  end
+end
+
 # A basic Plaid provider mock that returns static payloads for testing
 class PlaidMock
   TransactionSyncResponse = Struct.new(:added, :modified, :removed, :cursor, keyword_init: true)
   InvestmentsResponse      = Struct.new(:holdings, :transactions, :securities, keyword_init: true)
 
-  ITEM = OpenStruct.new(
+  ITEM = MockData.new(
     item_id: "item_mock_1",
     institution_id: "ins_mock",
     institution_name: "Mock Institution",
@@ -13,31 +21,31 @@ class PlaidMock
     billed_products:     %w[transactions investments liabilities]
   )
 
-  INSTITUTION = OpenStruct.new(
+  INSTITUTION = MockData.new(
     institution_id: "ins_mock",
     institution_name: "Mock Institution"
   )
 
   ACCOUNTS = [
-    OpenStruct.new(
+    MockData.new(
       account_id: "acc_mock_1",
       name:       "Mock Checking",
       mask:       "1111",
       type:       "depository",
       subtype:    "checking",
-      balances:   OpenStruct.new(
+      balances:   MockData.new(
         current:           1_000.00,
         available:         800.00,
         iso_currency_code: "USD"
       )
     ),
-    OpenStruct.new(
+    MockData.new(
       account_id: "acc_mock_2",
       name:       "Mock Brokerage",
       mask:       "2222",
       type:       "investment",
       subtype:    "brokerage",
-      balances:   OpenStruct.new(
+      balances:   MockData.new(
         current:           15_000.00,
         available:         15_000.00,
         iso_currency_code: "USD"
@@ -46,7 +54,7 @@ class PlaidMock
   ]
 
   SECURITIES = [
-    OpenStruct.new(
+    MockData.new(
       security_id:             "sec_mock_1",
       ticker_symbol:           "AAPL",
       proxy_security_id:       nil,
@@ -55,7 +63,7 @@ class PlaidMock
       is_cash_equivalent:      false
     ),
     # Cash security representation – used to exclude cash-equivalent holdings
-    OpenStruct.new(
+    MockData.new(
       security_id:             "sec_mock_cash",
       ticker_symbol:           "CUR:USD",
       proxy_security_id:       nil,
@@ -66,7 +74,7 @@ class PlaidMock
   ]
 
   TRANSACTIONS = [
-    OpenStruct.new(
+    MockData.new(
       transaction_id:            "txn_mock_1",
       account_id:                "acc_mock_1",
       merchant_name:             "Mock Coffee",
@@ -82,7 +90,7 @@ class PlaidMock
   ]
 
   INVESTMENT_TRANSACTIONS = [
-    OpenStruct.new(
+    MockData.new(
       investment_transaction_id: "inv_txn_mock_1",
       account_id:               "acc_mock_2",
       security_id:              "sec_mock_1",
@@ -94,7 +102,7 @@ class PlaidMock
       iso_currency_code:        "USD",
       date:                     Date.current.to_s
     ),
-    OpenStruct.new(
+    MockData.new(
       investment_transaction_id: "inv_txn_mock_cash",
       account_id:               "acc_mock_2",
       security_id:              "sec_mock_cash",
@@ -109,14 +117,14 @@ class PlaidMock
   ]
 
   HOLDINGS = [
-    OpenStruct.new(
+    MockData.new(
       account_id:              "acc_mock_2",
       security_id:             "sec_mock_1",
       quantity:                10,
       institution_price:       150.00,
       iso_currency_code:       "USD"
     ),
-    OpenStruct.new(
+    MockData.new(
       account_id:              "acc_mock_2",
       security_id:             "sec_mock_cash",
       quantity:                200.0,
@@ -127,22 +135,22 @@ class PlaidMock
 
   LIABILITIES = {
     credit: [
-      OpenStruct.new(
+      MockData.new(
         account_id:              "acc_mock_1",
         minimum_payment_amount:   25.00,
-        aprs:                    [ OpenStruct.new(apr_percentage: 19.99) ]
+        aprs:                    [ MockData.new(apr_percentage: 19.99) ]
       )
     ],
     mortgage: [
-      OpenStruct.new(
+      MockData.new(
         account_id:                  "acc_mock_3",
         origination_principal_amount: 250_000,
         origination_date:             10.years.ago.to_date.to_s,
-        interest_rate:               OpenStruct.new(type: "fixed", percentage: 3.5)
+        interest_rate:               MockData.new(type: "fixed", percentage: 3.5)
       )
     ],
     student: [
-      OpenStruct.new(
+      MockData.new(
         account_id:                  "acc_mock_4",
         origination_principal_amount: 50_000,
         origination_date:             6.years.ago.to_date.to_s,
@@ -152,7 +160,7 @@ class PlaidMock
   }
 
   def get_link_token(*, **)
-    OpenStruct.new(link_token: "link-mock-123")
+    MockData.new(link_token: "link-mock-123")
   end
 
   def create_public_token(username: nil)
@@ -160,23 +168,23 @@ class PlaidMock
   end
 
   def exchange_public_token(_token)
-    OpenStruct.new(access_token: "access-mock-123")
+    MockData.new(access_token: "access-mock-123")
   end
 
   def get_item(_access_token)
-    OpenStruct.new(
+    MockData.new(
       item: ITEM
     )
   end
 
   def get_institution(institution_id)
-    OpenStruct.new(
+    MockData.new(
       institution: INSTITUTION
     )
   end
 
   def get_item_accounts(_item_or_token)
-    OpenStruct.new(accounts: ACCOUNTS)
+    MockData.new(accounts: ACCOUNTS)
   end
 
   def get_transactions(access_token, next_cursor: nil)
@@ -197,7 +205,7 @@ class PlaidMock
   end
 
   def get_item_liabilities(_item_or_token)
-    OpenStruct.new(
+    MockData.new(
       credit:   LIABILITIES[:credit],
       mortgage: LIABILITIES[:mortgage],
       student:  LIABILITIES[:student]
