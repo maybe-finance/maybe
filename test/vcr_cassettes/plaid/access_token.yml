@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 15:34:39 GMT
+      - Mon, 19 May 2025 17:24:03 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -41,7 +41,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '4991'
+      - '2892'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -56,16 +56,16 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         {
-          "public_token": "public-sandbox-cd9e5fdc-bb09-4648-a453-c3debb681883",
-          "request_id": "mf8QVG1msqNmNs7"
+          "public_token": "public-sandbox-0463cb9d-8bdb-4e01-9b33-243e1370623c",
+          "request_id": "FaSopSLAyHsZM9O"
         }
-  recorded_at: Mon, 19 May 2025 15:34:39 GMT
+  recorded_at: Mon, 19 May 2025 17:24:03 GMT
 - request:
     method: post
     uri: https://sandbox.plaid.com/item/public_token/exchange
     body:
       encoding: UTF-8
-      string: '{"public_token":"public-sandbox-cd9e5fdc-bb09-4648-a453-c3debb681883"}'
+      string: '{"public_token":"public-sandbox-0463cb9d-8bdb-4e01-9b33-243e1370623c"}'
     headers:
       Content-Type:
       - application/json
@@ -89,7 +89,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 15:34:39 GMT
+      - Mon, 19 May 2025 17:24:03 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -101,7 +101,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '165'
+      - '171'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -116,9 +116,9 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         {
-          "access_token": "access-sandbox-d531d3c9-8520-43ca-9e58-5b70b79fd1d4",
-          "item_id": "ZvlBL5eMPQtnXDV6QrR9sRedKePzMaFgzeVqA",
-          "request_id": "PfP9W8bCgpIdD2G"
+          "access_token": "access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648",
+          "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
+          "request_id": "2e1nOnm2CoOXVcH"
         }
-  recorded_at: Mon, 19 May 2025 15:34:39 GMT
+  recorded_at: Mon, 19 May 2025 17:24:03 GMT
 recorded_with: VCR 6.3.1

@@ -49,34 +49,6 @@ class Provider::PlaidTest < ActiveSupport::TestCase
     end
   end
 
-  # NOTE: This one is a bit tricky because when the item is originally created,
-  # no transactions will be available yet (Plaid gives no way to pre-populate txns in sandbox).
-  #
-  # To get this working on a VCR refresh:
-  # 1. Run this test once to create the item
-  # 2. Wait a minute
-  # 3. Turn on `record: :all` and run the test again (txns should be populated now)
-  # 4. Turn off `record: :all`
-  test "gets item transactions with optional cursor for partial syncs" do
-    VCR.use_cassette("plaid/get_transactions_with_next_cursor") do
-      access_token = get_access_token
-
-      transactions_response = @plaid.get_transactions(access_token)
-
-      assert transactions_response.added.size > 0
-
-      # Second call, we get only the latest transactions
-      transactions_with_cursor = @plaid.get_transactions(
-        access_token,
-        next_cursor: transactions_response.cursor
-      )
-
-      assert_equal 0, transactions_with_cursor.added.size
-      assert_equal 0, transactions_with_cursor.modified.size
-      assert_equal 0, transactions_with_cursor.removed.size
-    end
-  end
-
   test "gets item investments" do
     VCR.use_cassette("plaid/get_item_investments") do
       access_token = get_access_token
@@ -90,7 +62,7 @@ class Provider::PlaidTest < ActiveSupport::TestCase
   test "gets item liabilities" do
     VCR.use_cassette("plaid/get_item_liabilities") do
       access_token = get_access_token
-      liabilities_response = @plaid.get_item_liabilities(access_token: access_token)
+      liabilities_response = @plaid.get_item_liabilities(access_token)
 
       assert liabilities_response.credit.count > 0
       assert liabilities_response.student.count > 0

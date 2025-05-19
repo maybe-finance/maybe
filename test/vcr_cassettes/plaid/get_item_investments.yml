@@ -5,7 +5,7 @@ http_interactions:
     uri: https://sandbox.plaid.com/investments/holdings/get
     body:
       encoding: UTF-8
-      string: '{"access_token":"access-sandbox-d531d3c9-8520-43ca-9e58-5b70b79fd1d4"}'
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648"}'
     headers:
       Content-Type:
       - application/json
@@ -29,11 +29,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 15:34:41 GMT
+      - Mon, 19 May 2025 17:24:05 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '6200'
+      - '6199'
       Connection:
       - keep-alive
       Plaid-Version:
@@ -41,7 +41,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '340'
+      - '324'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -58,39 +58,7 @@ http_interactions:
         {
           "accounts": [
             {
-              "account_id": "MpWPx5o4yrcpZvwQrdbMuwX699pjDRCLX98NN",
-              "balances": {
-                "available": 15000,
-                "current": 15000,
-                "iso_currency_code": "USD",
-                "limit": null,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "1119",
-              "name": "Test Student Loan Account",
-              "official_name": "Plaid student",
-              "subtype": "student",
-              "type": "loan"
-            },
-            {
-              "account_id": "ZvlBL5eMPQtnXDV6QrR9sReNVVz1XAieagDPz",
-              "balances": {
-                "available": 11065.71,
-                "current": 1000,
-                "iso_currency_code": "USD",
-                "limit": 12200,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "3053",
-              "name": "Test Credit Card Account",
-              "official_name": "Plaid credit card",
-              "subtype": "credit card",
-              "type": "credit"
-            },
-            {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "balances": {
                 "available": 8000,
                 "current": 10000,
@@ -99,14 +67,30 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "7330",
+              "mask": "1122",
               "name": "Test Brokerage Account",
               "official_name": "Plaid brokerage",
               "subtype": "brokerage",
               "type": "investment"
             },
             {
-              "account_id": "edNwr51XgAcoARVZP68vsdREvv56jafrvLlJ7",
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
               "balances": {
                 "available": 10000,
                 "current": 10000,
@@ -115,16 +99,32 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "8957",
+              "mask": "4243",
               "name": "Test Depository Account",
               "official_name": "Plaid checking",
               "subtype": "checking",
               "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
             }
           ],
           "holdings": [
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "cost_basis": 2000,
               "institution_price": 100,
               "institution_price_as_of": "2025-05-08",
@@ -138,7 +138,7 @@ http_interactions:
               "vested_value": null
             },
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "cost_basis": 3000,
               "institution_price": 1,
               "institution_price_as_of": "2025-05-08",
@@ -152,7 +152,7 @@ http_interactions:
               "vested_value": null
             },
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "cost_basis": 5000,
               "institution_price": 1,
               "institution_price_as_of": "2025-05-08",
@@ -189,7 +189,7 @@ http_interactions:
             "error": null,
             "institution_id": "ins_109508",
             "institution_name": "First Platypus Bank",
-            "item_id": "ZvlBL5eMPQtnXDV6QrR9sRedKePzMaFgzeVqA",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
             "products": [
               "investments",
               "liabilities",
@@ -198,7 +198,7 @@ http_interactions:
             "update_type": "background",
             "webhook": ""
           },
-          "request_id": "He6QRKK2d3ujE2q",
+          "request_id": "uRzq5c4Y37RCNNj",
           "securities": [
             {
               "close_price": 1,
@@ -271,13 +271,13 @@ http_interactions:
             }
           ]
         }
-  recorded_at: Mon, 19 May 2025 15:34:41 GMT
+  recorded_at: Mon, 19 May 2025 17:24:05 GMT
 - request:
     method: post
     uri: https://sandbox.plaid.com/investments/transactions/get
     body:
       encoding: UTF-8
-      string: '{"access_token":"access-sandbox-d531d3c9-8520-43ca-9e58-5b70b79fd1d4","start_date":"2023-05-20","end_date":"2025-05-19","options":{"offset":0}}'
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648","start_date":"2023-05-20","end_date":"2025-05-19","options":{"offset":0}}'
     headers:
       Content-Type:
       - application/json
@@ -301,11 +301,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 15:34:42 GMT
+      - Mon, 19 May 2025 17:24:05 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '6965'
+      - '6964'
       Connection:
       - keep-alive
       Plaid-Version:
@@ -313,7 +313,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '341'
+      - '334'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -330,39 +330,7 @@ http_interactions:
         {
           "accounts": [
             {
-              "account_id": "MpWPx5o4yrcpZvwQrdbMuwX699pjDRCLX98NN",
-              "balances": {
-                "available": 15000,
-                "current": 15000,
-                "iso_currency_code": "USD",
-                "limit": null,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "1119",
-              "name": "Test Student Loan Account",
-              "official_name": "Plaid student",
-              "subtype": "student",
-              "type": "loan"
-            },
-            {
-              "account_id": "ZvlBL5eMPQtnXDV6QrR9sReNVVz1XAieagDPz",
-              "balances": {
-                "available": 11065.71,
-                "current": 1000,
-                "iso_currency_code": "USD",
-                "limit": 12200,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "3053",
-              "name": "Test Credit Card Account",
-              "official_name": "Plaid credit card",
-              "subtype": "credit card",
-              "type": "credit"
-            },
-            {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "balances": {
                 "available": 8000,
                 "current": 10000,
@@ -371,14 +339,30 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "7330",
+              "mask": "1122",
               "name": "Test Brokerage Account",
               "official_name": "Plaid brokerage",
               "subtype": "brokerage",
               "type": "investment"
             },
             {
-              "account_id": "edNwr51XgAcoARVZP68vsdREvv56jafrvLlJ7",
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
               "balances": {
                 "available": 10000,
                 "current": 10000,
@@ -387,21 +371,37 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "8957",
+              "mask": "4243",
               "name": "Test Depository Account",
               "official_name": "Plaid checking",
               "subtype": "checking",
               "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
             }
           ],
           "investment_transactions": [
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "amount": -5000,
               "cancel_transaction_id": null,
               "date": "2025-05-03",
               "fees": 0,
-              "investment_transaction_id": "oMpyjB9Dlqhb4v8gkyn6tbz4GxgR39iowXK7g",
+              "investment_transaction_id": "eBqoazM4XkiXx5gZbmD7UKRZ3jE3ABUreq4R1",
               "iso_currency_code": "USD",
               "name": "retirement contribution",
               "price": 1,
@@ -412,12 +412,12 @@ http_interactions:
               "unofficial_currency_code": null
             },
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "amount": 5000,
               "cancel_transaction_id": null,
               "date": "2025-05-03",
               "fees": 0,
-              "investment_transaction_id": "g4j7B5kXEnCwdLV7NzQPHV5l87zaWeuEklMnW",
+              "investment_transaction_id": "QLeKVkpQM4ck1qMRGp6PUPp7obKowGtwRN547",
               "iso_currency_code": "USD",
               "name": "buy money market shares with contribution cash",
               "price": 1,
@@ -428,12 +428,12 @@ http_interactions:
               "unofficial_currency_code": null
             },
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "amount": 2000,
               "cancel_transaction_id": null,
               "date": "2025-05-02",
               "fees": 0,
-              "investment_transaction_id": "8lBZ7kqmNMflM6N1rBb8udzR5Vp7MXiWExrLG",
+              "investment_transaction_id": "ZnxNgJEwM1ig5476JqZxUKeJLXNLnMUe9o6Al",
               "iso_currency_code": "USD",
               "name": "buy AAPL stock",
               "price": 100,
@@ -444,12 +444,12 @@ http_interactions:
               "unofficial_currency_code": null
             },
             {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "amount": -5000,
               "cancel_transaction_id": null,
               "date": "2025-05-01",
               "fees": 0,
-              "investment_transaction_id": "EjM3A5vK8mCjLea1GE3mCyoKvAE3kjF4djEkP",
+              "investment_transaction_id": "MQ1Awmg943IKyWlQjRXgUqXrxD6xo3CLGjJw1",
               "iso_currency_code": "USD",
               "name": "Deposit cash into brokerage account",
               "price": 1,
@@ -483,7 +483,7 @@ http_interactions:
             "error": null,
             "institution_id": "ins_109508",
             "institution_name": "First Platypus Bank",
-            "item_id": "ZvlBL5eMPQtnXDV6QrR9sRedKePzMaFgzeVqA",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
             "products": [
               "investments",
               "liabilities",
@@ -492,7 +492,7 @@ http_interactions:
             "update_type": "background",
             "webhook": ""
           },
-          "request_id": "CqfMA8GOfEA1GhG",
+          "request_id": "dTc49uKiBZWzxHS",
           "securities": [
             {
               "close_price": 1,
@@ -566,5 +566,5 @@ http_interactions:
           ],
           "total_investment_transactions": 4
         }
-  recorded_at: Mon, 19 May 2025 15:34:42 GMT
+  recorded_at: Mon, 19 May 2025 17:24:05 GMT
 recorded_with: VCR 6.3.1

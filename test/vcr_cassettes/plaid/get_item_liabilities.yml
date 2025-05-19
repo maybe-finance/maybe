@@ -5,7 +5,7 @@ http_interactions:
     uri: https://sandbox.plaid.com/liabilities/get
     body:
       encoding: UTF-8
-      string: '{"access_token":"access-sandbox-d531d3c9-8520-43ca-9e58-5b70b79fd1d4"}'
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648"}'
     headers:
       Content-Type:
       - application/json
@@ -29,11 +29,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 15:34:40 GMT
+      - Mon, 19 May 2025 17:24:04 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '4910'
+      - '4907'
       Connection:
       - keep-alive
       Plaid-Version:
@@ -41,7 +41,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '239'
+      - '253'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -58,39 +58,7 @@ http_interactions:
         {
           "accounts": [
             {
-              "account_id": "MpWPx5o4yrcpZvwQrdbMuwX699pjDRCLX98NN",
-              "balances": {
-                "available": 15000,
-                "current": 15000,
-                "iso_currency_code": "USD",
-                "limit": null,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "1119",
-              "name": "Test Student Loan Account",
-              "official_name": "Plaid student",
-              "subtype": "student",
-              "type": "loan"
-            },
-            {
-              "account_id": "ZvlBL5eMPQtnXDV6QrR9sReNVVz1XAieagDPz",
-              "balances": {
-                "available": 11065.71,
-                "current": 1000,
-                "iso_currency_code": "USD",
-                "limit": 12200,
-                "unofficial_currency_code": null
-              },
-              "holder_category": "personal",
-              "mask": "3053",
-              "name": "Test Credit Card Account",
-              "official_name": "Plaid credit card",
-              "subtype": "credit card",
-              "type": "credit"
-            },
-            {
-              "account_id": "QEbZN5mMrxTnJ4XRxba9s9pKBBx4bnuwPpWZa",
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
               "balances": {
                 "available": 8000,
                 "current": 10000,
@@ -99,14 +67,30 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "7330",
+              "mask": "1122",
               "name": "Test Brokerage Account",
               "official_name": "Plaid brokerage",
               "subtype": "brokerage",
               "type": "investment"
             },
             {
-              "account_id": "edNwr51XgAcoARVZP68vsdREvv56jafrvLlJ7",
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
               "balances": {
                 "available": 10000,
                 "current": 10000,
@@ -115,11 +99,27 @@ http_interactions:
                 "unofficial_currency_code": null
               },
               "holder_category": "personal",
-              "mask": "8957",
+              "mask": "4243",
               "name": "Test Depository Account",
               "official_name": "Plaid checking",
               "subtype": "checking",
               "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
             }
           ],
           "item": {
@@ -145,7 +145,7 @@ http_interactions:
             "error": null,
             "institution_id": "ins_109508",
             "institution_name": "First Platypus Bank",
-            "item_id": "ZvlBL5eMPQtnXDV6QrR9sRedKePzMaFgzeVqA",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
             "products": [
               "investments",
               "liabilities",
@@ -157,7 +157,7 @@ http_interactions:
           "liabilities": {
             "credit": [
               {
-                "account_id": "ZvlBL5eMPQtnXDV6QrR9sReNVVz1XAieagDPz",
+                "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
                 "aprs": [
                   {
                     "apr_percentage": 12.5,
@@ -184,8 +184,8 @@ http_interactions:
             "mortgage": null,
             "student": [
               {
-                "account_id": "MpWPx5o4yrcpZvwQrdbMuwX699pjDRCLX98NN",
-                "account_number": "52810251119",
+                "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+                "account_number": "3117529572",
                 "disbursement_dates": [
                   "2023-05-01"
                 ],
@@ -207,7 +207,7 @@ http_interactions:
                 "origination_date": "2023-05-01",
                 "origination_principal_amount": 15000,
                 "outstanding_interest_amount": 1577.16,
-                "payment_reference_number": "52810251119",
+                "payment_reference_number": "3117529572",
                 "pslf_status": {
                   "estimated_eligibility_date": null,
                   "payments_made": null,
@@ -230,7 +230,7 @@ http_interactions:
               }
             ]
           },
-          "request_id": "WJhrfTcUFBSLw9j"
+          "request_id": "nFlL291sKIy1LkJ"
         }
-  recorded_at: Mon, 19 May 2025 15:34:40 GMT
+  recorded_at: Mon, 19 May 2025 17:24:04 GMT
 recorded_with: VCR 6.3.1
