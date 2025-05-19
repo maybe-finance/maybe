@@ -18,11 +18,19 @@ module SyncableInterfaceTest
     @syncable.perform_sync(mock_sync)
   end
 
-  test "any prior syncs for the same syncable entity are marked stale when new sync is requested" do
-    stale_sync = @syncable.sync_later
-    new_sync = @syncable.sync_later
+  test "second sync request widens existing pending window" do
+    later_start = 2.days.ago.to_date
+    first_sync = @syncable.sync_later(window_start_date: later_start, window_end_date: later_start)
 
-    assert_equal "stale", stale_sync.reload.status
-    assert_equal "pending", new_sync.reload.status
+    earlier_start = 5.days.ago.to_date
+    wider_end     = Date.current
+
+    assert_no_difference "@syncable.syncs.count" do
+      @syncable.sync_later(window_start_date: earlier_start, window_end_date: wider_end)
+    end
+
+    first_sync.reload
+    assert_equal earlier_start, first_sync.window_start_date
+    assert_equal wider_end, first_sync.window_end_date
   end
 end

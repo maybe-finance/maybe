@@ -27,7 +27,7 @@ class Family::AutoMerchantDetector
     end
 
     scope.each do |transaction|
-      transaction.lock!(:merchant_id)
+      transaction.lock_attr!(:merchant_id)
 
       auto_detection = result.data.find { |c| c.transaction_id == transaction.id }
 

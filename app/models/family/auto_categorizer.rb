@@ -27,7 +27,7 @@ class Family::AutoCategorizer
     end
 
     scope.each do |transaction|
-      transaction.lock!(:category_id)
+      transaction.lock_attr!(:category_id)
 
       auto_categorization = result.data.find { |c| c.transaction_id == transaction.id }
 

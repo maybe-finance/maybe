@@ -188,4 +188,24 @@ class SyncTest < ActiveSupport::TestCase
     assert_equal "stale", stale_pending.reload.status
     assert_equal "stale", stale_syncing.reload.status
   end
+
+  test "expand_window_if_needed widens start and end dates on a pending sync" do
+    initial_start = 1.day.ago.to_date
+    initial_end   = 1.day.ago.to_date
+
+    sync = Sync.create!(
+      syncable: accounts(:depository),
+      window_start_date: initial_start,
+      window_end_date: initial_end
+    )
+
+    new_start = 5.days.ago.to_date
+    new_end   = Date.current
+
+    sync.expand_window_if_needed(new_start, new_end)
+    sync.reload
+
+    assert_equal new_start, sync.window_start_date
+    assert_equal new_end,   sync.window_end_date
+  end
 end
