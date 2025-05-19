@@ -5,7 +5,7 @@ http_interactions:
     uri: https://sandbox.plaid.com/sandbox/public_token/create
     body:
       encoding: UTF-8
-      string: '{"institution_id":"ins_56","initial_products":["transactions","investments","liabilities"],"options":{"override_username":"custom_test"}}'
+      string: '{"institution_id":"ins_109508","initial_products":["transactions","investments","liabilities"],"options":{"override_username":"custom_test"}}'
     headers:
       Content-Type:
       - application/json
@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 13:54:31 GMT
+      - Mon, 19 May 2025 15:34:33 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -41,7 +41,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '2776'
+      - '3399'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -56,16 +56,16 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         {
-          "public_token": "public-sandbox-10b2d144-5203-4b0a-93f6-9ce25af4b052",
-          "request_id": "6zPegA0EukTP72O"
+          "public_token": "public-sandbox-701c57cf-4a49-44b8-a254-9c3bda72cd66",
+          "request_id": "kQ07S8tBwKOrExd"
         }
-  recorded_at: Mon, 19 May 2025 13:54:31 GMT
+  recorded_at: Mon, 19 May 2025 15:34:33 GMT
 - request:
     method: post
     uri: https://sandbox.plaid.com/item/public_token/exchange
     body:
       encoding: UTF-8
-      string: '{"public_token":"public-sandbox-10b2d144-5203-4b0a-93f6-9ce25af4b052"}'
+      string: '{"public_token":"public-sandbox-701c57cf-4a49-44b8-a254-9c3bda72cd66"}'
     headers:
       Content-Type:
       - application/json
@@ -89,7 +89,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 13:54:31 GMT
+      - Mon, 19 May 2025 15:34:34 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -101,7 +101,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '151'
+      - '156'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -116,9 +116,9 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         {
-          "access_token": "access-sandbox-7dd1d7be-e7de-43bd-bdce-5e2d3d757cb2",
-          "item_id": "PaKznRKQV9TnKx98J5mEhVE33r3MVZC7Xkv73",
-          "request_id": "SVKjsbMsaqdHLBJ"
+          "access_token": "access-sandbox-951ad956-da38-4a99-a8fd-c5b945502da8",
+          "item_id": "5Z6pw4gd9dTA9A6ADx9WhqZBvWgPdofZkJn4z",
+          "request_id": "JLgpp0qLgiJUeWT"
         }
-  recorded_at: Mon, 19 May 2025 13:54:31 GMT
+  recorded_at: Mon, 19 May 2025 15:34:34 GMT
 recorded_with: VCR 6.3.1

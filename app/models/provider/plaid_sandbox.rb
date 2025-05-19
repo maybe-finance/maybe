@@ -6,15 +6,13 @@ class Provider::PlaidSandbox < Provider::Plaid
     @region = :us
   end
 
-  def create_public_token(institution_id: nil, products: nil, user: nil)
+  def create_public_token(username: nil)
     client.sandbox_public_token_create(
       Plaid::SandboxPublicTokenCreateRequest.new(
-        institution_id: institution_id || "ins_56", # Chase
-        initial_products: products || [ "transactions", "investments", "liabilities" ],
+        institution_id: "ins_109508", # "First Platypus Bank" (Plaid's sandbox institution that works with all products)
+        initial_products: [ "transactions", "investments", "liabilities" ],
         options: {
-          # This is a custom user we created in Plaid Dashboard
-          # See https://dashboard.plaid.com/developers/sandbox
-          override_username: user || "custom_test"
+          override_username: username || "custom_test"
         }
       )
     ).public_token

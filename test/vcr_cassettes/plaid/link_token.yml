@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 19 May 2025 12:22:57 GMT
+      - Mon, 19 May 2025 15:34:40 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -41,7 +41,7 @@ http_interactions:
       Vary:
       - Accept-Encoding
       X-Envoy-Upstream-Service-Time:
-      - '51'
+      - '74'
       X-Envoy-Decorator-Operation:
       - default.svc-apiv2:8080/*
       Strict-Transport-Security:
@@ -56,9 +56,9 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         {
-          "expiration": "2025-05-19T16:22:58Z",
-          "link_token": "link-sandbox-f8d1c8ab-86c9-4f6e-9136-8e8fce0b078a",
-          "request_id": "JOT5vEl1srPSLI4"
+          "expiration": "2025-05-19T19:34:40Z",
+          "link_token": "link-sandbox-3b445f38-abc0-4781-b6d5-271a7b1089d4",
+          "request_id": "QtzDCRM39QhsuHF"
         }
-  recorded_at: Mon, 19 May 2025 12:22:57 GMT
+  recorded_at: Mon, 19 May 2025 15:34:40 GMT
 recorded_with: VCR 6.3.1
