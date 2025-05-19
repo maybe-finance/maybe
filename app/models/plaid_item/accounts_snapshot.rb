@@ -8,7 +8,7 @@ class PlaidItem::AccountsSnapshot
   end
 
   def accounts
-    @accounts ||= plaid_provider.get_item_accounts(plaid_item).accounts
+    @accounts ||= plaid_provider.get_item_accounts(plaid_item.access_token).accounts
   end
 
   def get_account_data(account_id)
@@ -60,16 +60,16 @@ class PlaidItem::AccountsSnapshot
 
     def transactions_data
       return nil unless plaid_item.supports_product?("transactions")
-      @transactions_data ||= plaid_provider.get_item_transactions(plaid_item)
+      @transactions_data ||= plaid_provider.get_transactions(plaid_item.access_token)
     end
 
     def investments_data
       return nil unless plaid_item.supports_product?("investments")
-      @investments_data ||= plaid_provider.get_item_investments(plaid_item)
+      @investments_data ||= plaid_provider.get_item_investments(plaid_item.access_token)
     end
 
     def liabilities_data
       return nil unless plaid_item.supports_product?("liabilities")
-      @liabilities_data ||= plaid_provider.get_item_liabilities(plaid_item)
+      @liabilities_data ||= plaid_provider.get_item_liabilities(plaid_item.access_token)
     end
 end

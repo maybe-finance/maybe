@@ -2,27 +2,21 @@ require "test_helper"
 
 class PlaidAccount::ImporterTest < ActiveSupport::TestCase
   setup do
-    @mock_provider = mock("Provider::Plaid")
+    @mock_provider = PlaidMock.new
     @plaid_account = plaid_accounts(:one)
+    @plaid_item = @plaid_account.plaid_item
+
+    @accounts_snapshot = PlaidItem::AccountsSnapshot.new(@plaid_item, plaid_provider: @mock_provider)
+    @account_snapshot = @accounts_snapshot.get_account_data(@plaid_account.plaid_id)
   end
 
   test "imports account data" do
-    raw_payload = OpenStruct.new(
-      account_id: "123",
-      name: "Test Account",
-      mask: "1234",
-      type: "checking",
-      subtype: "checking",
-    )
+    PlaidAccount::Importer.new(@plaid_account, account_snapshot: @account_snapshot).import
 
-    PlaidAccount::Importer.new(@plaid_account, raw_payload, plaid_provider: @mock_provider).import
-
-    @plaid_account.reload
-
-    assert_equal "123", @plaid_account.plaid_id
-    assert_equal "Test Account", @plaid_account.name
-    assert_equal "1234", @plaid_account.mask
-    assert_equal "checking", @plaid_account.plaid_type
-    assert_equal "checking", @plaid_account.plaid_subtype
+    assert_equal @account_snapshot.account_data.account_id, @plaid_account.plaid_id
+    assert_equal @account_snapshot.account_data.name, @plaid_account.name
+    assert_equal @account_snapshot.account_data.mask, @plaid_account.mask
+    assert_equal @account_snapshot.account_data.type, @plaid_account.plaid_type
+    assert_equal @account_snapshot.account_data.subtype, @plaid_account.plaid_subtype
   end
 end

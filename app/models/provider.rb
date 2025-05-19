@@ -18,6 +18,9 @@ class Provider
   end
 
   private
+    PaginatedData = Data.define(:paginated, :first_page, :total_pages)
+    UsageData = Data.define(:used, :limit, :utilization, :plan)
+
     def with_provider_response(error_transformer: nil, &block)
       data = yield
 

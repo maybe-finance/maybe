@@ -61,13 +61,13 @@ class Provider::PlaidTest < ActiveSupport::TestCase
     VCR.use_cassette("plaid/get_transactions_with_next_cursor") do
       access_token = get_access_token
 
-      transactions_response = @plaid.get_transactions(access_token: access_token)
+      transactions_response = @plaid.get_transactions(access_token)
 
       assert transactions_response.added.size > 0
 
       # Second call, we get only the latest transactions
       transactions_with_cursor = @plaid.get_transactions(
-        access_token: access_token,
+        access_token,
         next_cursor: transactions_response.cursor
       )
 
@@ -80,7 +80,7 @@ class Provider::PlaidTest < ActiveSupport::TestCase
   test "gets item investments" do
     VCR.use_cassette("plaid/get_item_investments") do
       access_token = get_access_token
-      investments_response = @plaid.get_item_investments(access_token: access_token)
+      investments_response = @plaid.get_item_investments(access_token)
 
       assert_equal 3, investments_response.holdings.size
       assert_equal 4, investments_response.transactions.size
