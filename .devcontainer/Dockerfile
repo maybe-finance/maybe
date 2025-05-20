@@ -10,6 +10,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   imagemagick \
   iproute2 \
   libpq-dev \
+  libyaml-dev \
+  libyaml-0-2 \
   openssh-client \
   postgresql-client \
   vim
