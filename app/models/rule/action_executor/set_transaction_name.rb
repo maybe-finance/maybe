@@ -16,14 +16,11 @@ class Rule::ActionExecutor::SetTransactionName < Rule::ActionExecutor
     end
 
     scope.each do |txn|
-      Rule.transaction do
-        txn.entry.log_enrichment!(
-          attribute_name: "name",
-          attribute_value: value,
-          source: "rule"
-        )
-        txn.entry.update!(name: value)
-      end
+      txn.entry.enrich_attribute(
+        :name,
+        value,
+        source: "rule"
+      )
     end
   end
 end
