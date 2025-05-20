@@ -109,7 +109,7 @@ export default class extends Controller {
       .attr("stroke", (d, i) => `url(#link-gradient-${d.source.index}-${d.target.index}-${i})`)
       .attr("stroke-width", (d) => Math.max(1, d.width))
       .append("title")
-      .text((d) => `${nodes[d.source.index].name} → ${nodes[d.target.index].name}: ${this.currencySymbolValue}${parseFloat(d.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${d.percentage}%)`);
+      .text((d) => `${nodes[d.source.index].name} → ${nodes[d.target.index].name}: ${this.currencySymbolValue}${Number.parseFloat(d.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${d.percentage}%)`);
 
     // Draw nodes
     const node = svg
@@ -146,7 +146,9 @@ export default class extends Controller {
                   Q ${x0},${y1} ${x0},${y1 - effectiveCornerRadius}
                   L ${x0},${y0 + effectiveCornerRadius}
                   Q ${x0},${y0} ${x0 + effectiveCornerRadius},${y0} Z`;
-        } else if (isTargetNode) { // Flat left corners, round right for Categories/Surplus
+        }
+
+        if (isTargetNode) { // Flat left corners, round right for Categories/Surplus
           if (h < effectiveCornerRadius * 2) {
             return `M ${x0},${y0} L ${x1},${y0} L ${x1},${y1} L ${x0},${y1} Z`;
           }
@@ -156,9 +158,10 @@ export default class extends Controller {
                   L ${x1},${y1 - effectiveCornerRadius}
                   Q ${x1},${y1} ${x1 - effectiveCornerRadius},${y1}
                   L ${x0},${y1} Z`;
-        } else { // Fallback for intermediate nodes (e.g., "Cash Flow") - draw as a simple sharp-cornered rectangle
-          return `M ${x0},${y0} L ${x1},${y0} L ${x1},${y1} L ${x0},${y1} Z`;
         }
+
+        // Fallback for intermediate nodes (e.g., "Cash Flow") - draw as a simple sharp-cornered rectangle
+        return `M ${x0},${y0} L ${x1},${y0} L ${x1},${y1} L ${x0},${y1} Z`;
       })
       .attr("fill", (d) => d.color || "var(--color-gray-400)")
       .attr("stroke", (d) => {
@@ -195,7 +198,7 @@ export default class extends Controller {
           .style("font-size", "0.65rem"); // Explicitly set smaller font size
 
         financialDetailsTspan.append("tspan")
-          .text(stimulusControllerInstance.currencySymbolValue + parseFloat(d.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+          .text(stimulusControllerInstance.currencySymbolValue + Number.parseFloat(d.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
       });
   }
 } 
