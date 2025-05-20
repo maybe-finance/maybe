@@ -27,29 +27,21 @@ module ExchangeRate::Provided
       rate
     end
 
-    def sync_provider_rates(from:, to:, start_date:, end_date: Date.current)
+    # @return [Integer] The number of exchange rates synced
+    def import_provider_rates(from:, to:, start_date:, end_date:, clear_cache: false)
       unless provider.present?
-        Rails.logger.warn("No provider configured for ExchangeRate.sync_provider_rates")
+        Rails.logger.warn("No provider configured for ExchangeRate.import_provider_rates")
         return 0
       end
 
-      fetched_rates = provider.fetch_exchange_rates(from: from, to: to, start_date: start_date, end_date: end_date)
-
-      unless fetched_rates.success?
-        Rails.logger.error("Provider error for ExchangeRate.sync_provider_rates: #{fetched_rates.error}")
-        return 0
-      end
-
-      rates_data = fetched_rates.data.map do |rate|
-        {
-          from_currency: rate.from,
-          to_currency: rate.to,
-          date: rate.date,
-          rate: rate.rate
-        }
-      end
-
-      ExchangeRate.upsert_all(rates_data, unique_by: %i[from_currency to_currency date])
+      ExchangeRate::Importer.new(
+        exchange_rate_provider: provider,
+        from: from,
+        to: to,
+        start_date: start_date,
+        end_date: end_date,
+        clear_cache: clear_cache
+      ).import_provider_rates
     end
   end
 end

@@ -17,14 +17,11 @@ class Rule::ActionExecutor::SetTransactionMerchant < Rule::ActionExecutor
     end
 
     scope.each do |txn|
-      Rule.transaction do
-        txn.log_enrichment!(
-          attribute_name: "merchant_id",
-          attribute_value: merchant.id,
-          source: "rule"
-        )
-        txn.update!(merchant: merchant)
-      end
+      txn.enrich_attribute(
+        :merchant_id,
+        merchant.id,
+        source: "rule"
+      )
     end
   end
 end

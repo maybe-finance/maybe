@@ -1,8 +1,8 @@
-<%# locals: (account:, header: nil, chart: nil, tabs: nil) %>
+<%# locals: (account:, header: nil, chart: nil, chart_view: nil, tabs: nil) %>
 
 <%= turbo_stream_from account %>
 
-<%= turbo_frame_tag dom_id(account) do %>
+<%= turbo_frame_tag dom_id(account, :container) do %>
   <%= tag.div class: "space-y-4 pb-32" do %>
     <% if header.present? %>
       <%= header %>
@@ -13,7 +13,7 @@
     <% if chart.present? %>
       <%= chart %>
     <% else %>
-      <%= render "accounts/show/chart", account: account %>
+      <%= render "accounts/show/chart", account: account, chart_view: chart_view %>
     <% end %>
 
     <div class="min-h-[800px]" data-testid="account-details">

@@ -14,7 +14,7 @@ http_interactions:
       X-Source-Type:
       - managed
       User-Agent:
-      - Faraday v2.12.2
+      - Faraday v2.13.1
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,7 +25,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sat, 15 Mar 2025 22:18:46 GMT
+      - Fri, 16 May 2025 13:01:38 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,11 +35,11 @@ http_interactions:
       Cache-Control:
       - max-age=0, private, must-revalidate
       Etag:
-      - W/"b0b21c870fe53492404cc5ac258fa465"
+      - W/"0c93a67d0c68e6f206e2954a41aa2933"
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Rndr-Id:
-      - 44367fcb-e5b4-457d
+      - 146e30b2-e03b-47e3
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains
       Vary:
@@ -53,15 +53,15 @@ http_interactions:
       X-Render-Origin-Server:
       - Render
       X-Request-Id:
-      - 8ce9dc85-afbd-437c-b18d-ec788b712334
+      - 3cf7ade1-8066-422a-97c7-5f8b99e24296
       X-Runtime:
-      - '0.031963'
+      - '0.024284'
       X-Xss-Protection:
       - '0'
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=SwRPS1vBsrKtk%2Ftb7Ix8j%2FCWYw9tZgbJxR1FCmotWn%2FIZAE3Ri%2FUwHtvkOSqBq6HN5pLVetfem5hp%2BkqWmD5GRCVho0mp3VgRr3J1tBMwrVK2p50tfpmb3X22Jj%2BOfapq1C22PnN"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ih8sEFqAOWyINqAEtKGKPKO2lr1qAYSVeipyB5F8g2umPODXvCD4hN3G6wTTs2Q7H8CDWsqiOlYkmVvmr%2BWvl2ojOtBwO25Ahk9TbhlcgRO9nT6mEIXOSdVXJpzpRn5Ov%2FMGigpQ"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Speculation-Rules:
@@ -69,13 +69,13 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 920f6378fe582237-ORD
+      - 940b109b5df1a3d7-ORD
       Alt-Svc:
       - h3=":443"; ma=86400
       Server-Timing:
-      - cfL4;desc="?proto=TCP&rtt=26670&min_rtt=26569&rtt_var=10167&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2829&recv_bytes=922&delivery_rate=105759&cwnd=181&unsent_bytes=0&cid=f0a872e0b2909c59&ts=188&x=0"
+      - cfL4;desc="?proto=TCP&rtt=25865&min_rtt=25683&rtt_var=9996&sent=4&recv=6&lost=0&retrans=0&sent_bytes=2827&recv_bytes=922&delivery_rate=106690&cwnd=219&unsent_bytes=0&cid=e48ae188d1f86721&ts=190&x=0"
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"date":"2024-01-01","source":"USD","rates":{"GBP":0.785476}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":249830,"date":"2024-01-01"}}'
-  recorded_at: Sat, 15 Mar 2025 22:18:46 GMT
+      string: '{"data":{"date":"2024-01-01","source":"USD","rates":{"GBP":0.785476}},"meta":{"total_records":1,"credits_used":1,"credits_remaining":249734,"date":"2024-01-01"}}'
+  recorded_at: Fri, 16 May 2025 13:01:38 GMT
 recorded_with: VCR 6.3.1

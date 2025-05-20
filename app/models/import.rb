@@ -1,4 +1,6 @@
 class Import < ApplicationRecord
+  MaxRowCountExceededError = Class.new(StandardError)
+
   TYPES = %w[TransactionImport TradeImport AccountImport MintImport].freeze
   SIGNAGE_CONVENTIONS = %w[inflows_positive inflows_negative]
   SEPARATORS = [ [ "Comma (,)", "," ], [ "Semicolon (;)", ";" ] ].freeze
@@ -52,6 +54,7 @@ class Import < ApplicationRecord
   end
 
   def publish_later
+    raise MaxRowCountExceededError if row_count_exceeded?
     raise "Import is not publishable" unless publishable?
 
     update! status: :importing
@@ -60,9 +63,11 @@ class Import < ApplicationRecord
   end
 
   def publish
+    raise MaxRowCountExceededError if row_count_exceeded?
+
     import!
 
-    family.sync
+    family.sync_later
 
     update! status: :complete
   rescue => error
@@ -220,7 +225,15 @@ class Import < ApplicationRecord
     )
   end
 
+  def max_row_count
+    10000
+  end
+
   private
+    def row_count_exceeded?
+      rows.count > max_row_count
+    end
+
     def import!
       # no-op, subclasses can implement for customization of algorithm
     end

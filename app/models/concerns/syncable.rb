@@ -6,24 +6,44 @@ module Syncable
   end
 
   def syncing?
-    syncs.where(status: [ :syncing, :pending ]).any?
+    raise NotImplementedError, "Subclasses must implement the syncing? method"
   end
 
-  def sync_later(start_date: nil, parent_sync: nil)
-    new_sync = syncs.create!(start_date: start_date, parent: parent_sync)
-    SyncJob.perform_later(new_sync)
+  # Schedules a sync for syncable.  If there is an existing sync pending/syncing for this syncable,
+  # we do not create a new sync, and attempt to expand the sync window if needed.
+  def sync_later(parent_sync: nil, window_start_date: nil, window_end_date: nil)
+    Sync.transaction do
+      with_lock do
+        sync = self.syncs.incomplete.first
+
+        if sync
+          Rails.logger.info("There is an existing sync, expanding window if needed (#{sync.id})")
+          sync.expand_window_if_needed(window_start_date, window_end_date)
+        else
+          sync = self.syncs.create!(
+            parent: parent_sync,
+            window_start_date: window_start_date,
+            window_end_date: window_end_date
+          )
+
+          SyncJob.perform_later(sync)
+        end
+
+        sync
+      end
+    end
   end
 
-  def sync(start_date: nil)
-    syncs.create!(start_date: start_date).perform
+  def perform_sync(sync)
+    syncer.perform_sync(sync)
   end
 
-  def sync_data(sync, start_date: nil)
-    raise NotImplementedError, "Subclasses must implement the `sync_data` method"
+  def perform_post_sync
+    syncer.perform_post_sync
   end
 
-  def post_sync(sync)
-    # no-op, syncable can optionally provide implementation
+  def broadcast_sync_complete
+    sync_broadcaster.broadcast
   end
 
   def sync_error
@@ -31,7 +51,7 @@ module Syncable
   end
 
   def last_synced_at
-    latest_sync&.last_ran_at
+    latest_sync&.completed_at
   end
 
   def last_sync_created_at
@@ -40,6 +60,14 @@ module Syncable
 
   private
     def latest_sync
-      syncs.order(created_at: :desc).first
+      syncs.ordered.first
+    end
+
+    def syncer
+      self.class::Syncer.new(self)
+    end
+
+    def sync_broadcaster
+      self.class::SyncCompleteEvent.new(self)
     end
 end

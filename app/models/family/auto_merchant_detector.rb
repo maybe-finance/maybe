@@ -27,8 +27,6 @@ class Family::AutoMerchantDetector
     end
 
     scope.each do |transaction|
-      transaction.lock!(:merchant_id)
-
       auto_detection = result.data.find { |c| c.transaction_id == transaction.id }
 
       merchant_id = user_merchants_input.find { |m| m[:name] == auto_detection&.business_name }&.dig(:id)
@@ -46,16 +44,16 @@ class Family::AutoMerchantDetector
       merchant_id = merchant_id || ai_provider_merchant&.id
 
       if merchant_id.present?
-        Family.transaction do
-          transaction.log_enrichment!(
-            attribute_name: "merchant_id",
-            attribute_value: merchant_id,
-            source: "ai",
-          )
+        transaction.enrich_attribute(
+          :merchant_id,
+          merchant_id,
+          source: "ai"
+        )
 
-          transaction.update!(merchant_id: merchant_id)
-        end
       end
+
+      # We lock the attribute so that this Rule doesn't try to run again
+      transaction.lock_attr!(:merchant_id)
     end
   end
 

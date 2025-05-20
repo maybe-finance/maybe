@@ -45,7 +45,7 @@ class Entry < ApplicationRecord
 
   def sync_account_later
     sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
-    account.sync_later(start_date: sync_start_date)
+    account.sync_later(window_start_date: sync_start_date)
   end
 
   def entryable_name_short
@@ -85,7 +85,7 @@ class Entry < ApplicationRecord
           entry.update! bulk_attributes
 
           entry.lock_saved_attributes!
-          entry.entryable.lock!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
+          entry.entryable.lock_attr!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
         end
       end
 

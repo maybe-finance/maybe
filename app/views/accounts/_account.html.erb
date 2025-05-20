@@ -30,9 +30,13 @@
       <% end %>
     </div>
     <div class="flex items-center gap-8">
-      <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
-        <%= format_money account.balance_money %>
-      </p>
+      <% if account.syncing? %>
+        <div class="w-16 h-6 bg-loader rounded-full animate-pulse"></div>
+      <% else %>
+        <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
+          <%= format_money account.balance_money %>
+        </p>
+      <% end %>
 
       <% unless account.scheduled_for_deletion? %>
         <%= styled_form_with model: account, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>

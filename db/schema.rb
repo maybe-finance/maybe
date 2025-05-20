@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_18_181619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
@@ -227,6 +227,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
     t.string "timezone"
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
+    t.boolean "auto_sync_on_login", default: true, null: false
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -537,6 +538,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
     t.uuid "active_impersonator_session_id"
     t.datetime "subscribed_at"
     t.jsonb "prev_transaction_page_params", default: {}
+    t.jsonb "data", default: {}
     t.index ["active_impersonator_session_id"], name: "index_sessions_on_active_impersonator_session_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
@@ -547,27 +549,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["var"], name: "index_settings_on_var", unique: true
-  end
-
-  create_table "stock_exchanges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "acronym"
-    t.string "mic", null: false
-    t.string "country", null: false
-    t.string "country_code", null: false
-    t.string "city"
-    t.string "website"
-    t.string "timezone_name"
-    t.string "timezone_abbr"
-    t.string "timezone_abbr_dst"
-    t.string "currency_code"
-    t.string "currency_symbol"
-    t.string "currency_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country"], name: "index_stock_exchanges_on_country"
-    t.index ["country_code"], name: "index_stock_exchanges_on_country_code"
-    t.index ["currency_code"], name: "index_stock_exchanges_on_currency_code"
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -587,15 +568,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_13_122703) do
   create_table "syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "syncable_type", null: false
     t.uuid "syncable_id", null: false
-    t.datetime "last_ran_at"
-    t.date "start_date"
     t.string "status", default: "pending"
     t.string "error"
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "error_backtrace", array: true
     t.uuid "parent_id"
+    t.datetime "pending_at"
+    t.datetime "syncing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.date "window_start_date"
+    t.date "window_end_date"
     t.index ["parent_id"], name: "index_syncs_on_parent_id"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end

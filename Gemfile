@@ -24,11 +24,11 @@ gem "stimulus-rails"
 gem "turbo-rails"
 gem "view_component"
 gem "lookbook", ">= 2.3.7"
-
 gem "hotwire_combobox"
 
 # Background Jobs
 gem "sidekiq"
+gem "sidekiq-cron"
 
 # Monitoring
 gem "vernier"
@@ -44,6 +44,7 @@ gem "aws-sdk-s3", "~> 1.177.0", require: false
 gem "image_processing", ">= 1.2"
 
 # Other
+gem "ostruct"
 gem "bcrypt", "~> 3.1"
 gem "jwt"
 gem "faraday"
@@ -62,6 +63,10 @@ gem "plaid"
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 3.0"
 gem "activerecord-import"
+
+# State machines
+gem "aasm"
+gem "after_commit_everywhere", "~> 1.0"
 
 # AI
 gem "ruby-openai"

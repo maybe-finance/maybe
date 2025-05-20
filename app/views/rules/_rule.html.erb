@@ -50,7 +50,7 @@
           <% if rule.effective_date.nil? %>
             All past and future <%= rule.resource_type.pluralize %>
           <% else %>
-            <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date.strftime('%b %-d, %Y') %>
+            <%= rule.resource_type.pluralize %> on or after <%= rule.effective_date.strftime("%b %-d, %Y") %>
           <% end %>
         </span>
       </p>

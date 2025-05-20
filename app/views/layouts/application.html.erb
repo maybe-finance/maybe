@@ -26,7 +26,8 @@
       <%= render(
         "accounts/account_sidebar_tabs",
         family: Current.family,
-        active_account_group_tab: params[:account_group_tab] || "assets"
+        active_tab: @account_group_tab,
+        mobile: true
       ) %>
     </div>
 
@@ -80,8 +81,8 @@
         <%= yield :sidebar %>
       <% else %>
         <div class="h-full flex flex-col">
-          <div class="overflow-y-auto grow" id="account-sidebar-tabs" data-turbo-permanent>
-            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_account_group_tab: params[:account_group_tab] || "assets" %>
+          <div class="overflow-y-auto grow">
+            <%= render "accounts/account_sidebar_tabs", family: Current.family, active_tab: @account_group_tab %>
           </div>
 
           <% if Current.family.trialing? && !self_hosted? %>

@@ -1,5 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Convertible, Enrichable
+  include Syncable, Monetizable, Chartable, Linkable, Enrichable
 
   validates :name, :balance, :currency, presence: true
 
@@ -61,6 +61,18 @@ class Account < ApplicationRecord
     end
   end
 
+  def syncing?
+    self_syncing = syncs.visible.any?
+
+    # Since Plaid Items sync as a "group", if the item is syncing, even if the account
+    # sync hasn't yet started (i.e. we're still fetching the Plaid data), show it as syncing in UI.
+    if linked?
+      plaid_account&.plaid_item&.syncing? || self_syncing
+    else
+      self_syncing
+    end
+  end
+
   def institution_domain
     url_string = plaid_account&.plaid_item&.institution_url
     return nil unless url_string.present?
@@ -79,21 +91,6 @@ class Account < ApplicationRecord
   def destroy_later
     update!(scheduled_for_deletion: true, is_active: false)
     DestroyJob.perform_later(self)
-  end
-
-  def sync_data(sync, start_date: nil)
-    Rails.logger.info("Processing balances (#{linked? ? 'reverse' : 'forward'})")
-    sync_balances
-  end
-
-  def post_sync(sync)
-    family.remove_syncing_notice!
-
-    accountable.post_sync(sync)
-
-    unless sync.child?
-      family.auto_match_transfers!
-    end
   end
 
   def current_holdings
@@ -172,10 +169,4 @@ class Account < ApplicationRecord
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
   end
-
-  private
-    def sync_balances
-      strategy = linked? ? :reverse : :forward
-      Balance::Syncer.new(self, strategy: strategy).sync_balances
-    end
 end

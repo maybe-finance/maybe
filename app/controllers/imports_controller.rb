@@ -5,6 +5,8 @@ class ImportsController < ApplicationController
     @import.publish_later
 
     redirect_to import_path(@import), notice: "Your import has started in the background."
+  rescue Import::MaxRowCountExceededError
+    redirect_back_or_to import_path(@import), alert: "Your import exceeds the maximum row count of #{@import.max_row_count}."
   end
 
   def index

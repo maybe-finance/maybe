@@ -2,8 +2,8 @@ class PlaidItemsController < ApplicationController
   before_action :set_plaid_item, only: %i[destroy sync]
 
   def create
-    Current.family.plaid_items.create_from_public_token(
-      plaid_item_params[:public_token],
+    Current.family.create_plaid_item!(
+      public_token: plaid_item_params[:public_token],
       item_name: item_name,
       region: plaid_item_params[:region]
     )
