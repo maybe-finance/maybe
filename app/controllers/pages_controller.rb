@@ -80,7 +80,7 @@ class PagesController < ApplicationController
         val = ct.total.to_f.round(2)
         percentage_of_total_income = total_income_val.zero? ? 0 : (val / total_income_val * 100).round(1)
         next if val.zero?
-        
+
         node_display_name = ct.category.name
         node_value_for_label = val + income_category_values[ct.category.id] # This sum is for parent node display
         node_percentage_for_label = total_income_val.zero? ? 0 : (node_value_for_label / total_income_val * 100).round(1)
@@ -89,7 +89,7 @@ class PagesController < ApplicationController
         current_cat_idx = add_node.call("income_#{ct.category.id}", node_display_name, node_value_for_label, node_percentage_for_label, node_color)
 
         if ct.category.parent_id
-          parent_cat_idx = node_indices["income_#{ct.category.parent_id}"] 
+          parent_cat_idx = node_indices["income_#{ct.category.parent_id}"]
           parent_cat_idx ||= add_node.call("income_#{ct.category.parent.id}", ct.category.parent.name, income_category_values[ct.category.parent.id], 0, ct.category.parent.color || Category::COLORS.sample) # Parent percentage will be recalc based on its total flow
           links << { source: current_cat_idx, target: parent_cat_idx, value: val, color: node_color, percentage: percentage_of_total_income }
         else
@@ -133,10 +133,10 @@ class PagesController < ApplicationController
         surplus_idx = add_node.call("surplus_node", "Surplus", leftover, percentage_of_total_income_for_surplus, "var(--color-success)")
         links << { source: cash_flow_idx, target: surplus_idx, value: leftover, color: "var(--color-success)", percentage: percentage_of_total_income_for_surplus }
       end
-      
+
       # Update Cash Flow and Income node percentages (relative to total income)
       if node_indices["cash_flow_node"]
-        nodes[node_indices["cash_flow_node"]][:percentage] = 100.0 
+        nodes[node_indices["cash_flow_node"]][:percentage] = 100.0
       end
       # No primary income node anymore, percentages are on individual income cats relative to total_income_val
 
