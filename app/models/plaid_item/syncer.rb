@@ -10,7 +10,9 @@ class PlaidItem::Syncer
     fetch_and_import_item_data
 
     # Processes the raw Plaid data and updates internal domain objects
-    process_item_data
+    plaid_item.plaid_accounts.each do |plaid_account|
+      PlaidAccount::Processor.new(plaid_account).process
+    end
 
     # All data is synced, so we can now run an account sync to calculate historical balances and more
     plaid_item.reload.accounts.each do |account|
@@ -33,10 +35,6 @@ class PlaidItem::Syncer
 
     def fetch_and_import_item_data
       PlaidItem::Importer.new(plaid_item, plaid_provider: plaid_provider).import
-    end
-
-    def process_item_data
-      PlaidItem::Processor.new(plaid_item).process_data
     end
 
     def safe_fetch_plaid_data(method)
