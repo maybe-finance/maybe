@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class ExchangeRate::SyncerTest < ActiveSupport::TestCase
+class ExchangeRate::ImporterTest < ActiveSupport::TestCase
   include ProviderTestHelper
 
   setup do
@@ -21,13 +21,13 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
       start_date: 2.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_rates
+    ).import_provider_rates
 
     db_rates = ExchangeRate.where(from_currency: "USD", to_currency: "EUR", date: 2.days.ago.to_date..Date.current)
                            .order(:date)
@@ -53,13 +53,13 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(1.day.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
       start_date: 3.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_rates
+    ).import_provider_rates
 
     db_rates = ExchangeRate.order(:date)
     assert_equal 4, db_rates.count
@@ -75,13 +75,13 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
 
     @provider.expects(:fetch_exchange_rates).never
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
       start_date: 3.days.ago.to_date,
       end_date: Date.current
-    ).sync_provider_rates
+    ).import_provider_rates
   end
 
   # A helpful "reset" option for when we need to refresh provider data
@@ -103,14 +103,14 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(2.days.ago.to_date), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
       start_date: 2.days.ago.to_date,
       end_date: Date.current,
       clear_cache: true
-    ).sync_provider_rates
+    ).import_provider_rates
 
     db_rates = ExchangeRate.where(from_currency: "USD", to_currency: "EUR").order(:date)
     assert_equal [ 1.3, 1.4, 1.5 ], db_rates.map(&:rate)
@@ -129,13 +129,13 @@ class ExchangeRate::SyncerTest < ActiveSupport::TestCase
              .with(from: "USD", to: "EUR", start_date: get_provider_fetch_start_date(Date.current), end_date: Date.current)
              .returns(provider_response)
 
-    ExchangeRate::Syncer.new(
+    ExchangeRate::Importer.new(
       exchange_rate_provider: @provider,
       from: "USD",
       to: "EUR",
       start_date: Date.current,
       end_date: future_date
-    ).sync_provider_rates
+    ).import_provider_rates
 
     assert_equal 1, ExchangeRate.count
   end

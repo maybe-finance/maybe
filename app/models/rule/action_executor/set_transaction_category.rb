@@ -17,15 +17,11 @@ class Rule::ActionExecutor::SetTransactionCategory < Rule::ActionExecutor
     end
 
     scope.each do |txn|
-      Rule.transaction do
-        txn.log_enrichment!(
-          attribute_name: "category_id",
-          attribute_value: category.id,
-          source: "rule"
-        )
-
-        txn.update!(category: category)
-      end
+      txn.enrich_attribute(
+        :category_id,
+        category.id,
+        source: "rule"
+      )
     end
   end
 end

@@ -1,4 +1,4 @@
-class Security::Price::Syncer
+class Security::Price::Importer
   MissingSecurityPriceError = Class.new(StandardError)
   MissingStartPriceError    = Class.new(StandardError)
 
@@ -12,23 +12,30 @@ class Security::Price::Syncer
 
   # Constructs a daily series of prices for a single security over the date range.
   # Returns the number of rows upserted.
-  def sync_provider_prices
+  def import_provider_prices
     if !clear_cache && all_prices_exist?
       Rails.logger.info("No new prices to sync for #{security.ticker} between #{start_date} and #{end_date}, skipping")
       return 0
     end
 
-    if clear_cache && provider_prices.empty?
-      Rails.logger.warn("Could not clear cache for #{security.ticker} between #{start_date} and #{end_date} because provider returned no prices")
+    if provider_prices.empty?
+      Rails.logger.warn("Could not fetch prices for #{security.ticker} between #{start_date} and #{end_date} because provider returned no prices")
       return 0
     end
 
     prev_price_value = start_price_value
 
     unless prev_price_value.present?
-      error = MissingStartPriceError.new("Could not find a start price for #{security.ticker} on or before #{start_date}")
-      Rails.logger.error(error.message)
-      Sentry.capture_exception(error)
+      Rails.logger.error("Could not find a start price for #{security.ticker} on or before #{start_date}")
+
+      Sentry.capture_exception(MissingStartPriceError.new("Could not determine start price for ticker")) do |scope|
+        scope.set_tags(security_id: security.id)
+        scope.set_context("security", {
+          id: security.id,
+          start_date: start_date
+        })
+      end
+
       return 0
     end
 
@@ -75,9 +82,12 @@ class Security::Price::Syncer
         if response.success?
           response.data.index_by(&:date)
         else
-          msg = "#{security_provider.class.name} could not fetch prices for #{security.ticker} between #{provider_fetch_start_date} and #{end_date}. Provider error: #{response.error.message}"
-          Rails.logger.warn(msg)
-          Sentry.capture_exception(MissingSecurityPriceError.new(msg))
+          Rails.logger.warn("#{security_provider.class.name} could not fetch prices for #{security.ticker} between #{provider_fetch_start_date} and #{end_date}. Provider error: #{response.error.message}")
+          Sentry.capture_exception(MissingSecurityPriceError.new("Could not fetch prices for ticker"), level: :warning) do |scope|
+            scope.set_tags(security_id: security.id)
+            scope.set_context("security", { id: security.id, start_date: start_date, end_date: end_date })
+          end
+
           {}
         end
       end

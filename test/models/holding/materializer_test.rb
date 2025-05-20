@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Holding::SyncerTest < ActiveSupport::TestCase
+class Holding::MaterializerTest < ActiveSupport::TestCase
   include EntriesTestHelper
 
   setup do
@@ -14,7 +14,7 @@ class Holding::SyncerTest < ActiveSupport::TestCase
 
     # Should have yesterday's and today's holdings
     assert_difference "@account.holdings.count", 2 do
-      Holding::Syncer.new(@account, strategy: :forward).sync_holdings
+      Holding::Materializer.new(@account, strategy: :forward).materialize_holdings
     end
   end
 
@@ -23,7 +23,7 @@ class Holding::SyncerTest < ActiveSupport::TestCase
     Holding.create!(account: @account, security: @aapl, qty: 1, price: 100, amount: 100, currency: "USD", date: Date.current)
 
     assert_difference "Holding.count", -1 do
-      Holding::Syncer.new(@account, strategy: :forward).sync_holdings
+      Holding::Materializer.new(@account, strategy: :forward).materialize_holdings
     end
   end
 end

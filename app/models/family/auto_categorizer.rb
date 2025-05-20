@@ -27,23 +27,19 @@ class Family::AutoCategorizer
     end
 
     scope.each do |transaction|
-      transaction.lock!(:category_id)
-
       auto_categorization = result.data.find { |c| c.transaction_id == transaction.id }
 
       category_id = user_categories_input.find { |c| c[:name] == auto_categorization&.category_name }&.dig(:id)
 
       if category_id.present?
-        Family.transaction do
-          transaction.log_enrichment!(
-            attribute_name: "category_id",
-            attribute_value: category_id,
-            source: "ai",
-          )
-
-          transaction.update!(category_id: category_id)
-        end
+        transaction.enrich_attribute(
+          :category_id,
+          category_id,
+          source: "ai"
+        )
       end
+
+      transaction.lock_attr!(:category_id)
     end
   end
 

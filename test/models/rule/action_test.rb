@@ -21,7 +21,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
 
   test "set_transaction_category" do
     # Does not modify transactions that are locked (user edited them)
-    @txn1.lock!(:category_id)
+    @txn1.lock_attr!(:category_id)
 
     action = Rule::Action.new(
       rule: @transaction_rule,
@@ -42,7 +42,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
     tag = @family.tags.create!(name: "Rule test tag")
 
     # Does not modify transactions that are locked (user edited them)
-    @txn1.lock!(:tag_ids)
+    @txn1.lock_attr!(:tag_ids)
 
     action = Rule::Action.new(
       rule: @transaction_rule,
@@ -63,7 +63,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
     merchant = @family.merchants.create!(name: "Rule test merchant")
 
     # Does not modify transactions that are locked (user edited them)
-    @txn1.lock!(:merchant_id)
+    @txn1.lock_attr!(:merchant_id)
 
     action = Rule::Action.new(
       rule: @transaction_rule,
@@ -84,7 +84,7 @@ class Rule::ActionTest < ActiveSupport::TestCase
     new_name = "Renamed Transaction"
 
     # Does not modify transactions that are locked (user edited them)
-    @txn1.lock!(:name)
+    @txn1.lock_attr!(:name)
 
     action = Rule::Action.new(
       rule: @transaction_rule,

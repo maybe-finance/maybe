@@ -1,6 +1,8 @@
 module Security::Provided
   extend ActiveSupport::Concern
 
+  SecurityInfoMissingError = Class.new(StandardError)
+
   class_methods do
     def provider
       registry = Provider::Registry.for_concept(:securities)
@@ -49,9 +51,9 @@ module Security::Provided
     price
   end
 
-  def sync_provider_details(clear_cache: false)
+  def import_provider_details(clear_cache: false)
     unless provider.present?
-      Rails.logger.warn("No provider configured for Security.sync_provider_details")
+      Rails.logger.warn("No provider configured for Security.import_provider_details")
       return
     end
 
@@ -70,25 +72,27 @@ module Security::Provided
         logo_url: response.data.logo_url,
       )
     else
-      err = StandardError.new("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
-      Rails.logger.warn(err.message)
-      Sentry.capture_exception(err, level: :warning)
+      Rails.logger.warn("Failed to fetch security info for #{ticker} from #{provider.class.name}: #{response.error.message}")
+      Sentry.capture_exception(SecurityInfoMissingError.new("Failed to get security info"), level: :warning) do |scope|
+        scope.set_tags(security_id: self.id)
+        scope.set_context("security", { id: self.id, provider_error: response.error.message })
+      end
     end
   end
 
-  def sync_provider_prices(start_date:, end_date:, clear_cache: false)
+  def import_provider_prices(start_date:, end_date:, clear_cache: false)
     unless provider.present?
-      Rails.logger.warn("No provider configured for Security.sync_provider_prices")
+      Rails.logger.warn("No provider configured for Security.import_provider_prices")
       return 0
     end
 
-    Security::Price::Syncer.new(
+    Security::Price::Importer.new(
       security: self,
       security_provider: provider,
       start_date: start_date,
       end_date: end_date,
       clear_cache: clear_cache
-    ).sync_provider_prices
+    ).import_provider_prices
   end
 
   private

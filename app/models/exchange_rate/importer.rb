@@ -1,4 +1,4 @@
-class ExchangeRate::Syncer
+class ExchangeRate::Importer
   MissingExchangeRateError = Class.new(StandardError)
   MissingStartRateError = Class.new(StandardError)
 
@@ -12,14 +12,14 @@ class ExchangeRate::Syncer
   end
 
   # Constructs a daily series of rates for the given currency pair for date range
-  def sync_provider_rates
+  def import_provider_rates
     if !clear_cache && all_rates_exist?
       Rails.logger.info("No new rates to sync for #{from} to #{to} between #{start_date} and #{end_date}, skipping")
       return
     end
 
-    if clear_cache && provider_rates.empty?
-      Rails.logger.warn("Could not clear cache for #{from} to #{to} between #{start_date} and #{end_date} because provider returned no rates")
+    if provider_rates.empty?
+      Rails.logger.warn("Could not fetch rates for #{from} to #{to} between #{start_date} and #{end_date} because provider returned no rates")
       return
     end
 
@@ -121,7 +121,7 @@ class ExchangeRate::Syncer
         else
           message = "#{exchange_rate_provider.class.name} could not fetch exchange rate pair from: #{from} to: #{to} between: #{effective_start_date} and: #{Date.current}.  Provider error: #{provider_response.error.message}"
           Rails.logger.warn(message)
-          Sentry.capture_exception(MissingExchangeRateError.new(message))
+          Sentry.capture_exception(MissingExchangeRateError.new(message), level: :warning)
           {}
         end
       end

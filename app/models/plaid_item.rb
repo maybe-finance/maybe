@@ -56,7 +56,7 @@ class PlaidItem < ApplicationRecord
     Sync.joins("LEFT JOIN accounts a ON a.id = syncs.syncable_id AND syncs.syncable_type = 'Account'")
         .joins("LEFT JOIN plaid_accounts pa ON pa.id = a.plaid_account_id")
         .where("syncs.syncable_id = ? OR pa.plaid_item_id = ?", id, id)
-        .incomplete
+        .visible
         .exists?
   end
 
@@ -77,14 +77,14 @@ class PlaidItem < ApplicationRecord
         category = alias_matcher.match(transaction.plaid_category_detailed)
 
         if category.present?
-          PlaidItem.transaction do
-            transaction.log_enrichment!(
-              attribute_name: "category_id",
-              attribute_value: category.id,
-              source: "plaid"
-            )
-            transaction.set_category!(category)
+          # Matcher could either return a string or a Category object
+          user_category = if category.is_a?(String)
+            family.categories.find_or_create_by!(name: category)
+          else
+            category
           end
+
+          transaction.enrich_attribute(:category_id, user_category.id, source: "plaid")
         end
       end
     end

@@ -1,7 +1,7 @@
 require "test_helper"
 require "ostruct"
 
-class Account::MarketDataSyncerTest < ActiveSupport::TestCase
+class Account::MarketDataImporterTest < ActiveSupport::TestCase
   include ProviderTestHelper
 
   PROVIDER_BUFFER = 5.days
@@ -32,7 +32,7 @@ class Account::MarketDataSyncerTest < ActiveSupport::TestCase
       accountable: Depository.new
     )
 
-    # Seed a rate for the first required day so that the syncer only needs the next day forward
+    # Seed a rate for the first required day so that the importer only needs the next day forward
     existing_date = account.start_date
     ExchangeRate.create!(from_currency: "CAD", to_currency: "USD", date: existing_date, rate: 2.0)
 
@@ -49,7 +49,7 @@ class Account::MarketDataSyncerTest < ActiveSupport::TestCase
              ]))
 
     before = ExchangeRate.count
-    Account::MarketDataSyncer.new(account).sync_market_data
+    Account::MarketDataImporter.new(account).import_all
     after  = ExchangeRate.count
 
     assert_operator after, :>, before, "Should insert at least one new exchange-rate row"
@@ -100,7 +100,7 @@ class Account::MarketDataSyncerTest < ActiveSupport::TestCase
     # Ignore exchange-rate calls for this test
     @provider.stubs(:fetch_exchange_rates).returns(provider_success_response([]))
 
-    Account::MarketDataSyncer.new(account).sync_market_data
+    Account::MarketDataImporter.new(account).import_all
 
     assert_equal 1, Security::Price.where(security: security, date: trade_date).count
   end

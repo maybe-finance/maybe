@@ -1,4 +1,11 @@
 class Sync < ApplicationRecord
+  # We run a cron that marks any syncs that have not been resolved in 24 hours as "stale"
+  # Syncs often become stale when new code is deployed and the worker restarts
+  STALE_AFTER = 24.hours
+
+  # The max time that a sync will show in the UI (after 5 minutes)
+  VISIBLE_FOR = 5.minutes
+
   include AASM
 
   Error = Class.new(StandardError)
@@ -9,7 +16,8 @@ class Sync < ApplicationRecord
   has_many :children, class_name: "Sync", foreign_key: :parent_id, dependent: :destroy
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :incomplete, -> { where(status: [ :pending, :syncing ]) }
+  scope :incomplete, -> { where("syncs.status IN (?)", %w[pending syncing]) }
+  scope :visible, -> { incomplete.where("syncs.created_at > ?", VISIBLE_FOR.ago) }
 
   validate :window_valid
 
@@ -19,6 +27,7 @@ class Sync < ApplicationRecord
     state :syncing
     state :completed
     state :failed
+    state :stale
 
     after_all_transitions :log_status_change
 
@@ -32,6 +41,17 @@ class Sync < ApplicationRecord
 
     event :fail do
       transitions from: :syncing, to: :failed
+    end
+
+    # Marks a sync that never completed within the expected time window
+    event :mark_stale do
+      transitions from: %i[pending syncing], to: :stale
+    end
+  end
+
+  class << self
+    def clean
+      incomplete.where("syncs.created_at < ?", STALE_AFTER.ago).find_each(&:mark_stale!)
     end
   end
 
@@ -73,6 +93,29 @@ class Sync < ApplicationRecord
 
     # If this sync has a parent, try to finalize it so the child status propagates up the chain.
     parent&.finalize_if_all_children_finalized
+  end
+
+  # If a sync is pending, we can adjust the window if new syncs are created with a wider window.
+  def expand_window_if_needed(new_window_start_date, new_window_end_date)
+    return unless pending?
+    return if self.window_start_date.nil? && self.window_end_date.nil? # already as wide as possible
+
+    earliest_start_date = if self.window_start_date && new_window_start_date
+      [ self.window_start_date, new_window_start_date ].min
+    else
+      nil
+    end
+
+    latest_end_date = if self.window_end_date && new_window_end_date
+      [ self.window_end_date, new_window_end_date ].max
+    else
+      nil
+    end
+
+    update(
+      window_start_date: earliest_start_date,
+      window_end_date: latest_end_date
+    )
   end
 
   private
