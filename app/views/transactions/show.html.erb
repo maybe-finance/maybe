@@ -66,7 +66,7 @@
             <%= f.fields_for :entryable do |ef| %>
 
               <%= ef.collection_select :merchant_id,
-                      Current.family.merchants.alphabetically,
+                    [@entry.transaction.merchant, *Current.family.merchants.alphabetically].compact,
                     :id, :name,
                     { include_blank: t(".none"),
                       label: t(".merchant_label"),

@@ -60,6 +60,31 @@ class PlaidItem < ApplicationRecord
         .exists?
   end
 
+  def import_latest_plaid_data
+    PlaidItem::Importer.new(self, plaid_provider: plaid_provider).import
+  end
+
+  # Reads the fetched data and updates internal domain objects
+  # Generally, this should only be called within a "sync", but can be called
+  # manually to "re-sync" the already fetched data
+  def process_accounts
+    plaid_accounts.each do |plaid_account|
+      PlaidAccount::Processor.new(plaid_account).process
+    end
+  end
+
+  # Once all the data is fetched, we can schedule account syncs to calculate historical balances
+  def schedule_account_syncs(parent_sync: nil, window_start_date: nil, window_end_date: nil)
+    accounts.each do |account|
+      account.sync_later(
+        parent_sync: parent_sync,
+        window_start_date: window_start_date,
+        window_end_date: window_end_date
+      )
+    end
+  end
+
+  # Saves the raw data fetched from Plaid API for this item
   def upsert_plaid_snapshot!(item_snapshot)
     assign_attributes(
       available_products: item_snapshot.available_products,
@@ -70,6 +95,7 @@ class PlaidItem < ApplicationRecord
     save!
   end
 
+  # Saves the raw data fetched from Plaid API for this item's institution
   def upsert_plaid_institution_snapshot!(institution_snapshot)
     assign_attributes(
       institution_id: institution_snapshot.institution_id,

@@ -41,6 +41,7 @@ class PlaidAccount::Processor
 
     PlaidAccount::TransactionsProcessor.new(plaid_account).process
     PlaidAccount::InvestmentsProcessor.new(plaid_account).process
+    PlaidAccount::LiabilitiesProcessor.new(plaid_account).process
   end
 
   private
