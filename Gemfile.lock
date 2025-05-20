@@ -90,15 +90,15 @@ GEM
       activesupport
     ast (2.4.3)
     aws-eventstream (1.3.2)
-    aws-partitions (1.1093.0)
-    aws-sdk-core (3.222.3)
+    aws-partitions (1.1105.0)
+    aws-sdk-core (3.224.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.99.0)
+    aws-sdk-kms (1.101.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.177.0)
@@ -160,6 +160,7 @@ GEM
       dotenv (= 3.1.8)
       railties (>= 6.1)
     drb (2.2.1)
+    erb (5.0.1)
     erb_lint (0.9.0)
       activesupport
       better_html (>= 2.0.1)
@@ -269,7 +270,7 @@ GEM
       logtail (~> 0.1, >= 0.1.14)
       logtail-rack (~> 0.1)
       railties (>= 5.0.0)
-    loofah (2.24.0)
+    loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lookbook (2.3.9)
@@ -303,7 +304,7 @@ GEM
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
-    net-imap (0.5.7)
+    net-imap (0.5.8)
       date
       net-protocol
     net-pop (0.1.2)
@@ -332,13 +333,14 @@ GEM
     octokit (10.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
+    ostruct (0.6.1)
     pagy (9.3.4)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
-    plaid (38.0.0)
+    plaid (39.0.0)
       faraday (>= 1.0.1, < 3.0)
       faraday-multipart (>= 1.0.1, < 2.0)
     platform_agent (1.0.1)
@@ -353,10 +355,10 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.3)
+    psych (5.2.6)
       date
       stringio
-    public_suffix (6.0.1)
+    public_suffix (6.0.2)
     puma (6.6.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
@@ -364,7 +366,7 @@ GEM
     rack (3.1.15)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
-    rack-session (2.1.0)
+    rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
     rack-test (2.2.0)
@@ -413,7 +415,8 @@ GEM
       ffi (~> 1.0)
     rbs (3.9.4)
       logger
-    rdoc (6.13.1)
+    rdoc (6.14.0)
+      erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
     redis (5.4.0)
@@ -430,7 +433,7 @@ GEM
       chunky_png (~> 1.0)
       rqrcode_core (~> 2.0)
     rqrcode_core (2.0.0)
-    rubocop (1.75.4)
+    rubocop (1.75.6)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -448,12 +451,12 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
-    rubocop-rails (2.31.0)
+    rubocop-rails (2.32.0)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
       rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.38.0, < 2.0)
+      rubocop-ast (>= 1.44.0, < 2.0)
     rubocop-rails-omakase (1.1.0)
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
@@ -514,21 +517,21 @@ GEM
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
-    sorbet-runtime (0.5.12115)
+    sorbet-runtime (0.5.12117)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.7)
     stripe (15.1.0)
-    tailwindcss-rails (4.2.2)
+    tailwindcss-rails (4.2.3)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.4)
-    tailwindcss-ruby (4.1.4-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.4-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.4-arm64-darwin)
-    tailwindcss-ruby (4.1.4-x86_64-darwin)
-    tailwindcss-ruby (4.1.4-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.4-x86_64-linux-musl)
+    tailwindcss-ruby (4.1.7)
+    tailwindcss-ruby (4.1.7-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.7-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.7-arm64-darwin)
+    tailwindcss-ruby (4.1.7-x86_64-darwin)
+    tailwindcss-ruby (4.1.7-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.7-x86_64-linux-musl)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.3.2)
@@ -568,7 +571,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.37)
-    zeitwerk (2.7.2)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -614,6 +617,7 @@ DEPENDENCIES
   lucide-rails!
   mocha
   octokit
+  ostruct
   pagy
   pg (~> 1.5)
   plaid
@@ -649,7 +653,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.4.1p0
+   ruby 3.4.4p34
 
 BUNDLED WITH
-   2.6.3
+   2.6.9
