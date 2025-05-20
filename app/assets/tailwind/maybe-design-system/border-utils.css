@@ -63,6 +63,10 @@
   }
 }
 
+@utility border-divider {
+  @apply border-tertiary;
+}
+
 @utility border-subdued {
   @apply border-alpha-black-50;
 
