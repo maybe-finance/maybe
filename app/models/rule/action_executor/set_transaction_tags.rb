@@ -17,15 +17,11 @@ class Rule::ActionExecutor::SetTransactionTags < Rule::ActionExecutor
     end
 
     rows = scope.each do |txn|
-      Rule.transaction do
-        txn.log_enrichment!(
-          attribute_name: "tag_ids",
-          attribute_value: [ tag.id ],
-          source: "rule"
-        )
-
-        txn.update!(tag_ids: [ tag.id ])
-      end
+      txn.enrich_attribute(
+        :tag_ids,
+        [ tag.id ],
+        source: "rule"
+      )
     end
   end
 end
