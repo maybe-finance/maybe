@@ -34,7 +34,11 @@ module Enrichable
     ActiveRecord::Base.transaction do
       enrichable_attrs.each do |attr, value|
         self.send("#{attr}=", value)
-        log_enrichment(attribute_name: attr, attribute_value: value, source: source, metadata: metadata)
+
+        # If it's a new record, this isn't technically an "enrichment".  No logging necessary.
+        unless self.new_record?
+          log_enrichment(attribute_name: attr, attribute_value: value, source: source, metadata: metadata)
+        end
       end
 
       save
