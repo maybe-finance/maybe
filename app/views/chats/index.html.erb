@@ -3,15 +3,15 @@
     <div class="flex flex-col h-full md:p-4">
       <% if @chats.any? %>
         <div class="grow flex flex-col">
-          <h1 class="text-xl font-medium my-6">Chats</h1>
-          <div class="mb-4">
+          <div class="flex items-center justify-between my-6">
+            <h1 class="text-xl font-medium">Chats</h1>
             <%= render LinkComponent.new(
-              text: "New chat",
+              id: "new-chat",
               icon: "plus",
-              variant: :primary,
+              variant: "icon",
               href: new_chat_path,
               frame: chat_frame,
-              class: "w-full justify-center"
+              text: "New chat"
             ) %>
           </div>
           <div class="space-y-2 px-0.5">
