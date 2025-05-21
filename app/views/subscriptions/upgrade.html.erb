@@ -2,7 +2,15 @@
   <nav class="p-4">
     <h1 class="sr-only">Upgrade</h1>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
+      <%= render ButtonComponent.new(
+        text: "Settings",
+        icon: "settings",
+        icon_position: :left,
+        variant: "ghost",
+        href: settings_profile_path(return_to: request.fullpath)
+      ) %>
+
       <%= render ButtonComponent.new(
         text: "Sign out",
         icon: "log-out",
