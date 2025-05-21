@@ -68,33 +68,34 @@ class PagesController < ApplicationController
       # --- Create Central Cash Flow Node ---
       cash_flow_idx = add_node.call("cash_flow_node", "Cash Flow", total_income_val, 0, "var(--color-success)")
 
-      # --- Process Income Side ---
-      income_category_values = Hash.new(0.0)
+      # --- Process Income Side (Top-level categories only) ---
       income_totals.category_totals.each do |ct|
-        val = ct.total.to_f.round(2)
-        next if val.zero? || !ct.category.parent_id
-        income_category_values[ct.category.parent_id] += val
-      end
+        # Skip subcategories – only include root income categories
+        next if ct.category.parent_id.present?
 
-      income_totals.category_totals.each do |ct|
         val = ct.total.to_f.round(2)
-        percentage_of_total_income = total_income_val.zero? ? 0 : (val / total_income_val * 100).round(1)
         next if val.zero?
 
+        percentage_of_total_income = total_income_val.zero? ? 0 : (val / total_income_val * 100).round(1)
+
         node_display_name = ct.category.name
-        node_value_for_label = val + income_category_values[ct.category.id] # This sum is for parent node display
-        node_percentage_for_label = total_income_val.zero? ? 0 : (node_value_for_label / total_income_val * 100).round(1)
-
         node_color = ct.category.color.presence || Category::COLORS.sample
-        current_cat_idx = add_node.call("income_#{ct.category.id}", node_display_name, node_value_for_label, node_percentage_for_label, node_color)
 
-        if ct.category.parent_id
-          parent_cat_idx = node_indices["income_#{ct.category.parent_id}"]
-          parent_cat_idx ||= add_node.call("income_#{ct.category.parent.id}", ct.category.parent.name, income_category_values[ct.category.parent.id], 0, ct.category.parent.color || Category::COLORS.sample) # Parent percentage will be recalc based on its total flow
-          links << { source: current_cat_idx, target: parent_cat_idx, value: val, color: node_color, percentage: percentage_of_total_income }
-        else
-          links << { source: current_cat_idx, target: cash_flow_idx, value: val, color: node_color, percentage: percentage_of_total_income }
-        end
+        current_cat_idx = add_node.call(
+          "income_#{ct.category.id}",
+          node_display_name,
+          val,
+          percentage_of_total_income,
+          node_color
+        )
+
+        links << {
+          source: current_cat_idx,
+          target: cash_flow_idx,
+          value: val,
+          color: node_color,
+          percentage: percentage_of_total_income
+        }
       end
 
       # --- Process Expense Side (Top-level categories only) ---
