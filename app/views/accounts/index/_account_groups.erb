@@ -11,7 +11,7 @@
         <p class="ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
       <% end %>
     </div>
-    <div class="bg-container rounded-md">
+    <div class="bg-container rounded-lg shadow-border-xs">
       <% accounts.each do |account| %>
         <%= render account %>
       <% end %>
