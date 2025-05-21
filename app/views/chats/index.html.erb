@@ -16,6 +16,16 @@
       <div class="grow flex flex-col">
         <% if @chats.any? %>
           <h1 class="text-xl font-medium mb-6">Chats</h1>
+          <div class="mb-4">
+            <%= render LinkComponent.new(
+              text: "New chat",
+              icon: "plus",
+              variant: :primary,
+              href: new_chat_path,
+              frame: chat_frame,
+              class: "w-full justify-center"
+            ) %>
+          </div>
           <div class="space-y-2 px-0.5">
             <%= render @chats %>
           </div>
