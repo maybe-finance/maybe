@@ -97,33 +97,34 @@ class PagesController < ApplicationController
         end
       end
 
-      # --- Process Expense Side ---
-      expense_category_values = Hash.new(0.0)
+      # --- Process Expense Side (Top-level categories only) ---
       expense_totals.category_totals.each do |ct|
-        val = ct.total.to_f.round(2)
-        next if val.zero? || !ct.category.parent_id
-        expense_category_values[ct.category.parent_id] += val
-      end
+        # Skip subcategories – only include root expense categories to keep Sankey shallow
+        next if ct.category.parent_id.present?
 
-      expense_totals.category_totals.each do |ct|
         val = ct.total.to_f.round(2)
-        percentage_of_total_expense = total_expense_val.zero? ? 0 : (val / total_expense_val * 100).round(1)
         next if val.zero?
 
+        percentage_of_total_expense = total_expense_val.zero? ? 0 : (val / total_expense_val * 100).round(1)
+
         node_display_name = ct.category.name
-        node_value_for_label = val + expense_category_values[ct.category.id]
-        node_percentage_for_label = total_expense_val.zero? ? 0 : (node_value_for_label / total_expense_val * 100).round(1) # Percentage relative to total expenses for expense nodes
-
         node_color = ct.category.color.presence || Category::UNCATEGORIZED_COLOR
-        current_cat_idx = add_node.call("expense_#{ct.category.id}", node_display_name, node_value_for_label, node_percentage_for_label, node_color)
 
-        if ct.category.parent_id
-          parent_cat_idx = node_indices["expense_#{ct.category.parent_id}"]
-          parent_cat_idx ||= add_node.call("expense_#{ct.category.parent.id}", ct.category.parent.name, expense_category_values[ct.category.parent.id], 0, ct.category.parent.color || Category::UNCATEGORIZED_COLOR)
-          links << { source: parent_cat_idx, target: current_cat_idx, value: val, color: nodes[parent_cat_idx][:color], percentage: percentage_of_total_expense }
-        else
-          links << { source: cash_flow_idx, target: current_cat_idx, value: val, color: node_color, percentage: percentage_of_total_expense }
-        end
+        current_cat_idx = add_node.call(
+          "expense_#{ct.category.id}",
+          node_display_name,
+          val,
+          percentage_of_total_expense,
+          node_color
+        )
+
+        links << {
+          source: cash_flow_idx,
+          target: current_cat_idx,
+          value: val,
+          color: node_color,
+          percentage: percentage_of_total_expense
+        }
       end
 
       # --- Process Surplus ---
