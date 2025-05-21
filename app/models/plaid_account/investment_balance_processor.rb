@@ -1,6 +1,8 @@
 # Plaid Investment balances have a ton of edge cases.  This processor is responsible
 # for deriving "brokerage cash" vs. "total value" based on Plaid's reported balances and holdings.
 class PlaidAccount::InvestmentBalanceProcessor
+  include PlaidAccount::Securitizable
+
   attr_reader :plaid_account
 
   def initialize(plaid_account)
