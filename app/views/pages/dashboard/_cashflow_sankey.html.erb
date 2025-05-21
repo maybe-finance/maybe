@@ -14,11 +14,31 @@
     <% end %>
   </div>
 
-  <div class="w-full h-96">
-    <div
-      data-controller="sankey-chart"
-      data-sankey-chart-data-value="<%= sankey_data.to_json %>"
-      data-sankey-chart-currency-symbol-value="<%= sankey_data[:currency_symbol] %>"
-      class="w-full h-full"></div>
-  </div>
+  <% if sankey_data[:links].present? %>
+    <div class="w-full h-96">
+      <div
+        data-controller="sankey-chart"
+        data-sankey-chart-data-value="<%= sankey_data.to_json %>"
+        data-sankey-chart-currency-symbol-value="<%= sankey_data[:currency_symbol] %>"
+        class="w-full h-full"></div>
+    </div>
+  <% else %>
+    <div class="h-[300px] lg:h-[340px] bg-container py-4 flex flex-col items-center justify-center">
+      <div class="space-y-3 text-center flex flex-col items-center">
+        <%= render FilledIconComponent.new(
+          variant: :container,
+          icon: "activity" # cashflow placeholder icon
+        ) %>
+
+        <p class="text-sm font-medium text-primary">No cash flow data for this time period</p>
+        <p class="text-secondary text-sm">Add transactions to display cash flow data or expand the time period</p>
+        <%= render LinkComponent.new(
+          text: "Add transaction",
+          icon: "plus",
+          href: new_transaction_path,
+          frame: :modal
+        ) %>
+      </div>
+    </div>
+  <% end %>
 </div> 
