@@ -12,8 +12,11 @@
       <% end %>
     </div>
     <div class="bg-container rounded-lg shadow-border-xs">
-      <% accounts.each do |account| %>
+      <% accounts.each_with_index do |account, index| %>
         <%= render account %>
+        <% unless index == accounts.count - 1 %>
+          <%= render "shared/ruler" %>
+        <% end %>
       <% end %>
     </div>
   </div>

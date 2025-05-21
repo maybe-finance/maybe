@@ -132,6 +132,9 @@
                   <% end %>
                 </div>
               </details>
+              <% unless idx == classification_group.account_groups.size - 1 %>
+                <%= render "shared/ruler", classes: "mx-4 group-ruler" %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -150,3 +153,10 @@
     </div>
   <% end %>
 </div>
+
+<%# Custom style for hiding ruler when details are open %>
+<style>
+  details[open] + .group-ruler {
+    display: none;
+  }
+</style>
