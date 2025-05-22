@@ -3,12 +3,11 @@
     <h1 class="sr-only">Upgrade</h1>
 
     <div class="flex justify-end gap-2">
-      <%= render ButtonComponent.new(
-        text: "Settings",
+      <%= render LinkComponent.new(
+        text: "Account Settings",
         icon: "settings",
-        icon_position: :left,
         variant: "ghost",
-        href: settings_profile_path(return_to: request.fullpath)
+        href: settings_profile_path,
       ) %>
 
       <%= render ButtonComponent.new(
