@@ -23,7 +23,7 @@ class Security::HealthChecker
       end
 
       # Daily limit for checked securities
-      due_for_check_scope.limit(DAILY_BATCH_SIZE).find_each do |security|
+      due_for_check_scope.limit(DAILY_BATCH_SIZE).each do |security|
         new(security).run_check
       end
     end
@@ -48,6 +48,8 @@ class Security::HealthChecker
   end
 
   def run_check
+    Rails.logger.info("Running health check for #{security.ticker}")
+
     if latest_provider_price
       handle_success
     else
@@ -69,6 +71,8 @@ class Security::HealthChecker
     end
 
     def latest_provider_price
+      return nil unless provider.present?
+
       response = provider.fetch_security_price(
         symbol: security.ticker,
         exchange_operating_mic: security.exchange_operating_mic,
