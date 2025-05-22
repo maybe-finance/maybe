@@ -15,6 +15,7 @@ export default class extends Controller {
     "validationMessage",
     "selection",
     "colorPickerRadioBtn",
+    "popup",
   ];
 
   static values = {
@@ -36,6 +37,7 @@ export default class extends Controller {
         this.colorInputTarget.reportValidity();
         e.target.open = true;
       }
+      this.updatePopupPosition()
     });
 
     this.selectedIcon = null;
@@ -43,6 +45,8 @@ export default class extends Controller {
     if (!this.presetColorsValue.includes(this.colorInputTarget.value)) {
       this.colorPickerRadioBtnTarget.checked = true;
     }
+
+    document.addEventListener("mousedown", this.handleOutsideClick);
   }
 
   initPicker() {
@@ -209,6 +213,7 @@ export default class extends Controller {
     this.colorsSectionTarget.classList.add("hidden");
     this.paletteSectionTarget.classList.remove("hidden");
     this.pickerSectionTarget.classList.remove("hidden");
+    this.updatePopupPosition();
     this.picker.show();
   }
 
@@ -216,6 +221,7 @@ export default class extends Controller {
     this.colorsSectionTarget.classList.remove("hidden");
     this.paletteSectionTarget.classList.add("hidden");
     this.pickerSectionTarget.classList.add("hidden");
+    this.updatePopupPosition()
     if (this.picker) {
       this.picker.destroyAndRemove();
     }
@@ -226,6 +232,27 @@ export default class extends Controller {
       this.showColorsSection();
     } else {
       this.showPaletteSection();
+    }
+  }
+
+  handleOutsideClick = (event) => {
+    if (this.detailsTarget.open && !this.detailsTarget.contains(event.target)) {
+      this.detailsTarget.open = false;
+    }
+  };
+
+  updatePopupPosition() {
+    const popup = this.popupTarget;
+    popup.style.top = "";
+    popup.style.bottom = "";
+
+    const rect = popup.getBoundingClientRect();
+    const overflow = rect.bottom > window.innerHeight;
+
+    if (overflow) {
+      popup.style.bottom = "0px";
+    } else {
+      popup.style.bottom = "";
     }
   }
 

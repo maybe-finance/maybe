@@ -2,20 +2,20 @@
 
 <div data-controller="category" data-category-preset-colors-value="<%= Category::COLORS %>">
   <%= styled_form_with model: category, class: "space-y-4" do |f| %>
-    <section class="space-y-4 ">
+    <section class="space-y-4">
       <div class="w-fit mx-auto relative">
         <%= render partial: "color_avatar", locals: { category: category } %>
 
-        <details data-category-target="details">
+        <details data-category-target="details" data-action="mousedown->category#handleOutsideClick">
           <summary class="cursor-pointer absolute -bottom-2 -right-2 flex justify-center items-center bg-surface-inset hover:bg-surface-inset-hover border-2 w-7 h-7 border-subdued rounded-full text-secondary">
             <%= icon("pen", size: "sm") %>
           </summary>
 
-          <div class="fixed ml-8 mt-2 z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit">
+          <div class="fixed right-0 sm:right-auto mx-2 sm:ml-8 sm:mr-0 mt-2 z-50 bg-container p-4 border border-alpha-black-25 rounded-2xl shadow-xs h-fit" data-category-target="popup">
             <div class="flex gap-2 flex-col mb-4" data-category-target="selection" style="<%= "display:none;" if @category.subcategory? %>">
               <div data-category-target="pickerSection"></div>
               <h4 class="text-gray-500 text-sm">Color</h4>
-              <div class="flex gap-2 items-center" data-category-target="colorsSection">
+              <div class="flex flex-wrap md:flex-nowrap gap-2 items-center" data-category-target="colorsSection">
                 <% Category::COLORS.each do |color| %>
                   <label class="relative">
                     <%= f.radio_button :color, color, class: "sr-only peer", data: { action: "change->category#handleColorChange" } %>
@@ -40,7 +40,7 @@
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 justify-center flex-col w-87">
+            <div class="flex flex-wrap gap-2 justify-center flex-col w-auto md:w-87">
               <h4 class="text-secondary text-sm">Icon</h4>
               <div class="flex flex-wrap gap-0.5">
                 <% Category.icon_codes.each do |icon| %>
