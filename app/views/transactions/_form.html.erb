@@ -1,6 +1,6 @@
 <%# locals: (entry:, income_categories:, expense_categories:) %>
 
-<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4", data: { controller: "transaction-form" } do |f| %>
+<%= styled_form_with model: entry, url: transactions_path, class: "space-y-4" do |f| %>
   <% if entry.errors.any? %>
     <%= render "shared/form_errors", model: entry %>
   <% end %>
@@ -8,7 +8,7 @@
   <section>
     <%= render "shared/transaction_type_tabs", active_tab: params[:nature] == "inflow" ? "income" : "expense", account_id: params[:account_id] %>
 
-    <%= f.hidden_field :nature, value: params[:nature] || "outflow", data: { "transaction-form-target": "natureField" } %>
+    <%= f.hidden_field :nature, value: params[:nature] || "outflow" %>
     <%= f.hidden_field :entryable_type, value: "Transaction" %>
   </section>
 
