@@ -14,7 +14,6 @@ class Security::HealthChecker
   HEALTH_CHECK_INTERVAL = 7.days
   DAILY_BATCH_SIZE = 1000
 
-
   class << self
     def check_all
       # No daily limit for unchecked securities (they are prioritized)
