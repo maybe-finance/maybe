@@ -43,7 +43,7 @@ class Security::PriceTest < ActiveSupport::TestCase
     with_provider_response = provider_error_response(StandardError.new("Test error"))
 
     @provider.expects(:fetch_security_price)
-             .with(security, date: Date.current)
+             .with(symbol: security.ticker, exchange_operating_mic: security.exchange_operating_mic, date: Date.current)
              .returns(with_provider_response)
 
     assert_not @security.find_or_fetch_price(date: Date.current)
@@ -52,7 +52,7 @@ class Security::PriceTest < ActiveSupport::TestCase
   private
     def expect_provider_price(security:, price:, date:)
       @provider.expects(:fetch_security_price)
-               .with(security, date: date)
+               .with(symbol: security.ticker, exchange_operating_mic: security.exchange_operating_mic, date: date)
                .returns(provider_success_response(price))
     end
 

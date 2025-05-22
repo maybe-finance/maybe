@@ -24,10 +24,6 @@ class Security < ApplicationRecord
     )
   end
 
-  def has_prices?
-    exchange_operating_mic.present?
-  end
-
   private
     def upcase_symbols
       self.ticker = ticker.upcase
