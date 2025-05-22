@@ -129,9 +129,9 @@ class TradeBuilder
     def security
       ticker_symbol, exchange_operating_mic = ticker.present? ? ticker.split("|") : [ manual_ticker, nil ]
 
-      Security.find_or_create_by!(
-        ticker: ticker_symbol,
+      Security::Resolver.new(
+        ticker_symbol,
         exchange_operating_mic: exchange_operating_mic
-      )
+      ).resolve
     end
 end

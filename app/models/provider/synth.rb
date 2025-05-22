@@ -94,7 +94,8 @@ class Provider::Synth < Provider
         req.params["name"] = symbol
         req.params["dataset"] = "limited"
         req.params["country_code"] = country_code if country_code.present?
-        req.params["exchange_operating_mic"] = exchange_operating_mic if exchange_operating_mic.present?
+        # Synth uses mic_code, which encompasses both exchange_mic AND exchange_operating_mic (union)
+        req.params["mic_code"] = exchange_operating_mic if exchange_operating_mic.present?
         req.params["limit"] = 25
       end
 
@@ -132,7 +133,7 @@ class Provider::Synth < Provider
     end
   end
 
-  def fetch_security_price(symbol:, exchange_operating_mic:, date:)
+  def fetch_security_price(symbol:, exchange_operating_mic: nil, date:)
     with_provider_response do
       historical_data = fetch_security_prices(symbol:, exchange_operating_mic:, start_date: date, end_date: date)
 
@@ -142,13 +143,13 @@ class Provider::Synth < Provider
     end
   end
 
-  def fetch_security_prices(symbol:, exchange_operating_mic:, start_date:, end_date:)
+  def fetch_security_prices(symbol:, exchange_operating_mic: nil, start_date:, end_date:)
     with_provider_response do
       params = {
         start_date: start_date,
         end_date: end_date,
         operating_mic_code: exchange_operating_mic
-      }
+      }.compact
 
       data = paginate(
         "#{base_url}/tickers/#{symbol}/open-close",
