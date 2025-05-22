@@ -15,7 +15,6 @@ export default class extends Controller {
   scrollToActiveItem() {
     const activeItem = this.element?.querySelector(this.selectorValue)
 
-    console.log(activeItem)
 
     if (!activeItem) return
 
