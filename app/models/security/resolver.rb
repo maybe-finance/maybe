@@ -1,6 +1,6 @@
 class Security::Resolver
   def initialize(symbol, exchange_operating_mic: nil, country_code: nil)
-    @symbol = symbol
+    @symbol = validate_symbol!(symbol)
     @exchange_operating_mic = exchange_operating_mic
     @country_code = country_code
   end
@@ -21,6 +21,11 @@ class Security::Resolver
 
   private
     attr_reader :symbol, :exchange_operating_mic, :country_code
+
+    def validate_symbol!(symbol)
+      raise ArgumentError, "Symbol is required and cannot be blank" if symbol.blank?
+      symbol.strip.upcase
+    end
 
     def offline_security
       security = Security.find_or_initialize_by(

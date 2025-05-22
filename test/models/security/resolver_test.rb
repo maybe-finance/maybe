@@ -72,8 +72,7 @@ class Security::ResolverTest < ActiveSupport::TestCase
   end
 
   test "returns nil when symbol blank" do
-    assert_no_difference "Security.count" do
-      assert_nil Security::Resolver.new(nil).resolve
-    end
+    assert_raises(ArgumentError) { Security::Resolver.new(nil).resolve }
+    assert_raises(ArgumentError) { Security::Resolver.new("").resolve }
   end
 end
