@@ -61,17 +61,49 @@ namespace :data_migration do
 
       begin
         ActiveRecord::Base.transaction do
-          updated_holdings = Holding.where(security_id: dup_ids).update_all(security_id: keeper.id)
-          updated_trades   = Trade.where(security_id: dup_ids).update_all(security_id: keeper.id)
+          # --------------------------------------------------------------
+          # HOLDINGS
+          # --------------------------------------------------------------
+          holdings_moved   = 0
+          holdings_deleted = 0
+
+          dup_ids.each do |dup_id|
+            Holding.where(security_id: dup_id).find_each(batch_size: 1_000) do |holding|
+              # Will this holding collide with an existing keeper row?
+              conflict_exists = Holding.where(
+                account_id: holding.account_id,
+                security_id: keeper.id,
+                date:        holding.date,
+                currency:    holding.currency
+              ).exists?
+
+              if conflict_exists
+                holding.destroy!
+                holdings_deleted += 1
+              else
+                holding.update!(security_id: keeper.id)
+                holdings_moved += 1
+              end
+            end
+          end
+
+          # --------------------------------------------------------------
+          # TRADES — no uniqueness constraints -> bulk update is fine
+          # --------------------------------------------------------------
+          trades_moved = Trade.where(security_id: dup_ids).update_all(security_id: keeper.id)
 
           # Ensure no rows remain pointing at duplicates before deletion
           raise "Leftover holdings detected" if Holding.where(security_id: dup_ids).exists?
           raise "Leftover trades detected"   if Trade.where(security_id: dup_ids).exists?
 
           duplicates.each(&:destroy!)   # destroys its security_prices via dependent: :destroy
-        end
 
-        puts "[#{idx + 1}/#{duplicate_sets.size}] Merged #{dup_ids.join(', ')} → #{keeper.id} (#{updated_holdings} holdings, #{updated_trades} trades)"
+          # Log inside the transaction so counters are in-scope
+          total_holdings = holdings_moved + holdings_deleted
+          puts "[#{idx + 1}/#{duplicate_sets.size}] Merged #{dup_ids.join(', ')} → #{keeper.id} " \
+               "(#{total_holdings} holdings → #{holdings_moved} moved, #{holdings_deleted} removed, " \
+               "#{trades_moved} trades)"
+        end
       rescue => e
         puts "ERROR migrating #{dup_ids.join(', ')}: #{e.message}"
       end
