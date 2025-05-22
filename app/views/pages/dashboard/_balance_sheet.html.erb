@@ -58,10 +58,13 @@
             </div>
           </div>
 
-          <div class="shadow-border-xs rounded-lg font-medium text-sm bg-container min-w-fit">
-            <% classification_group.account_groups.each do |account_group| %>
-              <details class="group">
-                <summary class="cursor-pointer p-4 group-open:bg-surface bg-container rounded-lg flex items-center justify-between">
+          <div class="shadow-border-xs rounded-lg bg-container font-medium text-sm min-w-fit">
+            <% classification_group.account_groups.each_with_index do |account_group, idx| %>
+              <details class="group open:bg-surface
+                <%= idx == 0 ? "rounded-t-lg" : "" %>
+                <%= idx == classification_group.account_groups.size - 1 ? "rounded-b-lg" : "" %>
+              ">
+                <summary class="cursor-pointer p-4 group-open:bg-surface rounded-lg flex items-center justify-between">
                   <div class="w-40 shrink-0 flex items-center gap-4">
                     <%= icon("chevron-right", class: "group-open:rotate-90") %>
 
@@ -93,7 +96,7 @@
 
                 <div>
                   <% account_group.accounts.each_with_index do |account, idx| %>
-                    <div class="pl-12 pr-4 py-3 flex items-center bg-container justify-between text-sm font-medium">
+                    <div class="pl-12 pr-4 py-3 flex items-center justify-between text-sm font-medium">
                       <div class="flex items-center gap-3">
                         <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
@@ -129,6 +132,9 @@
                   <% end %>
                 </div>
               </details>
+              <% unless idx == classification_group.account_groups.size - 1 %>
+                <%= render "shared/ruler", classes: "mx-4 group-ruler" %>
+              <% end %>
             <% end %>
           </div>
         </div>
@@ -147,3 +153,10 @@
     </div>
   <% end %>
 </div>
+
+<%# Custom style for hiding ruler when details are open %>
+<style>
+  details[open] + .group-ruler {
+    display: none;
+  }
+</style>
