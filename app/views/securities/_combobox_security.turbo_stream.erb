@@ -1,11 +1,24 @@
 <div class="flex items-center">
   <%= image_tag(combobox_security.logo_url, class: "rounded-full h-8 w-8 inline-block mr-2" ) %>
-  <div class="flex flex-col">
-    <span class="text-sm font-medium">
-      <%= combobox_security.name.presence || combobox_security.symbol %>
-    </span>
-    <span class="text-xs text-secondary">
-      <%= "#{combobox_security.symbol} (#{combobox_security.exchange_operating_mic})" %>
-    </span>
+  <div class="flex items-center justify-between w-full">
+    <div class="flex flex-col">
+      <span class="text-sm font-medium">
+        <%= combobox_security.name.presence || combobox_security.symbol %>
+      </span>
+      <span class="text-xs text-secondary">
+        <%= "#{combobox_security.symbol} (#{combobox_security.exchange_operating_mic})" %>
+      </span>
+    </div>
+    <% if combobox_security.country_code.present? %>
+      <div class="flex items-center bg-container-inset rounded-sm px-1.5 py-1 gap-1">
+        <%= image_tag("https://hatscripts.github.io/circle-flags/flags/#{combobox_security.country_code.downcase}.svg",
+                      class: "h-4 rounded-sm", # h-3 (12px) matches text-xs, w-5 for 3:5 aspect ratio
+                      alt: "#{combobox_security.country_code.upcase} flag",
+                      title: combobox_security.country_code.upcase) %>
+        <span class="text-xs text-secondary">
+          <%= combobox_security.country_code.upcase %>
+        </span>
+      </div>
+    <% end %>
   </div>
 </div>

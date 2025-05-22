@@ -21,6 +21,7 @@ class Security < ApplicationRecord
       name: name,
       logo_url: logo_url,
       exchange_operating_mic: exchange_operating_mic,
+      country_code: country_code
     )
   end
 

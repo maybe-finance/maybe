@@ -106,6 +106,7 @@ class Provider::Synth < Provider
           name: security.dig("name"),
           logo_url: security.dig("logo_url"),
           exchange_operating_mic: security.dig("exchange", "operating_mic_code"),
+          country_code: security.dig("exchange", "country_code")
         )
       end
     end

@@ -22,6 +22,7 @@ module Security::Provided
             name: provider_security.name,
             logo_url: provider_security.logo_url,
             exchange_operating_mic: provider_security.exchange_operating_mic,
+            country_code: provider_security.country_code
           )
         end
       else

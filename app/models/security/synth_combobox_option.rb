@@ -1,7 +1,7 @@
 class Security::SynthComboboxOption
   include ActiveModel::Model
 
-  attr_accessor :symbol, :name, :logo_url, :exchange_operating_mic
+  attr_accessor :symbol, :name, :logo_url, :exchange_operating_mic, :country_code
 
   def id
     "#{symbol}|#{exchange_operating_mic}" # submitted by combobox as value
