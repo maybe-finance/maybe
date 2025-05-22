@@ -30,7 +30,6 @@ export default class extends Controller {
                           (containerRect.height / 2) +
                           (activeItemRect.height / 2)
 
-    console.log(scrollPositionX, scrollPositionY)
 
     // Smooth scroll to position
     scrollContainer.scrollTo({
