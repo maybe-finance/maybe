@@ -1,0 +1,44 @@
+<%# locals: (sankey_data:, period:) %>
+<div id="cashflow-sankey-chart">
+  <div class="flex justify-between items-center gap-4 px-4 mb-4">
+    <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
+      Cashflow
+    </h2>
+
+    <%= form_with url: root_path, method: :get, data: { controller: "auto-submit-form", turbo_frame: "cashflow_sankey_section" } do |form| %>
+      <%= form.select :cashflow_period,
+                Period.as_options,
+                { selected: period.key },
+                data: { "auto-submit-form-target": "auto" },
+                class: "bg-container border border-secondary font-medium rounded-lg px-3 py-2 text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0" %>
+    <% end %>
+  </div>
+
+  <% if sankey_data[:links].present? %>
+    <div class="w-full h-96">
+      <div
+        data-controller="sankey-chart"
+        data-sankey-chart-data-value="<%= sankey_data.to_json %>"
+        data-sankey-chart-currency-symbol-value="<%= sankey_data[:currency_symbol] %>"
+        class="w-full h-full"></div>
+    </div>
+  <% else %>
+    <div class="h-[300px] lg:h-[340px] bg-container py-4 flex flex-col items-center justify-center">
+      <div class="space-y-3 text-center flex flex-col items-center">
+        <%= render FilledIconComponent.new(
+          variant: :container,
+          icon: "activity" # cashflow placeholder icon
+        ) %>
+
+        <p class="text-sm font-medium text-primary">No cash flow data for this time period</p>
+        <p class="text-secondary text-sm">Add transactions to display cash flow data or expand the time period</p>
+        <%= render LinkComponent.new(
+          text: "Add transaction",
+          icon: "plus",
+          href: new_transaction_path,
+          frame: :modal
+        ) %>
+      </div>
+    </div>
+  <% end %>
+</div>

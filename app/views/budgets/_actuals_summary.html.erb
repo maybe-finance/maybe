@@ -12,7 +12,7 @@
       <div>
         <div class="flex h-1.5 mb-3 gap-1">
           <% budget.income_category_totals.each do |category_total| %>
-            <div class="h-full rounded-xs" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
+            <div class="h-full rounded-full" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
           <% end %>
         </div>
 
@@ -38,7 +38,7 @@
       <div>
         <div class="flex h-1.5 mb-3 gap-1">
           <% budget.expense_category_totals.each do |category_total| %>
-            <div class="h-full rounded-xs" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
+            <div class="h-full rounded-full" style="background-color: <%= category_total.category.color %>; width: <%= category_total.weight %>%"></div>
           <% end %>
         </div>
 

@@ -1,7 +1,7 @@
 <%# locals: (account:, url:) %>
 
 <%= render "accounts/form", account: account, url: url do |form| %>
-  <hr class="my-4">
+  <%= render "shared/ruler", classes: "my-4" %>
 
   <div class="space-y-2">
     <%= form.fields_for :accountable do |loan_form| %>

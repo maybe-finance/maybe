@@ -41,7 +41,7 @@
         <p class="uppercase text-xs text-secondary font-medium"><%= Current.family.name %> &middot; <%= Current.family.users.size %></p>
       </div>
       <% @users.each do |user| %>
-        <div class="flex gap-2 mt-2 items-center bg-container p-4 border border-alpha-black-25 rounded-lg">
+        <div class="flex gap-2 mt-2 items-center bg-container p-4 shadow-border-xs rounded-lg">
           <div class="w-9 h-9 shrink-0">
             <%= render "settings/user_avatar", avatar_url: user.profile_image&.variant(:small)&.url, initials: user.initials %>
           </div>

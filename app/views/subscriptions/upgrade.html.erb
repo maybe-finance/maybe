@@ -2,7 +2,14 @@
   <nav class="p-4">
     <h1 class="sr-only">Upgrade</h1>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
+      <%= render LinkComponent.new(
+        text: "Account Settings",
+        icon: "settings",
+        variant: "ghost",
+        href: settings_profile_path,
+      ) %>
+
       <%= render ButtonComponent.new(
         text: "Sign out",
         icon: "log-out",

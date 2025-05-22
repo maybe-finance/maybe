@@ -9,6 +9,8 @@
       variant: "icon",
       icon: "menu",
       href: path,
+      frame: chat_frame,
+      text: "All chats"
     ) %>
 
     <div class="grow">
@@ -24,7 +26,8 @@
         variant: "link",
         text: "Edit chat title",
         href: edit_chat_path(chat, ctx: "chat"),
-        icon: "pencil", data: { turbo_frame: dom_id(chat, "title") }) %>
+        icon: "pencil",
+        frame: dom_id(chat, "title")) %>
 
       <% menu.with_item(
         variant: "button",

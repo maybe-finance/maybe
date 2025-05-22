@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_18_181619) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_21_112347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -519,6 +519,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_18_181619) do
     t.string "exchange_acronym"
     t.string "logo_url"
     t.string "exchange_operating_mic"
+    t.boolean "offline", default: false, null: false
+    t.datetime "failed_fetch_at"
+    t.integer "failed_fetch_count", default: 0, null: false
+    t.datetime "last_health_check_at"
     t.index ["country_code"], name: "index_securities_on_country_code"
     t.index ["exchange_operating_mic"], name: "index_securities_on_exchange_operating_mic"
     t.index ["ticker", "exchange_operating_mic"], name: "index_securities_on_ticker_and_exchange_operating_mic", unique: true

@@ -11,23 +11,24 @@ class TradeImportTest < ActiveSupport::TestCase
   end
 
   test "imports trades and accounts" do
-    # Create an existing AAPL security with no exchange_operating_mic
-    aapl = Security.create!(ticker: "AAPL", exchange_operating_mic: nil)
+    aapl_resolver = mock
+    googl_resolver = mock
 
-    # We should only hit the provider for GOOGL since AAPL already exists
-    Security.expects(:search_provider).with(
-      "GOOGL",
-      exchange_operating_mic: "XNAS"
-    ).returns([
-      Security.new(
-        ticker: "GOOGL",
-        name: "Google Inc.",
-        country_code: "US",
-        exchange_mic: "XNGS",
-        exchange_operating_mic: "XNAS",
-        exchange_acronym: "NGS"
-      )
-    ]).once
+    Security::Resolver.expects(:new)
+                      .with("AAPL", exchange_operating_mic: nil)
+                      .returns(aapl_resolver)
+                      .once
+
+    Security::Resolver.expects(:new)
+                      .with("GOOGL", exchange_operating_mic: "XNAS")
+                      .returns(googl_resolver)
+                      .once
+
+    aapl = securities(:aapl)
+    googl = Security.create!(ticker: "GOOGL", exchange_operating_mic: "XNAS")
+
+    aapl_resolver.stubs(:resolve).returns(aapl)
+    googl_resolver.stubs(:resolve).returns(googl)
 
     import = <<~CSV
       date,ticker,qty,price,currency,account,name,exchange_operating_mic
@@ -55,19 +56,10 @@ class TradeImportTest < ActiveSupport::TestCase
 
     assert_difference -> { Entry.count } => 2,
                       -> { Trade.count } => 2,
-                      -> { Security.count } => 1,
                       -> { Account.count } => 1 do
       @import.publish
     end
 
     assert_equal "complete", @import.status
-
-    # Verify the securities were created/updated correctly
-    aapl.reload
-    assert_nil aapl.exchange_operating_mic
-
-    googl = Security.find_by(ticker: "GOOGL")
-    assert_equal "XNAS", googl.exchange_operating_mic
-    assert_equal "XNGS", googl.exchange_mic
   end
 end

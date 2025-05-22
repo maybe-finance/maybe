@@ -50,7 +50,6 @@
           <% else %>
             <div class="ml-auto text-right grow h-10">
               <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
-
               <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy" do %>
                 <div class="flex items-center w-8 h-4 ml-auto">
                   <div class="w-6 h-px bg-loader"></div>

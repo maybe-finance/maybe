@@ -10,9 +10,14 @@ module Security::Provided
     end
 
     def search_provider(symbol, country_code: nil, exchange_operating_mic: nil)
-      return [] if symbol.blank? || symbol.length < 2
+      return [] if provider.nil? || symbol.blank?
 
-      response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
+      params = {
+        country_code: country_code,
+        exchange_operating_mic: exchange_operating_mic
+      }.compact_blank
+
+      response = provider.search_securities(symbol, **params)
 
       if response.success?
         response.data.map do |provider_security|
@@ -22,6 +27,7 @@ module Security::Provided
             name: provider_security.name,
             logo_url: provider_security.logo_url,
             exchange_operating_mic: provider_security.exchange_operating_mic,
+            country_code: provider_security.country_code
           )
         end
       else
@@ -37,7 +43,11 @@ module Security::Provided
 
     # Make sure we have a data provider before fetching
     return nil unless provider.present?
-    response = provider.fetch_security_price(self, date: date)
+    response = provider.fetch_security_price(
+      symbol: ticker,
+      exchange_operating_mic: exchange_operating_mic,
+      date: date
+    )
 
     return nil unless response.success? # Provider error
 

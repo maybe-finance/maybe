@@ -13,7 +13,7 @@
       <% end %>
     </div>
 
-    <div class="rounded-xl bg-container-inset p-1">
+    <div class="bg-container-inset rounded-xl p-1">
       <div class="grid grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-4 py-2">
         <%= tag.p t(".name"), class: "col-span-4" %>
         <%= tag.p t(".weight"), class: "col-span-2 justify-self-end" %>
@@ -22,13 +22,12 @@
         <%= tag.p t(".return"), class: "col-span-2 justify-self-end" %>
       </div>
 
-      <div class="rounded-lg bg-container shadow-border-xs">
+      <div class="bg-container rounded-lg shadow-border-xs">
         <%= render "holdings/cash", account: @account %>
-
-        <%= render "holdings/ruler" %>
+        <%= render "shared/ruler" %>
 
         <% if @account.current_holdings.any? %>
-          <%= render partial: "holdings/holding", collection: @account.current_holdings, spacer_template: "ruler" %>
+          <%= render partial: "holdings/holding", collection: @account.current_holdings, spacer_template: "shared/ruler" %>
         <% end %>
       </div>
     </div>

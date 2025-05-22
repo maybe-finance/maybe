@@ -2,32 +2,31 @@
   <%= turbo_frame_tag chat_frame do %>
     <div class="flex flex-col h-full md:p-4">
       <% if @chats.any? %>
-        <nav class="mb-6">
-          <% back_path = @last_viewed_chat ? chat_path(@last_viewed_chat) : new_chat_path %>
-
-          <%= render LinkComponent.new(
-            variant: "icon",
-            icon: "arrow-left",
-            href: back_path,
-          ) %>
-        </nav>
-      <% end %>
-
-      <div class="grow flex flex-col">
-        <% if @chats.any? %>
-          <h1 class="text-xl font-medium mb-6">Chats</h1>
+        <div class="grow flex flex-col">
+          <div class="flex items-center justify-between my-6">
+            <h1 class="text-xl font-medium">Chats</h1>
+            <%= render LinkComponent.new(
+              id: "new-chat",
+              icon: "plus",
+              variant: "icon",
+              href: new_chat_path,
+              frame: chat_frame,
+              text: "New chat"
+            ) %>
+          </div>
           <div class="space-y-2 px-0.5">
             <%= render @chats %>
           </div>
-        <% else %>
+        </div>
+      <% else %>
+        <div class="grow flex flex-col">
           <h1 class="sr-only">Chats</h1>
           <div class="mt-auto py-8">
             <%= render "chats/ai_greeting" %>
           </div>
-
           <%= render "messages/chat_form" %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>

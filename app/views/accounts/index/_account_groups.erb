@@ -11,9 +11,12 @@
         <p class="ml-auto"><%= totals_by_currency(collection: accounts, money_method: :balance_money) %></p>
       <% end %>
     </div>
-    <div class="bg-container rounded-md">
-      <% accounts.each do |account| %>
+    <div class="bg-container rounded-lg shadow-border-xs">
+      <% accounts.each_with_index do |account, index| %>
         <%= render account %>
+        <% unless index == accounts.count - 1 %>
+          <%= render "shared/ruler" %>
+        <% end %>
       <% end %>
     </div>
   </div>

@@ -16,7 +16,7 @@
       <% import.dry_run.each do |key, count| %>
         <% resource = dry_run_resource(key) %>
 
-        <div class="flex items-center justify-between gap-2 bg-container px-5 py-3 rounded-tl-lg rounded-tr-lg">
+        <div class="flex items-center justify-between gap-2 bg-container px-5 py-3 rounded-lg">
           <div class="flex items-center gap-3">
             <%= tag.div class: class_names(resource.bg_class, resource.text_class, "w-8 h-8 rounded-full flex justify-center items-center") do %>
               <%= icon resource.icon, color: "current" %>
@@ -29,7 +29,7 @@
         </div>
 
         <% if key != import.dry_run.keys.last %>
-          <div class="h-px bg-alpha-black-50 ml-14 mr-5"></div>
+          <%= render "shared/ruler" %>
         <% end %>
       <% end %>
     </div>
