@@ -1,6 +1,8 @@
 class TradeBuilder
   include ActiveModel::Model
 
+  Error = Class.new(StandardError)
+
   attr_accessor :account, :date, :amount, :currency, :qty,
                 :price, :ticker, :manual_ticker, :type, :transfer_account_id
 
@@ -128,6 +130,10 @@ class TradeBuilder
     # Users can either look up a ticker from our provider (Synth) or enter a manual, "offline" ticker (that we won't fetch prices for)
     def security
       ticker_symbol, exchange_operating_mic = ticker.present? ? ticker.split("|") : [ manual_ticker, nil ]
+
+      unless ticker_symbol.present?
+        raise Error, "Ticker symbol is required to create a trade"
+      end
 
       Security.find_or_create_by!(
         ticker: ticker_symbol,

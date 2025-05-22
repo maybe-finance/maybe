@@ -45,7 +45,7 @@ class Security::ResolverTest < ActiveSupport::TestCase
 
     # Return in reverse-priority order to prove the sorter works
     Security.expects(:search_provider)
-            .with("TEST", exchange_operating_mic: "XNAS", country_code: nil)
+            .with("TEST", exchange_operating_mic: "XNAS")
             .returns([ other, preferred ])
 
     assert_difference "Security.count", 1 do

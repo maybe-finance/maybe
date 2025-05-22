@@ -9,6 +9,8 @@ class Security < ApplicationRecord
   validates :ticker, presence: true
   validates :ticker, uniqueness: { scope: :exchange_operating_mic, case_sensitive: false }
 
+  scope :online, -> { where(offline: false) }
+
   def current_price
     @current_price ||= find_or_fetch_price
     return nil if @current_price.nil?

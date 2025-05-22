@@ -1,5 +1,5 @@
 class SecurityHealthCheckJob < ApplicationJob
-  queue_as :default
+  queue_as :scheduled
 
   def perform
     Security::HealthChecker.new.perform

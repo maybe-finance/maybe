@@ -108,11 +108,12 @@ class Security::Resolver
     end
 
     def provider_search_result
-      @provider_search_result ||= Security.search_provider(
-        symbol,
+      params = {
         exchange_operating_mic: exchange_operating_mic,
         country_code: country_code
-      )
+      }.compact_blank
+
+      @provider_search_result ||= Security.search_provider(symbol, **params)
     end
 
     # Non-exhaustive list of common country codes for help in choosing "close" matches

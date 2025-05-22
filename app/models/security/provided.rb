@@ -12,7 +12,12 @@ module Security::Provided
     def search_provider(symbol, country_code: nil, exchange_operating_mic: nil)
       return [] if provider.nil? || symbol.blank?
 
-      response = provider.search_securities(symbol, country_code: country_code, exchange_operating_mic: exchange_operating_mic)
+      params = {
+        country_code: country_code,
+        exchange_operating_mic: exchange_operating_mic
+      }.compact_blank
+
+      response = provider.search_securities(symbol, **params)
 
       if response.success?
         response.data.map do |provider_security|

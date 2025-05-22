@@ -76,42 +76,25 @@ class TradeImport < Import
   end
 
   private
-    def find_or_create_security(ticker:, exchange_operating_mic:)
-      # Normalize empty string to nil for consistency
-      exchange_operating_mic = nil if exchange_operating_mic.blank?
+    def find_or_create_security(ticker: nil, exchange_operating_mic: nil)
+      return nil unless ticker.present?
 
-      # First try to find an exact match in our DB, or if no exchange_operating_mic is provided, find by ticker only
-      internal_security = if exchange_operating_mic.present?
-        Security.find_by(ticker:, exchange_operating_mic:)
-      else
-        Security.find_by(ticker:)
-      end
+      # Avoids resolving the same security over and over again (resolver potentially makes network calls)
+      @security_cache ||= {}
 
-      return internal_security if internal_security.present?
+      cache_key = [ ticker, exchange_operating_mic ].compact.join(":")
 
-      # If security prices provider isn't properly configured or available, create with nil exchange_operating_mic
-      return Security.find_or_create_by!(ticker: ticker&.upcase, exchange_operating_mic: nil) unless Security.provider.present?
+      security = @security_cache[cache_key]
 
-      # Cache provider responses so that when we're looping through rows and importing,
-      # we only hit our provider for the unique combinations of ticker / exchange_operating_mic
-      cache_key = [ ticker, exchange_operating_mic ]
-      @provider_securities_cache ||= {}
+      return security if security.present?
 
-      provider_security = @provider_securities_cache[cache_key] ||= begin
-        Security.search_provider(
-          ticker,
-          exchange_operating_mic: exchange_operating_mic
-        ).first
-      end
+      security = Security::Resolver.new(
+        ticker,
+        exchange_operating_mic: exchange_operating_mic.presence
+      ).resolve
 
-      return Security.find_or_create_by!(ticker: ticker&.upcase, exchange_operating_mic: nil) if provider_security.nil?
+      @security_cache[cache_key] = security
 
-      Security.find_or_create_by!(ticker: provider_security[:ticker]&.upcase, exchange_operating_mic: provider_security[:exchange_operating_mic]&.upcase) do |security|
-        security.name = provider_security[:name]
-        security.country_code = provider_security[:country_code]
-        security.logo_url = provider_security[:logo_url]
-        security.exchange_acronym = provider_security[:exchange_acronym]
-        security.exchange_mic = provider_security[:exchange_mic]
-      end
+      security
     end
 end
