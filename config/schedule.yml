@@ -1,5 +1,5 @@
 import_market_data:
-  cron: "0 22 * * 1-5" # 5:00 PM EST / 6:00 PM EDT (NY time)
+  cron: "0 22 * * 1-5" # 5:00 PM EST / 6:00 PM EDT (NY time) Monday through Friday
   class: "ImportMarketDataJob"
   queue: "scheduled"
   description: "Imports market data daily at 5:00 PM EST (1 hour after market close)"
@@ -12,3 +12,9 @@ clean_syncs:
   class: "SyncCleanerJob"
   queue: "scheduled"
   description: "Cleans up stale syncs"
+
+run_security_health_checks:
+  cron: "0 2 * * 1-5" # 2:00 AM EST / 3:00 AM EDT (NY time) Monday through Friday
+  class: "SecurityHealthCheckJob"
+  queue: "scheduled"
+  description: "Runs security health checks to detect issues with security data"
