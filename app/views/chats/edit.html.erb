@@ -1,8 +1,9 @@
 <%= turbo_frame_tag dom_id(@chat, :title), class: "block" do %>
-  <% bg_class = params[:ctx] == "chat" ? "bg-container" : "bg-container-inset" %>
-  <%= styled_form_with model: @chat,
-                       class: class_names("p-1 rounded-md font-medium text-primary w-full", bg_class),
-                       data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } do |f| %>
-    <%= f.text_field :title, data: { auto_submit_form_target: "auto" }, inline: true %>
+  <%= styled_form_with model: @chat, data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } do |f| %>
+    <%= f.text_field :title,
+      data: { auto_submit_form_target: "auto" },
+      autofocus: true,
+      inline: true,
+      class: "w-full rounded-md px-2 py-1 text-sm font-medium bg-transparent" %>
   <% end %>
 <% end %>

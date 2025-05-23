@@ -2,7 +2,9 @@
 
 <%= tag.div class: "flex items-center justify-between px-4 py-3 bg-container shadow-border-xs rounded-lg" do %>
   <div class="grow">
-    <%= render "chats/chat_title", chat: chat, ctx: "list" %>
+    <%= turbo_frame_tag dom_id(chat, :title) do %>
+      <%= render "chats/chat_title", chat: chat, ctx: "list" %>
+    <% end %>
 
     <p class="text-sm text-secondary">
       <%= time_ago_in_words(chat.updated_at) %> ago
@@ -10,7 +12,13 @@
   </div>
 
   <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
-    <% menu.with_item(variant: "link", text: "Edit chat", href: edit_chat_path(chat), icon: "pencil", frame: dom_id(chat, "title")) %>
+    <% menu.with_item(
+      variant: "link", 
+      text: "Edit chat title", 
+      href: edit_chat_path(chat, ctx: "list"), 
+      icon: "pencil", 
+      frame: dom_id(chat, "title")) %>
+      
     <% menu.with_item(
       variant: "button",
       text: "Delete chat",
