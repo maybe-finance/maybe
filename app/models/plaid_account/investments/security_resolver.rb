@@ -4,6 +4,7 @@ class PlaidAccount::Investments::SecurityResolver
 
   def initialize(plaid_account)
     @plaid_account = plaid_account
+    @security_cache = {}
   end
 
   # Resolves an internal Security record for a given Plaid security ID
@@ -12,15 +13,6 @@ class PlaidAccount::Investments::SecurityResolver
     return response if response.present?
 
     plaid_security = get_plaid_security(plaid_security_id)
-
-    unless plaid_security
-      report_unresolvable_security(plaid_security_id)
-      return Response.new(security: nil, cash_equivalent?: false)
-    end
-
-    if brokerage_cash?(plaid_security)
-      return Response.new(security: nil, cash_equivalent?: true)
-    end
 
     if plaid_security.nil?
       report_unresolvable_security(plaid_security_id)
