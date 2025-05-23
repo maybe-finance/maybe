@@ -6,7 +6,7 @@ class PlaidAccount::Transactions::Processor
   def process
     # Each entry is processed inside a transaction, but to avoid locking up the DB when
     # there are hundreds or thousands of transactions, we process them individually.
-    modified_transactions.find_each do |transaction|
+    modified_transactions.each do |transaction|
       PlaidEntry::Processor.new(
         transaction,
         plaid_account: plaid_account,
@@ -15,7 +15,7 @@ class PlaidAccount::Transactions::Processor
     end
 
     PlaidAccount.transaction do
-      removed_transactions.find_each do |transaction|
+      removed_transactions.each do |transaction|
         remove_plaid_transaction(transaction)
       end
     end

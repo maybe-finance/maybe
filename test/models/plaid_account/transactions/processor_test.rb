@@ -15,16 +15,19 @@ class PlaidAccount::Transactions::ProcessorTest < ActiveSupport::TestCase
       removed: []
     })
 
-    mock_processor = mock("PlaidEntry::TransactionProcessor")
-    PlaidEntry::TransactionProcessor.expects(:new)
-                                    .with(added_transactions.first, plaid_account: @plaid_account)
-                                    .returns(mock_processor)
-                                    .once
+    mock_processor = mock("PlaidEntry::Processor")
+    category_matcher_mock = mock("PlaidAccount::Transactions::CategoryMatcher")
 
-    PlaidEntry::TransactionProcessor.expects(:new)
-                                    .with(modified_transactions.first, plaid_account: @plaid_account)
-                                    .returns(mock_processor)
-                                    .once
+    PlaidAccount::Transactions::CategoryMatcher.stubs(:new).returns(category_matcher_mock)
+    PlaidEntry::Processor.expects(:new)
+                         .with(added_transactions.first, plaid_account: @plaid_account, category_matcher: category_matcher_mock)
+                         .returns(mock_processor)
+                         .once
+
+    PlaidEntry::Processor.expects(:new)
+                         .with(modified_transactions.first, plaid_account: @plaid_account, category_matcher: category_matcher_mock)
+                         .returns(mock_processor)
+                         .once
 
     mock_processor.expects(:process).twice
 

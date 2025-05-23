@@ -27,7 +27,7 @@ class PlaidAccount::Investments::HoldingsProcessor
   end
 
   private
-    attr_reader :plaid_account
+    attr_reader :plaid_account, :security_resolver
 
     def account
       plaid_account.account
