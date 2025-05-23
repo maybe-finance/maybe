@@ -44,9 +44,9 @@ class PlaidAccount::Processor
         account.assign_attributes(
           accountable: map_accountable(plaid_account.plaid_type),
           subtype: map_subtype(plaid_account.plaid_type, plaid_account.plaid_subtype),
-          balance: balance,
+          balance: balance_calculator.balance,
           currency: plaid_account.currency,
-          cash_balance: cash_balance
+          cash_balance: balance_calculator.cash_balance
         )
 
         account.save!
@@ -78,26 +78,15 @@ class PlaidAccount::Processor
       report_exception(e)
     end
 
-    def balance
-      case plaid_account.plaid_type
-      when "investment"
-        investment_balance_processor.balance
+    def balance_calculator
+      if plaid_account.plaid_type == "investment"
+        @balance_calculator ||= PlaidAccount::Investments::BalanceCalculator.new(plaid_account, security_resolver: security_resolver)
       else
-        plaid_account.current_balance || plaid_account.available_balance
+        OpenStruct.new(
+          balance: plaid_account.current_balance || plaid_account.available_balance,
+          cash_balance: plaid_account.available_balance || 0
+        )
       end
-    end
-
-    def cash_balance
-      case plaid_account.plaid_type
-      when "investment"
-        investment_balance_processor.cash_balance
-      else
-        plaid_account.available_balance || 0
-      end
-    end
-
-    def investment_balance_processor
-      PlaidAccount::Investments::BalanceProcessor.new(plaid_account, security_resolver: security_resolver)
     end
 
     def report_exception(error)
