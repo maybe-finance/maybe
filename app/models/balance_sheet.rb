@@ -60,7 +60,7 @@ class BalanceSheet
 
         key = accountable.model_name.param_key
 
-        AccountGroup.new(
+        group = AccountGroup.new(
           id: classification ? "#{classification}_#{key}_group" : "#{key}_group",
           key: key,
           name: accountable.display_name,
@@ -72,13 +72,11 @@ class BalanceSheet
           color: accountable.color,
           syncing?: accounts.any?(&:is_syncing),
           accounts: accounts.map do |account|
-            account.define_singleton_method(:weight) do
-              classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
-            end
-
             account
-          end.sort_by(&:weight).reverse
+          end.sort_by(&:converted_balance).reverse
         )
+
+        group
       end
 
       groups.sort_by do |group|
