@@ -34,6 +34,7 @@
         min: options[:min] || -99999999999999,
         max: options[:max] || 99999999999999,
         step: currency.step,
+        disabled: options[:disabled],
         data: {
           "money-field-target": "amount",
           "auto-submit-form-target": ("auto" if options[:auto_submit])

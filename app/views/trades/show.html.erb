@@ -15,20 +15,22 @@
           <%= f.date_field :date,
                 label: t(".date_label"),
                 max: Date.current,
+                disabled: @entry.linked?,
                 "data-auto-submit-form-target": "auto" %>
 
           <div class="flex items-center gap-2">
             <%= f.select :nature,
                           [["Buy", "outflow"], ["Sell", "inflow"]],
                           { container_class: "w-1/3", label: "Type", selected: @entry.amount.negative? ? "inflow" : "outflow" },
-                          { data: { "auto-submit-form-target": "auto" } } %>
+                          { data: { "auto-submit-form-target": "auto" }, disabled: @entry.linked? } %>
 
             <%= f.fields_for :entryable do |ef| %>
               <%= ef.number_field :qty,
                   label: t(".quantity_label"),
                   step: "any",
                   value: trade.qty.abs,
-                  "data-auto-submit-form-target": "auto" %>
+                  "data-auto-submit-form-target": "auto",
+                  disabled: @entry.linked? %>
             <% end %>
           </div>
 
@@ -37,7 +39,9 @@
                   label: t(".cost_per_share_label"),
                   disable_currency: true,
                   auto_submit: true,
-                  min: 0 %>
+                  min: 0,
+                  disabled: @entry.linked?,
+                  disable_currency: @entry.linked? %>
           <% end %>
         <% end %>
       </div>

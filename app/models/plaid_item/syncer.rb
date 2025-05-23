@@ -21,7 +21,7 @@ class PlaidItem::Syncer
   end
 
   def perform_post_sync
-    plaid_item.auto_match_categories!
+    # no-op
   end
 
   private
