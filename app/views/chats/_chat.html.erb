@@ -17,7 +17,7 @@
       text: "Edit chat title", 
       href: edit_chat_path(chat, ctx: "list"), 
       icon: "pencil", 
-      data: { turbo_frame: dom_id(chat, "title") }) %>
+      frame: dom_id(chat, "title")) %>
       
     <% menu.with_item(
       variant: "button",
