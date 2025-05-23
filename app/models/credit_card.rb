@@ -1,6 +1,10 @@
 class CreditCard < ApplicationRecord
   include Accountable
 
+  SUBTYPES = {
+    "credit_card" => { short: "Credit Card", long: "Credit Card" }
+  }.freeze
+
   class << self
     def color
       "#F13636"

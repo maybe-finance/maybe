@@ -1,47 +1,21 @@
 class PlaidAccount::Processor
+  include PlaidAccount::TypeMappable
+
   attr_reader :plaid_account
-
-  UnknownAccountTypeError = Class.new(StandardError)
-
-  # Plaid Account Types -> Accountable Types
-  TYPE_MAPPING = {
-    "depository" => Depository,
-    "credit" => CreditCard,
-    "loan" => Loan,
-    "investment" => Investment,
-    "other" => OtherAsset
-  }
 
   def initialize(plaid_account)
     @plaid_account = plaid_account
   end
 
+  # Each step represents a different Plaid API endpoint / "product"
+  #
+  # Processing the account is the first step and if it fails, we halt the entire processor
+  # Each subsequent step can fail independently, but we continue processing the rest of the steps
   def process
-    PlaidAccount.transaction do
-      account = family.accounts.find_or_initialize_by(
-        plaid_account_id: plaid_account.id
-      )
-
-      # Name is the only attribute a user can override for Plaid accounts
-      account.enrich_attribute(
-        :name,
-        plaid_account.name,
-        source: "plaid"
-      )
-
-      account.assign_attributes(
-        accountable: accountable,
-        balance: balance,
-        currency: plaid_account.currency,
-        cash_balance: cash_balance
-      )
-
-      account.save!
-    end
-
-    PlaidAccount::TransactionsProcessor.new(plaid_account).process
-    PlaidAccount::InvestmentsProcessor.new(plaid_account).process
-    PlaidAccount::LiabilitiesProcessor.new(plaid_account).process
+    process_account!
+    process_transactions
+    process_investments
+    process_liabilities
   end
 
   private
@@ -49,12 +23,59 @@ class PlaidAccount::Processor
       plaid_account.plaid_item.family
     end
 
-    def accountable
-      accountable_class = TYPE_MAPPING[plaid_account.plaid_type]
+    # Shared securities reader and resolver
+    def security_resolver
+      @security_resolver ||= PlaidAccount::Investments::SecurityResolver.new(plaid_account)
+    end
 
-      raise UnknownAccountTypeError, "Unknown account type: #{plaid_account.plaid_type}" unless accountable_class
+    def process_account!
+      PlaidAccount.transaction do
+        account = family.accounts.find_or_initialize_by(
+          plaid_account_id: plaid_account.id
+        )
 
-      accountable_class.new
+        # Name is the only attribute a user can override for Plaid accounts
+        account.enrich_attribute(
+          :name,
+          plaid_account.name,
+          source: "plaid"
+        )
+
+        account.assign_attributes(
+          accountable: map_accountable(plaid_account.plaid_type),
+          subtype: map_subtype(plaid_account.plaid_type, plaid_account.plaid_subtype),
+          balance: balance,
+          currency: plaid_account.currency,
+          cash_balance: cash_balance
+        )
+
+        account.save!
+      end
+    end
+
+    def process_transactions
+      PlaidAccount::Transactions::Processor.new(plaid_account).process
+    rescue => e
+      report_exception(e)
+    end
+
+    def process_investments
+      PlaidAccount::Investments::TransactionsProcessor.new(plaid_account, security_resolver: security_resolver).process
+      PlaidAccount::Investments::HoldingsProcessor.new(plaid_account, security_resolver: security_resolver).process
+      report_exception(e)
+    end
+
+    def process_liabilities
+      case [ plaid_account.plaid_type, plaid_account.plaid_subtype ]
+      when [ "credit", "credit card" ]
+        PlaidAccount::CreditLiabilityProcessor.new(plaid_account).process
+      when [ "loan", "mortgage" ]
+        PlaidAccount::MortgageLiabilityProcessor.new(plaid_account).process
+      when [ "loan", "student" ]
+        PlaidAccount::StudentLoanLiabilityProcessor.new(plaid_account).process
+      end
+    rescue => e
+      report_exception(e)
     end
 
     def balance
@@ -76,6 +97,12 @@ class PlaidAccount::Processor
     end
 
     def investment_balance_processor
-      PlaidAccount::InvestmentBalanceProcessor.new(plaid_account)
+      PlaidAccount::Investments::BalanceProcessor.new(plaid_account, security_resolver: security_resolver)
+    end
+
+    def report_exception(error)
+      Sentry.capture_exception(error) do |scope|
+        scope.set_tags(plaid_account_id: plaid_account.id)
+      end
     end
 end

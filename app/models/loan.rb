@@ -1,6 +1,13 @@
 class Loan < ApplicationRecord
   include Accountable
 
+  SUBTYPES = {
+    "mortgage" => { short: "Mortgage", long: "Mortgage" },
+    "student" => { short: "Student", long: "Student Loan" },
+    "auto" => { short: "Auto", long: "Auto Loan" },
+    "other" => { short: "Other", long: "Other Loan" }
+  }.freeze
+
   def monthly_payment
     return nil if term_months.nil? || interest_rate.nil? || rate_type.nil? || rate_type != "fixed"
     return Money.new(0, account.currency) if account.loan.original_balance.amount.zero? || term_months.zero?

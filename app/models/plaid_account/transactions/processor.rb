@@ -1,4 +1,4 @@
-class PlaidAccount::TransactionsProcessor
+class PlaidAccount::Transactions::Processor
   def initialize(plaid_account)
     @plaid_account = plaid_account
   end
