@@ -1,11 +1,13 @@
-<%= turbo_frame_tag "#{@accountable.model_name.param_key}_sparkline" do %>
-  <div class="flex items-center justify-end gap-1">
-    <div class="w-8 h-3">
-      <%= render "shared/sparkline", id: dom_id(@accountable, :sparkline_chart), series: @series %>
-    </div>
+<% cache Current.family.build_cache_key("#{@accountable.name}_sparkline_html") do %>
+  <%= turbo_frame_tag "#{@accountable.model_name.param_key}_sparkline" do %>
+    <div class="flex items-center justify-end gap-1">
+      <div class="w-8 h-3">
+        <%= render "shared/sparkline", id: dom_id(@accountable, :sparkline_chart), series: @series %>
+      </div>
 
-    <%= tag.p @series.trend.percent_formatted,
-              style: "color: #{@series.trend.color}",
-              class: "font-mono text-right text-xs font-medium text-primary" %>
-  </div>
+      <%= tag.p @series.trend.percent_formatted,
+                style: "color: #{@series.trend.color}",
+                class: "font-mono text-right text-xs font-medium text-primary" %>
+    </div>
+  <% end %>
 <% end %>
