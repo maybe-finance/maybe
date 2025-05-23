@@ -15,6 +15,12 @@
     <% if entry.transaction.transfer? %>
       <%= icon "arrow-left-right", class: "mt-1" %>
     <% end %>
+
+    <% if entry.linked? %>
+      <span title="Linked with Plaid">
+        <%= icon("refresh-ccw", size: "sm") %>
+      </span>
+    <% end %>
   </div>
 
   <span class="text-sm text-secondary">

@@ -27,14 +27,23 @@ module Enrichable
     enrich_attributes({ attr => value }, source:, metadata:)
   end
 
-  # Enriches all attributes that haven't been locked yet
+  # Enriches and logs all attributes that:
+  # - Are not locked
+  # - Are not ignored
+  # - Have changed value from the last saved value
   def enrich_attributes(attrs, source:, metadata: {})
-    enrichable_attrs = Array(attrs).reject { |k, _v| locked?(k) }
+    enrichable_attrs = Array(attrs).reject do |attr_key, attr_value|
+      locked?(attr_key) || ignored_enrichable_attributes.include?(attr_key) || self[attr_key.to_s] == attr_value
+    end
 
     ActiveRecord::Base.transaction do
       enrichable_attrs.each do |attr, value|
         self.send("#{attr}=", value)
-        log_enrichment(attribute_name: attr, attribute_value: value, source: source, metadata: metadata)
+
+        # If it's a new record, this isn't technically an "enrichment".  No logging necessary.
+        unless self.new_record?
+          log_enrichment(attribute_name: attr, attribute_value: value, source: source, metadata: metadata)
+        end
       end
 
       save

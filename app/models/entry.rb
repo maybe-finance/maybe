@@ -56,6 +56,10 @@ class Entry < ApplicationRecord
     Balance::TrendCalculator.new(self, entries, balances).trend
   end
 
+  def linked?
+    plaid_id.present?
+  end
+
   class << self
     def search(params)
       EntrySearch.new(params).build_query(all)

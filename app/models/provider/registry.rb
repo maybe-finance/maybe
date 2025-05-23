@@ -18,6 +18,10 @@ class Provider::Registry
       raise Error.new("Provider '#{name}' not found in registry")
     end
 
+    def plaid_provider_for_region(region)
+      region.to_sym == :us ? plaid_us : plaid_eu
+    end
+
     private
       def stripe
         secret_key = ENV["STRIPE_SECRET_KEY"]

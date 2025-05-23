@@ -1,0 +1,160 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/accounts/get
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 17:24:04 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2578'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '191'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "accounts": [
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "balances": {
+                "available": 8000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1122",
+              "name": "Test Brokerage Account",
+              "official_name": "Plaid brokerage",
+              "subtype": "brokerage",
+              "type": "investment"
+            },
+            {
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
+              "balances": {
+                "available": 10000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "4243",
+              "name": "Test Depository Account",
+              "official_name": "Plaid checking",
+              "subtype": "checking",
+              "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
+            }
+          ],
+          "item": {
+            "available_products": [
+              "assets",
+              "auth",
+              "balance",
+              "credit_details",
+              "identity",
+              "identity_match",
+              "income",
+              "income_verification",
+              "recurring_transactions",
+              "signal",
+              "statements"
+            ],
+            "billed_products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "consent_expiration_time": null,
+            "error": null,
+            "institution_id": "ins_109508",
+            "institution_name": "First Platypus Bank",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
+            "products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "update_type": "background",
+            "webhook": ""
+          },
+          "request_id": "EWD5MMMYV0o9cZ0"
+        }
+  recorded_at: Mon, 19 May 2025 17:24:04 GMT
+recorded_with: VCR 6.3.1

@@ -6,12 +6,11 @@ class Investment < ApplicationRecord
     "pension" => { short: "Pension", long: "Pension" },
     "retirement" => { short: "Retirement", long: "Retirement" },
     "401k" => { short: "401(k)", long: "401(k)" },
-    "traditional_401k" => { short: "Traditional 401(k)", long: "Traditional 401(k)" },
     "roth_401k" => { short: "Roth 401(k)", long: "Roth 401(k)" },
     "529_plan" => { short: "529 Plan", long: "529 Plan" },
     "hsa" => { short: "HSA", long: "Health Savings Account" },
     "mutual_fund" => { short: "Mutual Fund", long: "Mutual Fund" },
-    "traditional_ira" => { short: "Traditional IRA", long: "Traditional IRA" },
+    "ira" => { short: "IRA", long: "Traditional IRA" },
     "roth_ira" => { short: "Roth IRA", long: "Roth IRA" },
     "angel" => { short: "Angel", long: "Angel" }
   }.freeze

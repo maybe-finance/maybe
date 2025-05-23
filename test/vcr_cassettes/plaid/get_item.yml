@@ -1,0 +1,106 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/item/get
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 17:24:03 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '1050'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '157'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "item": {
+            "available_products": [
+              "assets",
+              "auth",
+              "balance",
+              "credit_details",
+              "identity",
+              "identity_match",
+              "income",
+              "income_verification",
+              "recurring_transactions",
+              "signal",
+              "statements"
+            ],
+            "billed_products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "consent_expiration_time": null,
+            "created_at": "2025-05-19T17:24:00Z",
+            "error": null,
+            "institution_id": "ins_109508",
+            "institution_name": "First Platypus Bank",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
+            "products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "update_type": "background",
+            "webhook": ""
+          },
+          "request_id": "dpcY8geAZ93oxJm",
+          "status": {
+            "investments": {
+              "last_failed_update": null,
+              "last_successful_update": "2025-05-19T17:24:01.861Z"
+            },
+            "last_webhook": null,
+            "transactions": {
+              "last_failed_update": null,
+              "last_successful_update": null
+            }
+          }
+        }
+  recorded_at: Mon, 19 May 2025 17:24:03 GMT
+recorded_with: VCR 6.3.1

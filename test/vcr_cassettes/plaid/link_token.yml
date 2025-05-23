@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/link/token/create
+    body:
+      encoding: UTF-8
+      string: '{"client_name":"Maybe Finance","language":"en","country_codes":["US","CA"],"user":{"client_user_id":"test-user-id"},"products":["transactions"],"additional_consented_products":["investments","liabilities"],"webhook":"https://example.com/webhooks","redirect_uri":"http://localhost:3000/accounts","transactions":{"days_requested":730}}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 17:24:04 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '146'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '70'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "expiration": "2025-05-19T21:24:04Z",
+          "link_token": "link-sandbox-33432e02-32e2-415d-8f00-e626c6f4c6a6",
+          "request_id": "Gys5pGY7tIPDrlL"
+        }
+  recorded_at: Mon, 19 May 2025 17:24:04 GMT
+recorded_with: VCR 6.3.1

@@ -77,6 +77,8 @@ jobs:
     timeout-minutes: 10
 
     env:
+      PLAID_CLIENT_ID: foo
+      PLAID_SECRET: bar
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
       RAILS_ENV: test
 

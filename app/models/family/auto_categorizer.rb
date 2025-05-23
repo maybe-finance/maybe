@@ -70,8 +70,7 @@ class Family::AutoCategorizer
           amount: transaction.entry.amount.abs,
           classification: transaction.entry.classification,
           description: transaction.entry.name,
-          merchant: transaction.merchant&.name,
-          hint: transaction.plaid_category_detailed
+          merchant: transaction.merchant&.name
         }
       end
     end

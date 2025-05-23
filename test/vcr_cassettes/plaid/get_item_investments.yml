@@ -1,0 +1,570 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/investments/holdings/get
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648"}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 17:24:05 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '6199'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '324'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "accounts": [
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "balances": {
+                "available": 8000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1122",
+              "name": "Test Brokerage Account",
+              "official_name": "Plaid brokerage",
+              "subtype": "brokerage",
+              "type": "investment"
+            },
+            {
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
+              "balances": {
+                "available": 10000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "4243",
+              "name": "Test Depository Account",
+              "official_name": "Plaid checking",
+              "subtype": "checking",
+              "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
+            }
+          ],
+          "holdings": [
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "cost_basis": 2000,
+              "institution_price": 100,
+              "institution_price_as_of": "2025-05-08",
+              "institution_price_datetime": null,
+              "institution_value": 2000,
+              "iso_currency_code": "USD",
+              "quantity": 20,
+              "security_id": "xnL3QM3Ax4fP9lVmNLblTDaMkVMqN3fmxrXRd",
+              "unofficial_currency_code": null,
+              "vested_quantity": null,
+              "vested_value": null
+            },
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "cost_basis": 3000,
+              "institution_price": 1,
+              "institution_price_as_of": "2025-05-08",
+              "institution_price_datetime": null,
+              "institution_value": 3000,
+              "iso_currency_code": "USD",
+              "quantity": 3000,
+              "security_id": "EDRxkXxj7mtj8EzBBxllUqpy7KyNDBugoZrMX",
+              "unofficial_currency_code": null,
+              "vested_quantity": null,
+              "vested_value": null
+            },
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "cost_basis": 5000,
+              "institution_price": 1,
+              "institution_price_as_of": "2025-05-08",
+              "institution_price_datetime": null,
+              "institution_value": 5000,
+              "iso_currency_code": "USD",
+              "quantity": 5000,
+              "security_id": "7Dv19k16PZtEaexk6EZyFxP95o9ynrF4REalG",
+              "unofficial_currency_code": null,
+              "vested_quantity": null,
+              "vested_value": null
+            }
+          ],
+          "item": {
+            "available_products": [
+              "assets",
+              "auth",
+              "balance",
+              "credit_details",
+              "identity",
+              "identity_match",
+              "income",
+              "income_verification",
+              "recurring_transactions",
+              "signal",
+              "statements"
+            ],
+            "billed_products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "consent_expiration_time": null,
+            "error": null,
+            "institution_id": "ins_109508",
+            "institution_name": "First Platypus Bank",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
+            "products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "update_type": "background",
+            "webhook": ""
+          },
+          "request_id": "uRzq5c4Y37RCNNj",
+          "securities": [
+            {
+              "close_price": 1,
+              "close_price_as_of": "2025-04-28",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": "Investment Trusts or Mutual Funds",
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": true,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": null,
+              "name": "Vanguard Money Market Reserves - Federal Money Market Fd USD MNT",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": "Miscellaneous",
+              "security_id": "7Dv19k16PZtEaexk6EZyFxP95o9ynrF4REalG",
+              "sedol": "2571678",
+              "ticker_symbol": "VMFXX",
+              "type": "mutual fund",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            },
+            {
+              "close_price": 1,
+              "close_price_as_of": "2025-05-18",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": null,
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": true,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": null,
+              "name": "U S Dollar",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": null,
+              "security_id": "EDRxkXxj7mtj8EzBBxllUqpy7KyNDBugoZrMX",
+              "sedol": null,
+              "ticker_symbol": "CUR:USD",
+              "type": "cash",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            },
+            {
+              "close_price": 211.26,
+              "close_price_as_of": "2025-05-16",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": "Telecommunications Equipment",
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": false,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": "XNAS",
+              "name": "Apple Inc",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": "Electronic Technology",
+              "security_id": "xnL3QM3Ax4fP9lVmNLblTDaMkVMqN3fmxrXRd",
+              "sedol": "2046251",
+              "ticker_symbol": "AAPL",
+              "type": "equity",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            }
+          ]
+        }
+  recorded_at: Mon, 19 May 2025 17:24:05 GMT
+- request:
+    method: post
+    uri: https://sandbox.plaid.com/investments/transactions/get
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"access-sandbox-0af2c971-41a6-4fc5-a97d-f2b27ab0a648","start_date":"2023-05-20","end_date":"2025-05-19","options":{"offset":0}}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Plaid Ruby v38.0.0
+      Accept:
+      - application/json
+      Plaid-Client-Id:
+      - "<PLAID_CLIENT_ID>"
+      Plaid-Version:
+      - '2020-09-14'
+      Plaid-Secret:
+      - "<PLAID_SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 19 May 2025 17:24:05 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '6964'
+      Connection:
+      - keep-alive
+      Plaid-Version:
+      - '2020-09-14'
+      Vary:
+      - Accept-Encoding
+      X-Envoy-Upstream-Service-Time:
+      - '334'
+      X-Envoy-Decorator-Operation:
+      - default.svc-apiv2:8080/*
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "accounts": [
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "balances": {
+                "available": 8000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1122",
+              "name": "Test Brokerage Account",
+              "official_name": "Plaid brokerage",
+              "subtype": "brokerage",
+              "type": "investment"
+            },
+            {
+              "account_id": "RperV9wJMNiDWKljGMkPCkwDGJb7q7FaNlVMp",
+              "balances": {
+                "available": 9372.38,
+                "current": 1000,
+                "iso_currency_code": "USD",
+                "limit": 10500,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "1219",
+              "name": "Test Credit Card Account",
+              "official_name": "Plaid credit card",
+              "subtype": "credit card",
+              "type": "credit"
+            },
+            {
+              "account_id": "9mvxVZRW7LUD67QbEBm1CPZ6XlqkmkF4oGNBo",
+              "balances": {
+                "available": 10000,
+                "current": 10000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "4243",
+              "name": "Test Depository Account",
+              "official_name": "Plaid checking",
+              "subtype": "checking",
+              "type": "depository"
+            },
+            {
+              "account_id": "6Gwzm7nJ6ZU4VbqEyKzZszyPQ8keRet8Q97k7",
+              "balances": {
+                "available": 15000,
+                "current": 15000,
+                "iso_currency_code": "USD",
+                "limit": null,
+                "unofficial_currency_code": null
+              },
+              "holder_category": "personal",
+              "mask": "9572",
+              "name": "Test Student Loan Account",
+              "official_name": "Plaid student",
+              "subtype": "student",
+              "type": "loan"
+            }
+          ],
+          "investment_transactions": [
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "amount": -5000,
+              "cancel_transaction_id": null,
+              "date": "2025-05-03",
+              "fees": 0,
+              "investment_transaction_id": "eBqoazM4XkiXx5gZbmD7UKRZ3jE3ABUreq4R1",
+              "iso_currency_code": "USD",
+              "name": "retirement contribution",
+              "price": 1,
+              "quantity": -5000,
+              "security_id": "EDRxkXxj7mtj8EzBBxllUqpy7KyNDBugoZrMX",
+              "subtype": "contribution",
+              "type": "cash",
+              "unofficial_currency_code": null
+            },
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "amount": 5000,
+              "cancel_transaction_id": null,
+              "date": "2025-05-03",
+              "fees": 0,
+              "investment_transaction_id": "QLeKVkpQM4ck1qMRGp6PUPp7obKowGtwRN547",
+              "iso_currency_code": "USD",
+              "name": "buy money market shares with contribution cash",
+              "price": 1,
+              "quantity": 5000,
+              "security_id": "7Dv19k16PZtEaexk6EZyFxP95o9ynrF4REalG",
+              "subtype": "contribution",
+              "type": "buy",
+              "unofficial_currency_code": null
+            },
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "amount": 2000,
+              "cancel_transaction_id": null,
+              "date": "2025-05-02",
+              "fees": 0,
+              "investment_transaction_id": "ZnxNgJEwM1ig5476JqZxUKeJLXNLnMUe9o6Al",
+              "iso_currency_code": "USD",
+              "name": "buy AAPL stock",
+              "price": 100,
+              "quantity": 20,
+              "security_id": "xnL3QM3Ax4fP9lVmNLblTDaMkVMqN3fmxrXRd",
+              "subtype": "buy",
+              "type": "buy",
+              "unofficial_currency_code": null
+            },
+            {
+              "account_id": "vor45kgbDjfqa1BMD8QRU4om8adWNWtqbzQJe",
+              "amount": -5000,
+              "cancel_transaction_id": null,
+              "date": "2025-05-01",
+              "fees": 0,
+              "investment_transaction_id": "MQ1Awmg943IKyWlQjRXgUqXrxD6xo3CLGjJw1",
+              "iso_currency_code": "USD",
+              "name": "Deposit cash into brokerage account",
+              "price": 1,
+              "quantity": -5000,
+              "security_id": "EDRxkXxj7mtj8EzBBxllUqpy7KyNDBugoZrMX",
+              "subtype": "deposit",
+              "type": "cash",
+              "unofficial_currency_code": null
+            }
+          ],
+          "item": {
+            "available_products": [
+              "assets",
+              "auth",
+              "balance",
+              "credit_details",
+              "identity",
+              "identity_match",
+              "income",
+              "income_verification",
+              "recurring_transactions",
+              "signal",
+              "statements"
+            ],
+            "billed_products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "consent_expiration_time": null,
+            "error": null,
+            "institution_id": "ins_109508",
+            "institution_name": "First Platypus Bank",
+            "item_id": "n7XKpjRmDkHENymaBw7rU71wxQnrW4i6DDrQP",
+            "products": [
+              "investments",
+              "liabilities",
+              "transactions"
+            ],
+            "update_type": "background",
+            "webhook": ""
+          },
+          "request_id": "dTc49uKiBZWzxHS",
+          "securities": [
+            {
+              "close_price": 1,
+              "close_price_as_of": "2025-04-28",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": "Investment Trusts or Mutual Funds",
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": true,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": null,
+              "name": "Vanguard Money Market Reserves - Federal Money Market Fd USD MNT",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": "Miscellaneous",
+              "security_id": "7Dv19k16PZtEaexk6EZyFxP95o9ynrF4REalG",
+              "sedol": "2571678",
+              "ticker_symbol": "VMFXX",
+              "type": "mutual fund",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            },
+            {
+              "close_price": 1,
+              "close_price_as_of": "2025-05-18",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": null,
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": true,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": null,
+              "name": "U S Dollar",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": null,
+              "security_id": "EDRxkXxj7mtj8EzBBxllUqpy7KyNDBugoZrMX",
+              "sedol": null,
+              "ticker_symbol": "CUR:USD",
+              "type": "cash",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            },
+            {
+              "close_price": 211.26,
+              "close_price_as_of": "2025-05-16",
+              "cusip": null,
+              "fixed_income": null,
+              "industry": "Telecommunications Equipment",
+              "institution_id": null,
+              "institution_security_id": null,
+              "is_cash_equivalent": false,
+              "isin": null,
+              "iso_currency_code": "USD",
+              "market_identifier_code": "XNAS",
+              "name": "Apple Inc",
+              "option_contract": null,
+              "proxy_security_id": null,
+              "sector": "Electronic Technology",
+              "security_id": "xnL3QM3Ax4fP9lVmNLblTDaMkVMqN3fmxrXRd",
+              "sedol": "2046251",
+              "ticker_symbol": "AAPL",
+              "type": "equity",
+              "unofficial_currency_code": null,
+              "update_datetime": null
+            }
+          ],
+          "total_investment_transactions": 4
+        }
+  recorded_at: Mon, 19 May 2025 17:24:05 GMT
+recorded_with: VCR 6.3.1

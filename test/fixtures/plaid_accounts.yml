@@ -1,3 +1,9 @@
 one:
+  current_balance: 1000
+  available_balance: 1000
+  currency: USD
+  name: Plaid Depository Account
   plaid_item: one
-  plaid_id: "1234567890"
+  plaid_id: "acc_mock_1"
+  plaid_type: depository
+  plaid_subtype: checking

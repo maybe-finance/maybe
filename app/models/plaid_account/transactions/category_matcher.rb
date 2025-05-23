@@ -10,10 +10,10 @@
 #
 # This class is simply a FAST and CHEAP way to match categories that are high confidence.
 # Edge cases will be handled by user-defined rules.
-class Provider::Plaid::CategoryAliasMatcher
-  include Provider::Plaid::CategoryTaxonomy
+class PlaidAccount::Transactions::CategoryMatcher
+  include PlaidAccount::Transactions::CategoryTaxonomy
 
-  def initialize(user_categories)
+  def initialize(user_categories = [])
     @user_categories = user_categories
   end
 

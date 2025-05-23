@@ -1,5 +1,7 @@
 one:
   family: dylan_family
-  plaid_id: "1234567890"
+  plaid_id: "item_mock_1"
   access_token: encrypted_token_1
   name: "Test Bank"
+  billed_products: ["transactions", "investments", "liabilities"]
+  available_products: []
