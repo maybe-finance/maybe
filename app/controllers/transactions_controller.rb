@@ -26,7 +26,24 @@ class TransactionsController < ApplicationController
       params: ->(params) { params.except(:focused_record_id) }
     )
 
-    @totals = Current.family.income_statement.totals(transactions_scope: transactions_query)
+    # -------------------------------------------------------------------
+    # Cache totals
+    # -------------------------------------------------------------------
+    # Totals calculation is expensive (heavy SQL with grouping). We cache the
+    # result keyed by:
+    #   • Family id
+    #   • The family-level cache key that already embeds entries.maximum(:updated_at)
+    #   • A digest of the current search params so each distinct filter set gets
+    #     its own cache entry.
+    # When any entry is created/updated/deleted, the family cache key changes,
+    # automatically invalidating all related totals.
+
+    params_digest = Digest::MD5.hexdigest(@q.to_json)
+    cache_key     = Current.family.build_cache_key("transactions_totals_#{params_digest}")
+
+    @totals = Rails.cache.fetch(cache_key) do
+      Current.family.income_statement.totals(transactions_scope: transactions_query)
+    end
   end
 
   def clear_filter
@@ -140,15 +157,46 @@ class TransactionsController < ApplicationController
 
     def search_params
       cleaned_params = params.fetch(:q, {})
-            .permit(
-              :start_date, :end_date, :search, :amount,
-              :amount_operator, accounts: [], account_ids: [],
-              categories: [], merchants: [], types: [], tags: []
-            )
-            .to_h
-            .compact_blank
+              .permit(
+                :start_date, :end_date, :search, :amount,
+                :amount_operator, accounts: [], account_ids: [],
+                categories: [], merchants: [], types: [], tags: []
+              )
+              .to_h
+              .compact_blank
 
       cleaned_params.delete(:amount_operator) unless cleaned_params[:amount].present?
+
+      # -------------------------------------------------------------------
+      # Performance optimisation
+      # -------------------------------------------------------------------
+      # When a user lands on the Transactions page without an explicit date
+      # filter, the previous behaviour queried *all* historical transactions
+      # for the family.  For large datasets this results in very expensive
+      # SQL (as shown in Skylight) – particularly the aggregation queries
+      # used for @totals.  To keep the UI responsive while still showing a
+      # sensible period of activity, we fall back to the user's preferred
+      # default period (stored on User#default_period, defaulting to
+      # "last_30_days") when **no** date filters have been supplied.
+      #
+      # This effectively changes the default view from "all-time" to a
+      # rolling window, dramatically reducing the rows scanned / grouped in
+      # Postgres without impacting the UX (the user can always clear the
+      # filter).
+      # -------------------------------------------------------------------
+      if cleaned_params[:start_date].blank? && cleaned_params[:end_date].blank?
+        period_key = Current.user&.default_period.presence || "last_30_days"
+
+        begin
+          period = Period.from_key(period_key)
+          cleaned_params[:start_date] = period.start_date
+          cleaned_params[:end_date]   = period.end_date
+        rescue Period::InvalidKeyError
+          # Fallback – should never happen but keeps things safe.
+          cleaned_params[:start_date] = 30.days.ago.to_date
+          cleaned_params[:end_date]   = Date.current
+        end
+      end
 
       cleaned_params
     end
