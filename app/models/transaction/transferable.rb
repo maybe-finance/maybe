@@ -35,6 +35,6 @@ module Transaction::Transferable
 
   private
     def family_matches_scope
-      self.entry.account.family.transfer_match_candidates
+      self.entry.account.family.transfer_match_multi_currency_candidates
     end
 end

@@ -34,6 +34,47 @@ module Family::AutoTransferMatchable
       .order("date_diff ASC") # Closest matches first
   end
 
+  def transfer_match_multi_currency_candidates
+    Entry.select([
+      "inflow_candidates.entryable_id as inflow_transaction_id",
+      "outflow_candidates.entryable_id as outflow_transaction_id",
+      "ABS(inflow_candidates.date - outflow_candidates.date) as date_diff"
+    ]).from("entries inflow_candidates")
+      .joins("
+        JOIN entries outflow_candidates ON (
+          inflow_candidates.amount < 0 AND
+          outflow_candidates.amount > 0 AND
+          inflow_candidates.account_id <> outflow_candidates.account_id AND
+          inflow_candidates.date BETWEEN outflow_candidates.date - 4 AND outflow_candidates.date + 4
+        )
+      ").joins("
+        LEFT JOIN transfers existing_transfers ON (
+          existing_transfers.inflow_transaction_id = inflow_candidates.entryable_id OR
+          existing_transfers.outflow_transaction_id = outflow_candidates.entryable_id
+        )
+      ")
+      .joins("LEFT JOIN rejected_transfers ON (
+        rejected_transfers.inflow_transaction_id = inflow_candidates.entryable_id AND
+        rejected_transfers.outflow_transaction_id = outflow_candidates.entryable_id
+      )")
+      .joins("LEFT JOIN exchange_rates ON (
+        exchange_rates.date = outflow_candidates.date AND
+        exchange_rates.from_currency = outflow_candidates.currency AND
+        exchange_rates.to_currency = inflow_candidates.currency
+      )")
+      .joins("JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_candidates.account_id")
+      .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
+      .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.id, self.id)
+      .where("inflow_accounts.is_active = true")
+      .where("outflow_accounts.is_active = true")
+      .where("inflow_candidates.entryable_type = 'Transaction' AND outflow_candidates.entryable_type = 'Transaction'")
+      .where("
+        ABS(inflow_candidates.amount / (outflow_candidates.amount * COALESCE(exchange_rates.rate, 1))) BETWEEN 0.95 AND 1.05
+      ")
+      .where(existing_transfers: { id: nil })
+      .order("date_diff ASC") # Closest matches first
+  end
+
   def auto_match_transfers!
     # Exclude already matched transfers
     candidates_scope = transfer_match_candidates.where(rejected_transfers: { id: nil })
