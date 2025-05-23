@@ -22,65 +22,70 @@ class BalanceSheet
   end
 
   def classification_groups
-    asset_groups = account_groups("asset")
-    liability_groups = account_groups("liability")
+    Rails.cache.fetch(family.build_cache_key("bs_classification_groups")) do
+      asset_groups     = account_groups("asset")
+      liability_groups = account_groups("liability")
 
-    [
-      ClassificationGroup.new(
-        key: "asset",
-        display_name: "Assets",
-        icon: "plus",
-        total_money: total_assets_money,
-        account_groups: asset_groups,
-        syncing?: asset_groups.any?(&:syncing?)
-      ),
-      ClassificationGroup.new(
-        key: "liability",
-        display_name: "Debts",
-        icon: "minus",
-        total_money: total_liabilities_money,
-        account_groups: liability_groups,
-        syncing?: liability_groups.any?(&:syncing?)
-      )
-    ]
+      [
+        ClassificationGroup.new(
+          key: "asset",
+          display_name: "Assets",
+          icon: "plus",
+          total_money: total_assets_money,
+          account_groups: asset_groups,
+          syncing?: asset_groups.any?(&:syncing?)
+        ),
+        ClassificationGroup.new(
+          key: "liability",
+          display_name: "Debts",
+          icon: "minus",
+          total_money: total_liabilities_money,
+          account_groups: liability_groups,
+          syncing?: liability_groups.any?(&:syncing?)
+        )
+      ]
+    end
   end
 
   def account_groups(classification = nil)
-    classification_accounts = classification ? totals_query.filter { |t| t.classification == classification } : totals_query
-    classification_total = classification_accounts.sum(&:converted_balance)
-    account_groups = classification_accounts.group_by(&:accountable_type)
-                                            .transform_keys { |k| Accountable.from_type(k) }
+    Rails.cache.fetch(family.build_cache_key("bs_account_groups_#{classification || 'all'}")) do
+      classification_accounts = classification ? totals_query.filter { |t| t.classification == classification } : totals_query
+      classification_total    = classification_accounts.sum(&:converted_balance)
 
-    groups = account_groups.map do |accountable, accounts|
-      group_total = accounts.sum(&:converted_balance)
+      account_groups = classification_accounts.group_by(&:accountable_type)
+                                              .transform_keys { |k| Accountable.from_type(k) }
 
-      key = accountable.model_name.param_key
+      groups = account_groups.map do |accountable, accounts|
+        group_total = accounts.sum(&:converted_balance)
 
-      AccountGroup.new(
-        id: classification ? "#{classification}_#{key}_group" : "#{key}_group",
-        key: key,
-        name: accountable.display_name,
-        classification: accountable.classification,
-        total: group_total,
-        total_money: Money.new(group_total, currency),
-        weight: classification_total.zero? ? 0 : group_total / classification_total.to_d * 100,
-        missing_rates?: accounts.any? { |a| a.missing_rates? },
-        color: accountable.color,
-        syncing?: accounts.any?(&:is_syncing),
-        accounts: accounts.map do |account|
-          account.define_singleton_method(:weight) do
-            classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
-          end
+        key = accountable.model_name.param_key
 
-          account
-        end.sort_by(&:weight).reverse
-      )
-    end
+        AccountGroup.new(
+          id: classification ? "#{classification}_#{key}_group" : "#{key}_group",
+          key: key,
+          name: accountable.display_name,
+          classification: accountable.classification,
+          total: group_total,
+          total_money: Money.new(group_total, currency),
+          weight: classification_total.zero? ? 0 : group_total / classification_total.to_d * 100,
+          missing_rates?: accounts.any? { |a| a.missing_rates? },
+          color: accountable.color,
+          syncing?: accounts.any?(&:is_syncing),
+          accounts: accounts.map do |account|
+            account.define_singleton_method(:weight) do
+              classification_total.zero? ? 0 : account.converted_balance / classification_total.to_d * 100
+            end
 
-    groups.sort_by do |group|
-      manual_order = Accountable::TYPES
-      type_name = group.key.camelize
-      manual_order.index(type_name) || Float::INFINITY
+            account
+          end.sort_by(&:weight).reverse
+        )
+      end
+
+      groups.sort_by do |group|
+        manual_order = Accountable::TYPES
+        type_name    = group.key.camelize
+        manual_order.index(type_name) || Float::INFINITY
+      end
     end
   end
 
