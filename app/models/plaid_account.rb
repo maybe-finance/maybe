@@ -3,6 +3,9 @@ class PlaidAccount < ApplicationRecord
 
   has_one :account, dependent: :destroy
 
+  validates :name, :plaid_type, :currency, presence: true
+  validate :has_balance
+
   def upsert_plaid_snapshot!(account_snapshot)
     assign_attributes(
       current_balance: account_snapshot.balances.current,
@@ -41,4 +44,11 @@ class PlaidAccount < ApplicationRecord
 
     save!
   end
+
+  private
+    # Plaid guarantees at least one of these.  This validation is a sanity check for that guarantee.
+    def has_balance
+      return if current_balance.present? || available_balance.present?
+      errors.add(:base, "Plaid account must have either current or available balance")
+    end
 end

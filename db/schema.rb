@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_22_201031) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -420,13 +420,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_22_201031) do
 
   create_table "plaid_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "plaid_item_id", null: false
-    t.string "plaid_id"
-    t.string "plaid_type"
+    t.string "plaid_id", null: false
+    t.string "plaid_type", null: false
     t.string "plaid_subtype"
     t.decimal "current_balance", precision: 19, scale: 4
     t.decimal "available_balance", precision: 19, scale: 4
-    t.string "currency"
-    t.string "name"
+    t.string "currency", null: false
+    t.string "name", null: false
     t.string "mask"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -434,13 +434,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_22_201031) do
     t.jsonb "raw_transactions_payload", default: {}
     t.jsonb "raw_investments_payload", default: {}
     t.jsonb "raw_liabilities_payload", default: {}
+    t.index ["plaid_id"], name: "index_plaid_accounts_on_plaid_id", unique: true
     t.index ["plaid_item_id"], name: "index_plaid_accounts_on_plaid_item_id"
   end
 
   create_table "plaid_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "family_id", null: false
     t.string "access_token"
-    t.string "plaid_id"
+    t.string "plaid_id", null: false
     t.string "name"
     t.string "next_cursor"
     t.boolean "scheduled_for_deletion", default: false
@@ -456,6 +457,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_22_201031) do
     t.jsonb "raw_payload", default: {}
     t.jsonb "raw_institution_payload", default: {}
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
+    t.index ["plaid_id"], name: "index_plaid_items_on_plaid_id", unique: true
   end
 
   create_table "properties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

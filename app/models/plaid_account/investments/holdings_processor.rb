@@ -1,6 +1,4 @@
 class PlaidAccount::Investments::HoldingsProcessor
-  include PlaidAccount::Securitizable
-
   def initialize(plaid_account, security_resolver:)
     @plaid_account = plaid_account
     @security_resolver = security_resolver

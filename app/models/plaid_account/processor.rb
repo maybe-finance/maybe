@@ -34,16 +34,17 @@ class PlaidAccount::Processor
           plaid_account_id: plaid_account.id
         )
 
-        # Name is the only attribute a user can override for Plaid accounts
-        account.enrich_attribute(
-          :name,
-          plaid_account.name,
+        # Name and subtype are the only attributes a user can override for Plaid accounts
+        account.enrich_attributes(
+          {
+            name: plaid_account.name,
+            subtype: map_subtype(plaid_account.plaid_type, plaid_account.plaid_subtype)
+          },
           source: "plaid"
         )
 
         account.assign_attributes(
           accountable: map_accountable(plaid_account.plaid_type),
-          subtype: map_subtype(plaid_account.plaid_type, plaid_account.plaid_subtype),
           balance: balance_calculator.balance,
           currency: plaid_account.currency,
           cash_balance: balance_calculator.cash_balance
@@ -62,17 +63,18 @@ class PlaidAccount::Processor
     def process_investments
       PlaidAccount::Investments::TransactionsProcessor.new(plaid_account, security_resolver: security_resolver).process
       PlaidAccount::Investments::HoldingsProcessor.new(plaid_account, security_resolver: security_resolver).process
+    rescue => e
       report_exception(e)
     end
 
     def process_liabilities
       case [ plaid_account.plaid_type, plaid_account.plaid_subtype ]
       when [ "credit", "credit card" ]
-        PlaidAccount::CreditLiabilityProcessor.new(plaid_account).process
+        PlaidAccount::Liabilities::CreditProcessor.new(plaid_account).process
       when [ "loan", "mortgage" ]
-        PlaidAccount::MortgageLiabilityProcessor.new(plaid_account).process
+        PlaidAccount::Liabilities::MortgageProcessor.new(plaid_account).process
       when [ "loan", "student" ]
-        PlaidAccount::StudentLoanLiabilityProcessor.new(plaid_account).process
+        PlaidAccount::Liabilities::StudentLoanProcessor.new(plaid_account).process
       end
     rescue => e
       report_exception(e)

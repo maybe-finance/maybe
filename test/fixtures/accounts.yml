@@ -24,9 +24,10 @@ depository:
 
 connected:
   family: dylan_family
-  name: Connected Account
+  name: Plaid Depository Account
   balance: 5000
   currency: USD
+  subtype: checking
   accountable_type: Depository
   accountable: two
   plaid_account: one
