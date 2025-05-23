@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Provider::Plaid::CategoryAliasMatcherTest < ActiveSupport::TestCase
+class PlaidAccount::Transactions::CategoryMatcherTest < ActiveSupport::TestCase
   setup do
     @family = families(:empty)
 
@@ -32,7 +32,7 @@ class Provider::Plaid::CategoryAliasMatcherTest < ActiveSupport::TestCase
 
     @giving = @family.categories.create!(name: "Giving")
 
-    @matcher = Provider::Plaid::CategoryAliasMatcher.new(@family.categories)
+    @matcher = PlaidAccount::Transactions::CategoryMatcher.new(@family.categories)
   end
 
   test "matches expense categories" do

@@ -16,5 +16,9 @@ class AddRawPayloadsToPlaidAccounts < ActiveRecord::Migration[7.2]
     change_column_null :plaid_accounts, :currency, false
     change_column_null :plaid_accounts, :name, false
     add_index :plaid_accounts, :plaid_id, unique: true
+
+    # No longer need to store on transaction model because it is stored in raw_transactions_payload
+    remove_column :transactions, :plaid_category
+    remove_column :transactions, :plaid_category_detailed
   end
 end

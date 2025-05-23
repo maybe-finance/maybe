@@ -43,10 +43,6 @@ class PlaidItem < ApplicationRecord
     end
   end
 
-  def build_category_alias_matcher(user_categories)
-    Provider::Plaid::CategoryAliasMatcher.new(user_categories)
-  end
-
   def destroy_later
     update!(scheduled_for_deletion: true)
     DestroyJob.perform_later(self)
@@ -107,35 +103,35 @@ class PlaidItem < ApplicationRecord
     save!
   end
 
-  def auto_match_categories!
-    if family.categories.none?
-      family.categories.bootstrap!
-    end
+  # def auto_match_categories!
+  #   if family.categories.none?
+  #     family.categories.bootstrap!
+  #   end
 
-    alias_matcher = build_category_alias_matcher(family.categories)
+  #   alias_matcher = build_category_alias_matcher(family.categories)
 
-    accounts.each do |account|
-      matchable_transactions = account.transactions
-                                      .where(category_id: nil)
-                                      .where.not(plaid_category: nil)
-                                      .enrichable(:category_id)
+  #   accounts.each do |account|
+  #     matchable_transactions = account.transactions
+  #                                     .where(category_id: nil)
+  #                                     .where.not(plaid_category: nil)
+  #                                     .enrichable(:category_id)
 
-      matchable_transactions.each do |transaction|
-        category = alias_matcher.match(transaction.plaid_category_detailed)
+  #     matchable_transactions.each do |transaction|
+  #       category = alias_matcher.match(transaction.plaid_category_detailed)
 
-        if category.present?
-          # Matcher could either return a string or a Category object
-          user_category = if category.is_a?(String)
-            family.categories.find_or_create_by!(name: category)
-          else
-            category
-          end
+  #       if category.present?
+  #         # Matcher could either return a string or a Category object
+  #         user_category = if category.is_a?(String)
+  #           family.categories.find_or_create_by!(name: category)
+  #         else
+  #           category
+  #         end
 
-          transaction.enrich_attribute(:category_id, user_category.id, source: "plaid")
-        end
-      end
-    end
-  end
+  #         transaction.enrich_attribute(:category_id, user_category.id, source: "plaid")
+  #       end
+  #     end
+  #   end
+  # end
 
   def supports_product?(product)
     supported_products.include?(product)

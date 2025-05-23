@@ -645,8 +645,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.uuid "category_id"
     t.uuid "merchant_id"
     t.jsonb "locked_attributes", default: {}
-    t.string "plaid_category"
-    t.string "plaid_category_detailed"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
   end

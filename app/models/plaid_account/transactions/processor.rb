@@ -4,12 +4,18 @@ class PlaidAccount::Transactions::Processor
   end
 
   def process
-    PlaidAccount.transaction do
-      modified_transactions.each do |transaction|
-        PlaidEntry::TransactionProcessor.new(transaction, plaid_account: plaid_account).process
-      end
+    # Each entry is processed inside a transaction, but to avoid locking up the DB when
+    # there are hundreds or thousands of transactions, we process them individually.
+    modified_transactions.find_each do |transaction|
+      PlaidEntry::Processor.new(
+        transaction,
+        plaid_account: plaid_account,
+        category_matcher: category_matcher
+      ).process
+    end
 
-      removed_transactions.each do |transaction|
+    PlaidAccount.transaction do
+      removed_transactions.find_each do |transaction|
         remove_plaid_transaction(transaction)
       end
     end
@@ -17,6 +23,20 @@ class PlaidAccount::Transactions::Processor
 
   private
     attr_reader :plaid_account
+
+    def category_matcher
+      @category_matcher ||= PlaidAccount::Transactions::CategoryMatcher.new(family_categories)
+    end
+
+    def family_categories
+      @family_categories ||= begin
+        if account.family.categories.none?
+          account.family.categories.bootstrap!
+        end
+
+        account.family.categories
+      end
+    end
 
     def account
       plaid_account.account

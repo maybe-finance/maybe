@@ -1,19 +1,7 @@
-# The purpose of this matcher is to auto-match Plaid categories to
-# known internal user categories.  Since we allow users to define their own
-# categories we cannot directly assign Plaid categories as this would overwrite
-# user data and create a confusing experience.
-#
-# Automated category matching in the Maybe app has a hierarchy:
-# 1. Naive string matching via CategoryAliasMatcher
-# 2. Rules-based matching set by user
-# 3. AI-powered matching (also enabled by user via rules)
-#
-# This class is simply a FAST and CHEAP way to match categories that are high confidence.
-# Edge cases will be handled by user-defined rules.
-class Provider::Plaid::CategoryAliasMatcher
-  include Provider::Plaid::CategoryTaxonomy
+class PlaidAccount::Transactions::CategoryMatcher
+  include PlaidAccount::Transactions::CategoryTaxonomy
 
-  def initialize(user_categories)
+  def initialize(user_categories = [])
     @user_categories = user_categories
   end
 
