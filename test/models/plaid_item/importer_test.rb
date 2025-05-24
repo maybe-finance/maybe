@@ -3,21 +3,47 @@ require "ostruct"
 
 class PlaidItem::ImporterTest < ActiveSupport::TestCase
   setup do
-    @mock_provider = PlaidMock.new
+    @mock_provider = mock("Provider::Plaid")
     @plaid_item = plaid_items(:one)
     @importer = PlaidItem::Importer.new(@plaid_item, plaid_provider: @mock_provider)
   end
 
   test "imports item metadata" do
-    PlaidAccount::Importer.any_instance.expects(:import).times(PlaidMock::ACCOUNTS.count)
+    item_data = OpenStruct.new(
+      item_id: "item_1",
+      available_products: [ "transactions", "investments", "liabilities" ],
+      billed_products: [],
+      institution_id: "ins_1",
+      institution_name: "First Platypus Bank",
+    )
 
-    PlaidItem::Importer.new(@plaid_item, plaid_provider: @mock_provider).import
+    @mock_provider.expects(:get_item).with(@plaid_item.access_token).returns(
+      OpenStruct.new(item: item_data)
+    )
 
-    assert_equal PlaidMock::ITEM.institution_id, @plaid_item.institution_id
-    assert_equal PlaidMock::ITEM.available_products, @plaid_item.available_products
-    assert_equal PlaidMock::ITEM.billed_products, @plaid_item.billed_products
+    institution_data = OpenStruct.new(
+      institution_id: "ins_1",
+      institution_name: "First Platypus Bank",
+    )
 
-    assert_equal PlaidMock::ITEM.item_id, @plaid_item.raw_payload["item_id"]
-    assert_equal PlaidMock::INSTITUTION.institution_id, @plaid_item.raw_institution_payload["institution_id"]
+    @mock_provider.expects(:get_institution).with("ins_1").returns(
+      OpenStruct.new(institution: institution_data)
+    )
+
+    PlaidItem::AccountsSnapshot.any_instance.expects(:accounts).returns([
+      OpenStruct.new(
+        account_id: "acc_1",
+        type: "depository"
+      )
+    ]).at_least_once
+
+    PlaidItem::AccountsSnapshot.any_instance.expects(:get_account_data).with("acc_1").once
+
+    PlaidAccount::Importer.any_instance.expects(:import).once
+
+    @plaid_item.expects(:upsert_plaid_snapshot!).with(item_data)
+    @plaid_item.expects(:upsert_plaid_institution_snapshot!).with(institution_data)
+
+    @importer.import
   end
 end

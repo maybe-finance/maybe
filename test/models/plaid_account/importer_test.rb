@@ -2,34 +2,45 @@ require "test_helper"
 
 class PlaidAccount::ImporterTest < ActiveSupport::TestCase
   setup do
-    @mock_provider = PlaidMock.new
     @plaid_account = plaid_accounts(:one)
-    @plaid_item = @plaid_account.plaid_item
-
-    @accounts_snapshot = PlaidItem::AccountsSnapshot.new(@plaid_item, plaid_provider: @mock_provider)
-    @account_snapshot = @accounts_snapshot.get_account_data(@plaid_account.plaid_id)
+    @mock_account_snapshot = mock
   end
 
   test "imports account data" do
-    PlaidAccount::Importer.new(@plaid_account, account_snapshot: @account_snapshot).import
+    account_data = OpenStruct.new(
+      account_id: "acc_1",
+      name: "Test Account",
+      mask: "1234",
+    )
 
-    assert_equal @account_snapshot.account_data.account_id, @plaid_account.plaid_id
-    assert_equal @account_snapshot.account_data.name, @plaid_account.name
-    assert_equal @account_snapshot.account_data.mask, @plaid_account.mask
-    assert_equal @account_snapshot.account_data.type, @plaid_account.plaid_type
-    assert_equal @account_snapshot.account_data.subtype, @plaid_account.plaid_subtype
+    transactions_data = OpenStruct.new(
+      added: [],
+      modified: [],
+      removed: [],
+    )
 
-    # This account has transactions data
-    assert_equal PlaidMock::TRANSACTIONS.count, @plaid_account.raw_transactions_payload["added"].count
+    investments_data = OpenStruct.new(
+      holdings: [],
+      transactions: [],
+      securities: [],
+    )
 
-    # This account does not have investment data
-    assert_equal 0, @plaid_account.raw_investments_payload["holdings"].count
-    assert_equal 0, @plaid_account.raw_investments_payload["securities"].count
-    assert_equal 0, @plaid_account.raw_investments_payload["transactions"].count
+    liabilities_data = OpenStruct.new(
+      credit: [],
+      mortgage: [],
+      student: [],
+    )
 
-    # This account is a credit card, so it should have liability data
-    assert_equal @plaid_account.plaid_id, @plaid_account.raw_liabilities_payload["credit"]["account_id"]
-    assert_nil @plaid_account.raw_liabilities_payload["mortgage"]
-    assert_nil @plaid_account.raw_liabilities_payload["student"]
+    @mock_account_snapshot.expects(:account_data).returns(account_data).at_least_once
+    @mock_account_snapshot.expects(:transactions_data).returns(transactions_data).at_least_once
+    @mock_account_snapshot.expects(:investments_data).returns(investments_data).at_least_once
+    @mock_account_snapshot.expects(:liabilities_data).returns(liabilities_data).at_least_once
+
+    @plaid_account.expects(:upsert_plaid_snapshot!).with(account_data)
+    @plaid_account.expects(:upsert_plaid_transactions_snapshot!).with(transactions_data)
+    @plaid_account.expects(:upsert_plaid_investments_snapshot!).with(investments_data)
+    @plaid_account.expects(:upsert_plaid_liabilities_snapshot!).with(liabilities_data)
+
+    PlaidAccount::Importer.new(@plaid_account, account_snapshot: @mock_account_snapshot).import
   end
 end
