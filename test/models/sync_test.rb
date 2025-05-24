@@ -3,6 +3,17 @@ require "test_helper"
 class SyncTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
+  test "does not run if not in a valid state" do
+    syncable = accounts(:depository)
+    sync = Sync.create!(syncable: syncable, status: :completed)
+
+    syncable.expects(:perform_sync).never
+
+    sync.perform
+
+    assert_equal "completed", sync.status
+  end
+
   test "runs successful sync" do
     syncable = accounts(:depository)
     sync = Sync.create!(syncable: syncable)

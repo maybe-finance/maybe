@@ -57,6 +57,12 @@ class Sync < ApplicationRecord
 
   def perform
     Rails.logger.tagged("Sync", id, syncable_type, syncable_id) do
+      # This can happen on server restarts or if Sidekiq enqueues a duplicate job
+      unless may_start?
+        Rails.logger.warn("Sync #{id} is not in a valid state (#{aasm.from_state}) to start.  Skipping sync.")
+        return
+      end
+
       start!
 
       begin
