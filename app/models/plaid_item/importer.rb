@@ -22,7 +22,6 @@ class PlaidItem::Importer
       case error_body["error_code"]
       when "ITEM_LOGIN_REQUIRED"
         plaid_item.update!(status: :requires_update)
-        raise error
       else
         raise error
       end
