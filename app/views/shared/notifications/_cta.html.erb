@@ -1,10 +1,10 @@
 <%# locals: (message:, description:) %>
 
 <div id="cta">
-  <%= tag.div class: "relative flex gap-3 rounded-lg bg-container-inset p-4 group w-full md:max-w-80 shadow-border-xs", data: { controller: "element-removal" } do %>
+  <%= tag.div class: "relative flex gap-3 rounded-lg bg-container p-4 group w-full md:max-w-80 shadow-border-xs", data: { controller: "element-removal" } do %>
     <div class="h-5 w-5 shrink-0 p-px text-primary">
-      <div class="flex h-full items-center justify-center rounded-full bg-success">
-        <%= icon "check", size: "xs" %>
+      <div class="flex h-full items-center justify-center rounded-full bg-success text-white">
+        <%= icon "check", size: "xs", color: "current" %>
       </div>
     </div>
 

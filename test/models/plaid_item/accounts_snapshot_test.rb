@@ -26,7 +26,14 @@ class PlaidItem::AccountsSnapshotTest < ActiveSupport::TestCase
       )
     ]).at_least_once
 
-    @plaid_provider.expects(:get_transactions).with(@plaid_item.access_token).once
+    @plaid_provider.expects(:get_transactions).with(@plaid_item.access_token, next_cursor: nil).returns(
+      OpenStruct.new(
+        added: [],
+        modified: [],
+        removed: [],
+        cursor: "test_cursor_1"
+      )
+    ).once
     @plaid_provider.expects(:get_item_investments).never
     @plaid_provider.expects(:get_item_liabilities).never
 
@@ -39,6 +46,31 @@ class PlaidItem::AccountsSnapshotTest < ActiveSupport::TestCase
     @snapshot.expects(:accounts).returns([]).at_least_once
 
     @plaid_provider.expects(:get_transactions).never
+    @plaid_provider.expects(:get_item_investments).never
+    @plaid_provider.expects(:get_item_liabilities).never
+
+    @snapshot.get_account_data("123")
+  end
+
+  test "updates next_cursor when fetching transactions" do
+    @plaid_item.update!(available_products: [ "transactions" ], billed_products: [], next_cursor: "test_cursor_1")
+
+    @snapshot.expects(:accounts).returns([
+      OpenStruct.new(
+        account_id: "123",
+        type: "depository"
+      )
+    ]).at_least_once
+
+    @plaid_provider.expects(:get_transactions).with(@plaid_item.access_token, next_cursor: "test_cursor_1").returns(
+      OpenStruct.new(
+        added: [],
+        modified: [],
+        removed: [],
+        cursor: "test_cursor_2"
+      )
+    ).once
+
     @plaid_provider.expects(:get_item_investments).never
     @plaid_provider.expects(:get_item_liabilities).never
 

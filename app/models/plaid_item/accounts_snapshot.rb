@@ -20,6 +20,11 @@ class PlaidItem::AccountsSnapshot
     )
   end
 
+  def transactions_cursor
+    return nil unless transactions_data
+    transactions_data.cursor
+  end
+
   private
     attr_reader :plaid_item, :plaid_provider
 
@@ -68,7 +73,11 @@ class PlaidItem::AccountsSnapshot
 
     def transactions_data
       return nil unless can_fetch_transactions?
-      @transactions_data ||= plaid_provider.get_transactions(plaid_item.access_token)
+
+      @transactions_data ||= plaid_provider.get_transactions(
+        plaid_item.access_token,
+        next_cursor: plaid_item.next_cursor
+      )
     end
 
     def can_fetch_investments?

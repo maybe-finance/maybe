@@ -39,15 +39,20 @@ class PlaidItem::Importer
     def fetch_and_import_accounts_data
       snapshot = PlaidItem::AccountsSnapshot.new(plaid_item, plaid_provider: plaid_provider)
 
-      snapshot.accounts.each do |raw_account|
-        plaid_account = plaid_item.plaid_accounts.find_or_initialize_by(
-          plaid_id: raw_account.account_id
-        )
+      PlaidItem.transaction do
+        snapshot.accounts.each do |raw_account|
+          plaid_account = plaid_item.plaid_accounts.find_or_initialize_by(
+            plaid_id: raw_account.account_id
+          )
 
-        PlaidAccount::Importer.new(
-          plaid_account,
-          account_snapshot: snapshot.get_account_data(raw_account.account_id)
-        ).import
+          PlaidAccount::Importer.new(
+            plaid_account,
+            account_snapshot: snapshot.get_account_data(raw_account.account_id)
+          ).import
+        end
+
+        # Once we know all data has been imported, save the cursor to avoid re-fetching the same data next time
+        plaid_item.update!(next_cursor: snapshot.transactions_cursor)
       end
     end
 end

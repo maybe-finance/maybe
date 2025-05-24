@@ -5,12 +5,10 @@ class PlaidAccount::Importer
   end
 
   def import
-    PlaidAccount.transaction do
-      import_account_info
-      import_transactions if account_snapshot.transactions_data.present?
-      import_investments if account_snapshot.investments_data.present?
-      import_liabilities if account_snapshot.liabilities_data.present?
-    end
+    import_account_info
+    import_transactions if account_snapshot.transactions_data.present?
+    import_investments if account_snapshot.investments_data.present?
+    import_liabilities if account_snapshot.liabilities_data.present?
   end
 
   private
