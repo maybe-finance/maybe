@@ -112,7 +112,8 @@ class PlaidItem::AccountsSnapshotTest < ActiveSupport::TestCase
     @snapshot.expects(:accounts).returns([
       OpenStruct.new(
         account_id: "123",
-        type: "credit"
+        type: "loan",
+        subtype: "student"
       )
     ]).at_least_once
 
