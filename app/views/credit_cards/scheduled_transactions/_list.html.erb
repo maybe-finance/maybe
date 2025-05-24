@@ -1,0 +1,16 @@
+<%# Locals: credit_card (Account object), scheduled_transactions (collection) %>
+<div class="scheduled-transactions-list">
+  <div class="text-right mb-4">
+    <%= link_to "New Scheduled Transaction", new_credit_card_scheduled_transaction_path(credit_card), class: "btn btn-primary" %>
+  </div>
+
+  <% if scheduled_transactions.any? %>
+    <div id="scheduled_transactions_for_<%= credit_card.id %>">
+      <% scheduled_transactions.each do |st| %>
+        <%= render 'credit_cards/scheduled_transactions/scheduled_transaction', scheduled_transaction: st, credit_card: credit_card %>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No scheduled transactions yet.</p>
+  <% end %>
+</div>

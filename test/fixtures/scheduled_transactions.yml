@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  category: one
+  merchant: one
+  description: MyString
+  amount: 9.99
+  currency: MyString
+  frequency: MyString
+  installments: 1
+  current_installment: 1
+  next_occurrence_date: 2025-05-24
+  end_date: 2025-05-24
+
+two:
+  account: two
+  category: two
+  merchant: two
+  description: MyString
+  amount: 9.99
+  currency: MyString
+  frequency: MyString
+  installments: 1
+  current_installment: 1
+  next_occurrence_date: 2025-05-24
+  end_date: 2025-05-24

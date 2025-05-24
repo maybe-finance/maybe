@@ -1,0 +1,35 @@
+<%# Locals: scheduled_transaction, credit_card (Account object) %>
+<div id="<%= dom_id(scheduled_transaction) %>" class="scheduled-transaction-item">
+  <p>
+    <strong>Description:</strong>
+    <%= scheduled_transaction.description %>
+  </p>
+  <p>
+    <strong>Amount:</strong>
+    <%= number_to_currency(scheduled_transaction.amount, unit: scheduled_transaction.currency) %>
+  </p>
+  <p>
+    <strong>Frequency:</strong>
+    <%= scheduled_transaction.frequency&.humanize %>
+  </p>
+  <p>
+    <strong>Next Occurrence:</strong>
+    <%= l(scheduled_transaction.next_occurrence_date) if scheduled_transaction.next_occurrence_date? %>
+  </p>
+  <% if scheduled_transaction.installments.present? && scheduled_transaction.installments > 0 %>
+    <p>
+      <strong>Installments:</strong>
+      <%= scheduled_transaction.current_installment %> / <%= scheduled_transaction.installments %>
+    </p>
+  <% end %>
+  <% if scheduled_transaction.end_date.present? %>
+    <p>
+      <strong>Ends On:</strong>
+      <%= l(scheduled_transaction.end_date) %>
+    </p>
+  <% end %>
+  <p>
+    <%= link_to "Edit", edit_credit_card_scheduled_transaction_path(credit_card, scheduled_transaction) %> |
+    <%= link_to "Delete", credit_card_scheduled_transaction_path(credit_card, scheduled_transaction), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+  </p>
+</div>

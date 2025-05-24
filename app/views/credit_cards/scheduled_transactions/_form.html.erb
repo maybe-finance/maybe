@@ -1,0 +1,62 @@
+<%# Locals: form (FormBuilder), credit_card (Account object), scheduled_transaction (ScheduledTransaction object) %>
+<%= form_with(model: scheduled_transaction, url: scheduled_transaction.new_record? ? credit_card_scheduled_transactions_path(credit_card) : credit_card_scheduled_transaction_path(credit_card, scheduled_transaction), local: true) do |form| %>
+  <% if scheduled_transaction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(scheduled_transaction.errors.count, "error") %> prohibited this scheduled transaction from being saved:</h2>
+      <ul>
+        <% scheduled_transaction.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount %>
+    <%= form.number_field :amount, step: 0.01 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :currency %>
+    <%= form.text_field :currency, value: scheduled_transaction.currency || credit_card.currency %>
+  </div>
+
+  <div class="field">
+    <%= form.label :frequency %>
+    <%= form.select :frequency, options_for_select([['Daily', 'daily'], ['Weekly', 'weekly'], ['Monthly', 'monthly'], ['Yearly', 'yearly']], scheduled_transaction.frequency) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :next_occurrence_date %>
+    <%= form.date_select :next_occurrence_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :installments %>
+    <%= form.number_field :installments %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_date %>
+    <%= form.date_select :end_date, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :category_id %>
+    <%= form.collection_select :category_id, Current.family.categories.expenses.alphabetically, :id, :name_with_parent, { include_blank: true } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :merchant_id %>
+    <%= form.collection_select :merchant_id, Current.family.merchants.alphabetically, :id, :name, { include_blank: true } %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

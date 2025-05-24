@@ -166,7 +166,9 @@ Rails.application.routes.draw do
   resources :investments, except: :index
   resources :properties, except: :index
   resources :vehicles, except: :index
-  resources :credit_cards, except: :index
+  resources :credit_cards, except: :index do
+    resources :scheduled_transactions, only: [:new, :create, :edit, :update, :destroy], controller: 'credit_cards/scheduled_transactions'
+  end
   resources :loans, except: :index
   resources :cryptos, except: :index
   resources :other_assets, except: :index

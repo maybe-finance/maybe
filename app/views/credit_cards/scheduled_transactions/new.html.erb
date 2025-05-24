@@ -1,0 +1,5 @@
+<h1>New Scheduled Transaction for <%= @credit_card.name %></h1>
+
+<%= render 'form', credit_card: @credit_card, scheduled_transaction: @scheduled_transaction %>
+
+<%= link_to 'Back to Credit Card', credit_card_path(@credit_card) %>
