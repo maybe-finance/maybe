@@ -108,11 +108,8 @@ class PlaidItem < ApplicationRecord
   end
 
   private
-    # Silently swallow and report error so that we don't block the user from deleting the item
     def remove_plaid_item
       plaid_provider.remove_item(access_token)
-    rescue StandardError => e
-      Sentry.capture_exception(e)
     end
 
     # Plaid returns mutually exclusive arrays here.  If the item has made a request for a product,

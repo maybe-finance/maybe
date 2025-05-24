@@ -16,12 +16,4 @@ class PlaidItemTest < ActiveSupport::TestCase
       @plaid_item.destroy
     end
   end
-
-  test "if plaid item not found, silently continues with deletion" do
-    @plaid_provider.expects(:remove_item).with(@plaid_item.access_token).raises(Plaid::ApiError.new("Item not found"))
-
-    assert_difference "PlaidItem.count", -1 do
-      @plaid_item.destroy
-    end
-  end
 end
