@@ -11,29 +11,6 @@ class Provider::Plaid
     @region = region
   end
 
-  def process_webhook(webhook_body)
-    parsed = JSON.parse(webhook_body)
-
-    type = parsed["webhook_type"]
-    code = parsed["webhook_code"]
-
-    item = PlaidItem.find_by(plaid_id: parsed["item_id"])
-
-    case [ type, code ]
-    when [ "TRANSACTIONS", "SYNC_UPDATES_AVAILABLE" ]
-      item.sync_later
-    when [ "INVESTMENTS_TRANSACTIONS", "DEFAULT_UPDATE" ]
-      item.sync_later
-    when [ "HOLDINGS", "DEFAULT_UPDATE" ]
-      item.sync_later
-    else
-      Rails.logger.warn("Unhandled Plaid webhook type: #{type}:#{code}")
-    end
-  rescue => error
-    # Processing errors shouldn't return a 400 to Plaid since they are internal, so capture silently
-    Sentry.capture_exception(error)
-  end
-
   def validate_webhook!(verification_header, raw_body)
     jwks_loader = ->(options) do
       key_id = options[:kid]

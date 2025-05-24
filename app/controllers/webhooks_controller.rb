@@ -9,7 +9,8 @@ class WebhooksController < ApplicationController
     client = Provider::Registry.plaid_provider_for_region(:us)
 
     client.validate_webhook!(plaid_verification_header, webhook_body)
-    client.process_webhook(webhook_body)
+
+    PlaidItem::WebhookProcessor.new(webhook_body).process
 
     render json: { received: true }, status: :ok
   rescue => error
@@ -24,7 +25,8 @@ class WebhooksController < ApplicationController
     client = Provider::Registry.plaid_provider_for_region(:eu)
 
     client.validate_webhook!(plaid_verification_header, webhook_body)
-    client.process_webhook(webhook_body)
+
+    PlaidItem::WebhookProcessor.new(webhook_body).process
 
     render json: { received: true }, status: :ok
   rescue => error
