@@ -6,8 +6,12 @@ export default class extends Controller {
     linkToken: String,
     region: { type: String, default: "us" },
     isUpdate: { type: Boolean, default: false },
-    itemId: String
+    itemId: String,
   };
+
+  connect() {
+    this.open();
+  }
 
   open() {
     const handler = Plaid.create({
@@ -15,7 +19,7 @@ export default class extends Controller {
       onSuccess: this.handleSuccess,
       onLoad: this.handleLoad,
       onExit: this.handleExit,
-      onEvent: this.handleEvent
+      onEvent: this.handleEvent,
     });
 
     handler.open();
@@ -27,10 +31,10 @@ export default class extends Controller {
       fetch(`/plaid_items/${this.itemIdValue}/sync`, {
         method: "POST",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
           "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
-        }
+        },
       }).then(() => {
         // Refresh the page to show the updated status
         window.location.href = "/accounts";

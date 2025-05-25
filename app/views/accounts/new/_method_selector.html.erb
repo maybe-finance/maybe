@@ -1,4 +1,4 @@
-<%# locals: (path:, us_link_token: nil, eu_link_token: nil) %>
+<%# locals: (path:, accountable_type:, show_us_link: true, show_eu_link: true) %>
 
 <%= render layout: "accounts/new/container", locals: { title: t(".title"), back_path: new_account_path } do %>
   <div class="text-sm">
@@ -9,24 +9,28 @@
       <%= t("accounts.new.method_selector.manual_entry") %>
     <% end %>
 
-    <% if us_link_token %>
+    <% if show_us_link %>
       <%# Default US-only Link %>
-      <button data-controller="plaid" data-action="plaid#open dialog#close" data-plaid-region-value="us" data-plaid-link-token-value="<%= us_link_token %>" class="text-primary flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2">
+      <%= link_to new_plaid_item_path(region: "us", accountable_type: accountable_type), 
+                  class: "text-primary flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2",
+                  data: { turbo_frame: "modal" } do %>
         <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
           <%= icon("link-2") %>
         </span>
         <%= t("accounts.new.method_selector.connected_entry") %>
-      </button>
+      <% end %>
     <% end %>
 
     <%# EU Link %>
-    <% if eu_link_token %>
-      <button data-controller="plaid" data-action="plaid#open dialog#close" data-plaid-region-value="eu" data-plaid-link-token-value="<%= eu_link_token %>" class="text-primary flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2">
+    <% if show_eu_link %>
+      <%= link_to new_plaid_item_path(region: "eu", accountable_type: accountable_type), 
+                  class: "text-primary flex items-center gap-4 w-full text-center focus:outline-hidden focus:bg-gray-50 border border-transparent focus:border focus:border-gray-200 px-2 hover:bg-gray-50 rounded-lg p-2",
+                  data: { turbo_frame: "modal" } do %>
         <span class="flex w-8 h-8 shrink-0 grow-0 items-center justify-center rounded-lg bg-alpha-black-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
           <%= icon("link-2") %>
         </span>
         <%= t("accounts.new.method_selector.connected_entry_eu") %>
-      </button>
+      <% end %>
     <% end %>
   </div>
 <% end %>

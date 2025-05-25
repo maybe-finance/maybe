@@ -6,6 +6,7 @@ class PlaidItem::WebhookProcessor
     @webhook_type = parsed["webhook_type"]
     @webhook_code = parsed["webhook_code"]
     @item_id = parsed["item_id"]
+    @error = parsed["error"]
   end
 
   def process
@@ -21,6 +22,10 @@ class PlaidItem::WebhookProcessor
       plaid_item.sync_later
     when [ "HOLDINGS", "DEFAULT_UPDATE" ]
       plaid_item.sync_later
+    when [ "ITEM", "ERROR" ]
+      if error["error_code"] == "ITEM_LOGIN_REQUIRED"
+        plaid_item.update!(status: :requires_update)
+      end
     else
       Rails.logger.warn("Unhandled Plaid webhook type: #{webhook_type}:#{webhook_code}")
     end
@@ -30,7 +35,7 @@ class PlaidItem::WebhookProcessor
   end
 
   private
-    attr_reader :webhook_type, :webhook_code, :item_id
+    attr_reader :webhook_type, :webhook_code, :item_id, :error
 
     def plaid_item
       @plaid_item ||= PlaidItem.find_by(plaid_id: item_id)

@@ -23,24 +23,22 @@ class PlaidItem < ApplicationRecord
   scope :needs_update, -> { where(status: :requires_update) }
 
   def get_update_link_token(webhooks_url:, redirect_url:)
-    begin
-      family.get_link_token(
-        webhooks_url: webhooks_url,
-        redirect_url: redirect_url,
-        region: plaid_region,
-        access_token: access_token
-      )
-    rescue Plaid::ApiError => e
-      error_body = JSON.parse(e.response_body)
+    family.get_link_token(
+      webhooks_url: webhooks_url,
+      redirect_url: redirect_url,
+      region: plaid_region,
+      access_token: access_token
+    )
+  rescue Plaid::ApiError => e
+    error_body = JSON.parse(e.response_body)
 
-      if error_body["error_code"] == "ITEM_NOT_FOUND"
-        # Mark the connection as invalid but don't auto-delete
-        update!(status: :requires_update)
-        raise PlaidConnectionLostError
-      else
-        raise e
-      end
+    if error_body["error_code"] == "ITEM_NOT_FOUND"
+      # Mark the connection as invalid but don't auto-delete
+      update!(status: :requires_update)
     end
+
+    Sentry.capture_exception(e)
+    nil
   end
 
   def destroy_later
@@ -118,6 +116,4 @@ class PlaidItem < ApplicationRecord
     def supported_products
       available_products + billed_products
     end
-
-    class PlaidConnectionLostError < StandardError; end
 end

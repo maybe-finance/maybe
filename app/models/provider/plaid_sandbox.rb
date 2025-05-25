@@ -28,6 +28,14 @@ class Provider::PlaidSandbox < Provider::Plaid
     )
   end
 
+  def reset_login(item)
+    client.sandbox_item_reset_login(
+      Plaid::SandboxItemResetLoginRequest.new(
+        access_token: item.access_token
+      )
+    )
+  end
+
   private
     def create_client
       raise "Plaid sandbox is not supported in production" if Rails.env.production?

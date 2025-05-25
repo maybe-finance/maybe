@@ -5,7 +5,7 @@ module AccountableResource
     include ScrollFocusable, Periodable
 
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
-    before_action :set_link_token, only: :new
+    before_action :set_link_options, only: :new
   end
 
   class_methods do
@@ -59,34 +59,9 @@ module AccountableResource
   end
 
   private
-    def set_link_token
-      @us_link_token = Current.family.get_link_token(
-        webhooks_url: plaid_us_webhooks_url,
-        redirect_url: accounts_url,
-        accountable_type: accountable_type.name,
-        region: :us
-      )
-
-      if Current.family.eu?
-        @eu_link_token = Current.family.get_link_token(
-          webhooks_url: plaid_eu_webhooks_url,
-          redirect_url: accounts_url,
-          accountable_type: accountable_type.name,
-          region: :eu
-        )
-      end
-    end
-
-    def plaid_us_webhooks_url
-      return webhooks_plaid_url if Rails.env.production?
-
-      ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/")) + "/webhooks/plaid"
-    end
-
-    def plaid_eu_webhooks_url
-      return webhooks_plaid_eu_url if Rails.env.production?
-
-      ENV.fetch("DEV_WEBHOOKS_URL", root_url.chomp("/")) + "/webhooks/plaid_eu"
+    def set_link_options
+      @show_us_link = Current.family.can_connect_plaid_us?
+      @show_eu_link = Current.family.can_connect_plaid_eu?
     end
 
     def accountable_type

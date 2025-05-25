@@ -193,7 +193,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :plaid_items, only: %i[create destroy] do
+  resources :plaid_items, only: %i[new edit create destroy] do
     member do
       post :sync
     end
