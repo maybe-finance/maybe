@@ -108,6 +108,15 @@ class PlaidItem < ApplicationRecord
   private
     def remove_plaid_item
       plaid_provider.remove_item(access_token)
+    rescue Plaid::ApiError => e
+      json_response = JSON.parse(e.response_body)
+
+      # If the item is not found, that means it was already deleted by the user on their
+      # Plaid portal OR by Plaid support.  Either way, we're not being billed, so continue
+      # with the deletion of our internal record.
+      unless json_response["error_code"] == "ITEM_NOT_FOUND"
+        raise e
+      end
     end
 
     # Plaid returns mutually exclusive arrays here.  If the item has made a request for a product,
