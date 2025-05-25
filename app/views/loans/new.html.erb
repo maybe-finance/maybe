@@ -1,5 +1,9 @@
 <% if params[:step] == "method_select" %>
-  <%= render "accounts/new/method_selector", path: new_loan_path(return_to: params[:return_to]), us_link_token: @us_link_token, eu_link_token: @eu_link_token %>
+  <%= render "accounts/new/method_selector", 
+             path: new_loan_path(return_to: params[:return_to]), 
+             show_us_link: @show_us_link, 
+             show_eu_link: @show_eu_link,
+             accountable_type: "Loan" %>
 <% else %>
   <%= render DialogComponent.new do |dialog| %>
     <% dialog.with_header(title: t(".title")) %>

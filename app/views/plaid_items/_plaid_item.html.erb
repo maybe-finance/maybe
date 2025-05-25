@@ -48,56 +48,18 @@
 
       <div class="flex items-center gap-2">
         <% if plaid_item.requires_update? %>
-          <% begin %>
-            <% link_token = plaid_item.get_update_link_token(webhooks_url: plaid_webhooks_url(plaid_item.plaid_region), redirect_url: accounts_url) %>
-
-            <%= render ButtonComponent.new(
-              text: t(".update"),
-              icon: "refresh-cw",
-              variant: "secondary",
-              data: {
-                controller: "plaid",
-                action: "plaid#open",
-                plaid_region_value: plaid_item.plaid_region,
-                plaid_link_token_value: link_token,
-                plaid_is_update_value: true,
-                plaid_item_id_value: plaid_item.id
-              }
-            ) %>
-            <% rescue PlaidItem::PlaidConnectionLostError %>
-            <div class="flex flex-col gap-2">
-              <div class="text-warning flex items-center gap-1">
-                <%= icon "alert-triangle", size: "sm", color: "warning" %>
-                <%= tag.span t(".connection_lost") %>
-              </div>
-
-              <p class="text-sm text-secondary"><%= t(".connection_lost_description") %></p>
-
-              <div class="flex items-center gap-2">
-                <%= render ButtonComponent.new(
-                  text: t(".delete"),
-                  icon: "trash-2",
-                  variant: "destructive",
-                  href: plaid_item_path(plaid_item),
-                  method: :delete,
-                  confirm: CustomConfirm.for_resource_deletion(plaid_item.name, high_severity: true)
-                ) %>
-
-                <%= render LinkComponent.new(
-                  text: t(".add_new"),
-                  icon: "plus",
-                  variant: "secondary",
-                  href: new_account_path
-                ) %>
-              </div>
-            </div>
-          <% end %>
+          <%= render LinkComponent.new(
+            text: t(".update"),
+            icon: "refresh-cw",
+            variant: "secondary",
+            href: edit_plaid_item_path(plaid_item),
+            frame: "modal"
+          ) %>
         <% elsif Rails.env.development? %>
           <%= icon(
             "refresh-cw",
             as_button: true,
-            href: sync_plaid_item_path(plaid_item),
-            disabled: plaid_item.syncing? || plaid_item.scheduled_for_deletion?
+            href: sync_plaid_item_path(plaid_item)
           ) %>
         <% end %>
 

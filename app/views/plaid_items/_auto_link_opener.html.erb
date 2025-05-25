@@ -1,0 +1,9 @@
+<%# locals: (link_token:, region:, item_id:, is_update: false) %>
+
+<%= tag.div data: { 
+              controller: "plaid", 
+              plaid_link_token_value: link_token,  
+              plaid_region_value: region,
+              plaid_item_id_value: item_id,
+              plaid_is_update_value: is_update
+            } %>
