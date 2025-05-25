@@ -5,6 +5,15 @@ module Family::PlaidConnectable
     has_many :plaid_items, dependent: :destroy
   end
 
+  def can_connect_plaid_us?
+    plaid(:us).present?
+  end
+
+  # If Plaid provider is configured and user is in the EU region
+  def can_connect_plaid_eu?
+    plaid(:eu).present? && self.eu?
+  end
+
   def create_plaid_item!(public_token:, item_name:, region:)
     public_token_response = plaid(region).exchange_public_token(public_token)
 
@@ -34,6 +43,6 @@ module Family::PlaidConnectable
 
   private
     def plaid(region)
-      @plaid ||= Provider::Registry.plaid_provider_for_region(region)
+      Provider::Registry.plaid_provider_for_region(region)
     end
 end
