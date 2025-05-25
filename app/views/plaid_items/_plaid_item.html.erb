@@ -30,7 +30,7 @@
             </div>
           <% elsif plaid_item.requires_update? %>
             <div class="text-warning flex items-center gap-1">
-              <%= icon "alert-triangle", size: "sm" %>
+              <%= icon "alert-triangle", size: "sm", color: "warning" %>
               <%= tag.span t(".requires_update") %>
             </div>
           <% elsif plaid_item.sync_error.present? %>
