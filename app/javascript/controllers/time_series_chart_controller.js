@@ -55,6 +55,7 @@ export default class extends Controller {
     this._normalDataPoints = (this.dataValue.values || []).map((d) => ({
       date: parseLocalDate(d.date),
       date_formatted: d.date_formatted,
+      value: d.value,
       trend: d.trend,
     }));
   }
@@ -415,7 +416,7 @@ export default class extends Controller {
   }
 
   _getDatumValue = (datum) => {
-    return this._extractNumericValue(datum.trend.current);
+    return this._extractNumericValue(datum.value);
   };
 
   _extractNumericValue = (numeric) => {
