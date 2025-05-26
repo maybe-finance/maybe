@@ -10,7 +10,7 @@ class Series
     values.each(&block)
   end
 
-  attr_reader :start_date, :end_date, :interval, :trend, :values, :favorable_direction
+  attr_reader :start_date, :end_date, :interval, :values, :favorable_direction
 
   Value = Struct.new(
     :date,
