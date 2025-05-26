@@ -50,14 +50,17 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
       if period.start_date == Date.current
         []
       else
-        balance_series = scope.balance_series(
+        account_ids = scope.pluck(:id)
+
+        builder = Balance::ChartSeriesBuilder.new(
+          account_ids: account_ids,
           currency: family.currency,
           period: period,
-          interval: "1 month",
-          favorable_direction: "up"
+          favorable_direction: "up",
+          interval: "1 month"
         )
 
-        to_ai_time_series(balance_series)
+        to_ai_time_series(builder.balance_series)
       end
     end
 

@@ -88,7 +88,20 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    active_accounts.balance_series(currency: currency, period: period, favorable_direction: "up")
+    memo_key = [ period.start_date, period.end_date ].compact.join("_")
+
+    @net_worth_series ||= {}
+
+    account_ids = active_accounts.pluck(:id)
+
+    builder = (@net_worth_series[memo_key] ||= Balance::ChartSeriesBuilder.new(
+      account_ids: account_ids,
+      currency: currency,
+      period: period,
+      favorable_direction: "up"
+    ))
+
+    builder.balance_series
   end
 
   def currency
