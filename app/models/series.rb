@@ -33,10 +33,6 @@ class Series
         start_date: start_date,
         end_date: end_date,
         interval: interval,
-        trend: Trend.new(
-          current: ordered.last[:value],
-          previous: ordered.first[:value]
-        ),
         values: [ nil, *ordered ].each_cons(2).map do |prev_value, curr_value|
           Value.new(
             date: curr_value[:date],
