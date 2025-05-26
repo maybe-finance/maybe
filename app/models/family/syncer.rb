@@ -16,7 +16,7 @@ class Family::Syncer
 
     # Schedule child syncs
     child_syncables.each do |syncable|
-      syncable.sync_later(parent_sync: sync, window_start_date: sync.window_start_date, window_end_date: sync.window_end_date)
+      syncable.sync_later(parent_sync: sync)
     end
   end
 

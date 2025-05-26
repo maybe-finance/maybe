@@ -101,29 +101,6 @@ class Sync < ApplicationRecord
     parent&.finalize_if_all_children_finalized
   end
 
-  # If a sync is pending, we can adjust the window if new syncs are created with a wider window.
-  def expand_window_if_needed(new_window_start_date, new_window_end_date)
-    return unless pending?
-    return if self.window_start_date.nil? && self.window_end_date.nil? # already as wide as possible
-
-    earliest_start_date = if self.window_start_date && new_window_start_date
-      [ self.window_start_date, new_window_start_date ].min
-    else
-      nil
-    end
-
-    latest_end_date = if self.window_end_date && new_window_end_date
-      [ self.window_end_date, new_window_end_date ].max
-    else
-      nil
-    end
-
-    update(
-      window_start_date: earliest_start_date,
-      window_end_date: latest_end_date
-    )
-  end
-
   private
     def log_status_change
       Rails.logger.info("changing from #{aasm.from_state} to #{aasm.to_state} (event: #{aasm.current_event})")

@@ -68,13 +68,10 @@ class PlaidItem < ApplicationRecord
   end
 
   # Once all the data is fetched, we can schedule account syncs to calculate historical balances
-  def schedule_account_syncs(parent_sync: nil, window_start_date: nil, window_end_date: nil)
+  # TODO: <Sync>
+  def schedule_account_syncs(parent_sync: nil)
     accounts.each do |account|
-      account.sync_later(
-        parent_sync: parent_sync,
-        window_start_date: window_start_date,
-        window_end_date: window_end_date
-      )
+      account.sync_later(parent_sync: parent_sync)
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_26_093332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.boolean "scheduled_for_deletion", default: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
+    t.date "data_synced_through"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
@@ -228,6 +229,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
     t.boolean "auto_sync_on_login", default: true, null: false
+    t.date "data_synced_through"
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -456,6 +458,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.string "status", default: "good", null: false
     t.jsonb "raw_payload", default: {}
     t.jsonb "raw_institution_payload", default: {}
+    t.date "data_synced_through"
     t.index ["family_id"], name: "index_plaid_items_on_family_id"
     t.index ["plaid_id"], name: "index_plaid_items_on_plaid_id", unique: true
   end
