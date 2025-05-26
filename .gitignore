@@ -71,3 +71,35 @@ node_modules
 compose.yml
 
 plaid_test_accounts/
+
+# Added by Claude Task Master
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+.env
+# Editor directories and files
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.roo*
+# OS specific
+# Task files
+tasks.json
+tasks/ 
+*.mcp.json
+scripts/
+.cursor/mcp.json
+.taskmasterconfig
+.windsurfrules
+.cursor/rules/dev_workflow.mdc
+.cursor/rules/taskmaster.mdc
