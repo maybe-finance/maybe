@@ -15,13 +15,13 @@
         <% end %>
         <div>
           <a class="text-primary font-medium text-sm" href="https://github.com/<%= @release_notes[:username] %>"><%= "@#{@release_notes[:username]}" %></a>
-          <div class="text-secondary text-sm"><%= @release_notes[:published_at].strftime("%B %d, %Y") %></div>
+          <div class="text-secondary text-sm"><%= @release_notes[:published_at]&.strftime("%B %d, %Y") || "Date unavailable" %></div>
         </div>
       </div>
     </div>
     <div class="w-full md:w-2/3 text-secondary text-sm prose prose--github-release-notes">
       <h2 class="mb-5 text-xl text-primary"><%= @release_notes[:name] %></h2>
-      <%= @release_notes[:body].html_safe %>
+      <%= (@release_notes[:body] || "No release notes available").html_safe %>
     </div>
   </div>
 </div>
