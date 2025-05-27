@@ -30,7 +30,7 @@ class EntryTest < ActiveSupport::TestCase
     prior_date = @entry.date - 1
     @entry.update! date: prior_date
 
-    @entry.account.expects(:sync_later).with(window_start_date: prior_date)
+    @entry.account.expects(:sync_later).once
     @entry.sync_account_later
   end
 
@@ -38,14 +38,14 @@ class EntryTest < ActiveSupport::TestCase
     prior_date = @entry.date
     @entry.update! date: @entry.date + 1
 
-    @entry.account.expects(:sync_later).with(window_start_date: prior_date)
+    @entry.account.expects(:sync_later).once
     @entry.sync_account_later
   end
 
   test "triggers sync with correct start date when transaction deleted" do
     @entry.destroy!
 
-    @entry.account.expects(:sync_later).with(window_start_date: nil)
+    @entry.account.expects(:sync_later).once
     @entry.sync_account_later
   end
 

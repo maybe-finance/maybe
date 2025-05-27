@@ -44,8 +44,9 @@ class Entry < ApplicationRecord
   end
 
   def sync_account_later
+    # TODO: <Sync>
     sync_start_date = [ date_previously_was, date ].compact.min unless destroyed?
-    account.sync_later(window_start_date: sync_start_date)
+    account.sync_later
   end
 
   def entryable_name_short
