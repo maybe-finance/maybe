@@ -29,6 +29,17 @@ class PagesController < ApplicationController
   def changelog
     @release_notes = github_provider.fetch_latest_release_notes
 
+    # Fallback if no release notes are available
+    if @release_notes.nil?
+      @release_notes = {
+        avatar: "https://github.com/maybe-finance.png",
+        username: "maybe-finance",
+        name: "Release notes unavailable",
+        published_at: Date.current,
+        body: "<p>Unable to fetch the latest release notes at this time. Please check back later or visit our <a href='https://github.com/maybe-finance/maybe/releases' target='_blank'>GitHub releases page</a> directly.</p>"
+      }
+    end
+
     render layout: "settings"
   end
 
