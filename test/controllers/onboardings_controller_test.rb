@@ -162,6 +162,8 @@ end
     private
 
       def sign_out
-        delete session_path(@user.sessions.last) if @user.sessions.any?
-end
+        @user.sessions.each do |session|
+          delete session_path(session)
+        end
+      end
 end

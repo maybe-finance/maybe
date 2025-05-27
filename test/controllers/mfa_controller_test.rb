@@ -7,7 +7,9 @@ class MfaControllerTest < ActionDispatch::IntegrationTest
   end
 
   def sign_out
-    delete session_path(@user.sessions.last) if @user.sessions.any?
+    @user.sessions.each do |session|
+      delete session_path(session)
+    end
   end
 
   test "redirects to root if MFA already enabled" do
