@@ -2,6 +2,7 @@ class AccountableSparklinesController < ApplicationController
   def show
     @accountable = Accountable.from_type(params[:accountable_type]&.classify)
 
+    # Pre-load the series to catch any errors before rendering
     @series = Rails.cache.fetch(cache_key) do
       account_ids = family.accounts.active.where(accountable_type: @accountable.name).pluck(:id)
 

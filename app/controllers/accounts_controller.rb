@@ -23,6 +23,8 @@ class AccountsController < ApplicationController
   end
 
   def sparkline
+    # Pre-load the sparkline series to catch any errors before rendering
+    @sparkline_series = @account.sparkline_series
     render layout: false
   rescue => e
     Rails.logger.error "Sparkline error for account #{@account.id}: #{e.message}"
