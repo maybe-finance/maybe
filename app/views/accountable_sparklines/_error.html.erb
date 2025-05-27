@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "#{params[:accountable_type]}_sparkline" do %>
+  <div class="flex items-center justify-end gap-1">
+    <div class="w-8 h-3 flex items-center justify-center">
+      <%= icon("alert-triangle", size: "sm", class: "text-warning") %>
+    </div>
+    <p class="font-mono text-right text-xs text-warning">Error</p>
+  </div>
+<% end %> 

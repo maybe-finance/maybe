@@ -24,6 +24,9 @@ class AccountsController < ApplicationController
 
   def sparkline
     render layout: false
+  rescue => e
+    Rails.logger.error "Sparkline error for account #{@account.id}: #{e.message}"
+    render partial: "accounts/sparkline_error", layout: false
   end
 
   private

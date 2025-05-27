@@ -9,14 +9,23 @@ class Balance::ChartSeriesBuilder
 
   def balance_series
     build_series_for(:balance)
+  rescue => e
+    Rails.logger.error "Balance series error: #{e.message} for accounts #{@account_ids}"
+    raise
   end
 
   def cash_balance_series
     build_series_for(:cash_balance)
+  rescue => e
+    Rails.logger.error "Cash balance series error: #{e.message} for accounts #{@account_ids}"
+    raise
   end
 
   def holdings_balance_series
     build_series_for(:holdings_balance)
+  rescue => e
+    Rails.logger.error "Holdings balance series error: #{e.message} for accounts #{@account_ids}"
+    raise
   end
 
   private
@@ -61,6 +70,9 @@ class Balance::ChartSeriesBuilder
           sign_multiplier: sign_multiplier
         }
       ])
+    rescue => e
+      Rails.logger.error "Query data error: #{e.message} for accounts #{account_ids}, period #{period.start_date} to #{period.end_date}"
+      raise
     end
 
     # Since the query aggregates the *net* of assets - liabilities, this means that if we're looking at

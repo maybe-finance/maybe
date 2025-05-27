@@ -17,6 +17,9 @@ class AccountableSparklinesController < ApplicationController
     end
 
     render layout: false
+  rescue => e
+    Rails.logger.error "Accountable sparkline error for #{@accountable&.name}: #{e.message}"
+    render partial: "accountable_sparklines/error", layout: false
   end
 
   private

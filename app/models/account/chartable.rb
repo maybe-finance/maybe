@@ -29,5 +29,15 @@ module Account::Chartable
     Rails.cache.fetch(cache_key) do
       balance_series
     end
+  rescue => e
+    Rails.logger.error "Sparkline series error for account #{id}: #{e.message}"
+    # Return empty series as fallback
+    Series.new(
+      start_date: 30.days.ago.to_date,
+      end_date: Date.current,
+      interval: "1 day",
+      values: [],
+      favorable_direction: favorable_direction
+    )
   end
 end
