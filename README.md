@@ -38,6 +38,14 @@ Once you've done that, please visit
 our [contributing guide](https://github.com/maybe-finance/maybe/blob/main/CONTRIBUTING.md)
 to get started!
 
+### Performance Issues
+
+With data-heavy apps, inevitably, there are performance issues. We've set up a public dashboard showing the problematic requests, along with the stacktraces to help debug them.
+
+Any contributions that help improve performance are very much welcome.
+
+https://oss.skylight.io/app/applications/XDpPIXEX52oi/recent/6h/endpoints
+
 ## Local Development Setup
 
 **If you are trying to _self-host_ the Maybe app, stop here. You
