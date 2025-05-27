@@ -6,7 +6,7 @@ class AssistantMessageTest < ActiveSupport::TestCase
   end
 
   test "broadcasts append after creation" do
-    message = AssistantMessage.create!(chat: @chat, content: "Hello from assistant", ai_model: "gpt-4o")
+    message = AssistantMessage.create!(chat: @chat, content: "Hello from assistant", ai_model: "gpt-4.1")
     message.update!(content: "updated")
 
     streams = capture_turbo_stream_broadcasts(@chat)

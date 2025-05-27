@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
-      string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
+      string: '{"model":"gpt-4.1","input":[{"role":"user","content":"What is my net
         worth?"}],"instructions":"Use the tools available to you to answer the user''s
         question.","tools":[{"type":"function","name":"get_net_worth","description":"Gets
         a user''s net worth","parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false},"strict":true}],"previous_response_id":null,"stream":null}'
@@ -71,7 +71,7 @@ http_interactions:
           "incomplete_details": null,
           "instructions": "Use the tools available to you to answer the user's question.",
           "max_output_tokens": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-4.1-2024-08-06",
           "output": [
             {
               "type": "function_call",
@@ -132,7 +132,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
-      string: '{"model":"gpt-4o","input":[{"role":"user","content":"What is my net
+      string: '{"model":"gpt-4.1","input":[{"role":"user","content":"What is my net
         worth?"},{"type":"function_call_output","call_id":"call_KrFORr53UBxdwZ9SQ6fkpU0F","output":"\"{\\\"amount\\\":10000,\\\"currency\\\":\\\"USD\\\"}\""}],"instructions":null,"tools":[],"previous_response_id":"resp_67eafd5f2d1881928f10551839e8219102a5ebf5f2a599ef","stream":null}'
     headers:
       Content-Type:
@@ -196,7 +196,7 @@ http_interactions:
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-4.1-2024-08-06",
           "output": [
             {
               "type": "message",

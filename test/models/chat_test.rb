@@ -22,7 +22,7 @@ class ChatTest < ActiveSupport::TestCase
     prompt = "Test prompt"
 
     assert_difference "@user.chats.count", 1 do
-      chat = @user.chats.start!(prompt, model: "gpt-4o")
+      chat = @user.chats.start!(prompt, model: "gpt-4.1")
 
       assert_equal 1, chat.messages.count
       assert_equal 1, chat.messages.where(type: "UserMessage").count

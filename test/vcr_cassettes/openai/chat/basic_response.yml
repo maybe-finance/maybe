@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.openai.com/v1/responses
     body:
       encoding: UTF-8
-      string: '{"model":"gpt-4o","input":[{"role":"user","content":"This is a chat
+      string: '{"model":"gpt-4.1","input":[{"role":"user","content":"This is a chat
         test.  If it''s working, respond with a single word: Yes"}],"instructions":null,"tools":[],"previous_response_id":null,"stream":null}'
     headers:
       Content-Type:
@@ -69,7 +69,7 @@ http_interactions:
           "incomplete_details": null,
           "instructions": null,
           "max_output_tokens": null,
-          "model": "gpt-4o-2024-08-06",
+          "model": "gpt-4.1-2024-08-06",
           "output": [
             {
               "type": "message",
