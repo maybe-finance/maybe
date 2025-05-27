@@ -8,7 +8,7 @@
                 data: { chat_target: "form" } do |f| %>
 
     <%# In the future, this will be a dropdown with different AI models %>
-    <%= f.hidden_field :ai_model, value: "gpt-4o" %>
+    <%= f.hidden_field :ai_model, value: "gpt-4.1" %>
 
     <%= f.text_area :content, placeholder: "Ask anything ...", value: message_hint,
                   class: "w-full border-0 focus:ring-0 text-sm resize-none px-1 bg-transparent",

@@ -8,14 +8,14 @@ class AssistantTest < ActiveSupport::TestCase
     @message = @chat.messages.create!(
       type: "UserMessage",
       content: "What is my net worth?",
-      ai_model: "gpt-4o"
+      ai_model: "gpt-4.1"
     )
     @assistant = Assistant.for_chat(@chat)
     @provider = mock
   end
 
   test "errors get added to chat" do
-    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider)
+    @assistant.expects(:get_model_provider).with("gpt-4.1").returns(@provider)
 
     error = StandardError.new("test error")
     @provider.expects(:chat_response).returns(provider_error_response(error))
@@ -28,7 +28,7 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds to basic prompt" do
-    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider)
+    @assistant.expects(:get_model_provider).with("gpt-4.1").returns(@provider)
 
     text_chunks = [
       provider_text_chunk("I do not "),
@@ -38,7 +38,7 @@ class AssistantTest < ActiveSupport::TestCase
 
     response_chunk = provider_response_chunk(
       id: "1",
-      model: "gpt-4o",
+      model: "gpt-4.1",
       messages: [ provider_message(id: "1", text: text_chunks.join) ],
       function_requests: []
     )
@@ -63,7 +63,7 @@ class AssistantTest < ActiveSupport::TestCase
   end
 
   test "responds with tool function calls" do
-    @assistant.expects(:get_model_provider).with("gpt-4o").returns(@provider).once
+    @assistant.expects(:get_model_provider).with("gpt-4.1").returns(@provider).once
 
     # Only first provider call executes function
     Assistant::Function::GetAccounts.any_instance.stubs(:call).returns("test value").once
@@ -71,7 +71,7 @@ class AssistantTest < ActiveSupport::TestCase
     # Call #1: Function requests
     call1_response_chunk = provider_response_chunk(
       id: "1",
-      model: "gpt-4o",
+      model: "gpt-4.1",
       messages: [],
       function_requests: [
         provider_function_request(id: "1", call_id: "1", function_name: "get_accounts", function_args: "{}")
@@ -88,7 +88,7 @@ class AssistantTest < ActiveSupport::TestCase
 
     call2_response_chunk = provider_response_chunk(
       id: "2",
-      model: "gpt-4o",
+      model: "gpt-4.1",
       messages: [ provider_message(id: "1", text: call2_text_chunks.join) ],
       function_requests: []
     )

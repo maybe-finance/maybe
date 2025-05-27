@@ -8,7 +8,7 @@ class UserMessageTest < ActiveSupport::TestCase
   test "requests assistant response after creation" do
     @chat.expects(:ask_assistant_later).once
 
-    message = UserMessage.create!(chat: @chat, content: "Hello from user", ai_model: "gpt-4o")
+    message = UserMessage.create!(chat: @chat, content: "Hello from user", ai_model: "gpt-4.1")
     message.update!(content: "updated")
 
     streams = capture_turbo_stream_broadcasts(@chat)
