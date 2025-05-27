@@ -19,7 +19,7 @@ Complete the following steps:
 docker run hello-world
 ```
 
-### Step 2: Configure your Docker Compose file and environnment
+### Step 2: Configure your Docker Compose file and environment
 
 #### Create a directory for your app to run
 
