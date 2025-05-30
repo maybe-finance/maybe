@@ -38,6 +38,9 @@ class Import::MappingsController < ApplicationController
     end
 
     def mapping_class
-      mapping_params[:type]&.constantize
+      allowed_classes = %w[AllowedClass1 AllowedClass2 AllowedClass3]
+      type = mapping_params[:type]
+      return nil unless allowed_classes.include?(type)
+      type.constantize
     end
 end
