@@ -37,10 +37,20 @@ class Family < ApplicationRecord
 
   # If any accounts or plaid items are syncing, the family is also syncing, even if a formal "Family Sync" is not running.
   def syncing?
-    Sync.joins("LEFT JOIN plaid_items ON plaid_items.id = syncs.syncable_id AND syncs.syncable_type = 'PlaidItem'")
+    # Check for any in-progress syncs that belong directly to the family, to one of the
+    # family's accounts, or to one of the family's Plaid items. By moving the `visible`
+    # scope to the beginning we narrow down the candidate rows **before** performing the
+    # joins and by explicitly constraining the `syncable_type` for the direct Family
+    # match we allow Postgres to use the composite index on `(syncable_type, syncable_id)`.
+    Sync.visible
         .joins("LEFT JOIN accounts ON accounts.id = syncs.syncable_id AND syncs.syncable_type = 'Account'")
-        .where("syncs.syncable_id = ? OR accounts.family_id = ? OR plaid_items.family_id = ?", id, id, id)
-        .visible
+        .joins("LEFT JOIN plaid_items ON plaid_items.id = syncs.syncable_id AND syncs.syncable_type = 'PlaidItem'")
+        .where(
+          "(syncs.syncable_type = 'Family' AND syncs.syncable_id = :family_id) OR " \
+          "accounts.family_id = :family_id OR " \
+          "plaid_items.family_id = :family_id",
+          family_id: id
+        )
         .exists?
   end
 
