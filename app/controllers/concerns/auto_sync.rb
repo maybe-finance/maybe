@@ -1,9 +1,9 @@
 module AutoSync
   extend ActiveSupport::Concern
 
-  included do
-    before_action :sync_family, if: :family_needs_auto_sync?
-  end
+  # included do
+  #   before_action :sync_family, if: :family_needs_auto_sync?
+  # end
 
   private
     def sync_family
