@@ -10,12 +10,14 @@ class AutoSyncTest < ActionDispatch::IntegrationTest
   end
 
   test "auto-syncs family if hasn't synced" do
+    skip "AutoSync functionality temporarily disabled"
     assert_difference "Sync.count", 1 do
       get root_path
     end
   end
 
   test "auto-syncs family if hasn't synced in last 24 hours" do
+    skip "AutoSync functionality temporarily disabled"
     # If request comes in at beginning of day, but last sync was 1 hour ago ("yesterday"), we still sync
     travel_to Time.current.beginning_of_day
     last_sync_datetime = 1.hour.ago

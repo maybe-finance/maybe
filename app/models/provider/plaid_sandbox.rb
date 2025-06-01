@@ -44,6 +44,9 @@ class Provider::PlaidSandbox < Provider::Plaid
         Rails.application.config.plaid
       )
 
+      # Force sandbox environment for PlaidSandbox regardless of Rails config
+      api_client.config.server_index = Plaid::Configuration::Environment["sandbox"]
+
       Plaid::PlaidApi.new(api_client)
     end
 end

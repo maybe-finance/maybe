@@ -9,8 +9,12 @@ require_relative "../config/environment"
 
 ENV["RAILS_ENV"] ||= "test"
 
+# Set Plaid to sandbox mode for tests
+ENV["PLAID_ENV"] = "sandbox"
+ENV["PLAID_CLIENT_ID"] ||= "test_client_id"
+ENV["PLAID_SECRET"] ||= "test_secret"
+
 # Fixes Segfaults on M1 Macs when running tests in parallel (temporary workaround)
-# https://github.com/ged/ruby-pg/issues/538#issuecomment-1591629049
 ENV["PGGSSENCMODE"] = "disable"
 
 require "rails/test_help"
