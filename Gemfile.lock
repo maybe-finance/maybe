@@ -149,7 +149,7 @@ GEM
       unicode (>= 0.4.4.5)
     css_parser (1.21.1)
       addressable
-    csv (3.3.4)
+    csv (3.3.5)
     date (3.4.1)
     debug (1.10.0)
       irb (~> 1.10)
