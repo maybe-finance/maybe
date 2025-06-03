@@ -15,12 +15,12 @@ class Family::SyncerTest < ActiveSupport::TestCase
 
     Account.any_instance
            .expects(:sync_later)
-           .with(parent_sync: family_sync, window_start_date: nil, window_end_date: nil)
+           .with(parent_sync: family_sync)
            .times(manual_accounts_count)
 
     PlaidItem.any_instance
              .expects(:sync_later)
-             .with(parent_sync: family_sync, window_start_date: nil, window_end_date: nil)
+             .with(parent_sync: family_sync)
              .times(items_count)
 
     syncer.perform_sync(family_sync)
