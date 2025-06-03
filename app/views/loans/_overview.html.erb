@@ -1,6 +1,6 @@
 <%# locals: (account:) %>
 
-<div class="grid grid-cols-3 gap-2">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-2">
   <%= summary_card title: t(".original_principal") do %>
     <%= format_money account.loan.original_balance %>
   <% end %>
