@@ -1,0 +1,56 @@
+class ChangeIdDefaultToUuidV7 < ActiveRecord::Migration[7.2]
+  def change
+    change_column_default :accounts, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :active_storage_attachments, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :active_storage_blobs, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :active_storage_variant_records, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :addresses, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :balances, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :budget_categories, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :budgets, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :categories, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :chats, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :credit_cards, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :cryptos, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :data_enrichments, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :depositories, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :entries, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :exchange_rates, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :families, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :holdings, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :impersonation_session_logs, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :impersonation_sessions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :import_mappings, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :import_rows, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :imports, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :investments, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :invitations, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :invite_codes, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :loans, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :merchants, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :messages, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :other_assets, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :other_liabilities, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :plaid_accounts, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :plaid_items, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :properties, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :rejected_transfers, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :rule_actions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :rule_conditions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :rules, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :securities, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :security_prices, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :sessions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :subscriptions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :syncs, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :taggings, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :tags, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :tool_calls, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :trades, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :transactions, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :transfers, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :users, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :valuations, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+    change_column_default :vehicles, :id, from: -> { "gen_random_uuid()" }, to: -> { "gen_uuid_v7()" }
+  end
+end
