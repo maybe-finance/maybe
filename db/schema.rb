@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_05_031616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
     t.boolean "is_active", default: true, null: false
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.boolean "scheduled_for_deletion", default: false
@@ -593,6 +593,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_131455) do
     t.date "window_start_date"
     t.date "window_end_date"
     t.index ["parent_id"], name: "index_syncs_on_parent_id"
+    t.index ["status"], name: "index_syncs_on_status"
     t.index ["syncable_type", "syncable_id"], name: "index_syncs_on_syncable"
   end
 
