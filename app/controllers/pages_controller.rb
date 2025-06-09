@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[early_access]
   include Periodable
+
+  skip_authentication only: :redis_configuration_error
 
   def dashboard
     @balance_sheet = Current.family.balance_sheet
@@ -47,12 +48,8 @@ class PagesController < ApplicationController
     render layout: "settings"
   end
 
-  def early_access
-    redirect_to root_path if self_hosted?
-
-    @invite_codes_count = InviteCode.count
-    @invite_code = InviteCode.order("RANDOM()").limit(1).first
-    render layout: false
+  def redis_configuration_error
+    render layout: "blank"
   end
 
   private
