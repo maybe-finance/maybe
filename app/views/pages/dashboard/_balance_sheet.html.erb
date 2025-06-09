@@ -116,7 +116,7 @@
                       <% else %>
                         <div class="ml-auto flex items-center text-right gap-6">
                           <div class="w-28 shrink-0 flex items-center justify-end gap-2">
-                            <% 
+                            <%
                               # Calculate weight as percentage of classification total
                               classification_total = classification_group.total_money.amount
                               account_weight = classification_total.zero? ? 0 : account.converted_balance / classification_total * 100

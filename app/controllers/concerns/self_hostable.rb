@@ -18,7 +18,7 @@ module SelfHostable
 
     def verify_self_host_config
       return unless self_hosted?
-      
+
       # Special handling for Redis configuration error page
       if controller_name == "pages" && action_name == "redis_configuration_error"
         # If Redis is now working, redirect to home

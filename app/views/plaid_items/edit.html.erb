@@ -1,8 +1,8 @@
 <%# We render this in the empty modal frame so if Plaid flow is closed, user stays on same page they were on %>
 <%= turbo_frame_tag "modal" do %>
-  <%= render "plaid_items/auto_link_opener", 
-           link_token: @link_token, 
-           region: @plaid_item.plaid_region, 
-           item_id: @plaid_item.id, 
+  <%= render "plaid_items/auto_link_opener",
+           link_token: @link_token,
+           region: @plaid_item.plaid_region,
+           item_id: @plaid_item.id,
            is_update: true %>
 <% end %>
