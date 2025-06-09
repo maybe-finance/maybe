@@ -20,7 +20,7 @@
     <% end %>
 
     <div class="flex items-center gap-1 ml-auto">
-      <% if Rails.env.development? %>
+      <% if Rails.env.development? || self_hosted? %>
         <%= icon(
             "refresh-cw",
             as_button: true,
