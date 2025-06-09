@@ -80,6 +80,7 @@ jobs:
       PLAID_CLIENT_ID: foo
       PLAID_SECRET: bar
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      REDIS_URL: redis://localhost:6379
       RAILS_ENV: test
 
     services:
@@ -91,6 +92,12 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
