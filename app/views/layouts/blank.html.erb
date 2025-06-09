@@ -1,0 +1,13 @@
+<%= render "layouts/shared/htmldoc" do %>
+  <div class="min-h-screen bg-surface text-primary font-medium flex flex-col">
+    <div class="flex-1">
+      <%= yield %>
+    </div>
+
+    <% if content_for?(:footer) %>
+      <%= yield :footer %>
+    <% else %>
+      <%= render "layouts/shared/footer" %>
+    <% end %>
+  </div>
+<% end %>
