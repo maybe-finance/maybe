@@ -4,19 +4,19 @@ class FamilyMerchantsController < ApplicationController
   def index
     @breadcrumbs = [ [ "Home", root_path ], [ "Merchants", nil ] ]
 
-    @merchants = Current.family.merchants.alphabetically
+    @family_merchants = Current.family.merchants.alphabetically
 
     render layout: "settings"
   end
 
   def new
-    @merchant = FamilyMerchant.new(family: Current.family)
+    @family_merchant = FamilyMerchant.new(family: Current.family)
   end
 
   def create
-    @merchant = FamilyMerchant.new(merchant_params.merge(family: Current.family))
+    @family_merchant = FamilyMerchant.new(merchant_params.merge(family: Current.family))
 
-    if @merchant.save
+    if @family_merchant.save
       respond_to do |format|
         format.html { redirect_to family_merchants_path, notice: t(".success") }
         format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, family_merchants_path) }
@@ -30,7 +30,7 @@ class FamilyMerchantsController < ApplicationController
   end
 
   def update
-    @merchant.update!(merchant_params)
+    @family_merchant.update!(merchant_params)
     respond_to do |format|
       format.html { redirect_to family_merchants_path, notice: t(".success") }
       format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, family_merchants_path) }
@@ -38,14 +38,13 @@ class FamilyMerchantsController < ApplicationController
   end
 
   def destroy
-    @merchant.destroy!
+    @family_merchant.destroy!
     redirect_to family_merchants_path, notice: t(".success")
   end
 
   private
-
     def set_merchant
-      @merchant = Current.family.merchants.find(params[:id])
+      @family_merchant = Current.family.merchants.find(params[:id])
     end
 
     def merchant_params

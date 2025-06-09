@@ -6,6 +6,7 @@
       <% if family_merchant.errors.any? %>
         <%= render "shared/form_errors", model: family_merchant %>
       <% end %>
+
       <div class="w-fit m-auto mb-4">
         <%= render partial: "shared/color_avatar", locals: { name: family_merchant.name, color: family_merchant.color } %>
       </div>
