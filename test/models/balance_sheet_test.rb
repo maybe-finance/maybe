@@ -6,23 +6,23 @@ class BalanceSheetTest < ActiveSupport::TestCase
   end
 
   test "calculates total assets" do
-    assert_equal 0, BalanceSheet.new(@family).total_assets
+    assert_equal 0, BalanceSheet.new(@family).assets.total
 
     create_account(balance: 1000, accountable: Depository.new)
     create_account(balance: 5000, accountable: OtherAsset.new)
     create_account(balance: 10000, accountable: CreditCard.new) # ignored
 
-    assert_equal 1000 + 5000, BalanceSheet.new(@family).total_assets
+    assert_equal 1000 + 5000, BalanceSheet.new(@family).assets.total
   end
 
   test "calculates total liabilities" do
-    assert_equal 0, BalanceSheet.new(@family).total_liabilities
+    assert_equal 0, BalanceSheet.new(@family).liabilities.total
 
     create_account(balance: 1000, accountable: CreditCard.new)
     create_account(balance: 5000, accountable: OtherLiability.new)
     create_account(balance: 10000, accountable: Depository.new) # ignored
 
-    assert_equal 1000 + 5000, BalanceSheet.new(@family).total_liabilities
+    assert_equal 1000 + 5000, BalanceSheet.new(@family).liabilities.total
   end
 
   test "calculates net worth" do
@@ -42,8 +42,8 @@ class BalanceSheetTest < ActiveSupport::TestCase
     other_liability.update!(is_active: false)
 
     assert_equal 10000 - 1000, BalanceSheet.new(@family).net_worth
-    assert_equal 10000, BalanceSheet.new(@family).total_assets
-    assert_equal 1000, BalanceSheet.new(@family).total_liabilities
+    assert_equal 10000, BalanceSheet.new(@family).assets.total
+    assert_equal 1000, BalanceSheet.new(@family).liabilities.total
   end
 
   test "calculates asset group totals" do
@@ -53,7 +53,7 @@ class BalanceSheetTest < ActiveSupport::TestCase
     create_account(balance: 5000, accountable: OtherAsset.new)
     create_account(balance: 10000, accountable: CreditCard.new) # ignored
 
-    asset_groups = BalanceSheet.new(@family).account_groups("asset")
+    asset_groups = BalanceSheet.new(@family).assets.account_groups
 
     assert_equal 3, asset_groups.size
     assert_equal 1000 + 2000, asset_groups.find { |ag| ag.name == "Cash" }.total
@@ -68,7 +68,7 @@ class BalanceSheetTest < ActiveSupport::TestCase
     create_account(balance: 5000, accountable: OtherLiability.new)
     create_account(balance: 10000, accountable: Depository.new) # ignored
 
-    liability_groups = BalanceSheet.new(@family).account_groups("liability")
+    liability_groups = BalanceSheet.new(@family).liabilities.account_groups
 
     assert_equal 2, liability_groups.size
     assert_equal 1000 + 2000, liability_groups.find { |ag| ag.name == "Credit Cards" }.total

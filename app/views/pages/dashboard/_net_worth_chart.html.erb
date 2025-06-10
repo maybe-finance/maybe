@@ -5,23 +5,22 @@
   <div class="flex justify-between gap-4 px-4">
     <div class="space-y-2">
       <div class="space-y-2">
-        <p class="text-sm text-secondary font-medium"><%= t(".title") %></p>
+        <div class="flex items-center gap-2">
+          <p class="text-sm text-secondary font-medium"><%= t(".title") %></p>
 
-        <% if balance_sheet.syncing? %>
-          <div class="flex flex-col gap-2">
-            <div class="bg-loader rounded-md h-7 w-20"></div>
-            <div class="bg-loader rounded-md h-5 w-32"></div>
-          </div>
-        <% else %>
-          <p class="text-primary -space-x-0.5 text-3xl font-medium">
-            <%= series.trend.current.format %>
-          </p>
-
-          <% if series.trend.nil? %>
-            <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
-          <% else %>
-            <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
+          <% if balance_sheet.syncing? %>
+            <%= render partial: "shared/sync_indicator", locals: { size: "sm" } %>
           <% end %>
+        </div>
+
+        <p class="text-primary -space-x-0.5 text-3xl font-medium">
+          <%= series.trend.current.format %>
+        </p>
+
+        <% if series.trend.nil? %>
+          <p class="text-sm text-secondary"><%= t(".data_not_available") %></p>
+        <% else %>
+          <%= render partial: "shared/trend_change", locals: { trend: series.trend, comparison_label: period.comparison_label } %>
         <% end %>
       </div>
     </div>
@@ -35,21 +34,16 @@
     <% end %>
   </div>
 
-  <% if balance_sheet.syncing? %>
-    <div class="w-full flex items-center justify-center p-4 h-52">
-      <div class="bg-loader rounded-md h-full w-full"></div>
-    </div>
-  <% else %>
-    <% if series.any? %>
-      <div
+  <% if series.any? %>
+    <div
     id="netWorthChart"
     class="w-full flex-1 min-h-52"
     data-controller="time-series-chart"
     data-time-series-chart-data-value="<%= series.to_json %>"></div>
-    <% else %>
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
-      </div>
-    <% end %>
+  <% else %>
+    <div class="w-full h-full flex items-center justify-center">
+      <p class="text-secondary text-sm"><%= t(".data_not_available") %></p>
+    </div>
   <% end %>
+
 </div>

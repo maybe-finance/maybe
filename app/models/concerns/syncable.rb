@@ -6,7 +6,7 @@ module Syncable
   end
 
   def syncing?
-    raise NotImplementedError, "Subclasses must implement the syncing? method"
+    syncs.visible.any?
   end
 
   # Schedules a sync for syncable.  If there is an existing sync pending/syncing for this syncable,

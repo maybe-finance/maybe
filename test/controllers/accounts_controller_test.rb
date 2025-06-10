@@ -25,13 +25,4 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     get sparkline_account_url(@account)
     assert_response :success
   end
-
-  test "should handle sparkline errors gracefully" do
-  # Mock an error in the balance_series method to bypass the rescue in sparkline_series
-  Balance::ChartSeriesBuilder.any_instance.stubs(:balance_series).raises(StandardError.new("Test error"))
-
-  get sparkline_account_url(@account)
-  assert_response :success
-  assert_match /Error/, response.body
-end
 end

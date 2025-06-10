@@ -16,13 +16,13 @@ class Account::SyncCompleteEvent
       locals: { account: account }
     )
 
-    # Replace the groups this account belongs to in the sidebar
-    account_group_ids.each do |id|
+    # Replace the groups this account belongs to in both desktop and mobile sidebars
+    sidebar_targets.each do |(tab, mobile_flag)|
       account.broadcast_replace_to(
         account.family,
-        target: id,
+        target: account_group.dom_id(tab: tab, mobile: mobile_flag),
         partial: "accounts/accountable_group",
-        locals: { account_group: account_group, open: true }
+        locals: { account_group: account_group, open: true, all_tab: tab == :all, mobile: mobile_flag }
       )
     end
 
@@ -37,18 +37,18 @@ class Account::SyncCompleteEvent
   end
 
   private
-    # The sidebar will show the account in both its classification tab and the "all" tab,
-    # so we need to broadcast to both.
-    def account_group_ids
-      unless account_group.present?
-        error = Error.new("Account #{account.id} is not part of an account group")
-        Rails.logger.warn(error.message)
-        Sentry.capture_exception(error, level: :warning)
-        return []
-      end
+    # Returns an array of [tab, mobile?] tuples that should receive an update.
+    # We broadcast to both the classification-specific tab and the "all" tab,
+    # for desktop (mobile: false) and mobile (mobile: true) variants.
+    def sidebar_targets
+      return [] unless account_group.present?
 
-      id = account_group.id
-      [ id, "#{account_group.classification}_#{id}" ]
+      [
+        [ account_group.classification.to_sym, false ],
+        [ :all, false ],
+        [ account_group.classification.to_sym, true ],
+        [ :all, true ]
+      ]
     end
 
     def account_group

@@ -31,11 +31,11 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
         monthly_history: historical_data(period)
       },
       assets: {
-        current: family.balance_sheet.total_assets_money.format,
+        current: family.balance_sheet.assets.total_money.format,
         monthly_history: historical_data(period, classification: "asset")
       },
       liabilities: {
-        current: family.balance_sheet.total_liabilities_money.format,
+        current: family.balance_sheet.liabilities.total_money.format,
         monthly_history: historical_data(period, classification: "liability")
       },
       insights: insights_data
@@ -65,8 +65,8 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
     end
 
     def insights_data
-      assets = family.balance_sheet.total_assets
-      liabilities = family.balance_sheet.total_liabilities
+      assets = family.balance_sheet.assets.total
+      liabilities = family.balance_sheet.liabilities.total
       ratio = liabilities.zero? ? 0 : (liabilities / assets.to_f)
 
       {

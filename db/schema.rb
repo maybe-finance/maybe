@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_05_031616) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_10_181219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -228,6 +228,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_05_031616) do
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
     t.boolean "auto_sync_on_login", default: true, null: false
+    t.datetime "latest_sync_activity_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "latest_sync_completed_at", default: -> { "CURRENT_TIMESTAMP" }
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

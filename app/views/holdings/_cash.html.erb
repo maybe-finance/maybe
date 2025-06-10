@@ -20,12 +20,8 @@
   <div class="col-span-2 flex justify-end items-center gap-2">
     <% cash_weight = account.balance.zero? ? 0 : account.cash_balance / account.balance * 100 %>
 
-    <% if account.syncing? %>
-      <div class="w-16 h-6 bg-loader rounded-full"></div>
-    <% else %>
-      <%= render "shared/progress_circle", progress: cash_weight %>
-      <%= tag.p number_to_percentage(cash_weight, precision: 1) %>
-    <% end %>
+    <%= render "shared/progress_circle", progress: cash_weight %>
+    <%= tag.p number_to_percentage(cash_weight, precision: 1) %>
   </div>
 
   <div class="col-span-2 text-right">
@@ -33,13 +29,7 @@
   </div>
 
   <div class="col-span-2 text-right">
-    <% if account.syncing? %>
-      <div class="flex justify-end">
-        <div class="w-16 h-6 bg-loader rounded-full"></div>
-      </div>
-    <% else %>
-      <%= tag.p format_money account.cash_balance_money %>
-    <% end %>
+    <%= tag.p format_money account.cash_balance_money %>
   </div>
 
   <div class="col-span-2 text-right">
