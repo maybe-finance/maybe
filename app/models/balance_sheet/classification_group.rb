@@ -30,17 +30,25 @@ class BalanceSheet::ClassificationGroup
 
   # For now, we group by accountable type. This can be extended in the future to support arbitrary user groupings.
   def account_groups
-    accounts.group_by(&:accountable_type)
-            .transform_keys { |at| Accountable.from_type(at) }
-            .map do |accountable, account_rows|
-              BalanceSheet::AccountGroup.new(
-                name: accountable.display_name,
-                color: accountable.color,
-                accountable_type: accountable,
-                accounts: account_rows,
-                classification_group: self
-              )
-            end
+    groups = accounts.group_by(&:accountable_type)
+                     .transform_keys { |at| Accountable.from_type(at) }
+                     .map do |accountable, account_rows|
+                       BalanceSheet::AccountGroup.new(
+                         name: accountable.display_name,
+                         color: accountable.color,
+                         accountable_type: accountable,
+                         accounts: account_rows,
+                         classification_group: self
+                       )
+                     end
+
+    # Sort the groups using the manual order defined by Accountable::TYPES so that
+    # the UI displays account groups in a predictable, domain-specific sequence.
+    groups.sort_by do |group|
+      manual_order = Accountable::TYPES
+      type_name    = group.key.camelize
+      manual_order.index(type_name) || Float::INFINITY
+    end
   end
 
   private
