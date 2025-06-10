@@ -4,21 +4,18 @@
   <% is_open = open.nil? ? account_group.accounts.any? { |account| page_active?(account_path(account)) } : open %>
   <%= render DisclosureComponent.new(title: account_group.name, align: :left, open: is_open) do |disclosure| %>
     <% disclosure.with_summary_content do %>
+      <% if account_group.syncing? %>
+        <div class="ml-2 group-open:hidden">
+          <%= render partial: "shared/sync_indicator", locals: { size: "xs" } %>
+        </div>
+      <% end %>
+
       <div class="ml-auto text-right grow">
-        <% if account_group.syncing? %>
-          <div class="space-y-1">
-            <div class="h-5 w-24 rounded ml-auto bg-loader"></div>
-            <div class="flex items-center w-8 h-4 ml-auto">
-              <div class="w-6 h-px bg-loader"></div>
-            </div>
+        <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
+        <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy", data: { controller: "turbo-frame-timeout", turbo_frame_timeout_timeout_value: 10000 } do %>
+          <div class="flex items-center w-8 h-4 ml-auto">
+            <div class="w-6 h-px bg-loader"></div>
           </div>
-        <% else %>
-          <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
-          <%= turbo_frame_tag "#{account_group.key}_sparkline", src: accountable_sparkline_path(account_group.key), loading: "lazy", data: { controller: "turbo-frame-timeout", turbo_frame_timeout_timeout_value: 10000 } do %>
-            <div class="flex items-center w-8 h-4 ml-auto">
-              <div class="w-6 h-px bg-loader"></div>
-            </div>
-          <% end %>
         <% end %>
       </div>
     <% end %>
@@ -34,29 +31,23 @@
           <%= render "accounts/logo", account: account, size: "sm", color: account_group.color %>
 
           <div class="min-w-0 grow">
-            <%= tag.p account.name, class: "text-sm text-primary font-medium mb-0.5 truncate" %>
+            <div class="flex items-center gap-2 mb-0.5">
+              <%= tag.p account.name, class: "text-sm text-primary font-medium truncate" %>
+              <% if account.syncing? %>
+                <%= render partial: "shared/sync_indicator", locals: { size: "xs" } %>
+              <% end %>
+            </div>
             <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
           </div>
 
-          <% if account.syncing? %>
-            <div class="ml-auto text-right grow h-10">
-              <div class="space-y-1">
-                <div class="h-5 w-24 bg-loader rounded ml-auto"></div>
-                <div class="flex items-center w-8 h-4 ml-auto">
-                  <div class="w-6 h-px bg-loader"></div>
-                </div>
+          <div class="ml-auto text-right grow h-10">
+            <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
+            <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy", data: { controller: "turbo-frame-timeout", turbo_frame_timeout_timeout_value: 10000 } do %>
+              <div class="flex items-center w-8 h-4 ml-auto">
+                <div class="w-6 h-px bg-loader"></div>
               </div>
-            </div>
-          <% else %>
-            <div class="ml-auto text-right grow h-10">
-              <%= tag.p format_money(account.balance_money), class: "text-sm font-medium text-primary whitespace-nowrap" %>
-              <%= turbo_frame_tag dom_id(account, :sparkline), src: sparkline_account_path(account), loading: "lazy", data: { controller: "turbo-frame-timeout", turbo_frame_timeout_timeout_value: 10000 } do %>
-                <div class="flex items-center w-8 h-4 ml-auto">
-                  <div class="w-6 h-px bg-loader"></div>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         <% end %>
       <% end %>
     </div>

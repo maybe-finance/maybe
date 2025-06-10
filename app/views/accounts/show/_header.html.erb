@@ -10,10 +10,16 @@
       <div class="flex items-center gap-3 overflow-hidden">
         <%= render "accounts/logo", account: account %>
 
-        <div class="truncate">
-          <h2 class="font-medium text-xl truncate"><%= title || account.name %></h2>
-          <% if subtitle.present? %>
-            <p class="text-sm text-secondary"><%= subtitle %></p>
+        <div class="flex items-center gap-2">
+          <div class="truncate">
+            <h2 class="font-medium text-xl truncate"><%= title || account.name %></h2>
+            <% if subtitle.present? %>
+              <p class="text-sm text-secondary"><%= subtitle %></p>
+            <% end %>
+          </div>
+
+          <% if account.syncing? %>
+            <%= render partial: "shared/sync_indicator", locals: { size: "sm" } %>
           <% end %>
         </div>
       </div>

@@ -38,20 +38,7 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    memo_key = [ period.start_date, period.end_date ].compact.join("_")
-
-    @net_worth_series ||= {}
-
-    account_ids = active_accounts.pluck(:id)
-
-    builder = (@net_worth_series[memo_key] ||= Balance::ChartSeriesBuilder.new(
-      account_ids: account_ids,
-      currency: currency,
-      period: period,
-      favorable_direction: "up"
-    ))
-
-    builder.balance_series
+    net_worth_series_calculator.net_worth_series(period: period)
   end
 
   def currency
@@ -64,14 +51,14 @@ class BalanceSheet
 
   private
     def sync_status_monitor
-      @sync_status_monitor ||= BalanceSheet::SyncStatusMonitor.new(family)
+      @sync_status_monitor ||= SyncStatusMonitor.new(family)
     end
 
     def account_totals
-      @account_totals ||= BalanceSheet::AccountTotals.new(family, sync_status_monitor: sync_status_monitor)
+      @account_totals ||= AccountTotals.new(family, sync_status_monitor: sync_status_monitor)
     end
 
-    def active_accounts
-      family.accounts.active.with_attached_logo
+    def net_worth_series_calculator
+      @net_worth_series_calculator ||= NetWorthSeries.new(family)
     end
 end

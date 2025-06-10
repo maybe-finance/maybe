@@ -9,18 +9,14 @@
       <div class="flex items-center gap-1">
         <%= tag.p account.investment? ? "Total value" : default_value_title, class: "text-sm font-medium text-secondary" %>
 
-        <% if !account.syncing? && account.investment? %>
+        <% if account.investment? %>
           <%= render "investments/value_tooltip", balance: account.balance_money, holdings: account.balance_money - account.cash_balance_money, cash: account.cash_balance_money %>
         <% end %>
       </div>
       <div class="flex flex-row gap-2 items-baseline">
-        <% if account.syncing? %>
-          <div class="bg-loader rounded-md h-7 w-20"></div>
-        <% else %>
-          <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
-          <% if account.currency != Current.family.currency %>
-            <%= tag.p format_money(account.balance_money.exchange_to(Current.family.currency, fallback_rate: 1)), class: "text-sm font-medium text-secondary" %>
-          <% end %>
+        <%= tag.p format_money(account.balance_money), class: "text-primary text-3xl font-medium truncate" %>
+        <% if account.currency != Current.family.currency %>
+          <%= tag.p format_money(account.balance_money.exchange_to(Current.family.currency, fallback_rate: 1)), class: "text-sm font-medium text-secondary" %>
         <% end %>
       </div>
     </div>
