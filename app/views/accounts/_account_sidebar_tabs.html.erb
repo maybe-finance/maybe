@@ -82,7 +82,7 @@
 
         <div>
           <% family.balance_sheet.account_groups.each do |group| %>
-            <%= render "accounts/accountable_group", account_group: group, mobile: mobile %>
+            <%= render "accounts/accountable_group", account_group: group, mobile: mobile, all_tab: true %>
           <% end %>
         </div>
       </div>
