@@ -1,4 +1,4 @@
-class BalanceSheet::NetWorthSeries
+class BalanceSheet::NetWorthSeriesBuilder
   def initialize(family)
     @family = family
   end
@@ -24,12 +24,15 @@ class BalanceSheet::NetWorthSeries
     end
 
     def cache_key(period)
-      [
+      key = [
         "balance_sheet_net_worth_series",
-        family.id,
         period.start_date,
-        period.end_date,
-        family.latest_sync_completed_at # If account sync completes, need a refresh
-      ].join("_")
+        period.end_date
+      ].compact.join("_")
+
+      family.build_cache_key(
+        key,
+        invalidate_on_data_updates: true
+      )
     end
 end

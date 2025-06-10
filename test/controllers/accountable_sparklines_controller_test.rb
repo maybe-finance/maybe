@@ -9,13 +9,4 @@ class AccountableSparklinesControllerTest < ActionDispatch::IntegrationTest
     get accountable_sparkline_url("depository")
     assert_response :success
   end
-
-  test "should handle sparkline errors gracefully" do
-    # Mock an error in the balance_series method
-    Balance::ChartSeriesBuilder.any_instance.stubs(:balance_series).raises(StandardError.new("Test error"))
-
-    get accountable_sparkline_url("depository")
-    assert_response :success
-    assert_match /Error/, response.body
-  end
 end

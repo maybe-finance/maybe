@@ -38,11 +38,10 @@ class BalanceSheet::AccountTotals
     end
 
     def cache_key
-      [
+      family.build_cache_key(
         "balance_sheet_account_rows",
-        family.id,
-        family.latest_sync_completed_at
-      ].join("_")
+        invalidate_on_data_updates: true
+      )
     end
 
     def query

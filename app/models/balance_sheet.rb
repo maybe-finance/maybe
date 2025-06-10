@@ -38,7 +38,7 @@ class BalanceSheet
   end
 
   def net_worth_series(period: Period.last_30_days)
-    net_worth_series_calculator.net_worth_series(period: period)
+    net_worth_series_builder.net_worth_series(period: period)
   end
 
   def currency
@@ -58,7 +58,7 @@ class BalanceSheet
       @account_totals ||= AccountTotals.new(family, sync_status_monitor: sync_status_monitor)
     end
 
-    def net_worth_series_calculator
-      @net_worth_series_calculator ||= NetWorthSeries.new(family)
+    def net_worth_series_builder
+      @net_worth_series_builder ||= NetWorthSeriesBuilder.new(family)
     end
 end

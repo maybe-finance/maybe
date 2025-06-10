@@ -23,12 +23,14 @@ class AccountsController < ApplicationController
   end
 
   def sparkline
-    # Pre-load the sparkline series to catch any errors before rendering
-    @sparkline_series = @account.sparkline_series
-    render layout: false
-  rescue => e
-    Rails.logger.error "Sparkline error for account #{@account.id}: #{e.message}"
-    render partial: "accounts/sparkline_error", layout: false
+    etag_key = @account.family.build_cache_key("#{@account.id}_sparkline", invalidate_on_data_updates: true)
+
+    # Short-circuit with 304 Not Modified when the client already has the latest version.
+    # We defer the expensive series computation until we know the content is stale.
+    if stale?(etag: etag_key, last_modified: @account.family.latest_sync_completed_at)
+      @sparkline_series = @account.sparkline_series
+      render layout: false
+    end
   end
 
   private

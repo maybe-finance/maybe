@@ -24,20 +24,10 @@ module Account::Chartable
   end
 
   def sparkline_series
-    cache_key = family.build_cache_key("#{id}_sparkline")
+    cache_key = family.build_cache_key("#{id}_sparkline", invalidate_on_data_updates: true)
 
-    Rails.cache.fetch(cache_key) do
+    Rails.cache.fetch(cache_key, expires_in: 24.hours) do
       balance_series
     end
-  rescue => e
-    Rails.logger.error "Sparkline series error for account #{id}: #{e.message}"
-    # Return empty series as fallback
-    Series.new(
-      start_date: 30.days.ago.to_date,
-      end_date: Date.current,
-      interval: "1 day",
-      values: [],
-      favorable_direction: favorable_direction
-    )
   end
 end

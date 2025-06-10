@@ -6,7 +6,7 @@ class BalanceSheet::ClassificationGroup
   attr_reader :classification, :currency
 
   def initialize(classification:, currency:, accounts:)
-    @classification = set_classification!(classification)
+    @classification = normalize_classification!(classification)
     @name = name
     @currency = currency
     @accounts = accounts
@@ -46,9 +46,8 @@ class BalanceSheet::ClassificationGroup
   private
     attr_reader :accounts
 
-    def set_classification!(classification)
-      raise "Invalid classification: #{classification}" unless %w[asset liability].include?(classification)
-
+    def normalize_classification!(classification)
+      raise ArgumentError, "Invalid classification: #{classification}" unless %w[asset liability].include?(classification)
       classification
     end
 end

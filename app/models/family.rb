@@ -91,13 +91,15 @@ class Family < ApplicationRecord
     entries.order(:date).first&.date || Date.current
   end
 
-  # Cache key that is invalidated when any of the family's entries are updated (which affect rollups and other calculations)
-  def build_cache_key(key)
+  def build_cache_key(key, invalidate_on_data_updates: false)
+    # Our data sync process updates this timestamp whenever any family account successfully completes a data update.
+    # By including it in the cache key, we can expire caches every time family account data changes.
+    data_invalidation_key = invalidate_on_data_updates ? latest_sync_completed_at : nil
+
     [
-      "family",
       id,
       key,
-      entries.maximum(:updated_at)
+      data_invalidation_key
     ].compact.join("_")
   end
 
