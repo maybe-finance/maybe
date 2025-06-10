@@ -65,8 +65,6 @@ class Sync < ApplicationRecord
 
       start!
 
-      sleep 10
-
       begin
         syncable.perform_sync(self)
       rescue => e
