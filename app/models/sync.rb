@@ -29,13 +29,13 @@ class Sync < ApplicationRecord
     state :failed
     state :stale
 
-    after_all_transitions :log_status_change
+    after_all_transitions :handle_transition
 
-    event :start, after_commit: :report_warnings do
+    event :start, after_commit: :handle_start_transition do
       transitions from: :pending, to: :syncing
     end
 
-    event :complete do
+    event :complete, after_commit: :handle_completion_transition do
       transitions from: :syncing, to: :completed
     end
 
@@ -163,9 +163,30 @@ class Sync < ApplicationRecord
       end
     end
 
+    def handle_start_transition
+      report_warnings
+    end
+
+    def handle_transition
+      log_status_change
+      family.touch(:latest_sync_activity_at)
+    end
+
+    def handle_completion_transition
+      family.touch(:latest_sync_completed_at)
+    end
+
     def window_valid
       if window_start_date && window_end_date && window_start_date > window_end_date
         errors.add(:window_end_date, "must be greater than window_start_date")
+      end
+    end
+
+    def family
+      if syncable.is_a?(Family)
+        syncable
+      else
+        syncable.family
       end
     end
 end
