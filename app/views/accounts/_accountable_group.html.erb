@@ -1,6 +1,6 @@
 <%# locals: (account_group:, mobile: false, open: nil, **args) %>
 
-<div id="<%= mobile ? "mobile_#{account_group.id}" : account_group.id %>">
+<div id="<%= mobile ? "mobile_#{account_group.key}" : account_group.key %>">
   <% is_open = open.nil? ? account_group.accounts.any? { |account| page_active?(account_path(account)) } : open %>
   <%= render DisclosureComponent.new(title: account_group.name, align: :left, open: is_open) do |disclosure| %>
     <% disclosure.with_summary_content do %>
