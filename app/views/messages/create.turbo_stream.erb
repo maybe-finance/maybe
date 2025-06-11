@@ -1,0 +1,21 @@
+<%# Add thinking indicator to messages area %>
+<%= turbo_stream.append "messages" do %>
+  <%= render "chats/thinking_indicator", chat: @chat %>
+<% end %>
+
+<%# Reset the form by replacing it with a fresh version %>
+<%= turbo_stream.replace "chat-form" do %>
+  <%= render "messages/chat_form", chat: @chat %>
+<% end %>
+
+<%# Focus the input after form replacement %>
+<%= turbo_stream.after "chat-form" do %>
+  <script>
+    requestAnimationFrame(() => {
+      const textarea = document.querySelector('[data-chat-target="input"]');
+      if (textarea) {
+        textarea.focus();
+      }
+    });
+  </script>
+<% end %>
