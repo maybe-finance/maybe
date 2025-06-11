@@ -127,7 +127,7 @@ class Demo::Scenarios::PerformanceTesting < Demo::BaseScenario
         users_data << {
           id: SecureRandom.uuid,
           family_id: family_id,
-          email: "user#{i == 2 ? "" : i}@maybe.local",
+          email: "user#{i}@maybe.local",
           first_name: "Demo",
           last_name: "User",
           role: "admin",
@@ -141,7 +141,7 @@ class Demo::Scenarios::PerformanceTesting < Demo::BaseScenario
         users_data << {
           id: SecureRandom.uuid,
           family_id: family_id,
-          email: "member_user#{i == 2 ? "" : i}@maybe.local",
+          email: "member_user#{i}@maybe.local",
           first_name: "Demo (member user)",
           last_name: "User",
           role: "member",
@@ -204,14 +204,26 @@ class Demo::Scenarios::PerformanceTesting < Demo::BaseScenario
     def create_bulk_categories(template_categories, target_family)
       return if template_categories.empty?
 
+      # Create mapping from old category IDs to new category IDs
+      category_id_mapping = {}
+
+      # First pass: generate new IDs for all categories
+      template_categories.each do |template_category|
+        category_id_mapping[template_category.id] = SecureRandom.uuid
+      end
+
+      # Second pass: create category data with properly mapped parent_ids
       categories_data = template_categories.map do |template_category|
+        # Map parent_id to the new family's category ID, or nil if no parent
+        new_parent_id = template_category.parent_id ? category_id_mapping[template_category.parent_id] : nil
+
         {
-          id: SecureRandom.uuid,
+          id: category_id_mapping[template_category.id],
           family_id: target_family.id,
           name: template_category.name,
           color: template_category.color,
           classification: template_category.classification,
-          parent_id: template_category.parent_id, # Note: this assumes parent exists
+          parent_id: new_parent_id,
           created_at: Time.current,
           updated_at: Time.current
         }
