@@ -30,6 +30,7 @@ namespace :demo_data do
     Demo::Generator.new.generate_basic_budget_data!(families)
   end
 
+  # DO NOT RUN THIS unless you're testing performance locally. It will take a long time to load/clear. Easiest to clear with a db:reset
   desc "Generates realistic data for 500 families for performance testing. Creates 1 family with Ruby, then efficiently duplicates it 499 times using SQL bulk operations."
   task performance_testing: :environment do
     families = [ "Performance Family 1" ]
