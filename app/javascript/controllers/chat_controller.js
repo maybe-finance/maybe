@@ -5,6 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.#configureAutoScroll();
+    this.#setupFormSubmissionHandler();
   }
 
   disconnect() {
@@ -29,6 +30,7 @@ export default class extends Controller {
 
     setTimeout(() => {
       this.formTarget.requestSubmit();
+      this.#refocusInput();
     }, 200);
   }
 
@@ -37,6 +39,8 @@ export default class extends Controller {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       this.formTarget.requestSubmit();
+      // Maintain focus on input after submission
+      this.#refocusInput();
     }
   }
 
@@ -56,5 +60,22 @@ export default class extends Controller {
 
   #scrollToBottom = () => {
     this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight;
+  };
+
+  #setupFormSubmissionHandler = () => {
+    if (this.hasFormTarget) {
+      this.formTarget.addEventListener("submit", () => {
+        this.#refocusInput();
+      });
+    }
+  };
+
+  #refocusInput = () => {
+    // Use setTimeout to ensure the form submission completes before refocusing
+    setTimeout(() => {
+      if (this.hasInputTarget) {
+        this.inputTarget.focus();
+      }
+    }, 100);
   };
 }
