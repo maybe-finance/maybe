@@ -64,6 +64,18 @@ class Demo::Generator
       scenario = scenario_class.new(generators)
       scenario.generate!(families, **options)
 
+      # Sync families after generation (except for performance testing)
+      unless scenario_key == :performance_testing
+        puts "Running account sync for generated data..."
+        families.each do |family|
+          family.accounts.each do |account|
+            sync = Sync.create!(syncable: account)
+            sync.perform
+          end
+          puts "  - #{family.name} accounts synced (#{family.accounts.count} accounts)"
+        end
+      end
+
       puts "Demo data loaded successfully!"
     end
 

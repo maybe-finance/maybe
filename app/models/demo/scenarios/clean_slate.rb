@@ -78,7 +78,7 @@ class Demo::Scenarios::CleanSlate < Demo::BaseScenario
       @checking_account = family.accounts.create!(
         accountable: Depository.new,
         name: "Main Checking",
-        balance: 2500,
+        balance: 0, # Will be calculated from transactions
         currency: "USD"
       )
 
@@ -113,6 +113,9 @@ class Demo::Scenarios::CleanSlate < Demo::BaseScenario
         category: @food_category,
         date: 2.days.ago
       )
+
+      # Update account balance to match transaction sum
+      @generators[:transaction_generator].update_account_balances_from_transactions!(family)
 
       puts "  - #{TARGET_TRANSACTIONS_PER_FAMILY} sample transactions created"
     end

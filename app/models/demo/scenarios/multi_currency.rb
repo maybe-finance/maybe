@@ -57,8 +57,21 @@ class Demo::Scenarios::MultiCurrency < Demo::BaseScenario
 
     # Create EUR accounts (primary currency for this scenario)
     def create_eur_accounts!(family)
-      @generators[:account_generator].create_checking_accounts!(family, count: 1)
-      @generators[:account_generator].create_credit_card_accounts!(family, count: 1)
+      # Create EUR checking account
+      family.accounts.create!(
+        accountable: Depository.new,
+        name: "EUR Checking Account",
+        balance: 0, # Will be calculated from transactions
+        currency: "EUR"
+      )
+
+      # Create EUR credit card
+      family.accounts.create!(
+        accountable: CreditCard.new,
+        name: "EUR Credit Card",
+        balance: 0, # Will be calculated from transactions
+        currency: "EUR"
+      )
     end
 
     # Create USD accounts for US-based transactions
@@ -66,7 +79,7 @@ class Demo::Scenarios::MultiCurrency < Demo::BaseScenario
       family.accounts.create!(
         accountable: Depository.new,
         name: "USD Checking Account",
-        balance: 3000,
+        balance: 0, # Will be calculated from transactions
         currency: "USD"
       )
     end
@@ -76,7 +89,7 @@ class Demo::Scenarios::MultiCurrency < Demo::BaseScenario
       family.accounts.create!(
         accountable: Depository.new,
         name: "GBP Savings Account",
-        balance: 5000,
+        balance: 0, # Will be calculated from transactions
         currency: "GBP",
         subtype: "savings"
       )
@@ -89,42 +102,101 @@ class Demo::Scenarios::MultiCurrency < Demo::BaseScenario
 
     # Create transactions in various currencies to demonstrate international usage
     def create_international_transactions!(family)
+      # Create initial valuations for accounts that need them
+      create_initial_valuations!(family)
+
       create_eur_transaction_patterns!(family)
       create_usd_transaction_patterns!(family)
       create_gbp_transaction_patterns!(family)
 
+      # Update account balances to match transaction sums
+      @generators[:transaction_generator].update_account_balances_from_transactions!(family)
+
       puts "  - International transactions created across #{SUPPORTED_CURRENCIES.length} currencies"
     end
 
-    # Create EUR transactions (primary currency patterns)
+    # Create initial valuations for credit cards in this scenario
+    def create_initial_valuations!(family)
+      family.accounts.each do |account|
+        next unless account.accountable_type == "CreditCard"
+
+        Entry.create!(
+          account: account,
+          amount: 1000, # Initial credit card debt
+          name: "Initial creditcard valuation",
+          date: 2.years.ago.to_date,
+          currency: account.currency,
+          entryable_type: "Valuation",
+          entryable_attributes: {}
+        )
+      end
+    end
+
+    # Create EUR transactions (primary currency patterns) with both income and expenses
     def create_eur_transaction_patterns!(family)
       eur_accounts = family.accounts.where(currency: "EUR")
 
       eur_accounts.each do |account|
         next if account.accountable_type == "Investment"
 
-        5.times do |i|
-          @generators[:transaction_generator].create_transaction!(
-            account: account,
-            amount: random_positive_amount(20, 200),
-            name: "EUR Transaction #{i + 1}",
-            date: random_date_within_days(60),
-            currency: "EUR"
-          )
+        if account.accountable_type == "CreditCard"
+          # Credit cards only get purchases (positive amounts)
+          5.times do |i|
+            @generators[:transaction_generator].create_transaction!(
+              account: account,
+              amount: random_positive_amount(50, 300), # Purchases (positive)
+              name: "EUR Purchase #{i + 1}",
+              date: random_date_within_days(60),
+              currency: "EUR"
+            )
+          end
+        else
+          # Checking accounts get both income and expenses
+          # Create income transactions (negative amounts)
+          2.times do |i|
+            @generators[:transaction_generator].create_transaction!(
+              account: account,
+              amount: -random_positive_amount(2000, 3000), # Higher income to cover transfers
+              name: "EUR Salary #{i + 1}",
+              date: random_date_within_days(60),
+              currency: "EUR"
+            )
+          end
+
+          # Create expense transactions (positive amounts)
+          3.times do |i|
+            @generators[:transaction_generator].create_transaction!(
+              account: account,
+              amount: random_positive_amount(20, 200), # Expense (positive)
+              name: "EUR Purchase #{i + 1}",
+              date: random_date_within_days(60),
+              currency: "EUR"
+            )
+          end
         end
       end
     end
 
-    # Create USD transactions (US-based spending patterns)
+    # Create USD transactions (US-based spending patterns) with both income and expenses
     def create_usd_transaction_patterns!(family)
       usd_accounts = family.accounts.where(currency: "USD")
 
       usd_accounts.each do |account|
-        3.times do |i|
+        # Create income transaction (negative amount)
+        @generators[:transaction_generator].create_transaction!(
+          account: account,
+          amount: -random_positive_amount(1500, 2500), # Higher income to cover transfers
+          name: "USD Freelance Payment",
+          date: random_date_within_days(60),
+          currency: "USD"
+        )
+
+        # Create expense transactions (positive amounts)
+        2.times do |i|
           @generators[:transaction_generator].create_transaction!(
             account: account,
-            amount: random_positive_amount(30, 150),
-            name: "USD Transaction #{i + 1}",
+            amount: random_positive_amount(30, 150), # Expense (positive)
+            name: "USD Purchase #{i + 1}",
             date: random_date_within_days(60),
             currency: "USD"
           )
@@ -132,20 +204,28 @@ class Demo::Scenarios::MultiCurrency < Demo::BaseScenario
       end
     end
 
-    # Create GBP transactions (UK-based spending patterns)
+    # Create GBP transactions (UK-based spending patterns) with both income and expenses
     def create_gbp_transaction_patterns!(family)
       gbp_accounts = family.accounts.where(currency: "GBP")
 
       gbp_accounts.each do |account|
-        2.times do |i|
-          @generators[:transaction_generator].create_transaction!(
-            account: account,
-            amount: random_positive_amount(25, 100),
-            name: "GBP Transaction #{i + 1}",
-            date: random_date_within_days(60),
-            currency: "GBP"
-          )
-        end
+        # Create income transaction (negative amount)
+        @generators[:transaction_generator].create_transaction!(
+          account: account,
+          amount: -random_positive_amount(500, 800), # Income (negative)
+          name: "GBP Consulting Payment",
+          date: random_date_within_days(60),
+          currency: "GBP"
+        )
+
+        # Create expense transaction (positive amount)
+        @generators[:transaction_generator].create_transaction!(
+          account: account,
+          amount: random_positive_amount(25, 100), # Expense (positive)
+          name: "GBP Purchase",
+          date: random_date_within_days(60),
+          currency: "GBP"
+        )
       end
     end
 

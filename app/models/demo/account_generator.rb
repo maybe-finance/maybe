@@ -7,7 +7,7 @@ class Demo::AccountGenerator
       account = family.accounts.create!(
         accountable: CreditCard.new,
         name: account_name("Chase Credit Card", i, count),
-        balance: realistic_balance(:credit_card, count),
+        balance: 0,
         currency: "USD"
       )
       accounts << account
@@ -21,7 +21,7 @@ class Demo::AccountGenerator
       account = family.accounts.create!(
         accountable: Depository.new,
         name: account_name("Chase Checking", i, count),
-        balance: realistic_balance(:checking, count),
+        balance: 0,
         currency: "USD"
       )
       accounts << account
@@ -35,7 +35,7 @@ class Demo::AccountGenerator
       account = family.accounts.create!(
         accountable: Depository.new,
         name: account_name("Demo Savings", i, count),
-        balance: realistic_balance(:savings, count),
+        balance: 0,
         currency: "USD",
         subtype: "savings"
       )
@@ -50,7 +50,7 @@ class Demo::AccountGenerator
       property = family.accounts.create!(
         accountable: Property.new,
         name: account_name("123 Maybe Way", i, count),
-        balance: realistic_balance(:property, count),
+        balance: 0,
         currency: "USD"
       )
       accounts << property
@@ -58,7 +58,7 @@ class Demo::AccountGenerator
       mortgage = family.accounts.create!(
         accountable: Loan.new,
         name: account_name("Mortgage", i, count),
-        balance: realistic_balance(:mortgage, count),
+        balance: 0,
         currency: "USD"
       )
       accounts << mortgage
@@ -73,7 +73,7 @@ class Demo::AccountGenerator
       vehicle = family.accounts.create!(
         accountable: Vehicle.new,
         name: account_name("Honda Accord", i, vehicle_count),
-        balance: realistic_balance(:vehicle, vehicle_count),
+        balance: 0,
         currency: "USD"
       )
       accounts << vehicle
@@ -83,7 +83,7 @@ class Demo::AccountGenerator
       loan = family.accounts.create!(
         accountable: Loan.new,
         name: account_name("Car Loan", i, loan_count),
-        balance: realistic_balance(:car_loan, loan_count),
+        balance: 0,
         currency: "USD"
       )
       accounts << loan
@@ -99,7 +99,7 @@ class Demo::AccountGenerator
       asset = family.accounts.create!(
         accountable: OtherAsset.new,
         name: account_name("Other Asset", i, asset_count),
-        balance: realistic_balance(:other_asset, asset_count),
+        balance: 0,
         currency: "USD"
       )
       accounts << asset
@@ -109,7 +109,7 @@ class Demo::AccountGenerator
       liability = family.accounts.create!(
         accountable: OtherLiability.new,
         name: account_name("Other Liability", i, liability_count),
-        balance: realistic_balance(:other_liability, liability_count),
+        balance: 0,
         currency: "USD"
       )
       accounts << liability
@@ -123,15 +123,15 @@ class Demo::AccountGenerator
 
     if count <= 3
       account_configs = [
-        { name: "401(k)", balance: 125000 },
-        { name: "Roth IRA", balance: 45000 },
-        { name: "Taxable Brokerage", balance: 75000 }
+        { name: "401(k)", balance: 0 },
+        { name: "Roth IRA", balance: 0 },
+        { name: "Taxable Brokerage", balance: 0 }
       ]
 
       count.times do |i|
         config = account_configs[i] || {
           name: "Investment Account #{i + 1}",
-          balance: random_positive_amount(50000, 500000)
+          balance: 0
         }
 
         account = family.accounts.create!(
@@ -147,7 +147,7 @@ class Demo::AccountGenerator
         account = family.accounts.create!(
           accountable: Investment.new,
           name: "Investment Account #{i + 1}",
-          balance: random_positive_amount(50000, 500000),
+          balance: 0,
           currency: "USD"
         )
         accounts << account

@@ -15,8 +15,8 @@ class Demo::Scenarios::BasicBudget < Demo::BaseScenario
   SCENARIO_NAME = "Basic Budget".freeze
   PURPOSE = "Simple budget demonstration with category hierarchy".freeze
   TARGET_ACCOUNTS_PER_FAMILY = 1 # Single checking account
-  TARGET_TRANSACTIONS_PER_FAMILY = 3 # One per category
-  TARGET_CATEGORIES = 3 # Parent categories with one subcategory
+  TARGET_TRANSACTIONS_PER_FAMILY = 4 # One income, three expenses
+  TARGET_CATEGORIES = 4 # Income + 3 expense categories (with one subcategory)
   INCLUDES_SECURITIES = false
   INCLUDES_TRANSFERS = false
   INCLUDES_RULES = false
@@ -65,7 +65,7 @@ class Demo::Scenarios::BasicBudget < Demo::BaseScenario
       @checking_account = family.accounts.create!(
         accountable: Depository.new,
         name: "Demo Checking",
-        balance: 3000,
+        balance: 0, # Will be calculated from transactions
         currency: "USD"
       )
 
@@ -74,6 +74,22 @@ class Demo::Scenarios::BasicBudget < Demo::BaseScenario
 
     # Create one transaction for each category to demonstrate categorization
     def create_sample_categorized_transactions!(family)
+      # Create income category and transaction first
+      income_category = family.categories.create!(
+        name: "Income",
+        color: random_color,
+        classification: "income"
+      )
+
+      # Add income transaction (negative amount = inflow)
+      @generators[:transaction_generator].create_transaction!(
+        account: @checking_account,
+        amount: -500, # Income (negative)
+        name: "Salary",
+        category: income_category,
+        date: 5.days.ago
+      )
+
       # Grocery transaction (parent category)
       @generators[:transaction_generator].create_transaction!(
         account: @checking_account,
@@ -101,7 +117,10 @@ class Demo::Scenarios::BasicBudget < Demo::BaseScenario
         date: Date.current
       )
 
-      puts "  - #{TARGET_TRANSACTIONS_PER_FAMILY} categorized transactions created"
+      # Update account balance to match transaction sum
+      @generators[:transaction_generator].update_account_balances_from_transactions!(family)
+
+      puts "  - #{TARGET_TRANSACTIONS_PER_FAMILY + 1} categorized transactions created (including income)"
     end
 
     def scenario_name
