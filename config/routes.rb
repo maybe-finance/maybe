@@ -2,6 +2,7 @@ require "sidekiq/web"
 require "sidekiq/cron/web"
 
 Rails.application.routes.draw do
+  use_doorkeeper
   # MFA routes
   resource :mfa, controller: "mfa", only: [ :new, :create ] do
     get :verify
@@ -179,6 +180,8 @@ Rails.application.routes.draw do
   resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
   end
+
+
 
   resources :currencies, only: %i[show]
 

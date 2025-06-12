@@ -155,6 +155,8 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     docile (1.4.1)
+    doorkeeper (5.8.2)
+      railties (>= 5)
     dotenv (3.1.8)
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
@@ -364,6 +366,8 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.16)
+    rack-attack (6.7.0)
+      rack (>= 1.0, < 4)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-session (2.1.1)
@@ -596,6 +600,7 @@ DEPENDENCIES
   climate_control
   csv
   debug
+  doorkeeper
   dotenv-rails
   erb_lint
   faker
@@ -623,6 +628,7 @@ DEPENDENCIES
   plaid
   propshaft
   puma (>= 5.0)
+  rack-attack (~> 6.6)
   rack-mini-profiler
   rails (~> 7.2.2)
   rails-settings-cached
