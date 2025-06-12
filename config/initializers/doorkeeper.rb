@@ -182,7 +182,12 @@ Doorkeeper.configure do
   # Note: If you are already a user of doorkeeper and have existing tokens
   # in your installation, they will be invalid without adding 'fallback: :plain'.
   #
-  hash_token_secrets
+  # For test environment, allow fallback to plain tokens to make testing easier
+  if Rails.env.test?
+    hash_token_secrets fallback: :plain
+  else
+    hash_token_secrets
+  end
   # By default, token secrets will be hashed using the
   # +Doorkeeper::Hashing::SHA256+ strategy.
   #

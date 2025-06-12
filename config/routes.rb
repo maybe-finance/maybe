@@ -181,6 +181,18 @@ Rails.application.routes.draw do
     get :accept, on: :member
   end
 
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      # Test routes for API controller testing (only available in test environment)
+      if Rails.env.test?
+        get "test", to: "test#index"
+        get "test_not_found", to: "test#not_found"
+        get "test_family_access", to: "test#family_access"
+      end
+    end
+  end
+
 
 
   resources :currencies, only: %i[show]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_12_150749) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_12_154522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -427,7 +427,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_150749) do
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
-    t.bigint "resource_owner_id"
+    t.string "resource_owner_id"
     t.bigint "application_id", null: false
     t.string "token", null: false
     t.string "refresh_token"
