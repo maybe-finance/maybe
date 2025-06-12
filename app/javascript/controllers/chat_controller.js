@@ -57,4 +57,10 @@ export default class extends Controller {
   #scrollToBottom = () => {
     this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight;
   };
+
+  focusInput() {
+    if (this.hasInputTarget) {
+      this.inputTarget.focus();
+    }
+  }
 }
