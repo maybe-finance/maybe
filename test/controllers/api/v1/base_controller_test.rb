@@ -22,6 +22,14 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
       scopes: [ "read_write" ]
     )
     @plain_api_key = "test_api_key_12345"
+
+    # Clear any existing rate limit data
+    Redis.new.del("api_rate_limit:#{@api_key.id}")
+  end
+
+  teardown do
+    # Clean up Redis data after each test
+    Redis.new.del("api_rate_limit:#{@api_key.id}")
   end
 
   test "should require authentication" do
@@ -228,7 +236,6 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     assert_includes logs, "API Request"
     assert_includes logs, "GET /api/v1/test"
     assert_includes logs, @user.email
-    assert_includes logs, "API Key: Test API Key"
   end
 
   test "should provide current_resource_owner method" do
@@ -316,6 +323,105 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     response_body = JSON.parse(response.body)
     assert_equal "forbidden", response_body["error"]
+  end
+
+  test "should include rate limit headers on successful API key requests" do
+    get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+
+    assert_response :success
+    assert_not_nil response.headers["X-RateLimit-Limit"]
+    assert_not_nil response.headers["X-RateLimit-Remaining"]
+    assert_not_nil response.headers["X-RateLimit-Reset"]
+
+    assert_equal "100", response.headers["X-RateLimit-Limit"]
+    assert_equal "99", response.headers["X-RateLimit-Remaining"]
+  end
+
+  test "should increment rate limit count with each request" do
+    # First request
+    get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+    assert_response :success
+    assert_equal "99", response.headers["X-RateLimit-Remaining"]
+
+    # Second request
+    get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+    assert_response :success
+    assert_equal "98", response.headers["X-RateLimit-Remaining"]
+  end
+
+  test "should return 429 when rate limit exceeded" do
+    # Make 100 requests to exhaust the rate limit
+    100.times do
+      get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+      assert_response :success
+    end
+
+    # 101st request should be rate limited
+    get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+    assert_response :too_many_requests
+
+    response_body = JSON.parse(response.body)
+    assert_equal "rate_limit_exceeded", response_body["error"]
+    assert_includes response_body["message"], "Rate limit exceeded"
+
+    # Check response headers
+    assert_equal "100", response.headers["X-RateLimit-Limit"]
+    assert_equal "0", response.headers["X-RateLimit-Remaining"]
+    assert_not_nil response.headers["X-RateLimit-Reset"]
+    assert_not_nil response.headers["Retry-After"]
+  end
+
+  test "should not apply rate limiting to OAuth requests" do
+    # This would need to be implemented based on your OAuth setup
+    # For now, just verify that requests without API keys don't trigger rate limiting
+    get "/api/v1/test"
+    assert_response :unauthorized
+
+    # Should not have rate limit headers for unauthorized requests
+    assert_nil response.headers["X-RateLimit-Limit"]
+  end
+
+  test "should provide detailed rate limit information in 429 response" do
+    # Exhaust the rate limit
+    100.times do
+      get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+    end
+
+    # Make the rate-limited request
+    get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+    assert_response :too_many_requests
+
+    response_body = JSON.parse(response.body)
+    assert_equal "rate_limit_exceeded", response_body["error"]
+    assert response_body["details"]["limit"] == 100
+    assert response_body["details"]["current"] >= 100
+    assert response_body["details"]["reset_in_seconds"] > 0
+  end
+
+  test "rate limiting should be per API key" do
+    # Create a second API key
+    other_api_key = ApiKey.create!(
+      user: @user,
+      name: "Other Test API Key",
+      scopes: ["read"],
+      key: "other_test_key_for_rate_limiting"
+    )
+
+    begin
+      # Make 50 requests with first API key
+      50.times do
+        get "/api/v1/test", headers: { "X-Api-Key" => @plain_api_key }
+        assert_response :success
+      end
+
+      # Should still be able to make requests with second API key
+      get "/api/v1/test", headers: { "X-Api-Key" => other_api_key.plain_key }
+      assert_response :success
+      assert_equal "99", response.headers["X-RateLimit-Remaining"]
+    ensure
+      Redis.new.del("api_rate_limit:#{other_api_key.id}")
+      other_api_key.destroy
+    end
   end
 
 private

@@ -187,6 +187,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # Production API endpoints
       resources :accounts, only: [ :index ]
+      resource :usage, only: [ :show ]
 
       # Test routes for API controller testing (only available in test environment)
       if Rails.env.test?
