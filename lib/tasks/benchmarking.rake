@@ -1,4 +1,6 @@
 # See perf.rake for details on how to run benchmarks
+# Should be run in production mode against scrubbed, production-like data sample
+#
 # Sample command:
 #   BENCHMARKING_ENABLED=true RAILS_ENV=production ENDPOINT=/ rake benchmark:ips
 namespace :benchmark do

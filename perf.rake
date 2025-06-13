@@ -1,3 +1,5 @@
+# Must be in root of repo for derailed_benchmarks to read the benchmark file
+
 require 'bundler'
 Bundler.setup
 

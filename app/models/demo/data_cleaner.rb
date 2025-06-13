@@ -8,9 +8,6 @@ class Demo::DataCleaner
 
   # Main entry point for destroying all demo data
   def destroy_everything!
-    puts "Clearing existing data..."
-
-    # Rails associations handle cascading deletes
     Family.destroy_all
     Setting.destroy_all
     InviteCode.destroy_all
