@@ -37,7 +37,7 @@ gem "sentry-ruby"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "logtail-rails"
-gem "skylight"
+gem "skylight", groups: [ :production ]
 
 # Active Storage
 gem "aws-sdk-s3", "~> 1.177.0", require: false
@@ -80,6 +80,10 @@ group :development, :test do
   gem "dotenv-rails"
 end
 
+if ENV["BENCHMARKING_ENABLED"]
+  gem "dotenv-rails", groups: [ :production ]
+end
+
 group :development do
   gem "hotwire-livereload"
   gem "letter_opener"
@@ -87,6 +91,8 @@ group :development do
   gem "web-console"
   gem "faker"
   gem "benchmark-ips"
+  gem "stackprof"
+  gem "derailed_benchmarks"
   gem "foreman"
 end
 

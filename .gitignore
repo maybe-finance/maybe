@@ -98,7 +98,8 @@ node_modules/
 .taskmaster/config.json
 .taskmaster/templates
 tasks.json
-tasks/ 
+.taskmaster/tasks/
+.taskmaster/reports/
 *.mcp.json
 scripts/
 .cursor/mcp.json
