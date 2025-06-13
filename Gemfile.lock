@@ -245,6 +245,9 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    jbuilder (2.13.0)
+      actionview (>= 5.0.0)
+      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.12.2)
     jwt (2.10.1)
@@ -615,6 +618,7 @@ DEPENDENCIES
   importmap-rails
   inline_svg
   intercom-rails
+  jbuilder
   jwt
   letter_opener
   logtail-rails

@@ -6,6 +6,8 @@ class Api::V1::BaseController < ApplicationController
   # Skip regular session-based authentication for API
   skip_authentication
 
+  # Force JSON format for all API requests
+  before_action :force_json_format
   # Use our custom authentication that supports both OAuth and API keys
   before_action :authenticate_request!
   before_action :check_api_key_rate_limit
@@ -22,6 +24,11 @@ class Api::V1::BaseController < ApplicationController
   rescue_from ActionController::ParameterMissing, with: :handle_bad_request
 
   private
+
+    # Force JSON format for all API requests
+    def force_json_format
+      request.format = :json
+    end
 
     # Authenticate using either OAuth or API key
     def authenticate_request!
