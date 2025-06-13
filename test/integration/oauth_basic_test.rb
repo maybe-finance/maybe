@@ -7,10 +7,10 @@ class OauthBasicTest < ActionDispatch::IntegrationTest
     oauth_app = Doorkeeper::Application.create!(
       name: "Test API Client",
       redirect_uri: "https://client.example.com/callback",
-      scopes: "read_accounts"
+      scopes: "read"
     )
 
-    get "/oauth/authorize?client_id=#{oauth_app.uid}&redirect_uri=#{CGI.escape(oauth_app.redirect_uri)}&response_type=code&scope=read_accounts"
+    get "/oauth/authorize?client_id=#{oauth_app.uid}&redirect_uri=#{CGI.escape(oauth_app.redirect_uri)}&response_type=code&scope=read"
 
     # Should redirect to login page when not authenticated
     assert_redirected_to new_session_path
@@ -35,7 +35,7 @@ class OauthBasicTest < ActionDispatch::IntegrationTest
       Doorkeeper::Application.create!(
         name: "Test App",
         redirect_uri: "https://example.com/callback",
-        scopes: "read_accounts"
+        scopes: "read"
       )
     end
   end
@@ -44,6 +44,6 @@ class OauthBasicTest < ActionDispatch::IntegrationTest
     # Test that Doorkeeper is configured and working
     assert Doorkeeper.configuration.present?, "Doorkeeper configuration should exist"
     assert_equal 1.year, Doorkeeper.configuration.access_token_expires_in
-    assert_equal "read_accounts", Doorkeeper.configuration.default_scopes.first.to_s
+    assert_equal "read", Doorkeeper.configuration.default_scopes.first.to_s
   end
 end

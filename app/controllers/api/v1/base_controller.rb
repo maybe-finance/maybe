@@ -6,8 +6,8 @@ class Api::V1::BaseController < ApplicationController
   # Skip regular session-based authentication for API
   skip_authentication
 
-  # Require OAuth authentication for all API actions
-  before_action :doorkeeper_authorize!
+  # Use our custom authentication that supports both OAuth and API keys
+  before_action :authenticate_request!
   before_action :log_api_access
 
   # Override Doorkeeper's default behavior to return JSON instead of redirecting
@@ -22,49 +22,130 @@ class Api::V1::BaseController < ApplicationController
 
   private
 
-  # Returns the user that owns the access token
-  def current_resource_owner
-    @current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-  end
-
-  # Consistent JSON response method
-  def render_json(data, status: :ok)
-    render json: data, status: status
-  end
-
-  # Error handlers
-  def handle_not_found(exception)
-    Rails.logger.warn "API Record Not Found: #{exception.message}"
-    render_json({ error: "record_not_found", message: "The requested resource was not found" }, status: :not_found)
-  end
-
-  def handle_unauthorized(exception)
-    Rails.logger.warn "API Unauthorized: #{exception.message}"
-    render_json({ error: "unauthorized", message: "Access token is invalid or expired" }, status: :unauthorized)
-  end
-
-  def handle_bad_request(exception)
-    Rails.logger.warn "API Bad Request: #{exception.message}"
-    render_json({ error: "bad_request", message: "Required parameters are missing or invalid" }, status: :bad_request)
-  end
-
-  # Log API access for monitoring and debugging
-  def log_api_access
-    return unless doorkeeper_token && current_resource_owner
-
-    Rails.logger.info "API Request: #{request.method} #{request.path} - User: #{current_resource_owner.email} (Family: #{current_resource_owner.family_id})"
-  end
-
-  # Family-based access control helper (to be used by subcontrollers)
-  def ensure_current_family_access(resource)
-    return unless resource.respond_to?(:family_id)
-
-    unless resource.family_id == current_resource_owner.family_id
-      Rails.logger.warn "API Forbidden: User #{current_resource_owner.email} attempted to access resource from family #{resource.family_id}"
-      render_json({ error: "forbidden", message: "Access denied to this resource" }, status: :forbidden)
-      return false
+    # Authenticate using either OAuth or API key
+    def authenticate_request!
+      authenticate_oauth || authenticate_api_key || render_unauthorized
     end
 
-    true
-  end
+    # Try OAuth authentication first
+    def authenticate_oauth
+      return false unless request.headers["Authorization"].present?
+
+      doorkeeper_authorize!
+      @current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+      @authentication_method = :oauth
+      true
+    rescue Doorkeeper::Errors::DoorkeeperError
+      false
+    end
+
+    # Try API key authentication
+    def authenticate_api_key
+      api_key_value = request.headers["X-Api-Key"]
+      return false unless api_key_value
+
+      @api_key = ApiKey.find_by_value(api_key_value)
+      return false unless @api_key && @api_key.active?
+
+      @current_user = @api_key.user
+      @api_key.update_last_used!
+      @authentication_method = :api_key
+      true
+    end
+
+    # Render unauthorized response
+    def render_unauthorized
+      render_json({ error: "unauthorized", message: "Access token or API key is invalid, expired, or missing" }, status: :unauthorized)
+    end
+
+    # Returns the user that owns the access token or API key
+    def current_resource_owner
+      @current_user
+    end
+
+    # Get current scopes from either authentication method
+    def current_scopes
+      case @authentication_method
+      when :oauth
+        doorkeeper_token&.scopes&.to_a || []
+      when :api_key
+        @api_key&.scopes || []
+      else
+        []
+      end
+    end
+
+    # Check if the current authentication has the required scope
+    def authorize_scope!(required_scope)
+      scopes = current_scopes
+
+      case required_scope.to_s
+      when "read"
+        # Read access requires either "read" or "read_write" scope
+        has_access = scopes.include?("read") || scopes.include?("read_write")
+      when "write"
+        # Write access requires "read_write" scope
+        has_access = scopes.include?("read_write")
+      else
+        # For any other scope, check exact match (backward compatibility)
+        has_access = scopes.include?(required_scope.to_s)
+      end
+
+      unless has_access
+        Rails.logger.warn "API Insufficient Scope: User #{current_resource_owner&.email} attempted to access #{required_scope} but only has #{scopes}"
+        render_json({ error: "insufficient_scope", message: "This action requires the '#{required_scope}' scope" }, status: :forbidden)
+        return false
+      end
+      true
+    end
+
+    # Consistent JSON response method
+    def render_json(data, status: :ok)
+      render json: data, status: status
+    end
+
+    # Error handlers
+    def handle_not_found(exception)
+      Rails.logger.warn "API Record Not Found: #{exception.message}"
+      render_json({ error: "record_not_found", message: "The requested resource was not found" }, status: :not_found)
+    end
+
+    def handle_unauthorized(exception)
+      Rails.logger.warn "API Unauthorized: #{exception.message}"
+      render_json({ error: "unauthorized", message: "Access token is invalid or expired" }, status: :unauthorized)
+    end
+
+    def handle_bad_request(exception)
+      Rails.logger.warn "API Bad Request: #{exception.message}"
+      render_json({ error: "bad_request", message: "Required parameters are missing or invalid" }, status: :bad_request)
+    end
+
+    # Log API access for monitoring and debugging
+    def log_api_access
+      return unless current_resource_owner
+
+      auth_info = case @authentication_method
+      when :oauth
+        "OAuth Token"
+      when :api_key
+        "API Key: #{@api_key.name}"
+      else
+        "Unknown"
+      end
+
+      Rails.logger.info "API Request: #{request.method} #{request.path} - User: #{current_resource_owner.email} (Family: #{current_resource_owner.family_id}) - Auth: #{auth_info}"
+    end
+
+    # Family-based access control helper (to be used by subcontrollers)
+    def ensure_current_family_access(resource)
+      return unless resource.respond_to?(:family_id)
+
+      unless resource.family_id == current_resource_owner.family_id
+        Rails.logger.warn "API Forbidden: User #{current_resource_owner.email} attempted to access resource from family #{resource.family_id}"
+        render_json({ error: "forbidden", message: "Access denied to this resource" }, status: :forbidden)
+        return false
+      end
+
+      true
+    end
 end

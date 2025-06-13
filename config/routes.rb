@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     end
     resource :billing, only: :show
     resource :security, only: :show
+    resource :api_key, only: [ :show, :new, :create, :destroy ]
   end
 
   resource :subscription, only: %i[new show create] do
@@ -184,11 +185,16 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
+      # Production API endpoints
+      resources :accounts, only: [ :index ]
+
       # Test routes for API controller testing (only available in test environment)
       if Rails.env.test?
         get "test", to: "test#index"
         get "test_not_found", to: "test#not_found"
         get "test_family_access", to: "test#family_access"
+        get "test_scope_required", to: "test#scope_required"
+        get "test_multiple_scopes_required", to: "test#multiple_scopes_required"
       end
     end
   end

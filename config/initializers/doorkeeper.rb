@@ -7,7 +7,20 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    Current.user || redirect_to(new_session_url)
+    # Manually replicate the app's session-based authentication logic, since
+    # Doorkeeper controllers don't include our Authentication concern.
+    if (session_id = cookies.signed[:session_token]).present?
+      if (session_record = Session.find_by(id: session_id))
+        # Set Current.session so downstream code expecting it behaves normally.
+        Current.session = session_record
+        # Return the authenticated user object as the resource owner.
+        session_record.user
+      else
+        redirect_to new_session_url
+      end
+    else
+      redirect_to new_session_url
+    end
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -16,11 +29,13 @@ Doorkeeper.configure do
   # every time somebody will try to access the admin web interface.
   #
   admin_authenticator do
-    # Put your admin authentication logic here.
-    # Example implementation:
-
-    if Current.user
-      head :forbidden unless Current.user.admin?
+    if (session_id = cookies.signed[:session_token]).present?
+      if (session_record = Session.find_by(id: session_id))
+        Current.session = session_record
+        head :forbidden unless session_record.user&.super_admin?
+      else
+        redirect_to new_session_url
+      end
     else
       redirect_to new_session_url
     end
@@ -246,8 +261,8 @@ Doorkeeper.configure do
   # For more information go to
   # https://doorkeeper.gitbook.io/guides/ruby-on-rails/scopes
   #
-  default_scopes  :read_accounts
-  optional_scopes :read_transactions, :read_balances
+  default_scopes  :read
+  optional_scopes :read_write
 
   # Allows to restrict only certain scopes for grant_type.
   # By default, all the scopes will be available for all the grant types.

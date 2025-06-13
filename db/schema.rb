@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_12_154522) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_13_101051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -86,6 +86,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_154522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable"
+  end
+
+  create_table "api_keys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "user_id", null: false
+    t.json "scopes"
+    t.datetime "last_used_at"
+    t.datetime "expires_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "display_key", null: false
+    t.index ["display_key"], name: "index_api_keys_on_display_key", unique: true
+    t.index ["revoked_at"], name: "index_api_keys_on_revoked_at"
+    t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
 
   create_table "balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -234,6 +249,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_154522) do
     t.boolean "data_enrichment_enabled", default: false
     t.boolean "early_access", default: false
     t.boolean "auto_sync_on_login", default: true, null: false
+    t.datetime "latest_sync_activity_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "latest_sync_completed_at", default: -> { "CURRENT_TIMESTAMP" }
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -765,6 +782,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_154522) do
   add_foreign_key "accounts", "plaid_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "api_keys", "users"
   add_foreign_key "balances", "accounts", on_delete: :cascade
   add_foreign_key "budget_categories", "budgets"
   add_foreign_key "budget_categories", "categories"
