@@ -1,41 +1,63 @@
 namespace :demo_data do
-  desc "Creates a family with no financial data. Use for testing empty data states."
+  desc "Load empty demo dataset (no financial data)"
   task empty: :environment do
+    start = Time.now
+    puts "🚀 Loading EMPTY demo data…"
+
     Demo::Generator.new.generate_empty_data!
+
+    puts "✅ Done in #{(Time.now - start).round(2)}s"
   end
 
-  desc "Creates a family that needs onboarding. Use for testing onboarding flows."
+  desc "Load new-user demo dataset (family created but not onboarded)"
   task new_user: :environment do
+    start = Time.now
+    puts "🚀 Loading NEW-USER demo data…"
+
     Demo::Generator.new.generate_new_user_data!
+
+    puts "✅ Done in #{(Time.now - start).round(2)}s"
   end
 
-  desc "Creates comprehensive realistic demo data with multi-currency accounts"
+  desc "Load full realistic demo dataset"
   task default: :environment do
-    Demo::Generator.new.generate_default_data!
+    start    = Time.now
+    seed     = ENV.fetch("SEED", Random.new_seed)
+    puts "🚀 Loading FULL demo data (seed=#{seed})…"
 
-    # Verify balances after generation and sync
-    puts "\n🔍 Verifying account balances..."
-    family = Family.last
+    generator = Demo::Generator.new(seed: seed)
+    generator.generate_default_data!
 
-    # Reload accounts and balances to get post-sync data
-    family.accounts.reload.includes(:balances).each do |account|
-      latest_balance = account.balances.order(:date).last&.balance || 0
-      status = if account.asset?
-        latest_balance >= 0 ? "✅" : "❌"
-      else # liability
-        latest_balance >= 0 ? "✅" : "❌" # Positive balance = debt owed (correct for liabilities)
-      end
-      puts "#{status} #{account.name}: #{account.currency} #{latest_balance.to_i}"
+    validate_demo_data!
+
+    elapsed = Time.now - start
+    puts "🎉 Demo data ready in #{elapsed.round(2)}s"
+  end
+
+  # ---------------------------------------------------------------------------
+  # Validation helpers
+  # ---------------------------------------------------------------------------
+  def validate_demo_data!
+    total_entries   = Entry.count
+    trade_entries   = Entry.where(entryable_type: "Trade").count
+    categorized_txn = Transaction.joins(:category).count
+    txn_total       = Transaction.count
+
+    coverage = ((categorized_txn.to_f / txn_total) * 100).round(1)
+
+    puts "\n📊 Validation Summary".ljust(40, "-")
+    puts "Entries total:              #{total_entries}"
+    puts "Trade entries:             #{trade_entries} (#{trade_entries.between?(500, 1000) ? '✅' : '❌'})"
+    puts "Txn categorization:        #{coverage}% (>=75% ✅)"
+
+    unless total_entries.between?(8_000, 12_000)
+      raise "Total entries #{total_entries} outside 8k–12k range"
     end
-
-    # Calculate net worth properly: assets - liabilities (liabilities are positive debt amounts)
-    total_assets = family.accounts.asset.reload.sum { |a| a.balances.order(:date).last&.balance || 0 }
-    total_liabilities = family.accounts.liability.reload.sum { |a| a.balances.order(:date).last&.balance || 0 }
-    net_worth = total_assets - total_liabilities # Subtract liabilities (debt) from assets
-
-    puts "\n💰 Assets: $#{total_assets.to_i}"
-    puts "💳 Liabilities: $#{total_liabilities.to_i}"
-    puts "🏦 Net Worth: $#{net_worth.to_i} #{net_worth > 0 ? '✅' : '❌'}"
-    puts "📊 Total Transactions: #{Entry.joins(:account).where(accounts: { family_id: family.id }).count}"
+    unless trade_entries.between?(500, 1000)
+      raise "Trade entries #{trade_entries} outside 500–1 000 range"
+    end
+    unless coverage >= 75
+      raise "Categorization coverage below 75%"
+    end
   end
 end
