@@ -1,9 +1,11 @@
-# See perf.rake for details on how to run benchmarks
-# Should be run in production mode against scrubbed, production-like data sample
+# Benchmarking requires a production-like data sample, so requires some up-front setup.
 #
-# Sample command:
-#   BENCHMARKING_ENABLED=true RAILS_ENV=production ENDPOINT=/ rake benchmark:ips
-namespace :benchmark do
+# 1. Load a scrubbed production-like slice of data into maybe_benchmarking DB locally
+# 2. Setup .env.production so that the Rails app can boot with RAILS_ENV=production and connect to local maybe_benchmarking DB
+# 3. Run `rake benchmark_dump:06_setup_bench_user`
+# 4. Run locally, find endpoint needed
+# 5. Run an endpoint, example: `ENDPOINT=/budgets/jun-2025/budget_categories/245637cb-129f-4612-b0a8-1de57559372b RAILS_ENV=production BENCHMARKING_ENABLED=true RAILS_LOG_LEVEL=debug rake benchmarking:ips`
+namespace :benchmarking do
   # When to use: Track overall endpoint speed improvements over time (recommended, most practical test)
   desc "Run cold & warm performance benchmarks and append to history"
   task ips: :environment do
@@ -41,6 +43,10 @@ namespace :benchmark do
     cold_cmd = "IPS_WARMUP=#{cold_warmup} IPS_TIME=0 IPS_ITERATIONS=#{cold_iterations} " \
                "bundle exec derailed exec perf:ips"
     cold_output = `#{cold_cmd} 2>&1`
+
+    puts "Cold output:"
+    puts cold_output
+
     cold_result = extract_clean_results(cold_output)
 
     # ---------------------------
@@ -50,6 +56,10 @@ namespace :benchmark do
     warm_cmd = "IPS_WARMUP=#{warm_warmup} IPS_TIME=#{warm_time} " \
                "bundle exec derailed exec perf:ips"
     warm_output = `#{warm_cmd} 2>&1`
+
+    puts "Warm output:"
+    puts warm_output
+
     warm_result = extract_clean_results(warm_output)
 
     # ---------------------------------------------------------------------------
@@ -61,6 +71,7 @@ namespace :benchmark do
     # Table header
     table_header    = "| Type | IPS | Deviation | Time/Iteration | Iterations | Total Time |\n"
     table_separator = "|------|-----|-----------|----------------|------------|------------|\n"
+
     cold_row        = format_table_row("COLD", cold_result)
     warm_row        = format_table_row("WARM", warm_result)
 
@@ -72,13 +83,12 @@ namespace :benchmark do
   end
 
   private
-
     def setup_benchmark_env(path)
       ENV["USE_AUTH"]      = "true"
       ENV["USE_SERVER"]    = "puma"
       ENV["PATH_TO_HIT"]   = path
       ENV["HTTP_METHOD"]   = "GET"
-      ENV["RAILS_LOG_LEVEL"] ||= "info" # keep output clean
+      ENV["RAILS_LOG_LEVEL"] ||= "error" # keep output clean
     end
 
     def benchmark_file(path)

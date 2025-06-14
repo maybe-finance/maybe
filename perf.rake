@@ -14,7 +14,9 @@ class CustomAuth < DerailedBenchmarks::AuthHelper
 
   def call(env)
     # Make sure this user is created in the DB with realistic data before running benchmarks
-    user = User.find_by!(email: ENV.fetch("BENCHMARK_USER_EMAIL", "user@maybe.local"))
+    user = User.find_by!(email: "user@maybe.local")
+
+    puts "Found user for benchmarking: #{user.email}"
 
     # Mimic the way Rails handles browser cookies
     session = user.sessions.create!
@@ -24,6 +26,8 @@ class CustomAuth < DerailedBenchmarks::AuthHelper
     signed_value = verifier.generate(session.id)
 
     env['HTTP_COOKIE'] = "session_token=#{signed_value}"
+
+    puts "Setting up session for user: #{user.email}"
 
     app.call(env)
   end
