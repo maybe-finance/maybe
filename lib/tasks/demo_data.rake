@@ -1,39 +1,63 @@
 namespace :demo_data do
-  desc "Creates a new user with no data. Use for testing empty data states."
+  desc "Load empty demo dataset (no financial data)"
   task empty: :environment do
-    families = [ "Demo Family 1" ]
-    Demo::Generator.new.reset_and_clear_data!(families)
+    start = Time.now
+    puts "🚀 Loading EMPTY demo data…"
+
+    Demo::Generator.new.generate_empty_data!
+
+    puts "✅ Done in #{(Time.now - start).round(2)}s"
   end
 
-  desc "Creates a new user who has to go through onboarding still. Use for testing onboarding flows."
+  desc "Load new-user demo dataset (family created but not onboarded)"
   task new_user: :environment do
-    families = [ "Demo Family 1" ]
-    Demo::Generator.new.reset_and_clear_data!(families, require_onboarding: true)
+    start = Time.now
+    puts "🚀 Loading NEW-USER demo data…"
+
+    Demo::Generator.new.generate_new_user_data!
+
+    puts "✅ Done in #{(Time.now - start).round(2)}s"
   end
 
-  desc "General data reset that loads semi-realistic data"
-  task :reset, [ :count ] => :environment do |t, args|
-    count = (args[:count] || 1).to_i
-    families = count.times.map { |i| "Demo Family #{i + 1}" }
-    Demo::Generator.new.reset_data!(families)
+  desc "Load full realistic demo dataset"
+  task default: :environment do
+    start    = Time.now
+    seed     = ENV.fetch("SEED", Random.new_seed)
+    puts "🚀 Loading FULL demo data (seed=#{seed})…"
+
+    generator = Demo::Generator.new(seed: seed)
+    generator.generate_default_data!
+
+    validate_demo_data!
+
+    elapsed = Time.now - start
+    puts "🎉 Demo data ready in #{elapsed.round(2)}s"
   end
 
-  desc "Use this when you need to test multi-currency features of the app with a minimal setup"
-  task multi_currency: :environment do
-    families = [ "Demo Family 1", "Demo Family 2" ]
-    Demo::Generator.new.generate_multi_currency_data!(families)
-  end
+  # ---------------------------------------------------------------------------
+  # Validation helpers
+  # ---------------------------------------------------------------------------
+  def validate_demo_data!
+    total_entries   = Entry.count
+    trade_entries   = Entry.where(entryable_type: "Trade").count
+    categorized_txn = Transaction.joins(:category).count
+    txn_total       = Transaction.count
 
-  desc "Use this when you want realistic budget data"
-  task basic_budget: :environment do
-    families = [ "Demo Family 1" ]
-    Demo::Generator.new.generate_basic_budget_data!(families)
-  end
+    coverage = ((categorized_txn.to_f / txn_total) * 100).round(1)
 
-  # DO NOT RUN THIS unless you're testing performance locally. It will take a long time to load/clear. Easiest to clear with a db:reset
-  desc "Generates realistic data for 500 families for performance testing. Creates 1 family with Ruby, then efficiently duplicates it 499 times using SQL bulk operations."
-  task performance_testing: :environment do
-    families = [ "Performance Family 1" ]
-    Demo::Generator.new.generate_performance_testing_data!(families)
+    puts "\n📊 Validation Summary".ljust(40, "-")
+    puts "Entries total:              #{total_entries}"
+    puts "Trade entries:             #{trade_entries} (#{trade_entries.between?(500, 1000) ? '✅' : '❌'})"
+    puts "Txn categorization:        #{coverage}% (>=75% ✅)"
+
+    unless total_entries.between?(8_000, 12_000)
+      raise "Total entries #{total_entries} outside 8k–12k range"
+    end
+    unless trade_entries.between?(500, 1000)
+      raise "Trade entries #{trade_entries} outside 500–1 000 range"
+    end
+    unless coverage >= 75
+      raise "Categorization coverage below 75%"
+    end
   end
 end
