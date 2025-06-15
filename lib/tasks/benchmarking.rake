@@ -6,9 +6,16 @@
 # 4. Run locally, find endpoint needed
 # 5. Run an endpoint, example: `ENDPOINT=/budgets/jun-2025/budget_categories/245637cb-129f-4612-b0a8-1de57559372b RAILS_ENV=production BENCHMARKING_ENABLED=true RAILS_LOG_LEVEL=debug rake benchmarking:ips`
 namespace :benchmarking do
+  desc "Shorthand task for running warm/cold benchmark"
+  task endpoint: :environment do
+    system(
+      "RAILS_ENV=production BENCHMARKING_ENABLED=true ENDPOINT=#{ENV.fetch("ENDPOINT", "/")} rake benchmarking:warm_cold_endpoint_ips"
+    )
+  end
+
   # When to use: Track overall endpoint speed improvements over time (recommended, most practical test)
   desc "Run cold & warm performance benchmarks and append to history"
-  task ips: :environment do
+  task warm_cold_endpoint_ips: :environment do
     path = ENV.fetch("ENDPOINT", "/")
 
     # 🚫 Fail fast unless the benchmark is run in production mode
