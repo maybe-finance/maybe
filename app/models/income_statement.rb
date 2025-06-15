@@ -53,6 +53,13 @@ class IncomeStatement
     family_stats(interval: interval).find { |stat| stat.classification == "income" }&.median || 0
   end
 
+  def warm_caches!(interval: "month")
+    totals
+    family_stats(interval: interval)
+    category_stats(interval: interval)
+    nil
+  end
+
   private
     ScopeTotals = Data.define(:transactions_count, :income_money, :expense_money, :missing_exchange_rates?)
     PeriodTotal = Data.define(:classification, :total, :currency, :missing_exchange_rates?, :category_totals)
@@ -102,21 +109,40 @@ class IncomeStatement
 
     def family_stats(interval: "month")
       @family_stats ||= {}
-      @family_stats[interval] ||= FamilyStats.new(family, interval:).call
+      @family_stats[interval] ||= Rails.cache.fetch([
+        "income_statement", "family_stats", family.id, interval, entries_cache_version
+      ]) { FamilyStats.new(family, interval:).call }
     end
 
     def category_stats(interval: "month")
       @category_stats ||= {}
-      @category_stats[interval] ||= CategoryStats.new(family, interval:).call
+      @category_stats[interval] ||= Rails.cache.fetch([
+        "income_statement", "category_stats", family.id, interval, entries_cache_version
+      ]) { CategoryStats.new(family, interval:).call }
     end
 
     def totals_query(transactions_scope:)
-      @totals_query_cache ||= {}
-      cache_key = Digest::MD5.hexdigest(transactions_scope.to_sql)
-      @totals_query_cache[cache_key] ||= Totals.new(family, transactions_scope: transactions_scope).call
+      sql_hash = Digest::MD5.hexdigest(transactions_scope.to_sql)
+
+      Rails.cache.fetch([
+        "income_statement", "totals_query", family.id, sql_hash, entries_cache_version
+      ]) { Totals.new(family, transactions_scope: transactions_scope).call }
     end
 
     def monetizable_currency
       family.currency
+    end
+
+    # Returns a monotonically increasing integer based on the most recent
+    # update to any Entry that belongs to the family. Incorporated into cache
+    # keys so they expire automatically on data changes.
+    def entries_cache_version
+      @entries_cache_version ||= begin
+        ts = Entry.joins(:account)
+                  .where(accounts: { family_id: family.id })
+                  .maximum(:updated_at)
+
+        ts.present? ? ts.to_i : 0
+      end
     end
 end

@@ -29,9 +29,59 @@ class Demo::Generator
   # Expose the seed so callers can reproduce a run if necessary.
   attr_reader :seed
 
-  # ---------------------------------------------------------------------------
-  #                            Performance helpers
-  # ---------------------------------------------------------------------------
+  # Generate empty family - no financial data
+  def generate_empty_data!(skip_clear: false)
+    with_timing(__method__) do
+      unless skip_clear
+        puts "🧹 Clearing existing data..."
+        clear_all_data!
+      end
+
+      puts "👥 Creating empty family..."
+      create_family_and_users!("Demo Family", "user@maybe.local", onboarded: true, subscribed: true)
+
+      puts "✅ Empty demo data loaded successfully!"
+    end
+  end
+
+  # Generate new user family - no financial data, needs onboarding
+  def generate_new_user_data!(skip_clear: false)
+    with_timing(__method__) do
+      unless skip_clear
+        puts "🧹 Clearing existing data..."
+        clear_all_data!
+      end
+
+      puts "👥 Creating new user family..."
+      create_family_and_users!("Demo Family", "user@maybe.local", onboarded: false, subscribed: false)
+
+      puts "✅ New user demo data loaded successfully!"
+    end
+  end
+
+  # Generate comprehensive realistic demo data with multi-currency
+  def generate_default_data!(skip_clear: false, email: "user@maybe.local")
+    if skip_clear
+      puts "⏭️  Skipping data clearing (appending new family)..."
+    else
+      puts "🧹 Clearing existing data..."
+      clear_all_data!
+    end
+
+    with_timing(__method__, max_seconds: 1000) do
+      puts "👥 Creating demo family..."
+      family = create_family_and_users!("Demo Family", email, onboarded: true, subscribed: true)
+
+      puts "📊 Creating realistic financial data..."
+      create_realistic_categories!(family)
+      create_realistic_accounts!(family)
+      create_realistic_transactions!(family)
+      # Auto-fill current-month budget based on recent spending averages
+      generate_budget_auto_fill!(family)
+
+      puts "✅ Realistic demo data loaded successfully!"
+    end
+  end
 
   private
 
@@ -58,66 +108,7 @@ class Demo::Generator
       @rng.rand(*args)
     end
 
-    # Generate empty family - no financial data
-    def generate_empty_data!(skip_clear: false)
-      with_timing(__method__) do
-        unless skip_clear
-          puts "🧹 Clearing existing data..."
-          clear_all_data!
-        end
 
-        puts "👥 Creating empty family..."
-        create_family_and_users!("Demo Family", "user@maybe.local", onboarded: true, subscribed: true)
-
-        puts "✅ Empty demo data loaded successfully!"
-      end
-    end
-
-    # Generate new user family - no financial data, needs onboarding
-    def generate_new_user_data!(skip_clear: false)
-      with_timing(__method__) do
-        unless skip_clear
-          puts "🧹 Clearing existing data..."
-          clear_all_data!
-        end
-
-        puts "👥 Creating new user family..."
-        create_family_and_users!("Demo Family", "user@maybe.local", onboarded: false, subscribed: false)
-
-        puts "✅ New user demo data loaded successfully!"
-      end
-    end
-
-    # Generate comprehensive realistic demo data with multi-currency
-    def generate_default_data!(skip_clear: false, email: "user@maybe.local")
-      if skip_clear
-        puts "⏭️  Skipping data clearing (appending new family)..."
-      else
-        puts "🧹 Clearing existing data..."
-        clear_all_data!
-      end
-
-      with_timing(__method__, max_seconds: 1000) do
-        puts "👥 Creating demo family..."
-        family = create_family_and_users!("Demo Family", email, onboarded: true, subscribed: true)
-
-        puts "📊 Creating realistic financial data..."
-        create_realistic_categories!(family)
-        create_realistic_accounts!(family)
-        create_realistic_transactions!(family)
-        # Auto-fill current-month budget based on recent spending averages
-        generate_budget_auto_fill!(family)
-
-        puts "✅ Realistic demo data loaded successfully!"
-      end
-    end
-
-    # Multi-currency support (keeping existing functionality)
-    def generate_multi_currency_data!(family_names)
-      with_timing(__method__) do
-        generate_for_scenario(:multi_currency, family_names)
-      end
-    end
 
     def clear_all_data!
       family_count = Family.count
@@ -1225,9 +1216,4 @@ class Demo::Generator
 
       puts "   ✅ Set property and vehicle valuations"
     end
-end
-
-# Expose public API after full class definition
-Demo::Generator.public_instance_methods.include?(:generate_default_data!) or Demo::Generator.class_eval do
-  public :generate_empty_data!, :generate_new_user_data!, :generate_default_data!, :generate_multi_currency_data!
 end
