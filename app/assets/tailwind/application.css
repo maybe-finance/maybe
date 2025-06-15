@@ -39,7 +39,7 @@
 .combobox {
   .hw-combobox__main__wrapper,
   .hw-combobox__input {
-    @apply bg-container w-full;
+    @apply bg-container text-primary w-full;
   }
 
   .hw-combobox__main__wrapper {
