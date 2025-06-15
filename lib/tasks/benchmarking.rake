@@ -30,7 +30,7 @@ namespace :benchmarking do
     cold_iterations = Integer(ENV.fetch("COLD_ITERATIONS", 1)) # requests to measure for the cold run
 
     warm_warmup     = Integer(ENV.fetch("WARM_WARMUP", 5))  # seconds benchmark-ips uses to stabilise JIT/caches
-    warm_time       = Integer(ENV.fetch("WARM_TIME", 30))   # seconds benchmark-ips samples for warm statistics
+    warm_time       = Integer(ENV.fetch("WARM_TIME", 10))   # seconds benchmark-ips samples for warm statistics
     # ---------------------------------------------------------------------------
 
     setup_benchmark_env(path)
