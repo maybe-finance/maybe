@@ -18,9 +18,8 @@ class Account::Syncer
     # TODO: this is a temporary solution to speed up pages. Long term we'll throw a materialized view / pre-computed table
     # in for family stats.
     income_statement = IncomeStatement.new(account.family)
-    income_statement.family_stats
-    income_statement.category_stats
-    income_statement.totals # uses default scope internally
+    Rails.logger.info("Warming IncomeStatement caches")
+    income_statement.warm_caches!
   end
 
   private
