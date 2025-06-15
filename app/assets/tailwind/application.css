@@ -39,7 +39,7 @@
 .combobox {
   .hw-combobox__main__wrapper,
   .hw-combobox__input {
-    @apply w-full;
+    @apply bg-container w-full;
   }
 
   .hw-combobox__main__wrapper {
@@ -52,6 +52,10 @@
 
   .hw-combobox__label {
     @apply block text-xs text-gray-500 peer-disabled:text-gray-400;
+  }
+  
+  .hw-combobox__option {
+    @apply bg-container hover:bg-container-hover;
   }
 
   .hw_combobox__pagination__wrapper {
