@@ -28,11 +28,15 @@ class TransactionsController < ApplicationController
     items_per_page = params[:per_page].presence || default_params[:per_page]
     current_page   = params[:page].presence   || default_params[:page]
 
+    # Build a compact cache digest: sanitized filters + page info + a
+    # token that changes on updates *or* deletions.
+    entries_changed_token = [ latest_update_ts, Current.family.entries.count ].join(":")
+
     digest_source = {
-      params: request.query_parameters.to_h,
-      page:   current_page,
-      per:    items_per_page,
-      ts:     latest_update_ts
+      q:    @q,                 # processed & sanitised search params
+      page: current_page,       # requested page number
+      per:  items_per_page,     # page size
+      tok:  entries_changed_token
     }.to_json
 
     cache_key = Current.family.build_cache_key(
