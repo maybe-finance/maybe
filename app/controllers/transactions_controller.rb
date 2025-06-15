@@ -3,6 +3,8 @@ class TransactionsController < ApplicationController
 
   before_action :store_params!, only: :index
 
+  require "digest/md5"
+
   def new
     super
     @income_categories = Current.family.categories.incomes.alphabetically
@@ -15,35 +17,84 @@ class TransactionsController < ApplicationController
 
     set_focused_record(transactions_query, params[:focused_record_id], default_per_page: 50)
 
-    @pagy, @transactions = pagy(
-      transactions_query.includes(
-        { entry: :account },
-        :category, :merchant, :tags,
-        transfer_as_outflow: { inflow_transaction: { entry: :account } },
-        transfer_as_inflow: { outflow_transaction: { entry: :account } }
-      ).reverse_chronological,
-      limit: params[:per_page].presence || default_params[:per_page],
-      params: ->(params) { params.except(:focused_record_id) }
+    # ------------------------------------------------------------------
+    # Cache the expensive includes & pagination block so the DB work only
+    # runs when either the query params change *or* any entry has been
+    # updated for the current family.
+    # ------------------------------------------------------------------
+
+    latest_update_ts = Current.family.entries.maximum(:updated_at)&.utc&.to_i || 0
+
+    items_per_page = params[:per_page].presence || default_params[:per_page]
+    current_page   = params[:page].presence   || default_params[:page]
+
+    digest_source = {
+      params: request.query_parameters.to_h,
+      page:   current_page,
+      per:    items_per_page,
+      ts:     latest_update_ts
+    }.to_json
+
+    cache_key = Current.family.build_cache_key(
+      "transactions_idx_#{Digest::MD5.hexdigest(digest_source)}"
     )
 
-    # -------------------------------------------------------------------
-    # Cache totals
-    # -------------------------------------------------------------------
-    # Totals calculation is expensive (heavy SQL with grouping). We cache the
-    # result keyed by:
-    #   • Family id
-    #   • The family-level cache key that already embeds entries.maximum(:updated_at)
-    #   • A digest of the current search params so each distinct filter set gets
-    #     its own cache entry.
-    # When any entry is created/updated/deleted, the family cache key changes,
-    # automatically invalidating all related totals.
+    ids, total_count = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
+      offset = (current_page.to_i - 1) * items_per_page.to_i
 
-    params_digest = Digest::MD5.hexdigest(@q.to_json)
-    cache_key     = Current.family.build_cache_key("transactions_totals_#{params_digest}")
+      ids = transactions_query
+              .reverse_chronological
+              .limit(items_per_page)
+              .offset(offset)
+              .pluck(:id)
 
-    @totals = Rails.cache.fetch(cache_key) do
-      Current.family.income_statement.totals(transactions_scope: transactions_query)
+      [ ids, transactions_query.count ]
     end
+
+    # ------------------------------------------------------------------
+    # Fallback – if the requested page is beyond the last available page
+    # (which can easily happen when users manipulate the URL or after the
+    # underlying dataset has shrunk), we transparently load the *last*
+    # page instead. This mirrors Pagy's :last_page overflow strategy and
+    # keeps the UI stable (and our tests green)
+    # ------------------------------------------------------------------
+    if ids.empty? && total_count.positive? && current_page.to_i > 1
+      current_page = (total_count.to_f / items_per_page.to_i).ceil
+
+      offset = (current_page - 1) * items_per_page.to_i
+
+      ids = transactions_query
+              .reverse_chronological
+              .limit(items_per_page)
+              .offset(offset)
+              .pluck(:id)
+    end
+
+    # Build Pagy object (this part is cheap – done *after* potential
+    # page fallback so the pagination UI reflects the adjusted page
+    # number).
+    @pagy = Pagy.new(
+      count:  total_count,
+      page:   current_page,
+      items:  items_per_page,
+      params: ->(p) { p.except(:focused_record_id) }
+    )
+
+    # Fetch the transactions in the cached order
+    @transactions = Current.family.transactions
+                     .active
+                     .where(id: ids)
+                     .includes(
+                       { entry: :account },
+                       :category, :merchant, :tags,
+                       transfer_as_outflow: { inflow_transaction: { entry: :account } },
+                       transfer_as_inflow: { outflow_transaction: { entry: :account } }
+                     )
+
+    # Preserve the order defined by `ids`
+    @transactions = ids.map { |id| @transactions.detect { |t| t.id == id } }.compact
+
+    @totals = Current.family.income_statement.totals(transactions_scope: transactions_query)
   end
 
   def clear_filter
