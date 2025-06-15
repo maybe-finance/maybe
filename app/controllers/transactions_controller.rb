@@ -25,8 +25,11 @@ class TransactionsController < ApplicationController
 
     latest_update_ts = Current.family.entries.maximum(:updated_at)&.utc&.to_i || 0
 
-    items_per_page = params[:per_page].presence || default_params[:per_page]
-    current_page   = params[:page].presence   || default_params[:page]
+    items_per_page = (params[:per_page].presence || default_params[:per_page]).to_i
+    items_per_page = 1 if items_per_page <= 0
+
+    current_page   = (params[:page].presence || default_params[:page]).to_i
+    current_page   = 1 if current_page <= 0
 
     # Build a compact cache digest: sanitized filters + page info + a
     # token that changes on updates *or* deletions.
@@ -43,36 +46,36 @@ class TransactionsController < ApplicationController
       "transactions_idx_#{Digest::MD5.hexdigest(digest_source)}"
     )
 
-    ids, total_count = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
-      offset = (current_page.to_i - 1) * items_per_page.to_i
+    cache_data = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
+      current_page_i = current_page
 
+      # Initial query
+      offset = (current_page_i - 1) * items_per_page
       ids = transactions_query
               .reverse_chronological
               .limit(items_per_page)
               .offset(offset)
               .pluck(:id)
 
-      [ ids, transactions_query.count ]
+      total_count = transactions_query.count
+
+      if ids.empty? && total_count.positive? && current_page_i > 1
+        current_page_i = (total_count.to_f / items_per_page).ceil
+        offset = (current_page_i - 1) * items_per_page
+
+        ids = transactions_query
+                .reverse_chronological
+                .limit(items_per_page)
+                .offset(offset)
+                .pluck(:id)
+      end
+
+      { ids: ids, total_count: total_count, current_page: current_page_i }
     end
 
-    # ------------------------------------------------------------------
-    # Fallback – if the requested page is beyond the last available page
-    # (which can easily happen when users manipulate the URL or after the
-    # underlying dataset has shrunk), we transparently load the *last*
-    # page instead. This mirrors Pagy's :last_page overflow strategy and
-    # keeps the UI stable (and our tests green)
-    # ------------------------------------------------------------------
-    if ids.empty? && total_count.positive? && current_page.to_i > 1
-      current_page = (total_count.to_f / items_per_page.to_i).ceil
-
-      offset = (current_page - 1) * items_per_page.to_i
-
-      ids = transactions_query
-              .reverse_chronological
-              .limit(items_per_page)
-              .offset(offset)
-              .pluck(:id)
-    end
+    ids         = cache_data[:ids]
+    total_count = cache_data[:total_count]
+    current_page = cache_data[:current_page]
 
     # Build Pagy object (this part is cheap – done *after* potential
     # page fallback so the pagination UI reflects the adjusted page
