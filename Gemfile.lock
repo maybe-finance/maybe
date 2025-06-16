@@ -296,7 +296,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    lookbook (2.3.9)
+    lookbook (2.3.10)
       activemodel
       css_parser
       htmlbeautifier (~> 1.3)
