@@ -390,7 +390,7 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.16)
-    rack-mini-profiler (3.3.1)
+    rack-mini-profiler (4.0.0)
       rack (>= 1.2.0)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
