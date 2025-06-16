@@ -9,6 +9,13 @@ class Transaction < ApplicationRecord
 
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
+  enum :kind, {
+    standard: "standard",
+    transfer: "transfer",
+    loan_payment: "loan_payment",
+    one_time: "one_time"
+  }
+
   class << self
     def search(params)
       Search.new(params).build_query(all)
