@@ -296,7 +296,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    lookbook (2.3.10)
+    lookbook (2.3.9)
       activemodel
       css_parser
       htmlbeautifier (~> 1.3)
@@ -642,7 +642,7 @@ DEPENDENCIES
   jwt
   letter_opener
   logtail-rails
-  lookbook (>= 2.3.7)
+  lookbook (= 2.3.9)
   lucide-rails!
   mocha
   octokit

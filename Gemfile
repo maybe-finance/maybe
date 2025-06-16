@@ -23,7 +23,11 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 gem "view_component"
-gem "lookbook", ">= 2.3.7"
+
+# https://github.com/lookbook-hq/lookbook/issues/712
+# TODO: Remove max version constraint when fixed
+gem "lookbook", "2.3.9"
+
 gem "hotwire_combobox"
 
 # Background Jobs
