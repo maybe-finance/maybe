@@ -59,7 +59,7 @@ class ApiRateLimiter
     {
       current_count: current_count,
       rate_limit: rate_limit,
-      remaining: [rate_limit - current_count, 0].max,
+      remaining: [ rate_limit - current_count, 0 ].max,
       reset_time: reset_time,
       tier: determine_tier
     }

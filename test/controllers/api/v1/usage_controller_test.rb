@@ -6,7 +6,7 @@ class Api::V1::UsageControllerTest < ActionDispatch::IntegrationTest
     @api_key = ApiKey.create!(
       user: @user,
       name: "Test API Key",
-      scopes: ["read"],
+      scopes: [ "read" ],
       key: "test_key_for_usage"
     )
 
@@ -34,7 +34,7 @@ class Api::V1::UsageControllerTest < ActionDispatch::IntegrationTest
 
     # Check API key information
     assert_equal "Test API Key", response_body["api_key"]["name"]
-    assert_equal ["read"], response_body["api_key"]["scopes"]
+    assert_equal [ "read" ], response_body["api_key"]["scopes"]
     assert_not_nil response_body["api_key"]["last_used_at"]
     assert_not_nil response_body["api_key"]["created_at"]
 

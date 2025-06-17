@@ -141,7 +141,7 @@ class Api::V1::TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_difference('@account.entries.count', 1) do
+    assert_difference("@account.entries.count", 1) do
       post api_v1_transactions_url,
            params: transaction_params,
            headers: api_headers(@api_key)
@@ -232,24 +232,24 @@ class Api::V1::TransactionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # DESTROY action tests
-    test "should destroy transaction" do
-    entry_to_delete = @account.entries.create!(
-      name: "Transaction to Delete",
-      amount: 10.00,
-      currency: "USD",
-      date: Date.current,
-      entryable: Transaction.new
-    )
-    transaction_to_delete = entry_to_delete.transaction
+  test "should destroy transaction" do
+  entry_to_delete = @account.entries.create!(
+    name: "Transaction to Delete",
+    amount: 10.00,
+    currency: "USD",
+    date: Date.current,
+    entryable: Transaction.new
+  )
+  transaction_to_delete = entry_to_delete.transaction
 
-    assert_difference('@account.entries.count', -1) do
-      delete api_v1_transaction_url(transaction_to_delete), headers: api_headers(@api_key)
-    end
-
-    assert_response :success
-    response_data = JSON.parse(response.body)
-    assert response_data.key?("message")
+  assert_difference("@account.entries.count", -1) do
+    delete api_v1_transaction_url(transaction_to_delete), headers: api_headers(@api_key)
   end
+
+  assert_response :success
+  response_data = JSON.parse(response.body)
+  assert response_data.key?("message")
+end
 
   test "should reject destroy with read-only API key" do
     delete api_v1_transaction_url(@transaction), headers: api_headers(@read_only_api_key)
@@ -334,7 +334,7 @@ class Api::V1::TransactionsControllerTest < ActionDispatch::IntegrationTest
 
   private
 
-  def api_headers(api_key)
-    { "X-Api-Key" => api_key.plain_key }
-  end
+    def api_headers(api_key)
+      { "X-Api-Key" => api_key.plain_key }
+    end
 end

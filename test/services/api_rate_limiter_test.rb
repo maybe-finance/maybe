@@ -6,7 +6,7 @@ class ApiRateLimiterTest < ActiveSupport::TestCase
     @api_key = ApiKey.create!(
       user: @user,
       name: "Test API Key",
-      scopes: ["read"],
+      scopes: [ "read" ],
       key: "test_key_123"
     )
     @rate_limiter = ApiRateLimiter.new(@api_key)
@@ -99,7 +99,7 @@ class ApiRateLimiterTest < ActiveSupport::TestCase
     other_api_key = ApiKey.create!(
       user: @user,
       name: "Other API Key",
-      scopes: ["read_write"],
+      scopes: [ "read_write" ],
       key: "other_key_456"
     )
 

@@ -403,7 +403,7 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     other_api_key = ApiKey.create!(
       user: @user,
       name: "Other Test API Key",
-      scopes: ["read"],
+      scopes: [ "read" ],
       key: "other_test_key_for_rate_limiting"
     )
 

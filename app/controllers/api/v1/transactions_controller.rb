@@ -4,9 +4,9 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   include Pagy::Backend
 
   # Ensure proper scope authorization for read vs write access
-  before_action :ensure_read_scope, only: [:index, :show]
-  before_action :ensure_write_scope, only: [:create, :update, :destroy]
-  before_action :set_transaction, only: [:show, :update, :destroy]
+  before_action :ensure_read_scope, only: [ :index, :show ]
+  before_action :ensure_write_scope, only: [ :create, :update, :destroy ]
+  before_action :set_transaction, only: [ :show, :update, :destroy ]
 
   def index
     family = current_resource_owner.family
@@ -63,7 +63,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     }, status: :internal_server_error
   end
 
-    def create
+  def create
     family = current_resource_owner.family
 
     # Validate account_id is present
@@ -71,7 +71,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       render json: {
         error: "validation_failed",
         message: "Account ID is required",
-        errors: ["Account ID is required"]
+        errors: [ "Account ID is required" ]
       }, status: :unprocessable_entity
       return
     end
@@ -102,7 +102,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       error: "internal_server_error",
       message: "Error: #{e.message}"
     }, status: :internal_server_error
-  end
+end
 
   def update
     if @entry.update(entry_params_for_update)
@@ -202,22 +202,22 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
       # Date range filtering
       if params[:start_date].present?
-        query = query.joins(:entry).where('entries.date >= ?', Date.parse(params[:start_date]))
+        query = query.joins(:entry).where("entries.date >= ?", Date.parse(params[:start_date]))
       end
 
       if params[:end_date].present?
-        query = query.joins(:entry).where('entries.date <= ?', Date.parse(params[:end_date]))
+        query = query.joins(:entry).where("entries.date <= ?", Date.parse(params[:end_date]))
       end
 
       # Amount filtering
       if params[:min_amount].present?
         min_amount = params[:min_amount].to_f
-        query = query.joins(:entry).where('entries.amount >= ?', min_amount)
+        query = query.joins(:entry).where("entries.amount >= ?", min_amount)
       end
 
       if params[:max_amount].present?
         max_amount = params[:max_amount].to_f
-        query = query.joins(:entry).where('entries.amount <= ?', max_amount)
+        query = query.joins(:entry).where("entries.amount <= ?", max_amount)
       end
 
       # Tag filtering
@@ -229,26 +229,26 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       # Transaction type filtering (income/expense)
       if params[:type].present?
         case params[:type].downcase
-        when 'income'
-          query = query.joins(:entry).where('entries.amount < 0')
-        when 'expense'
-          query = query.joins(:entry).where('entries.amount > 0')
+        when "income"
+          query = query.joins(:entry).where("entries.amount < 0")
+        when "expense"
+          query = query.joins(:entry).where("entries.amount > 0")
         end
       end
 
       query
     end
 
-        def apply_search(query)
+    def apply_search(query)
       search_term = "%#{params[:search]}%"
 
       query.joins(:entry)
            .left_joins(:merchant)
            .where(
-             'entries.name ILIKE ? OR entries.notes ILIKE ? OR merchants.name ILIKE ?',
+             "entries.name ILIKE ? OR entries.notes ILIKE ? OR merchants.name ILIKE ?",
              search_term, search_term, search_term
            )
-    end
+end
 
     def transaction_params
       params.require(:transaction).permit(
@@ -264,7 +264,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
         amount: calculate_signed_amount,
         currency: transaction_params[:currency] || current_resource_owner.family.currency,
         notes: transaction_params[:notes],
-        entryable_type: 'Transaction',
+        entryable_type: "Transaction",
         entryable_attributes: {
           category_id: transaction_params[:category_id],
           merchant_id: transaction_params[:merchant_id],
@@ -301,9 +301,9 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       nature = transaction_params[:nature]
 
       case nature&.downcase
-      when 'income', 'inflow'
+      when "income", "inflow"
         -amount.abs  # Income is negative
-      when 'expense', 'outflow'
+      when "expense", "outflow"
         amount.abs   # Expense is positive
       else
         amount       # Use as provided

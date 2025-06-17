@@ -6,7 +6,7 @@ class Api::V1::AccountsController < Api::V1::BaseController
   # Ensure proper scope authorization for read access
   before_action :ensure_read_scope
 
-    def index
+  def index
     # Test with Pagy pagination
     family = current_resource_owner.family
     accounts_query = family.accounts.active.alphabetically
@@ -30,7 +30,7 @@ class Api::V1::AccountsController < Api::V1::BaseController
       error: "internal_server_error",
       message: "Error: #{e.message}"
     }, status: :internal_server_error
-  end
+end
 
     private
 
