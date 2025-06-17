@@ -12,48 +12,6 @@ class Transfer < ApplicationRecord
   validate :transfer_within_date_range
   validate :transfer_has_same_family
 
-  class << self
-    def from_accounts(from_account:, to_account:, date:, amount:)
-      # Attempt to convert the amount to the to_account's currency.
-      # If the conversion fails, use the original amount.
-      converted_amount = begin
-        Money.new(amount.abs, from_account.currency).exchange_to(to_account.currency)
-      rescue Money::ConversionError
-        Money.new(amount.abs, from_account.currency)
-      end
-
-      outflow_kind = if to_account&.accountable_type == "Loan"
-        "loan_payment"
-      elsif to_account&.liability?
-        "payment"
-      else
-        "transfer"
-      end
-
-      new(
-        inflow_transaction: Transaction.new(
-          kind: "transfer",
-          entry: to_account.entries.build(
-            amount: converted_amount.amount.abs * -1,
-            currency: converted_amount.currency.iso_code,
-            date: date,
-            name: "Transfer from #{from_account.name}",
-          )
-        ),
-        outflow_transaction: Transaction.new(
-          kind: outflow_kind,
-          entry: from_account.entries.build(
-            amount: amount.abs,
-            currency: from_account.currency,
-            date: date,
-            name: "Transfer to #{to_account.name}",
-          )
-        ),
-        status: "confirmed"
-      )
-    end
-  end
-
   def reject!
     Transfer.transaction do
       RejectedTransfer.find_or_create_by!(inflow_transaction_id: inflow_transaction_id, outflow_transaction_id: outflow_transaction_id)
