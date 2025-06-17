@@ -9,9 +9,8 @@ class AddKindToTransactions < ActiveRecord::Migration[7.2]
         execute <<~SQL
           UPDATE transactions
           SET kind = CASE
-            WHEN loan_accounts.accountable_type = 'Loan'
-              AND entries.amount > 0
-            THEN 'loan_payment'
+            WHEN destination_accounts.accountable_type = 'Loan' AND entries.amount > 0 THEN 'loan_payment'
+            WHEN destination_accounts.accountable_type IN ('CreditCard', 'OtherLiability') AND entries.amount > 0 THEN 'payment'
             ELSE 'transfer'
           END
           FROM transfers t
@@ -23,7 +22,7 @@ class AddKindToTransactions < ActiveRecord::Migration[7.2]
             inflow_entries.entryable_id = t.inflow_transaction_id
             AND inflow_entries.entryable_type = 'Transaction'
           )
-          LEFT JOIN accounts loan_accounts ON loan_accounts.id = inflow_entries.account_id
+          LEFT JOIN accounts destination_accounts ON destination_accounts.id = inflow_entries.account_id
           WHERE transactions.id = entries.entryable_id
             AND entries.entryable_type = 'Transaction'
         SQL
