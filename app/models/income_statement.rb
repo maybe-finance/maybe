@@ -20,8 +20,7 @@ class IncomeStatement
     ScopeTotals.new(
       transactions_count: result.sum(&:transactions_count),
       income_money: Money.new(total_income, family.currency),
-      expense_money: Money.new(total_expense, family.currency),
-      missing_exchange_rates?: result.any?(&:missing_exchange_rates?)
+      expense_money: Money.new(total_expense, family.currency)
     )
   end
 
@@ -61,8 +60,8 @@ class IncomeStatement
   end
 
   private
-    ScopeTotals = Data.define(:transactions_count, :income_money, :expense_money, :missing_exchange_rates?)
-    PeriodTotal = Data.define(:classification, :total, :currency, :missing_exchange_rates?, :category_totals)
+    ScopeTotals = Data.define(:transactions_count, :income_money, :expense_money)
+    PeriodTotal = Data.define(:classification, :total, :currency, :category_totals)
     CategoryTotal = Data.define(:category, :total, :currency, :weight)
 
     def categories
@@ -102,7 +101,6 @@ class IncomeStatement
         classification: classification,
         total: category_totals.reject { |ct| ct.category.subcategory? }.sum(&:total),
         currency: family.currency,
-        missing_exchange_rates?: totals.any?(&:missing_exchange_rates?),
         category_totals: category_totals
       )
     end

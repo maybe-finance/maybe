@@ -11,14 +11,13 @@ class IncomeStatement::Totals
         category_id: row["category_id"],
         classification: row["classification"],
         total: row["total"],
-        transactions_count: row["transactions_count"],
-        missing_exchange_rates?: row["missing_exchange_rates"]
+        transactions_count: row["transactions_count"]
       )
     end
   end
 
   private
-    TotalsRow = Data.define(:parent_category_id, :category_id, :classification, :total, :transactions_count, :missing_exchange_rates?)
+    TotalsRow = Data.define(:parent_category_id, :category_id, :classification, :total, :transactions_count)
 
     def query_sql
       ActiveRecord::Base.sanitize_sql_array([
@@ -36,8 +35,7 @@ class IncomeStatement::Totals
           c.parent_id as parent_category_id,
           CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END as classification,
           ABS(SUM(ae.amount * COALESCE(er.rate, 1))) as total,
-          COUNT(ae.id) as transactions_count,
-          BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
+          COUNT(ae.id) as transactions_count
         FROM (#{@transactions_scope.to_sql}) at
         JOIN entries ae ON ae.entryable_id = at.id AND ae.entryable_type = 'Transaction'
         LEFT JOIN categories c ON c.id = at.category_id

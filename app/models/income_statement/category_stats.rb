@@ -10,14 +10,13 @@ class IncomeStatement::CategoryStats
         category_id: row["category_id"],
         classification: row["classification"],
         median: row["median"],
-        avg: row["avg"],
-        missing_exchange_rates?: row["missing_exchange_rates"]
+        avg: row["avg"]
       )
     end
   end
 
   private
-    StatRow = Data.define(:category_id, :classification, :median, :avg, :missing_exchange_rates?)
+    StatRow = Data.define(:category_id, :classification, :median, :avg)
 
     def query_sql
       ActiveRecord::Base.sanitize_sql_array([
@@ -35,8 +34,7 @@ class IncomeStatement::CategoryStats
             c.id as category_id,
             date_trunc(:interval, ae.date) as period,
             CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END as classification,
-            SUM(ae.amount * COALESCE(er.rate, 1)) as total,
-            BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
+            SUM(ae.amount * COALESCE(er.rate, 1)) as total
           FROM transactions t
           JOIN entries ae ON ae.entryable_id = t.id AND ae.entryable_type = 'Transaction'
           JOIN accounts a ON a.id = ae.account_id
@@ -54,8 +52,7 @@ class IncomeStatement::CategoryStats
           category_id,
           classification,
           ABS(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total)) as median,
-          ABS(AVG(total)) as avg,
-          BOOL_OR(missing_exchange_rates) as missing_exchange_rates
+          ABS(AVG(total)) as avg
         FROM period_totals
         GROUP BY category_id, classification;
       SQL
