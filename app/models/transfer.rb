@@ -65,6 +65,10 @@ class Transfer < ApplicationRecord
     update!(status: "confirmed")
   end
 
+  def date
+    inflow_transaction.entry.date
+  end
+
   def sync_account_later
     inflow_transaction&.entry&.sync_account_later
     outflow_transaction&.entry&.sync_account_later

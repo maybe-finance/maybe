@@ -189,7 +189,7 @@ class TransactionsTest < ApplicationSystemTestCase
     end
     select "Deposit", from: "Type"
     fill_in "Date", with: transfer_date
-    fill_in "entry[amount]", with: 175.25
+    fill_in "model[amount]", with: 175.25
     click_button "Add transaction"
     within "#entry-group-" + transfer_date.to_s do
       assert_text "175.25"

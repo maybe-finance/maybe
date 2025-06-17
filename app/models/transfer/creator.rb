@@ -4,7 +4,7 @@ class Transfer::Creator
     @source_account = family.accounts.find(source_account_id) # early throw if not found
     @destination_account = family.accounts.find(destination_account_id) # early throw if not found
     @date = date
-    @amount = amount
+    @amount = amount.to_d
   end
 
   def create

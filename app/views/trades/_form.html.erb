@@ -1,14 +1,11 @@
-<%# locals: (entry:) %>
+<%# locals: (model:, account:) %>
 
 <% type = params[:type] || "buy" %>
 
-<%= styled_form_with model: entry, url: trades_path, data: { controller: "trade-form" } do |form| %>
-
-  <%= form.hidden_field :account_id %>
-
+<%= styled_form_with url: trades_path(account_id: account&.id), scope: :model, data: { controller: "trade-form" } do |form| %>
   <div class="space-y-4">
-    <% if entry.errors.any? %>
-      <%= render "shared/form_errors", model: entry %>
+    <% if model.errors.any? %>
+      <%= render "shared/form_errors", model: model %>
     <% end %>
 
     <div class="space-y-2">
@@ -22,7 +19,7 @@
       { label: t(".type"), selected: type },
       { data: {
           action: "trade-form#changeType",
-          trade_form_url_param: new_trade_path(account_id: entry.account&.id || entry.account_id),
+          trade_form_url_param: new_trade_path(account_id: account&.id),
           trade_form_key_param: "type",
         }} %>
 
@@ -41,10 +38,10 @@
         <% end %>
       <% end %>
 
-      <%= form.date_field :date, label: true, value: Date.current, required: true %>
+      <%= form.date_field :date, label: true, value: model.date || Date.current, required: true %>
 
       <% unless %w[buy sell].include?(type) %>
-        <%= form.money_field :amount, label: t(".amount"), required: true %>
+        <%= form.money_field :amount, label: t(".amount"), value: model.amount, required: true %>
       <% end %>
 
       <% if %w[deposit withdrawal].include?(type) %>
