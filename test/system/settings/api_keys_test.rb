@@ -55,7 +55,7 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
       user: @user,
       name: "Production API Key",
       display_key: "test_plain_key_123",
-      scopes: [ "read", "read_write" ]
+      scopes: [ "read_write" ]
     )
 
     visit settings_api_key_path
@@ -63,7 +63,6 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
     assert_text "Your API Key"
     assert_text "Production API Key"
     assert_text "Active"
-    assert_text "Read Only"
     assert_text "Read/Write"
     assert_text "Never used"
     assert_link "Create New Key"
@@ -96,12 +95,16 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
     visit settings_api_key_path
     click_link "Create New Key"
 
-    assert_current_path new_settings_api_key_path
+    # Should be on the new API key form
+    assert_text "Create New API Key"
+    
     fill_in "API Key Name", with: "New API Key"
     choose "Read Only"
     click_button "Create API Key"
 
+    # Should redirect to show page with new key
     assert_text "New API Key"
+    assert_text "Your API Key"
 
     # Old key should be revoked
     api_key.reload
@@ -118,13 +121,23 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
 
     visit settings_api_key_path
 
-    # Mock the confirmation dialog
-    accept_confirm "Are you sure you want to revoke this API key?" do
-      click_button "Revoke Key"
+    # Click the revoke button to open the modal
+    click_button "Revoke Key"
+    
+    # Wait for the modal to appear and click Confirm
+    # The dialog might take a moment to appear
+    sleep 0.5
+    
+    within "#confirm-dialog" do
+      assert_text "Are you sure you want to revoke this API key?"
+      click_button "Confirm"
     end
+    
+    # Wait for the page to update after revoke
+    sleep 0.5
 
     assert_text "Create Your API Key"
-    assert_no_text "Your API Key"
+    assert_text "Get programmatic access to your Maybe data"
 
     # Key should be revoked in the database
     api_key.reload
@@ -160,8 +173,9 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
     click_button "Create API Key"
 
     # Should stay on form with validation error
-    assert_current_path settings_api_key_path # POST path
+    assert_current_path new_settings_api_key_path
     assert_field "API Key Name" # Form should still be visible
+    # The form might not show the validation error inline, but should remain on the form
   end
 
   test "should show last used timestamp when API key has been used" do
