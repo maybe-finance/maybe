@@ -97,7 +97,7 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
 
     # Should be on the new API key form
     assert_text "Create New API Key"
-    
+
     fill_in "API Key Name", with: "New API Key"
     choose "Read Only"
     click_button "Create API Key"
@@ -123,16 +123,16 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
 
     # Click the revoke button to open the modal
     click_button "Revoke Key"
-    
+
     # Wait for the modal to appear and click Confirm
     # The dialog might take a moment to appear
     sleep 0.5
-    
+
     within "#confirm-dialog" do
       assert_text "Are you sure you want to revoke this API key?"
       click_button "Confirm"
     end
-    
+
     # Wait for the page to update after revoke
     sleep 0.5
 
