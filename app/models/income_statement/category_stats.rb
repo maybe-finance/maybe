@@ -1,6 +1,4 @@
 class IncomeStatement::CategoryStats
-  include IncomeStatement::BaseQuery
-
   def initialize(family, interval: "month")
     @family = family
     @interval = interval
@@ -22,11 +20,35 @@ class IncomeStatement::CategoryStats
     StatRow = Data.define(:category_id, :classification, :median, :avg, :missing_exchange_rates?)
 
     def query_sql
-      base_sql = base_query_sql(family: @family, interval: @interval, transactions_scope: @family.transactions.active)
+      ActiveRecord::Base.sanitize_sql_array([
+        base_query_sql,
+        sql_params
+      ])
+    end
 
+    def base_query_sql
       <<~SQL
         WITH base_totals AS (
-          #{base_sql}
+          SELECT
+            c.id as category_id,
+            c.parent_id as parent_category_id,
+            date_trunc(:interval, ae.date) as date,
+            CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END as classification,
+            SUM(ae.amount * COALESCE(er.rate, 1)) as total,
+            COUNT(ae.id) as transactions_count,
+            BOOL_OR(ae.currency <> :target_currency AND er.rate IS NULL) as missing_exchange_rates
+          FROM transactions t
+          JOIN entries ae ON ae.entryable_id = t.id AND ae.entryable_type = 'Transaction'
+          JOIN accounts a ON a.id = ae.account_id
+          LEFT JOIN categories c ON c.id = t.category_id
+          LEFT JOIN exchange_rates er ON (
+            er.date = ae.date AND
+            er.from_currency = ae.currency AND
+            er.to_currency = :target_currency
+          )
+          WHERE a.family_id = :family_id
+            AND t.kind NOT IN ('transfer', 'one_time', 'payment')
+          GROUP BY 1, 2, 3, 4
         )
         SELECT
             category_id,
@@ -37,5 +59,13 @@ class IncomeStatement::CategoryStats
         FROM base_totals
         GROUP BY category_id, classification;
       SQL
+    end
+
+    def sql_params
+      {
+        target_currency: @family.currency,
+        interval: @interval,
+        family_id: @family.id
+      }
     end
 end

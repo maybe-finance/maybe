@@ -6,6 +6,30 @@
 # 4. Run locally, find endpoint needed
 # 5. Run an endpoint, example: `ENDPOINT=/budgets/jun-2025/budget_categories/245637cb-129f-4612-b0a8-1de57559372b RAILS_ENV=production BENCHMARKING_ENABLED=true RAILS_LOG_LEVEL=debug rake benchmarking:ips`
 namespace :benchmarking do
+  desc "Benchmark specific code"
+  task code: :environment do
+    Benchmark.ips do |x|
+      x.config(time: 30, warmup: 10)
+
+      family = User.find_by(email: "user@maybe.local").family
+      scope = family.transactions.active
+
+      x.report("IncomeStatement::Totals") do
+        IncomeStatement::Totals.new(family, transactions_scope: scope).call
+      end
+
+      x.report("IncomeStatement::CategoryStats") do
+        IncomeStatement::CategoryStats.new(family).call
+      end
+
+      x.report("IncomeStatement::FamilyStats") do
+        IncomeStatement::FamilyStats.new(family).call
+      end
+
+      x.compare!
+    end
+  end
+
   desc "Shorthand task for running warm/cold benchmark"
   task endpoint: :environment do
     system(
