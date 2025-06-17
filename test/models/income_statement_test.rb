@@ -71,7 +71,8 @@ class IncomeStatementTest < ActiveSupport::TestCase
     create_transaction(account: @checking_account, amount: 500, category: @groceries_category)
 
     income_statement = IncomeStatement.new(@family)
-    # Adjust expectation to match current implementation behavior
+    # CORRECT BUSINESS LOGIC: Calculates median of time-period totals for budget planning
+    # All transactions in same month = monthly total of 1500, so median = 1500.0
     assert_equal 1500.0, income_statement.median_expense(interval: "month")
   end
 
@@ -79,14 +80,17 @@ class IncomeStatementTest < ActiveSupport::TestCase
     # Clear existing transactions by deleting entries
     Entry.joins(:account).where(accounts: { family_id: @family.id }).destroy_all
 
-    # Create income: -200, -400, -600 (median should be 400)
+    # Create income: -200, -300, -400, -500, -600 (median should be -400, displayed as 400)
     create_transaction(account: @checking_account, amount: -200, category: @income_category)
+    create_transaction(account: @checking_account, amount: -300, category: @income_category)
     create_transaction(account: @checking_account, amount: -400, category: @income_category)
+    create_transaction(account: @checking_account, amount: -500, category: @income_category)
     create_transaction(account: @checking_account, amount: -600, category: @income_category)
 
     income_statement = IncomeStatement.new(@family)
-    # Adjust expectation to match current implementation behavior
-    assert_equal 1200.0, income_statement.median_income(interval: "month")
+    # CORRECT BUSINESS LOGIC: Calculates median of time-period totals for budget planning
+    # All transactions in same month = monthly total of -2000, so median = 2000.0
+    assert_equal 2000.0, income_statement.median_income(interval: "month")
   end
 
   test "calculates average expense correctly with known dataset" do
@@ -99,7 +103,8 @@ class IncomeStatementTest < ActiveSupport::TestCase
     create_transaction(account: @checking_account, amount: 300, category: @groceries_category)
 
     income_statement = IncomeStatement.new(@family)
-    # Adjust expectation to match current implementation behavior
+    # CORRECT BUSINESS LOGIC: Calculates average of time-period totals for budget planning
+    # All transactions in same month = monthly total of 600, so average = 600.0
     assert_equal 600.0, income_statement.avg_expense(interval: "month")
   end
 
@@ -120,11 +125,12 @@ class IncomeStatementTest < ActiveSupport::TestCase
     create_transaction(account: @checking_account, amount: 150, category: other_food_category)
 
     income_statement = IncomeStatement.new(@family)
-    # Adjust expectations to match current implementation behavior
+    # CORRECT BUSINESS LOGIC: Calculates median of time-period totals for budget planning
+    # All groceries in same month = monthly total of 900, so median = 900.0
     assert_equal 900.0, income_statement.median_expense(interval: "month", category: @groceries_category)
-    # For restaurants, let's see what the actual value is and adjust accordingly
+    # For restaurants: monthly total = 200, so median = 200.0
     restaurants_median = income_statement.median_expense(interval: "month", category: other_food_category)
-    assert restaurants_median.is_a?(Numeric) # Just verify it returns a number for now
+    assert_equal 200.0, restaurants_median
   end
 
   test "calculates category-specific average expense" do
@@ -138,7 +144,8 @@ class IncomeStatementTest < ActiveSupport::TestCase
     create_transaction(account: @checking_account, amount: 300, category: @groceries_category)
 
     income_statement = IncomeStatement.new(@family)
-    # Adjust expectation to match current implementation behavior
+    # CORRECT BUSINESS LOGIC: Calculates average of time-period totals for budget planning
+    # All transactions in same month = monthly total of 600, so average = 600.0
     assert_equal 600.0, income_statement.avg_expense(interval: "month", category: @groceries_category)
   end
 
@@ -205,16 +212,37 @@ class IncomeStatementTest < ActiveSupport::TestCase
   end
 
   # NEW TESTS: Interval-Based Calculations
-  test "calculates statistics for different intervals" do
+  test "different intervals return different statistical results with multi-period data" do
+    # Clear existing transactions
+    Entry.joins(:account).where(accounts: { family_id: @family.id }).destroy_all
+
+    # Create transactions across multiple weeks to test interval behavior
+    # Week 1: 100, 200 (total: 300, median: 150)
+    create_transaction(account: @checking_account, amount: 100, category: @groceries_category, date: 3.weeks.ago)
+    create_transaction(account: @checking_account, amount: 200, category: @groceries_category, date: 3.weeks.ago + 1.day)
+
+    # Week 2: 400, 600 (total: 1000, median: 500)
+    create_transaction(account: @checking_account, amount: 400, category: @groceries_category, date: 2.weeks.ago)
+    create_transaction(account: @checking_account, amount: 600, category: @groceries_category, date: 2.weeks.ago + 1.day)
+
+    # Week 3: 800 (total: 800, median: 800)
+    create_transaction(account: @checking_account, amount: 800, category: @groceries_category, date: 1.week.ago)
+
     income_statement = IncomeStatement.new(@family)
 
-    # Test that different intervals return results (specific values depend on implementation)
     month_median = income_statement.median_expense(interval: "month")
     week_median = income_statement.median_expense(interval: "week")
 
-    # Both should return numeric values
+    # CRITICAL TEST: Different intervals should return different results
+    # Month interval: median of monthly totals (if all in same month) vs individual transactions
+    # Week interval: median of weekly totals [300, 1000, 800] = 800 vs individual transactions [100,200,400,600,800] = 400
+    refute_equal month_median, week_median, "Different intervals should return different statistical results when data spans multiple time periods"
+
+    # Both should still be numeric
     assert month_median.is_a?(Numeric)
     assert week_median.is_a?(Numeric)
+    assert month_median > 0
+    assert week_median > 0
   end
 
   # NEW TESTS: Edge Cases
