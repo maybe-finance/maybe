@@ -12,7 +12,7 @@
       </span>
     </h3>
 
-    <% if entry.transaction.transfer? %>
+    <% if entry.transaction.transfer.present? %>
       <%= icon "arrow-left-right", class: "mt-1" %>
     <% end %>
 

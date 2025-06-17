@@ -110,7 +110,7 @@ module ApplicationHelper
 
   private
     def calculate_total(item, money_method, negate)
-      items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer? }
+      items = item.reject { |i| i.respond_to?(:entryable) && i.entryable.transfer.present? }
       total = items.sum(&money_method)
       negate ? -total : total
     end

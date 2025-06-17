@@ -10,7 +10,7 @@
 
       <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 lg:col-span-6">
         <%= check_box_tag dom_id(entry, "selection"),
-            disabled: transaction.transfer?,
+            disabled: transaction.transfer.present?,
             class: "checkbox checkbox--light",
             data: {
               id: entry.id,
@@ -37,8 +37,8 @@
               <div class="space-y-0.5">
                 <div class="flex items-center gap-1">
                   <%= link_to(
-                        transaction.transfer? ? transaction.transfer.name : entry.name,
-                        transaction.transfer? ? transfer_path(transaction.transfer) : entry_path(entry),
+                        transaction.transfer.present? ? transaction.transfer.name : entry.name,
+                        transaction.transfer.present? ? transfer_path(transaction.transfer) : entry_path(entry),
                         data: {
                           turbo_frame: "drawer",
                           turbo_prefetch: false
@@ -52,13 +52,13 @@
                     </span>
                   <% end %>
 
-                  <% if transaction.transfer? %>
+                  <% if transaction.transfer.present? %>
                     <%= render "transactions/transfer_match", transaction: transaction %>
                   <% end %>
                 </div>
 
                 <div class="text-secondary text-xs font-normal hidden lg:block">
-                  <% if transaction.transfer? %>
+                  <% if transaction.transfer.present? %>
                     <%= render "transfers/account_links",
                         transfer: transaction.transfer,
                         is_inflow: transaction.transfer_as_inflow.present? %>
@@ -81,7 +81,7 @@
 
       <div class="col-span-4 lg:col-span-2 ml-auto text-right">
         <%= content_tag :p,
-            transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
+            transaction.transfer.present? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>
       </div>
 

@@ -9,81 +9,81 @@
           class="bg-container placeholder:text-sm placeholder:text-secondary font-normal h-10 relative pl-10 w-full border-none rounded-lg focus:outline-hidden focus:ring-0"
           data-list-filter-target="input"
           data-action="list-filter#filter">
-        <%= icon("search", class: "absolute inset-0 ml-2 transform top-1/2 -translate-y-1/2") %>
+          <%= icon("search", class: "absolute inset-0 ml-2 transform top-1/2 -translate-y-1/2") %>
+        </div>
       </div>
-    </div>
-    <div data-list-filter-target="list" class="flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar">
-      <div class="pb-2 pl-4 mr-2 text-secondary hidden" data-list-filter-target="emptyMessage">
-        <%= t(".no_categories") %>
-      </div>
-      <% if @categories.any? %>
-        <% Category::Group.for(@categories).each do |group| %>
-          <%= render "category/dropdowns/row", category: group.category %>
+      <div data-list-filter-target="list" class="flex flex-col gap-0.5 p-1.5 mt-0.5 mr-2 max-h-64 overflow-y-scroll scrollbar">
+        <div class="pb-2 pl-4 mr-2 text-secondary hidden" data-list-filter-target="emptyMessage">
+          <%= t(".no_categories") %>
+        </div>
+        <% if @categories.any? %>
+          <% Category::Group.for(@categories).each do |group| %>
+            <%= render "category/dropdowns/row", category: group.category %>
 
-          <% group.subcategories.each do |category| %>
-            <%= render "category/dropdowns/row", category: category %>
+            <% group.subcategories.each do |category| %>
+              <%= render "category/dropdowns/row", category: category %>
+            <% end %>
           <% end %>
-        <% end %>
-      <% else %>
-        <div class="flex justify-center items-center py-12">
-          <div class="text-center flex flex-col items-center max-w-[500px]">
-            <p class="text-sm text-secondary font-normal mb-4"><%= t(".empty") %></p>
+        <% else %>
+          <div class="flex justify-center items-center py-12">
+            <div class="text-center flex flex-col items-center max-w-[500px]">
+              <p class="text-sm text-secondary font-normal mb-4"><%= t(".empty") %></p>
 
-            <%= render ButtonComponent.new(
+              <%= render ButtonComponent.new(
               text: t(".bootstrap"),
               variant: "outline",
               href: bootstrap_categories_path,
               method: :post,
               data: { turbo_frame: :_top }) %>
+            </div>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
 
-    <%= render "shared/ruler", classes: "my-2" %>
+      <%= render "shared/ruler", classes: "my-2" %>
 
-    <div class="relative p-1.5 w-full">
-      <% if @transaction.category %>
-        <%= button_to transaction_path(@transaction.entry),
+      <div class="relative p-1.5 w-full">
+        <% if @transaction.category %>
+          <%= button_to transaction_path(@transaction.entry),
                       method: :patch,
                       data: { turbo_frame: dom_id(@transaction.entry) },
                       params: { entry: { entryable_type: "Transaction", entryable_attributes: { id: @transaction.id, category_id: nil } } },
                       class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-container-inset-hover" do %>
-          <%= icon("minus") %>
+            <%= icon("minus") %>
 
-          <%= t(".clear") %>
+            <%= t(".clear") %>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <% unless @transaction.transfer? %>
-        <%= link_to new_transaction_transfer_match_path(@transaction.entry),
+        <% unless @transaction.transfer.present? %>
+          <%= link_to new_transaction_transfer_match_path(@transaction.entry),
                   class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-container-inset-hover",
                   data: { turbo_frame: "modal" } do %>
-          <%= icon("refresh-cw") %>
+            <%= icon("refresh-cw") %>
 
-          <p>Match transfer/payment</p>
+            <p>Match transfer/payment</p>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <div class="flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2">
-        <div class="flex items-center gap-2">
-          <%= form_with url: transaction_path(@transaction.entry),
+        <div class="flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2">
+          <div class="flex items-center gap-2">
+            <%= form_with url: transaction_path(@transaction.entry),
                         method: :patch,
                         data: { controller: "auto-submit-form" } do |f| %>
-            <%= f.hidden_field "entry[excluded]", value: !@transaction.entry.excluded %>
-            <%= f.check_box "entry[excluded]",
+              <%= f.hidden_field "entry[excluded]", value: !@transaction.entry.excluded %>
+              <%= f.check_box "entry[excluded]",
                           checked: @transaction.entry.excluded,
                           class: "checkbox checkbox--light",
                           data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
-          <% end %>
+            <% end %>
+          </div>
+
+          <p>One-time <%= @transaction.entry.amount.negative? ? "income" : "expense" %></p>
+
+          <span class="text-orange-500 ml-auto">
+            <%= icon("asterisk", color: "current") %>
+          </span>
         </div>
-
-        <p>One-time <%= @transaction.entry.amount.negative? ? "income" : "expense" %></p>
-
-        <span class="text-orange-500 ml-auto">
-          <%= icon("asterisk", color: "current") %>
-        </span>
       </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
