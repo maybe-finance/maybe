@@ -6,12 +6,17 @@ class Api::V1::BaseController < ApplicationController
   # Skip regular session-based authentication for API
   skip_authentication
 
-  # Force JSON format for all API requests
+  # Skip onboarding requirements for API endpoints
+  skip_before_action :require_onboarding_and_upgrade
+
+    # Force JSON format for all API requests
   before_action :force_json_format
   # Use our custom authentication that supports both OAuth and API keys
   before_action :authenticate_request!
   before_action :check_api_key_rate_limit
   before_action :log_api_access
+
+
 
   # Override Doorkeeper's default behavior to return JSON instead of redirecting
   def doorkeeper_unauthorized_render_options(error: nil)
@@ -30,20 +35,52 @@ class Api::V1::BaseController < ApplicationController
       request.format = :json
     end
 
-    # Authenticate using either OAuth or API key
+        # Authenticate using either OAuth or API key
     def authenticate_request!
-      authenticate_oauth || authenticate_api_key || render_unauthorized
+      return if authenticate_oauth
+      return if authenticate_api_key
+      render_unauthorized unless performed?
     end
 
     # Try OAuth authentication first
     def authenticate_oauth
       return false unless request.headers["Authorization"].present?
 
-      doorkeeper_authorize!
-      @current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-      @authentication_method = :oauth
-      true
-    rescue Doorkeeper::Errors::DoorkeeperError
+            # Manually verify the token (bypassing doorkeeper_authorize! which had scope issues)
+      token_string = request.authorization&.split(' ')&.last
+      access_token = Doorkeeper::AccessToken.by_token(token_string)
+
+      # Check token validity and scope (read_write includes read access)
+      has_sufficient_scope = access_token&.scopes&.include?('read') || access_token&.scopes&.include?('read_write')
+
+      unless access_token && !access_token.expired? && has_sufficient_scope
+        render_json({ error: "unauthorized", message: "Access token is invalid, expired, or missing required scope" }, status: :unauthorized)
+        return false
+      end
+
+      # Set the doorkeeper_token for compatibility
+      @_doorkeeper_token = access_token
+
+              if doorkeeper_token&.resource_owner_id
+          @current_user = User.find_by(id: doorkeeper_token.resource_owner_id)
+
+          # If user doesn't exist, the token is invalid (user was deleted)
+          unless @current_user
+            Rails.logger.warn "API OAuth Token Invalid: Access token resource_owner_id #{doorkeeper_token.resource_owner_id} does not exist"
+            render_json({ error: "unauthorized", message: "Access token is invalid - user not found" }, status: :unauthorized)
+            return false
+          end
+      else
+        Rails.logger.warn "API OAuth Token Invalid: Access token missing resource_owner_id"
+        render_json({ error: "unauthorized", message: "Access token is invalid - missing resource owner" }, status: :unauthorized)
+        return false
+      end
+
+              @authentication_method = :oauth
+        setup_current_context_for_api
+        true
+    rescue Doorkeeper::Errors::DoorkeeperError => e
+      Rails.logger.warn "API OAuth Error: #{e.message}"
       false
     end
 
@@ -59,6 +96,7 @@ class Api::V1::BaseController < ApplicationController
       @api_key.update_last_used!
       @authentication_method = :api_key
       @rate_limiter = ApiRateLimiter.new(@api_key)
+      setup_current_context_for_api
       true
     end
 
@@ -129,6 +167,7 @@ class Api::V1::BaseController < ApplicationController
     end
 
     # Check if the current authentication has the required scope
+    # Implements hierarchical scope checking where read_write includes read access
     def authorize_scope!(required_scope)
       scopes = current_scopes
 
@@ -189,7 +228,7 @@ class Api::V1::BaseController < ApplicationController
       Rails.logger.info "API Request: #{request.method} #{request.path} - User: #{current_resource_owner.email} (Family: #{current_resource_owner.family_id}) - Auth: #{auth_info}"
     end
 
-    # Family-based access control helper (to be used by subcontrollers)
+        # Family-based access control helper (to be used by subcontrollers)
     def ensure_current_family_access(resource)
       return unless resource.respond_to?(:family_id)
 
@@ -200,5 +239,31 @@ class Api::V1::BaseController < ApplicationController
       end
 
       true
+    end
+
+        # Manual doorkeeper_token accessor for compatibility with manual token verification
+    def doorkeeper_token
+      @_doorkeeper_token
+    end
+
+        # Set up Current context for API requests since we don't use session-based auth
+    def setup_current_context_for_api
+      # For API requests, we need to create a minimal session-like object
+      # or find/create an actual session for this user to make Current.user work
+      if @current_user
+        # Try to find an existing session for this user, or create a temporary one
+        session = @current_user.sessions.first
+        if session
+          Current.session = session
+        else
+          # Create a temporary session for this API request
+          # This won't be persisted but will allow Current.user to work
+          session = @current_user.sessions.build(
+            user_agent: request.user_agent,
+            ip_address: request.ip
+          )
+          Current.session = session
+        end
+      end
     end
 end
