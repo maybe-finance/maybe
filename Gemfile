@@ -23,7 +23,11 @@ gem "lucide-rails", github: "maybe-finance/lucide-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 gem "view_component"
-gem "lookbook", ">= 2.3.7"
+
+# https://github.com/lookbook-hq/lookbook/issues/712
+# TODO: Remove max version constraint when fixed
+gem "lookbook", "2.3.9"
+
 gem "hotwire_combobox"
 
 # Background Jobs
@@ -37,7 +41,7 @@ gem "sentry-ruby"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "logtail-rails"
-gem "skylight"
+gem "skylight", groups: [ :production ]
 
 # Active Storage
 gem "aws-sdk-s3", "~> 1.177.0", require: false
@@ -85,6 +89,10 @@ group :development, :test do
   gem "dotenv-rails"
 end
 
+if ENV["BENCHMARKING_ENABLED"]
+  gem "dotenv-rails", groups: [ :production ]
+end
+
 group :development do
   gem "hotwire-livereload"
   gem "letter_opener"
@@ -92,6 +100,8 @@ group :development do
   gem "web-console"
   gem "faker"
   gem "benchmark-ips"
+  gem "stackprof"
+  gem "derailed_benchmarks"
   gem "foreman"
 end
 

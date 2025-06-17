@@ -67,7 +67,7 @@ bin/setup
 bin/dev
 
 # Optionally, load demo data
-rake demo_data:reset
+rake demo_data:default
 ```
 
 And visit http://localhost:3000 to see the app. You can use the following
