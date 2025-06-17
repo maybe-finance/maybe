@@ -52,13 +52,6 @@ class IncomeStatement
     family_stats(interval: interval).find { |stat| stat.classification == "income" }&.median || 0
   end
 
-  def warm_caches!(interval: "month")
-    totals
-    family_stats(interval: interval)
-    category_stats(interval: interval)
-    nil
-  end
-
   private
     ScopeTotals = Data.define(:transactions_count, :income_money, :expense_money)
     PeriodTotal = Data.define(:classification, :total, :currency, :category_totals)
