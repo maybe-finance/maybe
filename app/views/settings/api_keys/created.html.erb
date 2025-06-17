@@ -1,0 +1,94 @@
+<%= content_for :page_title, "API Key Created" %>
+
+<%= settings_section title: "API Key Created Successfully", subtitle: "Your new API key has been generated successfully." do %>
+  <div class="space-y-4">
+    <div class="p-3 shadow-border-xs bg-container rounded-lg">
+      <div class="flex items-start gap-3">
+        <%= render FilledIconComponent.new(
+          icon: "check-circle",
+          rounded: true,
+          size: "lg",
+          variant: :success
+        ) %>
+        <div class="flex-1">
+          <h3 class="font-medium text-primary">API Key Created Successfully!</h3>
+          <p class="text-secondary text-sm mt-1">Your new API key "<%= @api_key.name %>" has been created and is ready to use.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface-inset rounded-xl p-4">
+      <h4 class="font-medium text-primary mb-3">Your API Key</h4>
+      <p class="text-secondary text-sm mb-3">Copy and store this key securely. You'll need it to authenticate your API requests.</p>
+
+      <div class="bg-container rounded-lg p-3 border border-primary" data-controller="clipboard">
+        <div class="flex items-center justify-between gap-3">
+          <code id="api-key-display" class="font-mono text-sm text-primary break-all" data-clipboard-target="source"><%= @api_key.plain_key %></code>
+          <%= render ButtonComponent.new(
+            text: "Copy API Key",
+            variant: "ghost",
+            icon: "copy",
+            data: { action: "clipboard#copy" }
+          ) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface-inset rounded-xl p-4">
+      <h4 class="font-medium text-primary mb-3">Key Details</h4>
+      <div class="space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span class="text-secondary">Name:</span>
+          <span class="text-primary font-medium"><%= @api_key.name %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-secondary">Permissions:</span>
+          <span class="text-primary">
+            <%= @api_key.scopes.map { |scope|
+              case scope
+              when "read_accounts" then "View Accounts"
+              when "read_transactions" then "View Transactions"
+              when "read_balances" then "View Balances"
+              when "write_transactions" then "Create Transactions"
+              else scope.humanize
+              end
+            }.join(", ") %>
+          </span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-secondary">Created:</span>
+          <span class="text-primary"><%= @api_key.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-warning-50 border border-warning-200 rounded-xl p-4">
+      <div class="flex items-start gap-2">
+        <%= icon("alert-triangle", class: "w-5 h-5 text-warning-600 mt-0.5") %>
+        <div>
+          <h4 class="font-medium text-warning-800 text-sm">Important Security Note</h4>
+          <p class="text-warning-700 text-sm mt-1">
+            This is the only time your API key will be displayed. Make sure to copy it now and store it securely.
+            If you lose this key, you'll need to generate a new one.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface-inset rounded-xl p-4">
+      <h4 class="font-medium text-primary mb-3">How to use your API key</h4>
+      <p class="text-secondary text-sm mb-3">Include your API key in the X-Api-Key header when making requests:</p>
+      <div class="bg-container rounded-lg p-3 font-mono text-sm text-primary border border-primary">
+        curl -H "X-Api-Key: <%= @api_key.plain_key %>" <%= request.base_url %>/api/v1/accounts
+      </div>
+    </div>
+
+    <div class="flex justify-end pt-4 border-t border-primary">
+      <%= render LinkComponent.new(
+        text: "Continue to API Key Settings",
+        href: settings_api_key_path,
+        variant: "primary"
+      ) %>
+    </div>
+  </div>
+<% end %>

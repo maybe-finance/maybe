@@ -70,6 +70,7 @@ en:
         page_title: Security
     settings_nav:
       accounts_label: Accounts
+      api_key_label: API Key
       billing_label: Billing
       categories_label: Categories
       feedback_label: Feedback
