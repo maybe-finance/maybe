@@ -3,11 +3,14 @@ require "test_helper"
 class ApiRateLimiterTest < ActiveSupport::TestCase
   setup do
     @user = users(:family_admin)
+    # Destroy any existing active API keys for this user
+    @user.api_keys.active.destroy_all
+
     @api_key = ApiKey.create!(
       user: @user,
-      name: "Test API Key",
+      name: "Rate Limiter Test Key",
       scopes: [ "read" ],
-      key: "test_key_123"
+      display_key: "rate_limiter_test_#{SecureRandom.hex(8)}"
     )
     @rate_limiter = ApiRateLimiter.new(@api_key)
 
@@ -96,11 +99,13 @@ class ApiRateLimiterTest < ActiveSupport::TestCase
   end
 
   test "should handle multiple API keys separately" do
+    # Create a different user for the second API key
+    other_user = users(:family_member)
     other_api_key = ApiKey.create!(
-      user: @user,
+      user: other_user,
       name: "Other API Key",
       scopes: [ "read_write" ],
-      key: "other_key_456"
+      display_key: "rate_limiter_other_#{SecureRandom.hex(8)}"
     )
 
     other_rate_limiter = ApiRateLimiter.new(other_api_key)
@@ -130,11 +135,4 @@ class ApiRateLimiterTest < ActiveSupport::TestCase
 
     assert_in_delta expected_reset, reset_time, 1
   end
-
-  private
-
-    def users(key)
-      # Mock fixture - in real tests this would reference actual fixtures
-      OpenStruct.new(id: 1, email: "test@example.com", family_id: 1)
-    end
 end

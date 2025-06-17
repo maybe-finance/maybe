@@ -15,13 +15,13 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     @user.api_keys.destroy_all
 
     # Create a test API key
+    @plain_api_key = "base_test_#{SecureRandom.hex(8)}"
     @api_key = ApiKey.create!(
       user: @user,
       name: "Test API Key",
-      display_key: "test_api_key_12345",
+      display_key: @plain_api_key,
       scopes: [ "read_write" ]
     )
-    @plain_api_key = "test_api_key_12345"
 
     # Clear any existing rate limit data
     Redis.new.del("api_rate_limit:#{@api_key.id}")
@@ -177,12 +177,12 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     limited_api_key = ApiKey.create!(
       user: @user,
       name: "Limited API Key",
-      display_key: "limited_key_123",
+      display_key: "limited_key_#{SecureRandom.hex(8)}",
       scopes: [ "read" ]  # Only read scope
     )
 
     get "/api/v1/test_scope_required", params: {}, headers: {
-      "X-Api-Key" => "limited_key_123"
+      "X-Api-Key" => limited_api_key.display_key
     }
 
     assert_response :forbidden
@@ -212,13 +212,13 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     read_only_key = ApiKey.create!(
       user: @user,
       name: "Read Only API Key",
-      display_key: "read_only_key_123",
+      display_key: "read_only_key_#{SecureRandom.hex(8)}",
       scopes: [ "read" ]  # Only read scope, no write
     )
 
     # Try to access the write-requiring endpoint with read-only key
     get "/api/v1/test_scope_required", params: {}, headers: {
-      "X-Api-Key" => "read_only_key_123"
+      "X-Api-Key" => read_only_key.display_key
     }
 
     assert_response :forbidden
@@ -311,13 +311,13 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
     other_user_api_key = ApiKey.create!(
       user: other_user,
       name: "Other User API Key",
-      display_key: "other_user_key_123",
+      display_key: "other_user_key_#{SecureRandom.hex(8)}",
       scopes: [ "read" ]
     )
 
     # Try to access data from a different family
     get "/api/v1/test_family_access", params: {}, headers: {
-      "X-Api-Key" => "other_user_key_123"
+      "X-Api-Key" => other_user_api_key.display_key
     }
 
     assert_response :forbidden
@@ -399,12 +399,13 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "rate limiting should be per API key" do
-    # Create a second API key
+    # Create a second user for independent API keys
+    other_user = users(:family_member)
     other_api_key = ApiKey.create!(
-      user: @user,
+      user: other_user,
       name: "Other Test API Key",
       scopes: [ "read" ],
-      key: "other_test_key_for_rate_limiting"
+      display_key: "other_rate_test_#{SecureRandom.hex(8)}"
     )
 
     begin
@@ -415,7 +416,7 @@ class Api::V1::BaseControllerTest < ActionDispatch::IntegrationTest
       end
 
       # Should still be able to make requests with second API key
-      get "/api/v1/test", headers: { "X-Api-Key" => other_api_key.plain_key }
+      get "/api/v1/test", headers: { "X-Api-Key" => other_api_key.display_key }
       assert_response :success
       assert_equal "99", response.headers["X-RateLimit-Remaining"]
     ensure

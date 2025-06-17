@@ -1,7 +1,7 @@
 class Api::V1::UsageController < Api::V1::BaseController
   # GET /api/v1/usage
   def show
-    authorize_scope!(:read)
+    return unless authorize_scope!(:read)
 
     case @authentication_method
     when :api_key

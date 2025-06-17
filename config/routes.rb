@@ -188,7 +188,7 @@ Rails.application.routes.draw do
       # Production API endpoints
       resources :accounts, only: [ :index ]
       resources :transactions, only: [ :index, :show, :create, :update, :destroy ]
-      resource :usage, only: [ :show ]
+      resource :usage, only: [ :show ], controller: "usage"
 
       # Test routes for API controller testing (only available in test environment)
       if Rails.env.test?
