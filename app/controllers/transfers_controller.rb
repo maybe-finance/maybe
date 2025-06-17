@@ -1,4 +1,6 @@
 class TransfersController < ApplicationController
+  include StreamExtensions
+
   before_action :set_transfer, only: %i[destroy show update]
 
   def new
@@ -10,25 +12,19 @@ class TransfersController < ApplicationController
   end
 
   def create
-    from_account = Current.family.accounts.find(transfer_params[:from_account_id])
-    to_account = Current.family.accounts.find(transfer_params[:to_account_id])
-
-    @transfer = Transfer.from_accounts(
-      from_account: from_account,
-      to_account: to_account,
+    @transfer = Transfer::Creator.new(
+      family: Current.family,
+      source_account_id: transfer_params[:from_account_id],
+      destination_account_id: transfer_params[:to_account_id],
       date: transfer_params[:date],
       amount: transfer_params[:amount].to_d
-    )
+    ).create
 
-    if @transfer.save
-      @transfer.sync_account_later
-
-      flash[:notice] = t(".success")
-
+    if @transfer.persisted?
+      success_message = "Transfer created"
       respond_to do |format|
-        format.html { redirect_back_or_to transactions_path }
-        redirect_target_url = request.referer || transactions_path
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+        format.html { redirect_back_or_to transactions_path, notice: success_message }
+        format.turbo_stream { stream_redirect_back_or_to transactions_path, notice: success_message }
       end
     else
       render :new, status: :unprocessable_entity

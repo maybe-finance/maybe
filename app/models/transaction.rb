@@ -10,10 +10,11 @@ class Transaction < ApplicationRecord
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   enum :kind, {
-    standard: "standard",
-    transfer: "transfer",
-    loan_payment: "loan_payment",
-    one_time: "one_time"
+    standard: "standard", # A regular transaction, included in budget analytics
+    transfer: "transfer", # Movement of funds, excluded from budget analytics
+    payment: "payment", # A CC or Other payment, excluded from budget analytics (CC payments offset the sum of expense transactions)
+    loan_payment: "loan_payment", # A payment to a Loan account, treated as an expense in budgets
+    one_time: "one_time" # A one-time expense/income, excluded from budget analytics
   }
 
   class << self

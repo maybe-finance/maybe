@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_10_181219) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_16_183654) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -648,7 +648,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_10_181219) do
     t.uuid "category_id"
     t.uuid "merchant_id"
     t.jsonb "locked_attributes", default: {}
+    t.string "kind", default: "standard", null: false
     t.index ["category_id"], name: "index_transactions_on_category_id"
+    t.index ["kind"], name: "index_transactions_on_kind"
     t.index ["merchant_id"], name: "index_transactions_on_merchant_id"
   end
 

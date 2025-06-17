@@ -203,6 +203,7 @@ class TransactionsTest < ApplicationSystemTestCase
     inflow_entry = create_transaction("inflow", 1.day.ago.to_date, -500, account: investment_account)
     @user.family.auto_match_transfers!
     visit transactions_url
+
     within "#entry-group-" + Date.current.to_s + "-totals" do
       assert_text "-$100.00" # transaction eleven from setup
     end

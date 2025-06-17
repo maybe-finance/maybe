@@ -22,8 +22,17 @@ class Transfer < ApplicationRecord
         Money.new(amount.abs, from_account.currency)
       end
 
+      outflow_kind = if to_account&.accountable_type == "Loan"
+        "loan_payment"
+      elsif to_account&.liability?
+        "payment"
+      else
+        "transfer"
+      end
+
       new(
         inflow_transaction: Transaction.new(
+          kind: "transfer",
           entry: to_account.entries.build(
             amount: converted_amount.amount.abs * -1,
             currency: converted_amount.currency.iso_code,
@@ -32,6 +41,7 @@ class Transfer < ApplicationRecord
           )
         ),
         outflow_transaction: Transaction.new(
+          kind: outflow_kind,
           entry: from_account.entries.build(
             amount: amount.abs,
             currency: from_account.currency,
@@ -87,6 +97,24 @@ class Transfer < ApplicationRecord
 
   def payment?
     to_account&.liability?
+  end
+
+  def loan_payment?
+    outflow_transaction&.kind == "loan_payment"
+  end
+
+  def liability_payment?
+    outflow_transaction&.kind == "payment"
+  end
+
+  def regular_transfer?
+    outflow_transaction&.kind == "transfer"
+  end
+
+  def transfer_type
+    return "loan_payment" if loan_payment?
+    return "liability_payment" if liability_payment?
+    "transfer"
   end
 
   def categorizable?
