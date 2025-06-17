@@ -258,12 +258,10 @@ class IncomeStatementTest < ActiveSupport::TestCase
   end
 
   test "handles category not found gracefully" do
-    nonexistent_category = @family.categories.build(name: "Nonexistent")
-    nonexistent_category.id = 99999
+    nonexistent_category = Category.new(id: 99999, name: "Nonexistent")
 
     income_statement = IncomeStatement.new(@family)
 
-    # Should return 0 for nonexistent category
     assert_equal 0, income_statement.median_expense(interval: "month", category: nonexistent_category)
     assert_equal 0, income_statement.avg_expense(interval: "month", category: nonexistent_category)
   end
