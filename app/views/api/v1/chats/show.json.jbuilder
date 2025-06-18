@@ -10,7 +10,7 @@ json.messages @messages do |message|
   json.model message.ai_model if message.type == "AssistantMessage"
   json.created_at message.created_at.iso8601
   json.updated_at message.updated_at.iso8601
-  
+
   # Include tool calls for assistant messages
   if message.type == "AssistantMessage" && message.tool_calls.any?
     json.tool_calls message.tool_calls do |tool_call|

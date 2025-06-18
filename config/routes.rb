@@ -189,7 +189,7 @@ Rails.application.routes.draw do
       resources :accounts, only: [ :index ]
       resources :transactions, only: [ :index, :show, :create, :update, :destroy ]
       resource :usage, only: [ :show ], controller: "usage"
-      
+
       resources :chats, only: [ :index, :show, :create, :update, :destroy ] do
         resources :messages, only: [ :create ] do
           post :retry, on: :collection
