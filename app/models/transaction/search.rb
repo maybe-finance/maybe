@@ -16,7 +16,6 @@ class Transaction::Search
 
   def build_query(scope)
     query = scope.joins(entry: :account)
-                 .joins(transfer_join)
 
     query = apply_category_filter(query, categories)
     query = apply_type_filter(query, types)
@@ -31,27 +30,12 @@ class Transaction::Search
   end
 
   private
-    def transfer_join
-      <<~SQL
-        LEFT JOIN (
-          SELECT t.*, t.id as transfer_id, a.accountable_type
-          FROM transfers t
-          JOIN entries ae ON ae.entryable_id = t.inflow_transaction_id
-          AND ae.entryable_type = 'Transaction'
-        JOIN accounts a ON a.id = ae.account_id
-        ) transfer_info ON (
-          transfer_info.inflow_transaction_id = transactions.id OR
-            transfer_info.outflow_transaction_id = transactions.id
-        )
-      SQL
-    end
-
     def apply_category_filter(query, categories)
       return query unless categories.present?
 
       query = query.left_joins(:category).where(
         "categories.name IN (?) OR (
-        categories.id IS NULL AND (transfer_info.transfer_id IS NULL OR transfer_info.accountable_type = 'Loan')
+        categories.id IS NULL AND (transactions.kind NOT IN ('transfer', 'payment', 'one_time') OR transactions.kind = 'loan_payment')
       )",
         categories
       )
@@ -67,7 +51,7 @@ class Transaction::Search
       return query unless types.present?
       return query if types.sort == [ "expense", "income", "transfer" ]
 
-      transfer_condition = "transfer_info.transfer_id IS NOT NULL"
+      transfer_condition = "transactions.kind IN ('transfer', 'payment', 'one_time')"
       expense_condition = "entries.amount >= 0"
       income_condition = "entries.amount <= 0"
 
@@ -75,15 +59,15 @@ class Transaction::Search
       when [ "transfer" ]
         transfer_condition
       when [ "expense" ]
-        Arel.sql("#{expense_condition} AND NOT (#{transfer_condition})")
+        Arel.sql("(#{expense_condition} AND transactions.kind NOT IN ('transfer', 'payment', 'one_time')) OR transactions.kind = 'loan_payment'")
       when [ "income" ]
-        Arel.sql("#{income_condition} AND NOT (#{transfer_condition})")
+        Arel.sql("#{income_condition} AND transactions.kind NOT IN ('transfer', 'payment', 'one_time', 'loan_payment')")
       when [ "expense", "transfer" ]
-        Arel.sql("#{expense_condition} OR #{transfer_condition}")
+        Arel.sql("(#{expense_condition} AND transactions.kind NOT IN ('transfer', 'payment', 'one_time')) OR transactions.kind = 'loan_payment' OR #{transfer_condition}")
       when [ "income", "transfer" ]
-        Arel.sql("#{income_condition} OR #{transfer_condition}")
+        Arel.sql("(#{income_condition} AND transactions.kind NOT IN ('transfer', 'payment', 'one_time', 'loan_payment')) OR #{transfer_condition}")
       when [ "expense", "income" ]
-        Arel.sql("NOT (#{transfer_condition})")
+        Arel.sql("transactions.kind NOT IN ('transfer', 'payment', 'one_time') OR transactions.kind = 'loan_payment'")
       end
 
       query.where(condition)
