@@ -4,12 +4,16 @@ class ApiKey < ApplicationRecord
   # Use Rails built-in encryption for secure storage
   encrypts :display_key, deterministic: true
 
+  # Constants
+  SOURCES = [ "web", "mobile" ].freeze
+
   # Validations
   validates :display_key, presence: true, uniqueness: true
   validates :name, presence: true
   validates :scopes, presence: true
+  validates :source, presence: true, inclusion: { in: SOURCES }
   validate :scopes_not_empty
-  validate :one_active_key_per_user, on: :create
+  validate :one_active_key_per_user_per_source, on: :create
 
   # Callbacks
   before_validation :set_display_key
@@ -82,9 +86,9 @@ class ApiKey < ApplicationRecord
       end
     end
 
-    def one_active_key_per_user
-      if user&.api_keys&.active&.where&.not(id: id)&.exists?
-        errors.add(:user, "can only have one active API key")
+    def one_active_key_per_user_per_source
+      if user&.api_keys&.active&.where(source: source)&.where&.not(id: id)&.exists?
+        errors.add(:user, "can only have one active API key per source (#{source})")
       end
     end
 end

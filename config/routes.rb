@@ -185,6 +185,11 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
+      # Authentication endpoints
+      post "auth/signup", to: "auth#signup"
+      post "auth/login", to: "auth#login"
+      post "auth/refresh", to: "auth#refresh"
+      
       # Production API endpoints
       resources :accounts, only: [ :index ]
       resources :transactions, only: [ :index, :show, :create, :update, :destroy ]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_13_152743) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_18_110736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -98,8 +98,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_13_152743) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "display_key", null: false
+    t.string "source", default: "web"
     t.index ["display_key"], name: "index_api_keys_on_display_key", unique: true
     t.index ["revoked_at"], name: "index_api_keys_on_revoked_at"
+    t.index ["user_id", "source"], name: "index_api_keys_on_user_id_and_source"
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
 
@@ -429,6 +431,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_13_152743) do
     t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 
+  create_table "mobile_devices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "device_id"
+    t.string "device_name"
+    t.string "device_type"
+    t.string "os_version"
+    t.string "app_version"
+    t.datetime "last_seen_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_mobile_devices_on_device_id", unique: true
+    t.index ["user_id", "device_id"], name: "index_mobile_devices_on_user_id_and_device_id", unique: true
+    t.index ["user_id"], name: "index_mobile_devices_on_user_id"
+  end
+
   create_table "oauth_access_grants", force: :cascade do |t|
     t.string "resource_owner_id", null: false
     t.bigint "application_id", null: false
@@ -468,6 +485,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_13_152743) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "owner_id"
+    t.string "owner_type"
+    t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -802,6 +822,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_13_152743) do
   add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "merchants", "families"
   add_foreign_key "messages", "chats"
+  add_foreign_key "mobile_devices", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "plaid_accounts", "plaid_items"
