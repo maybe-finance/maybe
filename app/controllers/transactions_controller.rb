@@ -13,7 +13,7 @@ class TransactionsController < ApplicationController
 
   def index
     @q = search_params
-    transactions_query = Current.family.transactions.active.search(@q)
+    transactions_query = Transaction::Search.new(@q, family: Current.family).relation
 
     set_focused_record(transactions_query, params[:focused_record_id], default_per_page: 50)
 
@@ -217,7 +217,8 @@ class TransactionsController < ApplicationController
       cleaned_params = params.fetch(:q, {})
               .permit(
                 :start_date, :end_date, :search, :amount,
-                :amount_operator, accounts: [], account_ids: [],
+                :amount_operator, :active_accounts_only, :excluded_transactions,
+                accounts: [], account_ids: [],
                 categories: [], merchants: [], types: [], tags: []
               )
               .to_h

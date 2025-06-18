@@ -13,10 +13,22 @@ class Transaction::Search
   attribute :categories, array: true
   attribute :merchants, array: true
   attribute :tags, array: true
+  attribute :active_accounts_only, :boolean, default: true
+  attribute :excluded_transactions, :boolean, default: false
 
-  def build_query(scope)
-    query = scope.joins(entry: :account)
+  attr_reader :family
 
+  def initialize(attributes = {}, family:)
+    @family = family
+    super(attributes)
+  end
+
+  # Build the complete filtered relation
+  def relation
+    query = base_relation.joins(entry: :account)
+
+    query = apply_active_accounts_filter(query, active_accounts_only)
+    query = apply_excluded_transactions_filter(query, excluded_transactions)
     query = apply_category_filter(query, categories)
     query = apply_type_filter(query, types)
     query = apply_merchant_filter(query, merchants)
@@ -30,6 +42,27 @@ class Transaction::Search
   end
 
   private
+    # Build the base relation from family context
+    def base_relation
+      family.transactions
+    end
+
+    def apply_active_accounts_filter(query, active_accounts_only_filter)
+      if active_accounts_only_filter
+        query.where(accounts: { is_active: true })
+      else
+        query
+      end
+    end
+
+    def apply_excluded_transactions_filter(query, excluded_transactions_filter)
+      unless excluded_transactions_filter
+        query.where(entries: { excluded: false })
+      else
+        query
+      end
+    end
+
     def apply_category_filter(query, categories)
       return query unless categories.present?
 

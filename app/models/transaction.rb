@@ -17,11 +17,7 @@ class Transaction < ApplicationRecord
     one_time: "one_time" # A one-time expense/income, excluded from budget analytics
   }
 
-  class << self
-    def search(params)
-      Search.new(params).build_query(all)
-    end
-  end
+
 
   def set_category!(category)
     if category.is_a?(String)
