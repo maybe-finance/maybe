@@ -11,6 +11,8 @@ class ImportMarketDataJob < ApplicationJob
   queue_as :scheduled
 
   def perform(opts)
+    return if Rails.env.development?
+
     opts = opts.symbolize_keys
     mode = opts.fetch(:mode, :full)
     clear_cache = opts.fetch(:clear_cache, false)

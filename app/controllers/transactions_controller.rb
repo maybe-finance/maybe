@@ -23,7 +23,7 @@ class TransactionsController < ApplicationController
     @pagy = Pagy.new(
       count: transactions_query.count,
       page: current_page,
-      items: items_per_page,
+      limit: items_per_page,
       params: ->(p) { p.except(:focused_record_id) }
     )
 
