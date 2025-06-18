@@ -1,0 +1,100 @@
+---
+description: 
+globs: app/views/**,app/javascript/**,app/components/**/*.js
+alwaysApply: false
+---
+Use this rule to learn how to write ERB views, partials, and Stimulus controllers should be incorporated into them.
+
+- **Component vs. Partial Decision Making**
+  - **Use ViewComponents when:**
+    - Element has complex logic or styling patterns
+    - Element will be reused across multiple views/contexts
+    - Element needs structured styling with variants/sizes (like buttons, badges)
+    - Element requires interactive behavior or Stimulus controllers
+    - Element has configurable slots or complex APIs
+    - Element needs accessibility features or ARIA support
+  
+  - **Use Partials when:**
+    - Element is primarily static HTML with minimal logic
+    - Element is used in only one or few specific contexts
+    - Element is simple template content (like CTAs, static sections)
+    - Element doesn't need variants, sizes, or complex configuration
+    - Element is more about content organization than reusable functionality
+
+- **Prefer components over partials**
+  - If there is a component available for the use case in app/components, use it
+  - If there is no component, look for a partial
+  - If there is no partial, decide between component or partial based on the criteria above
+
+- **Examples of Component vs. Partial Usage**
+  ```erb
+  <%# Component: Complex, reusable with variants and interactivity %>
+  <%= render DialogComponent.new(variant: :drawer) do |dialog| %>
+    <% dialog.with_header(title: "Account Settings") %>
+    <% dialog.with_body { "Dialog content here" } %>
+  <% end %>
+  
+  <%# Component: Interactive with complex styling options %>
+  <%= render ButtonComponent.new(text: "Save Changes", variant: "primary", confirm: "Are you sure?") %>
+  
+  <%# Component: Reusable with variants %>
+  <%= render FilledIconComponent.new(icon: "credit-card", variant: :surface) %>
+  
+  <%# Partial: Static template content %>
+  <%= render "shared/logo" %>
+  
+  <%# Partial: Simple, context-specific content with basic styling %>
+  <%= render "shared/trend_change", trend: @account.trend, comparison_label: "vs last month" %>
+  
+  <%# Partial: Simple divider/utility %>
+  <%= render "shared/ruler", classes: "my-4" %>
+  
+  <%# Partial: Simple form utility %>
+  <%= render "shared/form_errors", model: @account %>
+  ```
+
+- **Keep domain logic out of the views**
+   ```erb
+    <%# BAD!!! %>
+
+    <%# This belongs in the component file, not the template file! %>
+    <% button_classes = { class: "bg-blue-500 hover:bg-blue-600" } %>
+
+    <%= tag.button class: button_classes do %>
+      Save Account
+    <% end %>
+
+    <%# GOOD! %>
+
+    <%= tag.button class: computed_button_classes do %>
+      Save Account
+    <% end %>
+    ```
+
+- **Stimulus Integration in Views**
+  - Always use the **declarative approach** when integrating Stimulus controllers
+  - The ERB template should declare what happens, the Stimulus controller should respond
+  - Refer to [stimulus_conventions.mdc](mdc:.cursor/rules/stimulus_conventions.mdc) to learn how to incorporate them into 
+
+  GOOD Stimulus controller integration into views:
+
+  ```erb
+  <!-- Declarative - HTML declares what happens -->
+
+  <div data-controller="toggle">
+    <button data-action="click->toggle#toggle" data-toggle-target="button">Show</button>
+    <div data-toggle-target="content" class="hidden">Hello World!</div>
+  </div>
+  ```
+
+- **Stimulus Controller Placement Guidelines**
+  - **Component controllers** (in `app/components/`) should only be used within their component templates
+  - **Global controllers** (in `app/javascript/controllers/`) can be used across any view
+  - Pass data from Rails to Stimulus using `data-*-value` attributes, not inline JavaScript
+  - Use Stimulus targets to reference DOM elements, not manual `getElementById` calls
+
+- **Naming Conventions**
+  - **Components**: Use `ComponentName` suffix (e.g., `ButtonComponent`, `DialogComponent`, `FilledIconComponent`)
+  - **Partials**: Use underscore prefix (e.g., `_trend_change.html.erb`, `_form_errors.html.erb`, `_sync_indicator.html.erb`)
+  - **Shared partials**: Place in `app/views/shared/` directory for reusable content
+  - **Context-specific partials**: Place in relevant controller view directory (e.g., `accounts/_account_sidebar_tabs.html.erb`)
