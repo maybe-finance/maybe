@@ -1,6 +1,5 @@
 class Transaction::Totals
   # Service for computing transaction totals with multi-currency support
-  # Uses kind filtering to exclude transfers/payments but include loan_payment as expenses
   def self.compute(search)
     new(search).call
   end
@@ -31,8 +30,8 @@ class Transaction::Totals
     def query_sql
       <<~SQL
         SELECT
-          COALESCE(SUM(CASE WHEN ae.amount >= 0 THEN ABS(ae.amount * COALESCE(er.rate, 1)) * 100 ELSE 0 END), 0) as expense_total,
-          COALESCE(SUM(CASE WHEN ae.amount < 0 THEN ABS(ae.amount * COALESCE(er.rate, 1)) * 100 ELSE 0 END), 0) as income_total,
+          COALESCE(SUM(CASE WHEN ae.amount >= 0 THEN ABS(ae.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as expense_total,
+          COALESCE(SUM(CASE WHEN ae.amount < 0 THEN ABS(ae.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as income_total,
           COUNT(ae.id) as transactions_count,
           :target_currency as currency
         FROM (#{transactions_scope.to_sql}) t
@@ -41,8 +40,7 @@ class Transaction::Totals
           er.date = ae.date AND
           er.from_currency = ae.currency AND
           er.to_currency = :target_currency
-        )
-        WHERE t.kind NOT IN ('transfer', 'one_time', 'payment');
+        );
       SQL
     end
 
