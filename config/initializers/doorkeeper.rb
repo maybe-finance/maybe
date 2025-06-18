@@ -313,7 +313,7 @@ Doorkeeper.configure do
   # for example.
   #
   # Block javascript URIs but allow custom schemes
-  forbid_redirect_uri { |uri| uri.scheme.to_s.downcase == 'javascript' }
+  forbid_redirect_uri { |uri| uri.scheme.to_s.downcase == "javascript" }
 
   # Allows to set blank redirect URIs for Applications in case Doorkeeper configured
   # to use URI-less OAuth grant flows like Client Credentials or Resource Owner

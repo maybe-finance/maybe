@@ -12,6 +12,6 @@ class CreateMobileDevices < ActiveRecord::Migration[7.2]
       t.timestamps
     end
     add_index :mobile_devices, :device_id, unique: true
-    add_index :mobile_devices, [:user_id, :device_id], unique: true
+    add_index :mobile_devices, [ :user_id, :device_id ], unique: true
   end
 end

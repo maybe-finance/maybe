@@ -39,7 +39,7 @@ class Api::V1::AuthControllerTest < ActionDispatch::IntegrationTest
     assert_equal "newuser@example.com", response_data["user"]["email"]
     assert_equal "New", response_data["user"]["first_name"]
     assert_equal "User", response_data["user"]["last_name"]
-    
+
     # OAuth token assertions
     assert response_data["access_token"].present?
     assert response_data["refresh_token"].present?
@@ -217,7 +217,7 @@ class Api::V1::AuthControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal user.id.to_s, response_data["user"]["id"]
     assert_equal user.email, response_data["user"]["email"]
-    
+
     # OAuth token assertions
     assert response_data["access_token"].present?
     assert response_data["refresh_token"].present?
@@ -351,7 +351,7 @@ class Api::V1::AuthControllerTest < ActionDispatch::IntegrationTest
     user = users(:family_admin)
     device = user.mobile_devices.create!(@device_info)
     oauth_app = device.create_oauth_application!
-    
+
     # Create initial token
     initial_token = Doorkeeper::AccessToken.create!(
       application: oauth_app,
