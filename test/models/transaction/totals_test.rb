@@ -11,6 +11,8 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
 
     # Clean up existing entries/transactions from fixtures to ensure test isolation
     @family.accounts.each { |account| account.entries.delete_all }
+
+    @search = Transaction::Search.new(@family)
   end
 
   test "computes basic expense and income totals" do
@@ -18,19 +20,18 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     expense_entry = create_transaction(
       account: @checking_account,
       amount: 100,
-      category: categories(:food_and_drink)
+      category: categories(:food_and_drink),
+      kind: "standard"
     )
-    expense_entry.entryable.update!(kind: "standard")
 
     # Create income transaction
     income_entry = create_transaction(
       account: @checking_account,
-      amount: -200
+      amount: -200,
+      kind: "standard"
     )
-    income_entry.entryable.update!(kind: "standard")
 
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 2, totals.transactions_count
     assert_equal Money.new(10000, "USD"), totals.expense_money # $100
@@ -41,19 +42,18 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     # Create loan payment transaction
     loan_payment_entry = create_transaction(
       account: @loan_account,
-      amount: 500
+      amount: 500,
+      kind: "loan_payment"
     )
-    loan_payment_entry.entryable.update!(kind: "loan_payment")
 
     # Create regular expense
     expense_entry = create_transaction(
       account: @checking_account,
-      amount: 100
+      amount: 100,
+      kind: "standard"
     )
-    expense_entry.entryable.update!(kind: "standard")
 
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 2, totals.transactions_count
     assert_equal Money.new(60000, "USD"), totals.expense_money # $500 + $100
@@ -64,31 +64,30 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     # Create transactions that should be excluded
     transfer_entry = create_transaction(
       account: @checking_account,
-      amount: 100
+      amount: 100,
+      kind: "transfer"
     )
-    transfer_entry.entryable.update!(kind: "transfer")
 
     payment_entry = create_transaction(
       account: @credit_card_account,
-      amount: -200
+      amount: -200,
+      kind: "payment"
     )
-    payment_entry.entryable.update!(kind: "payment")
 
     one_time_entry = create_transaction(
       account: @checking_account,
-      amount: 300
+      amount: 300,
+      kind: "one_time"
     )
-    one_time_entry.entryable.update!(kind: "one_time")
 
     # Create transaction that should be included
     standard_entry = create_transaction(
       account: @checking_account,
-      amount: 50
+      amount: 50,
+      kind: "standard"
     )
-    standard_entry.entryable.update!(kind: "standard")
 
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     # Only the standard transaction should be counted
     assert_equal 1, totals.transactions_count
@@ -101,9 +100,9 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     eur_entry = create_transaction(
       account: @checking_account,
       amount: 100,
-      currency: "EUR"
+      currency: "EUR",
+      kind: "standard"
     )
-    eur_entry.entryable.update!(kind: "standard")
 
     # Create exchange rate EUR -> USD
     ExchangeRate.create!(
@@ -117,12 +116,11 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     usd_entry = create_transaction(
       account: @checking_account,
       amount: 50,
-      currency: "USD"
+      currency: "USD",
+      kind: "standard"
     )
-    usd_entry.entryable.update!(kind: "standard")
 
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 2, totals.transactions_count
     # EUR 100 * 1.1 + USD 50 = 110 + 50 = 160
@@ -135,12 +133,11 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     eur_entry = create_transaction(
       account: @checking_account,
       amount: 100,
-      currency: "EUR"
+      currency: "EUR",
+      kind: "standard"
     )
-    eur_entry.entryable.update!(kind: "standard")
 
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 1, totals.transactions_count
     # Should use rate of 1 when exchange rate is missing
@@ -153,19 +150,19 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     food_entry = create_transaction(
       account: @checking_account,
       amount: 100,
-      category: categories(:food_and_drink)
+      category: categories(:food_and_drink),
+      kind: "standard"
     )
-    food_entry.entryable.update!(kind: "standard")
 
     other_entry = create_transaction(
       account: @checking_account,
       amount: 50,
-      category: categories(:income)
+      category: categories(:income),
+      kind: "standard"
     )
-    other_entry.entryable.update!(kind: "standard")
 
     # Filter by food category only
-    search = Transaction::Search.new({ categories: [ "Food & Drink" ] }, family: @family)
+    search = Transaction::Search.new(@family, filters: { categories: [ "Food & Drink" ] })
     totals = Transaction::Totals.compute(search)
 
     assert_equal 1, totals.transactions_count
@@ -177,18 +174,18 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     # Create expense and income transactions
     expense_entry = create_transaction(
       account: @checking_account,
-      amount: 100
+      amount: 100,
+      kind: "standard"
     )
-    expense_entry.entryable.update!(kind: "standard")
 
     income_entry = create_transaction(
       account: @checking_account,
-      amount: -200
+      amount: -200,
+      kind: "standard"
     )
-    income_entry.entryable.update!(kind: "standard")
 
     # Filter by expense type only
-    search = Transaction::Search.new({ types: [ "expense" ] }, family: @family)
+    search = Transaction::Search.new(@family, filters: { types: [ "expense" ] })
     totals = Transaction::Totals.compute(search)
 
     assert_equal 1, totals.transactions_count
@@ -197,8 +194,7 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
   end
 
   test "handles empty results" do
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 0, totals.transactions_count
     assert_equal Money.new(0, "USD"), totals.expense_money
@@ -209,27 +205,26 @@ class Transaction::TotalsTest < ActiveSupport::TestCase
     # Create an excluded transaction (should be excluded by default)
     excluded_entry = create_transaction(
       account: @checking_account,
-      amount: 100
+      amount: 100,
+      kind: "standard"
     )
-    excluded_entry.entryable.update!(kind: "standard")
     excluded_entry.update!(excluded: true) # Marks it as excluded
 
     # Create a normal transaction
     normal_entry = create_transaction(
       account: @checking_account,
-      amount: 50
+      amount: 50,
+      kind: "standard"
     )
-    normal_entry.entryable.update!(kind: "standard")
 
     # Default behavior should exclude excluded transactions
-    search = Transaction::Search.new({}, family: @family)
-    totals = Transaction::Totals.compute(search)
+    totals = Transaction::Totals.compute(@search)
 
     assert_equal 1, totals.transactions_count
     assert_equal Money.new(5000, "USD"), totals.expense_money # Only non-excluded transaction
 
     # Explicitly include excluded transactions
-    search_with_excluded = Transaction::Search.new({ excluded_transactions: true }, family: @family)
+    search_with_excluded = Transaction::Search.new(@family, filters: { excluded_transactions: true })
     totals_with_excluded = Transaction::Totals.compute(search_with_excluded)
 
     assert_equal 2, totals_with_excluded.transactions_count

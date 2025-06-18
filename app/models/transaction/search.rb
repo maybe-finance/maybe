@@ -18,9 +18,9 @@ class Transaction::Search
 
   attr_reader :family
 
-  def initialize(attributes = {}, family:)
+  def initialize(family, filters: {})
     @family = family
-    super(attributes)
+    super(filters)
   end
 
   # Build the complete filtered relation

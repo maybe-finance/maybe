@@ -153,12 +153,8 @@ class IncomeStatementTest < ActiveSupport::TestCase
   # NOTE: These tests now pass because kind filtering is working after the refactoring!
   test "excludes regular transfers from income statement calculations" do
     # Create a regular transfer between accounts
-    outflow_transaction = create_transaction(account: @checking_account, amount: 500)
-    inflow_transaction = create_transaction(account: @credit_card_account, amount: -500)
-
-    # Manually set transaction kinds to simulate transfer
-    outflow_transaction.entryable.update!(kind: "transfer")
-    inflow_transaction.entryable.update!(kind: "transfer")
+    outflow_transaction = create_transaction(account: @checking_account, amount: 500, kind: "transfer")
+    inflow_transaction = create_transaction(account: @credit_card_account, amount: -500, kind: "transfer")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals
@@ -171,8 +167,7 @@ class IncomeStatementTest < ActiveSupport::TestCase
 
   test "includes loan payments as expenses in income statement" do
     # Create a loan payment transaction
-    loan_payment = create_transaction(account: @checking_account, amount: 1000, category: nil)
-    loan_payment.entryable.update!(kind: "loan_payment")
+    loan_payment = create_transaction(account: @checking_account, amount: 1000, category: nil, kind: "loan_payment")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals
@@ -185,8 +180,7 @@ class IncomeStatementTest < ActiveSupport::TestCase
 
   test "excludes one-time transactions from income statement calculations" do
     # Create a one-time transaction
-    one_time_transaction = create_transaction(account: @checking_account, amount: 250, category: @groceries_category)
-    one_time_transaction.entryable.update!(kind: "one_time")
+    one_time_transaction = create_transaction(account: @checking_account, amount: 250, category: @groceries_category, kind: "one_time")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals
@@ -199,8 +193,7 @@ class IncomeStatementTest < ActiveSupport::TestCase
 
   test "excludes payment transactions from income statement calculations" do
     # Create a payment transaction (credit card payment)
-    payment_transaction = create_transaction(account: @checking_account, amount: 300, category: nil)
-    payment_transaction.entryable.update!(kind: "payment")
+    payment_transaction = create_transaction(account: @checking_account, amount: 300, category: nil, kind: "payment")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class TransactionTest < ActiveSupport::TestCase
+class Transaction::SearchTest < ActiveSupport::TestCase
   include EntriesTestHelper
 
   setup do
@@ -15,36 +15,36 @@ class TransactionTest < ActiveSupport::TestCase
     standard_entry = create_transaction(
       account: @checking_account,
       amount: 100,
-      category: categories(:food_and_drink)
+      category: categories(:food_and_drink),
+      kind: "standard"
     )
-    standard_entry.entryable.update!(kind: "standard")
 
     transfer_entry = create_transaction(
       account: @checking_account,
-      amount: 200
+      amount: 200,
+      kind: "transfer"
     )
-    transfer_entry.entryable.update!(kind: "transfer")
 
     payment_entry = create_transaction(
       account: @credit_card_account,
-      amount: -300
+      amount: -300,
+      kind: "payment"
     )
-    payment_entry.entryable.update!(kind: "payment")
 
     loan_payment_entry = create_transaction(
       account: @loan_account,
-      amount: 400
+      amount: 400,
+      kind: "loan_payment"
     )
-    loan_payment_entry.entryable.update!(kind: "loan_payment")
 
     one_time_entry = create_transaction(
       account: @checking_account,
-      amount: 500
+      amount: 500,
+      kind: "one_time"
     )
-    one_time_entry.entryable.update!(kind: "one_time")
 
     # Test transfer type filter
-    transfer_results = Transaction::Search.new({ types: [ "transfer" ] }, family: @family).relation
+    transfer_results = Transaction::Search.new(@family, filters: { types: [ "transfer" ] }).relation
     transfer_ids = transfer_results.pluck(:id)
 
     assert_includes transfer_ids, transfer_entry.entryable.id
@@ -54,7 +54,7 @@ class TransactionTest < ActiveSupport::TestCase
     assert_not_includes transfer_ids, loan_payment_entry.entryable.id
 
     # Test expense type filter (should include loan_payment)
-    expense_results = Transaction::Search.new({ types: [ "expense" ] }, family: @family).relation
+    expense_results = Transaction::Search.new(@family, filters: { types: [ "expense" ] }).relation
     expense_ids = expense_results.pluck(:id)
 
     assert_includes expense_ids, standard_entry.entryable.id
@@ -66,11 +66,11 @@ class TransactionTest < ActiveSupport::TestCase
     # Test income type filter
     income_entry = create_transaction(
       account: @checking_account,
-      amount: -600
+      amount: -600,
+      kind: "standard"
     )
-    income_entry.entryable.update!(kind: "standard")
 
-    income_results = Transaction::Search.new({ types: [ "income" ] }, family: @family).relation
+    income_results = Transaction::Search.new(@family, filters: { types: [ "income" ] }).relation
     income_ids = income_results.pluck(:id)
 
     assert_includes income_ids, income_entry.entryable.id
@@ -79,7 +79,7 @@ class TransactionTest < ActiveSupport::TestCase
     assert_not_includes income_ids, transfer_entry.entryable.id
 
     # Test combined expense and income filter (excludes transfers)
-    non_transfer_results = Transaction::Search.new({ types: [ "expense", "income" ] }, family: @family).relation
+    non_transfer_results = Transaction::Search.new(@family, filters: { types: [ "expense", "income" ] }).relation
     non_transfer_ids = non_transfer_results.pluck(:id)
 
     assert_includes non_transfer_ids, standard_entry.entryable.id
@@ -94,24 +94,24 @@ class TransactionTest < ActiveSupport::TestCase
     # Create uncategorized transactions of different kinds
     uncategorized_standard = create_transaction(
       account: @checking_account,
-      amount: 100
+      amount: 100,
+      kind: "standard"
     )
-    uncategorized_standard.entryable.update!(kind: "standard")
 
     uncategorized_transfer = create_transaction(
       account: @checking_account,
-      amount: 200
+      amount: 200,
+      kind: "transfer"
     )
-    uncategorized_transfer.entryable.update!(kind: "transfer")
 
     uncategorized_loan_payment = create_transaction(
       account: @loan_account,
-      amount: 300
+      amount: 300,
+      kind: "loan_payment"
     )
-    uncategorized_loan_payment.entryable.update!(kind: "loan_payment")
 
     # Search for uncategorized transactions
-    uncategorized_results = Transaction::Search.new({ categories: [ "Uncategorized" ] }, family: @family).relation
+    uncategorized_results = Transaction::Search.new(@family, filters: { categories: [ "Uncategorized" ] }).relation
     uncategorized_ids = uncategorized_results.pluck(:id)
 
     # Should include standard and loan_payment (budget-relevant) uncategorized transactions
@@ -127,18 +127,18 @@ class TransactionTest < ActiveSupport::TestCase
     transaction1 = create_transaction(
       account: @checking_account,
       amount: 100,
-      category: categories(:food_and_drink)
+      category: categories(:food_and_drink),
+      kind: "standard"
     )
-    transaction1.entryable.update!(kind: "standard")
 
     transaction2 = create_transaction(
       account: @checking_account,
-      amount: 200
+      amount: 200,
+      kind: "transfer"
     )
-    transaction2.entryable.update!(kind: "transfer")
 
     # Test new family-based API
-    search = Transaction::Search.new({ types: [ "expense" ] }, family: @family)
+    search = Transaction::Search.new(@family, filters: { types: [ "expense" ] })
     results = search.relation
     result_ids = results.pluck(:id)
 
@@ -154,8 +154,9 @@ class TransactionTest < ActiveSupport::TestCase
   end
 
   test "family-based API requires family parameter" do
-  assert_raises(ArgumentError, "missing keyword: :family") do
-    Transaction::Search.new({ types: [ "expense" ] })
+    assert_raises(NoMethodError) do
+      search = Transaction::Search.new({ types: [ "expense" ] })
+      search.relation  # This will fail when trying to call .transactions on a Hash
+    end
   end
-end
 end
