@@ -43,25 +43,27 @@ class Transaction::SearchTest < ActiveSupport::TestCase
       kind: "one_time"
     )
 
-    # Test transfer type filter
+    # Test transfer type filter (includes loan_payment)
     transfer_results = Transaction::Search.new(@family, filters: { types: [ "transfer" ] }).relation
     transfer_ids = transfer_results.pluck(:id)
 
+
+
     assert_includes transfer_ids, transfer_entry.entryable.id
     assert_includes transfer_ids, payment_entry.entryable.id
-    assert_includes transfer_ids, one_time_entry.entryable.id
+    assert_includes transfer_ids, loan_payment_entry.entryable.id
+    assert_not_includes transfer_ids, one_time_entry.entryable.id
     assert_not_includes transfer_ids, standard_entry.entryable.id
-    assert_not_includes transfer_ids, loan_payment_entry.entryable.id
 
-    # Test expense type filter (should include loan_payment)
+    # Test expense type filter (excludes transfer kinds but includes one_time)
     expense_results = Transaction::Search.new(@family, filters: { types: [ "expense" ] }).relation
     expense_ids = expense_results.pluck(:id)
 
     assert_includes expense_ids, standard_entry.entryable.id
-    assert_includes expense_ids, loan_payment_entry.entryable.id
+    assert_includes expense_ids, one_time_entry.entryable.id
+    assert_not_includes expense_ids, loan_payment_entry.entryable.id
     assert_not_includes expense_ids, transfer_entry.entryable.id
     assert_not_includes expense_ids, payment_entry.entryable.id
-    assert_not_includes expense_ids, one_time_entry.entryable.id
 
     # Test income type filter
     income_entry = create_transaction(
@@ -78,16 +80,16 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     assert_not_includes income_ids, loan_payment_entry.entryable.id
     assert_not_includes income_ids, transfer_entry.entryable.id
 
-    # Test combined expense and income filter (excludes transfers)
+    # Test combined expense and income filter (excludes transfer kinds but includes one_time)
     non_transfer_results = Transaction::Search.new(@family, filters: { types: [ "expense", "income" ] }).relation
     non_transfer_ids = non_transfer_results.pluck(:id)
 
     assert_includes non_transfer_ids, standard_entry.entryable.id
     assert_includes non_transfer_ids, income_entry.entryable.id
-    assert_includes non_transfer_ids, loan_payment_entry.entryable.id
+    assert_includes non_transfer_ids, one_time_entry.entryable.id
+    assert_not_includes non_transfer_ids, loan_payment_entry.entryable.id
     assert_not_includes non_transfer_ids, transfer_entry.entryable.id
     assert_not_includes non_transfer_ids, payment_entry.entryable.id
-    assert_not_includes non_transfer_ids, one_time_entry.entryable.id
   end
 
   test "search category filter handles uncategorized transactions correctly with kind filtering" do
@@ -114,8 +116,9 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     uncategorized_results = Transaction::Search.new(@family, filters: { categories: [ "Uncategorized" ] }).relation
     uncategorized_ids = uncategorized_results.pluck(:id)
 
-    # Should include standard and loan_payment (budget-relevant) uncategorized transactions
+    # Should include standard uncategorized transactions
     assert_includes uncategorized_ids, uncategorized_standard.entryable.id
+    # Should include loan_payment since it's treated specially in category logic
     assert_includes uncategorized_ids, uncategorized_loan_payment.entryable.id
 
     # Should exclude transfer transactions even if uncategorized
@@ -147,9 +150,9 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     # Should exclude transfer transactions
     assert_not_includes result_ids, transaction2.entryable.id
 
-    # Test that the relation builds from family.transactions.active
-    assert_equal @family.transactions.active.joins(entry: :account).where(
-      "(entries.amount >= 0 AND transactions.kind NOT IN ('transfer', 'payment', 'one_time')) OR transactions.kind = 'loan_payment'"
+    # Test that the relation builds from family.transactions correctly
+    assert_equal @family.transactions.joins(entry: :account).where(
+      "entries.amount >= 0 AND NOT (transactions.kind IN ('transfer', 'payment', 'loan_payment'))"
     ).count, results.count
   end
 

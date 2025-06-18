@@ -5,7 +5,7 @@ class IncomeStatement::CategoryStats
   end
 
   def call
-    ActiveRecord::Base.connection.select_all(query_sql).map do |row|
+    ActiveRecord::Base.connection.select_all(sanitized_query_sql).map do |row|
       StatRow.new(
         category_id: row["category_id"],
         classification: row["classification"],
@@ -18,16 +18,18 @@ class IncomeStatement::CategoryStats
   private
     StatRow = Data.define(:category_id, :classification, :median, :avg)
 
-    def query_sql
+    def sanitized_query_sql
       ActiveRecord::Base.sanitize_sql_array([
-        optimized_query_sql,
-        sql_params
+        query_sql,
+        {
+          target_currency: @family.currency,
+          interval: @interval,
+          family_id: @family.id
+        }
       ])
     end
 
-    # OPTIMIZED: Use interval for time bucketing but eliminate unnecessary intermediate CTE
-    # Still faster than original due to simplified structure and kind filtering
-    def optimized_query_sql
+    def query_sql
       <<~SQL
         WITH period_totals AS (
           SELECT
@@ -56,13 +58,5 @@ class IncomeStatement::CategoryStats
         FROM period_totals
         GROUP BY category_id, classification;
       SQL
-    end
-
-    def sql_params
-      {
-        target_currency: @family.currency,
-        interval: @interval,
-        family_id: @family.id
-      }
     end
 end

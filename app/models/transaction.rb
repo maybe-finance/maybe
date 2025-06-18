@@ -17,8 +17,6 @@ class Transaction < ApplicationRecord
     one_time: "one_time" # A one-time expense/income, excluded from budget analytics
   }
 
-
-
   def set_category!(category)
     if category.is_a?(String)
       category = entry.account.family.categories.find_or_create_by!(

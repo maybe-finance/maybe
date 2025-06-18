@@ -10,20 +10,18 @@ class Transaction::Totals
   end
 
   def call
-    result = execute_query.first
-
     ScopeTotals.new(
-      transactions_count: result["transactions_count"].to_i,
-      income_money: Money.new(result["income_total"].to_i, result["currency"]),
-      expense_money: Money.new(result["expense_total"].to_i, result["currency"])
+      transactions_count: query_result["transactions_count"].to_i,
+      income_money: Money.new(query_result["income_total"].to_i, query_result["currency"]),
+      expense_money: Money.new(query_result["expense_total"].to_i, query_result["currency"])
     )
   end
 
   private
     ScopeTotals = Data.define(:transactions_count, :income_money, :expense_money)
 
-    def execute_query
-      ActiveRecord::Base.connection.select_all(sanitized_query)
+    def query_result
+      ActiveRecord::Base.connection.select_all(sanitized_query).first
     end
 
     def sanitized_query
