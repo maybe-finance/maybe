@@ -27,7 +27,7 @@ class MobileDevice < ApplicationRecord
       scopes: "read_write", # Use the configured scope
       confidential: false # Public client for mobile
     )
-    
+
     # Store the association
     update!(oauth_application: app)
     app
@@ -35,7 +35,7 @@ class MobileDevice < ApplicationRecord
 
   def active_tokens
     return Doorkeeper::AccessToken.none unless oauth_application
-    
+
     Doorkeeper::AccessToken
       .where(application: oauth_application)
       .where(resource_owner_id: user_id)

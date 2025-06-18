@@ -175,7 +175,7 @@ module Api
         def create_or_update_device(user)
           # Handle both string and symbol keys
           device_data = params[:device].permit(:device_id, :device_name, :device_type, :os_version, :app_version)
-          
+
           device = user.mobile_devices.find_or_initialize_by(device_id: device_data[:device_id])
           device.update!(device_data.merge(last_seen_at: Time.current))
           device

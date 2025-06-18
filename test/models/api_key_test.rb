@@ -146,7 +146,7 @@ class ApiKeyTest < ActiveSupport::TestCase
     )
 
     assert_not second_key.valid?
-    assert_includes second_key.errors[:user], "can only have one active API key"
+    assert_includes second_key.errors[:user], "can only have one active API key per source (web)"
   end
 
   test "should allow user to have new active key after revoking old one" do
