@@ -70,16 +70,16 @@ class Transaction::Search
     end
   end
 
+  def cache_key_base
+    [
+      family.id,
+      Digest::SHA256.hexdigest(attributes.sort.to_h.to_json), # cached by filters
+      family.entries_cache_version
+    ].join("/")
+  end
+
   private
     Totals = Data.define(:count, :income_money, :expense_money)
-
-    def cache_key_base
-      [
-        family.id,
-        Digest::SHA256.hexdigest(attributes.sort.to_h.to_json), # cached by filters
-        family.entries_cache_version
-      ].join("/")
-    end
 
     def apply_active_accounts_filter(query, active_accounts_only_filter)
       if active_accounts_only_filter

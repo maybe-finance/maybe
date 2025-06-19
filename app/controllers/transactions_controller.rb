@@ -53,6 +53,10 @@ class TransactionsController < ApplicationController
     end
 
     updated_params["q"] = q_params.presence
+
+    # Add flag to indicate filters were explicitly cleared
+    updated_params["filter_cleared"] = "1" if updated_params["q"].blank?
+
     Current.session.update!(prev_transaction_page_params: updated_params)
 
     redirect_to transactions_path(updated_params)
@@ -154,6 +158,11 @@ class TransactionsController < ApplicationController
               .compact_blank
 
       cleaned_params.delete(:amount_operator) unless cleaned_params[:amount].present?
+
+      # Only add default start_date if params are blank AND filters weren't explicitly cleared
+      if cleaned_params.blank? && params[:filter_cleared].blank?
+        cleaned_params[:start_date] = 30.days.ago.to_date
+      end
 
       cleaned_params
     end
