@@ -148,7 +148,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   assert_operator overflow_count, :>, 0, "Overflow should show some transactions"
 end
 
-  test "calls Transaction::Totals service with correct search parameters" do
+  test "calls Transaction::Search totals method with correct search parameters" do
     family = families(:empty)
     sign_in users(:empty)
     account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
@@ -157,19 +157,19 @@ end
 
     search = Transaction::Search.new(family)
     totals = OpenStruct.new(
-      transactions_count: 1,
+      count: 1,
       expense_money: Money.new(10000, "USD"),
       income_money: Money.new(0, "USD")
     )
 
     Transaction::Search.expects(:new).with(family, filters: {}).returns(search)
-    Transaction::Totals.expects(:compute).once.with(search).returns(totals)
+    search.expects(:totals).once.returns(totals)
 
     get transactions_url
     assert_response :success
   end
 
-  test "calls Transaction::Totals service with filtered search parameters" do
+  test "calls Transaction::Search totals method with filtered search parameters" do
     family = families(:empty)
     sign_in users(:empty)
     account = family.accounts.create! name: "Test", balance: 0, currency: "USD", accountable: Depository.new
@@ -179,13 +179,13 @@ end
 
     search = Transaction::Search.new(family, filters: { "categories" => [ "Food" ], "types" => [ "expense" ] })
     totals = OpenStruct.new(
-      transactions_count: 1,
+      count: 1,
       expense_money: Money.new(10000, "USD"),
       income_money: Money.new(0, "USD")
     )
 
     Transaction::Search.expects(:new).with(family, filters: { "categories" => [ "Food" ], "types" => [ "expense" ] }).returns(search)
-    Transaction::Totals.expects(:compute).once.with(search).returns(totals)
+    search.expects(:totals).once.returns(totals)
 
     get transactions_url(q: { categories: [ "Food" ], types: [ "expense" ] })
     assert_response :success

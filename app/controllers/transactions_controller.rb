@@ -12,32 +12,25 @@ class TransactionsController < ApplicationController
   def index
     @q = search_params
     search = Transaction::Search.new(Current.family, filters: @q)
-    @totals = Transaction::Totals.compute(search)
-    transactions_query = search.relation
+    @totals = search.totals
 
-    set_focused_record(transactions_query, params[:focused_record_id], default_per_page: 50)
+    per_page = params[:per_page].to_i.positive? ? params[:per_page].to_i : 50
 
-    items_per_page = params[:per_page].to_i.positive? ? params[:per_page].to_i : 50
-    current_page = params[:page].to_i.positive? ? params[:page].to_i : 1
+    base_scope = search.transactions_scope
+                       .reverse_chronological
+                       .includes(
+                         { entry: :account },
+                         :category, :merchant, :tags,
+                         transfer_as_outflow: { inflow_transaction: { entry: :account } },
+                         transfer_as_inflow: { outflow_transaction: { entry: :account } }
+                       )
 
-    @pagy = Pagy.new(
-      count: transactions_query.count,
-      page: current_page,
-      limit: items_per_page,
-      params: ->(p) { p.except(:focused_record_id) }
-    )
+    @pagy, @transactions = pagy(base_scope, limit: per_page, params: ->(p) { p.except(:focused_record_id) })
 
-    # Use Pagy's calculated page (which handles overflow) with our variables
-    @transactions = transactions_query
-                      .reverse_chronological
-                      .limit(items_per_page)
-                      .offset((@pagy.page - 1) * items_per_page)
-                      .includes(
-                        { entry: :account },
-                        :category, :merchant, :tags,
-                        transfer_as_outflow: { inflow_transaction: { entry: :account } },
-                        transfer_as_inflow: { outflow_transaction: { entry: :account } }
-                      )
+    # No performance penalty by default. Only runs queries if the record is set.
+    if params[:focused_record_id].present?
+      set_focused_record(base_scope, params[:focused_record_id], default_per_page: per_page)
+    end
   end
 
   def clear_filter

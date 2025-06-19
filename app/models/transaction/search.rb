@@ -23,28 +23,62 @@ class Transaction::Search
     super(filters)
   end
 
-  # Build the complete filtered relation
-  def relation
-    query = base_relation.joins(entry: :account)
+  def transactions_scope
+    @transactions_scope ||= begin
+      # This already joins entries + accounts. To avoid expensive double-joins, don't join them again (causes full table scan)
+      query = family.transactions
 
-    query = apply_active_accounts_filter(query, active_accounts_only)
-    query = apply_excluded_transactions_filter(query, excluded_transactions)
-    query = apply_category_filter(query, categories)
-    query = apply_type_filter(query, types)
-    query = apply_merchant_filter(query, merchants)
-    query = apply_tag_filter(query, tags)
-    query = EntrySearch.apply_search_filter(query, search)
-    query = EntrySearch.apply_date_filters(query, start_date, end_date)
-    query = EntrySearch.apply_amount_filter(query, amount, amount_operator)
-    query = EntrySearch.apply_accounts_filter(query, accounts, account_ids)
+      query = apply_active_accounts_filter(query, active_accounts_only)
+      query = apply_excluded_transactions_filter(query, excluded_transactions)
+      query = apply_category_filter(query, categories)
+      query = apply_type_filter(query, types)
+      query = apply_merchant_filter(query, merchants)
+      query = apply_tag_filter(query, tags)
+      query = EntrySearch.apply_search_filter(query, search)
+      query = EntrySearch.apply_date_filters(query, start_date, end_date)
+      query = EntrySearch.apply_amount_filter(query, amount, amount_operator)
+      query = EntrySearch.apply_accounts_filter(query, accounts, account_ids)
 
-    query
+      query
+    end
+  end
+
+  # Computes totals for the specific search
+  def totals
+    @totals ||= begin
+      Rails.cache.fetch("transaction_search_totals/#{cache_key_base}") do
+        result = transactions_scope
+                  .select(
+                    "COALESCE(SUM(CASE WHEN entries.amount >= 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as expense_total",
+                    "COALESCE(SUM(CASE WHEN entries.amount < 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as income_total",
+                    "COUNT(entries.id) as transactions_count"
+                  )
+                  .joins(
+                    ActiveRecord::Base.sanitize_sql_array([
+                      "LEFT JOIN exchange_rates er ON (er.date = entries.date AND er.from_currency = entries.currency AND er.to_currency = ?)",
+                      family.currency
+                    ])
+                  )
+                  .take
+
+        Totals.new(
+          count: result.transactions_count.to_i,
+          income_money: Money.new(result.income_total.to_i, family.currency),
+          expense_money: Money.new(result.expense_total.to_i, family.currency)
+        )
+      end
+    end
   end
 
   private
-    # Build the base relation from family context
-    def base_relation
-      family.transactions
+    Totals = Data.define(:count, :income_money, :expense_money)
+
+    def cache_key_base
+      [
+        family.id,
+        Digest::SHA256.hexdigest(attributes.sort.to_h.to_json), # cached by filters
+        family.entries_cache_version
+      ].join("/")
     end
 
     def apply_active_accounts_filter(query, active_accounts_only_filter)
@@ -66,7 +100,6 @@ class Transaction::Search
     def apply_category_filter(query, categories)
       return query unless categories.present?
 
-      non_budget_kinds = %w[transfer payment one_time]
       query = query.left_joins(:category).where(
         "categories.name IN (?) OR (
         categories.id IS NULL AND (transactions.kind NOT IN ('transfer', 'payment'))

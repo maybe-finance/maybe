@@ -14,16 +14,23 @@ namespace :benchmarking do
       family = User.find_by(email: "user@maybe.local").family
       scope = family.transactions.active
 
-      x.report("IncomeStatement::Totals") do
-        IncomeStatement::Totals.new(family, transactions_scope: scope).call
-      end
+      # x.report("IncomeStatement::Totals") do
+      #   IncomeStatement::Totals.new(family, transactions_scope: scope).call
+      # end
 
-      x.report("IncomeStatement::CategoryStats") do
-        IncomeStatement::CategoryStats.new(family).call
-      end
+      # x.report("IncomeStatement::CategoryStats") do
+      #   IncomeStatement::CategoryStats.new(family).call
+      # end
 
-      x.report("IncomeStatement::FamilyStats") do
-        IncomeStatement::FamilyStats.new(family).call
+      # x.report("IncomeStatement::FamilyStats") do
+      #   IncomeStatement::FamilyStats.new(family).call
+      # end
+
+      puts family.entries.count
+
+      x.report("Transaction::Totals") do
+        search = Transaction::Search.new(family)
+        search.totals
       end
 
       x.compare!
