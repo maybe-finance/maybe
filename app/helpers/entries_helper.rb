@@ -1,19 +1,35 @@
 module EntriesHelper
   def entries_by_date(entries, totals: false)
+    # Group transactions that might be transfers by their matching criteria
+    # Use amount, date, and currency to identify potential transfer pairs
     transfer_groups = entries.group_by do |entry|
-      # Only check for transfer if it's a transaction
+      # Only check for transfer-type transactions
       next nil unless entry.entryable_type == "Transaction"
-      entry.entryable.transfer&.id
+      transaction = entry.entryable
+      next nil unless transaction.transfer?
+
+      # Create a grouping key based on transfer matching criteria
+      # This groups transactions that are likely transfer pairs
+      [
+        entry.amount_money.abs, # Absolute amount
+        entry.currency,
+        entry.date
+      ]
     end
 
     # For a more intuitive UX, we do not want to show the same transfer twice in the list
-    deduped_entries = transfer_groups.flat_map do |transfer_id, grouped_entries|
-      if transfer_id.nil? || grouped_entries.size == 1
+    # Keep the outflow side (positive amount) and reject the inflow side (negative amount)
+    deduped_entries = transfer_groups.flat_map do |group_key, grouped_entries|
+      if group_key.nil? || grouped_entries.size == 1
+        # Not a transfer or only one side found, keep all entries
         grouped_entries
       else
-        grouped_entries.reject do |e|
-          e.entryable_type == "Transaction" &&
-          e.entryable.transfer_as_inflow.present?
+        # Multiple entries with same amount/date/currency - likely a transfer pair
+        # Keep the outflow side (positive amount) and reject inflow side (negative amount)
+        grouped_entries.reject do |entry|
+          entry.entryable_type == "Transaction" &&
+          entry.entryable.transfer? &&
+          entry.amount.negative? # This is the inflow side
         end
       end
     end
@@ -36,5 +52,19 @@ module EntriesHelper
       entry.account.name,
       entry.name
     ].join(" • ")
+  end
+
+  # Helper method to derive transfer name without Transfer association
+  def transfer_name_for_transaction(transaction)
+    entry = transaction.entry
+
+    # For loan payments, use payment language
+    if transaction.loan_payment?
+      "Payment to #{entry.account.name}"
+    # For other transfer types, use transfer language
+    else
+      # Default transfer name based on the account
+      "Transfer involving #{entry.account.name}"
+    end
   end
 end

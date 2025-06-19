@@ -27,14 +27,14 @@ class Transfer::CreatorTest < ActiveSupport::TestCase
 
     # Verify outflow transaction (from source account)
     outflow = transfer.outflow_transaction
-    assert_equal "transfer", outflow.kind
+    assert_equal "funds_movement", outflow.kind
     assert_equal @amount, outflow.entry.amount
     assert_equal @source_account.currency, outflow.entry.currency
     assert_equal "Transfer to #{@destination_account.name}", outflow.entry.name
 
     # Verify inflow transaction (to destination account)
     inflow = transfer.inflow_transaction
-    assert_equal "transfer", inflow.kind
+    assert_equal "funds_movement", inflow.kind
     assert_equal(@amount * -1, inflow.entry.amount)
     assert_equal @destination_account.currency, inflow.entry.currency
     assert_equal "Transfer from #{@source_account.name}", inflow.entry.name
@@ -60,12 +60,12 @@ class Transfer::CreatorTest < ActiveSupport::TestCase
 
     # Verify outflow transaction
     outflow = transfer.outflow_transaction
-    assert_equal "transfer", outflow.kind
+    assert_equal "funds_movement", outflow.kind
     assert_equal "Transfer to #{crypto_account.name}", outflow.entry.name
 
     # Verify inflow transaction with currency handling
     inflow = transfer.inflow_transaction
-    assert_equal "transfer", inflow.kind
+    assert_equal "funds_movement", inflow.kind
     assert_equal "Transfer from #{@source_account.name}", inflow.entry.name
     assert_equal crypto_account.currency, inflow.entry.currency
   end
@@ -94,7 +94,7 @@ class Transfer::CreatorTest < ActiveSupport::TestCase
 
     # Verify inflow transaction
     inflow = transfer.inflow_transaction
-    assert_equal "transfer", inflow.kind
+    assert_equal "funds_movement", inflow.kind
     assert_equal "Payment from #{@source_account.name}", inflow.entry.name
   end
 
@@ -117,12 +117,12 @@ class Transfer::CreatorTest < ActiveSupport::TestCase
 
     # Verify outflow transaction is marked as payment for liability
     outflow = transfer.outflow_transaction
-    assert_equal "payment", outflow.kind
+    assert_equal "cc_payment", outflow.kind
     assert_equal "Payment to #{credit_card_account.name}", outflow.entry.name
 
     # Verify inflow transaction
     inflow = transfer.inflow_transaction
-    assert_equal "transfer", inflow.kind
+    assert_equal "funds_movement", inflow.kind
     assert_equal "Payment from #{@source_account.name}", inflow.entry.name
   end
 

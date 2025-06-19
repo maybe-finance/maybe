@@ -162,7 +162,8 @@ end
       income_money: Money.new(0, "USD")
     )
 
-    Transaction::Search.expects(:new).with(family, filters: {}).returns(search)
+    expected_filters = { "start_date" => 30.days.ago.to_date }
+    Transaction::Search.expects(:new).with(family, filters: expected_filters).returns(search)
     search.expects(:totals).once.returns(totals)
 
     get transactions_url

@@ -153,8 +153,8 @@ class IncomeStatementTest < ActiveSupport::TestCase
   # NOTE: These tests now pass because kind filtering is working after the refactoring!
   test "excludes regular transfers from income statement calculations" do
     # Create a regular transfer between accounts
-    outflow_transaction = create_transaction(account: @checking_account, amount: 500, kind: "transfer")
-    inflow_transaction = create_transaction(account: @credit_card_account, amount: -500, kind: "transfer")
+    outflow_transaction = create_transaction(account: @checking_account, amount: 500, kind: "funds_movement")
+    inflow_transaction = create_transaction(account: @credit_card_account, amount: -500, kind: "funds_movement")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals
@@ -193,7 +193,7 @@ class IncomeStatementTest < ActiveSupport::TestCase
 
   test "excludes payment transactions from income statement calculations" do
     # Create a payment transaction (credit card payment)
-    payment_transaction = create_transaction(account: @checking_account, amount: 300, category: nil, kind: "payment")
+    payment_transaction = create_transaction(account: @checking_account, amount: 300, category: nil, kind: "cc_payment")
 
     income_statement = IncomeStatement.new(@family)
     totals = income_statement.totals

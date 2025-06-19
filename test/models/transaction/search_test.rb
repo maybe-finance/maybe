@@ -25,13 +25,13 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     transfer_entry = create_transaction(
       account: @checking_account,
       amount: 200,
-      kind: "transfer"
+      kind: "funds_movement"
     )
 
     payment_entry = create_transaction(
       account: @credit_card_account,
       amount: -300,
-      kind: "payment"
+      kind: "cc_payment"
     )
 
     loan_payment_entry = create_transaction(
@@ -104,7 +104,7 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     uncategorized_transfer = create_transaction(
       account: @checking_account,
       amount: 200,
-      kind: "transfer"
+      kind: "funds_movement"
     )
 
     uncategorized_loan_payment = create_transaction(
@@ -138,7 +138,7 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     transaction2 = create_transaction(
       account: @checking_account,
       amount: 200,
-      kind: "transfer"
+      kind: "funds_movement"
     )
 
     # Test new family-based API
@@ -153,7 +153,7 @@ class Transaction::SearchTest < ActiveSupport::TestCase
 
     # Test that the relation builds from family.transactions correctly
     assert_equal @family.transactions.joins(entry: :account).where(
-      "entries.amount >= 0 AND NOT (transactions.kind IN ('transfer', 'payment', 'loan_payment'))"
+      "entries.amount >= 0 AND NOT (transactions.kind IN ('funds_movement', 'cc_payment', 'loan_payment'))"
     ).count, results.count
   end
 

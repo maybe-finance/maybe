@@ -55,7 +55,7 @@
           <% end %>
         <% end %>
 
-        <% unless @transaction.transfer.present? %>
+        <% unless @transaction.transfer? %>
           <%= link_to new_transaction_transfer_match_path(@transaction.entry),
                   class: "flex text-sm font-medium items-center gap-2 text-secondary w-full rounded-lg p-2 hover:bg-container-inset-hover",
                   data: { turbo_frame: "modal" } do %>

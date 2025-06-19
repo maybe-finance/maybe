@@ -124,6 +124,7 @@ Rails.application.routes.draw do
   end
 
   resources :transactions, only: %i[index new create show update destroy] do
+    resource :transfer, only: :show
     resource :transfer_match, only: %i[new create]
     resource :category, only: :update, controller: :transaction_categories
 

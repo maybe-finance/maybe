@@ -32,10 +32,6 @@ class Transfer < ApplicationRecord
     outflow_transaction&.entry&.sync_account_later
   end
 
-  def belongs_to_family?(family)
-    family.transactions.include?(inflow_transaction)
-  end
-
   def to_account
     inflow_transaction&.entry&.account
   end
@@ -66,11 +62,11 @@ class Transfer < ApplicationRecord
   end
 
   def liability_payment?
-    outflow_transaction&.kind == "payment"
+    outflow_transaction&.kind == "cc_payment"
   end
 
   def regular_transfer?
-    outflow_transaction&.kind == "transfer"
+    outflow_transaction&.kind == "funds_movement"
   end
 
   def transfer_type

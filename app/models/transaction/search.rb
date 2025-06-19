@@ -102,7 +102,7 @@ class Transaction::Search
 
       query = query.left_joins(:category).where(
         "categories.name IN (?) OR (
-        categories.id IS NULL AND (transactions.kind NOT IN ('transfer', 'payment'))
+        categories.id IS NULL AND (transactions.kind NOT IN ('funds_movement', 'cc_payment'))
       )",
         categories
       )
@@ -118,7 +118,7 @@ class Transaction::Search
       return query unless types.present?
       return query if types.sort == [ "expense", "income", "transfer" ]
 
-      transfer_condition = "transactions.kind IN ('transfer', 'payment', 'loan_payment')"
+      transfer_condition = "transactions.kind IN ('funds_movement', 'cc_payment', 'loan_payment')"
       expense_condition = "entries.amount >= 0"
       income_condition = "entries.amount <= 0"
 

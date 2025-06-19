@@ -43,7 +43,7 @@ class Transfer::Creator
       name = "#{name_prefix} from #{source_account.name}"
 
       Transaction.new(
-        kind: "transfer",
+        kind: "funds_movement",
         entry: destination_account.entries.build(
           amount: inflow_converted_money.amount.abs * -1,
           currency: destination_account.currency,
@@ -69,9 +69,9 @@ class Transfer::Creator
       if destination_account.loan?
         "loan_payment"
       elsif destination_account.liability?
-        "payment"
+        "cc_payment"
       else
-        "transfer"
+        "funds_movement"
       end
     end
 

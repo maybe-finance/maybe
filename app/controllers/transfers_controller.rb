@@ -1,7 +1,7 @@
 class TransfersController < ApplicationController
   include StreamExtensions
 
-  before_action :set_transfer, only: %i[destroy show update]
+  before_action :set_transfer, only: %i[show destroy update]
 
   def new
     @transfer = Transfer.new
@@ -50,9 +50,15 @@ class TransfersController < ApplicationController
 
   private
     def set_transfer
-      @transfer = Transfer.find(params[:id])
-
-      raise ActiveRecord::RecordNotFound unless @transfer.belongs_to_family?(Current.family)
+      if params[:transaction_id]
+        @transfer = Current.family.transactions.find(params[:transaction_id]).transfer
+      else
+        # Finds the transfer and ensures the family owns it
+        @transfer = Transfer
+                      .where(id: params[:id])
+                      .where(inflow_transaction_id: Current.family.transactions.select(:id))
+                      .first
+      end
     end
 
     def transfer_params

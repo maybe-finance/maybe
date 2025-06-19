@@ -21,7 +21,7 @@
                 disabled: @entry.linked?,
                 "data-auto-submit-form-target": "auto" %>
 
-          <% unless @entry.transaction.transfer.present? %>
+          <% unless @entry.transaction.transfer? %>
             <div class="flex items-center gap-2">
               <%= f.select :nature,
                     [["Expense", "outflow"], ["Income", "inflow"]],
@@ -57,7 +57,7 @@
               url: transaction_path(@entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <% unless @entry.transaction.transfer.present? %>
+          <% unless @entry.transaction.transfer? %>
             <%= f.select :account,
                 options_for_select(
                   Current.family.accounts.alphabetically.pluck(:name, :id),
