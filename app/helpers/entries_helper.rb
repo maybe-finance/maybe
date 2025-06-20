@@ -37,18 +37,4 @@ module EntriesHelper
       entry.name
     ].join(" • ")
   end
-
-  # Helper method to derive transfer name without Transfer association
-  def transfer_name_for_transaction(transaction)
-    entry = transaction.entry
-
-    # For loan payments, use payment language
-    if transaction.loan_payment?
-      "Payment to #{entry.account.name}"
-    # For other transfer types, use transfer language
-    else
-      # Default transfer name based on the account
-      "Transfer involving #{entry.account.name}"
-    end
-  end
 end
