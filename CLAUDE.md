@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Testing
 - `bin/rails test` - Run all tests
 - `bin/rails test:db` - Run tests with database reset
-- `bin/rails test:system` - Run system tests only
+- `bin/rails test:system` - Run system tests only (use sparingly - they take longer)
 - `bin/rails test test/models/account_test.rb` - Run specific test file
 - `bin/rails test test/models/account_test.rb:42` - Run specific test at line
 
@@ -31,6 +31,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Setup
 - `bin/setup` - Initial project setup (installs dependencies, prepares database)
+
+## Pre-Pull Request CI Workflow
+
+ALWAYS run these commands before opening a pull request:
+
+1. **Tests** (Required):
+   - `bin/rails test` - Run all tests (always required)
+   - `bin/rails test:system` - Run system tests (only when applicable, they take longer)
+
+2. **Linting** (Required):
+   - `bin/rubocop -f github -a` - Ruby linting with auto-correct
+   - `bundle exec erb_lint ./app/**/*.erb -a` - ERB linting with auto-correct
+
+3. **Security** (Required):
+   - `bin/brakeman --no-pager` - Security analysis
+
+Only proceed with pull request creation if ALL checks pass.
 
 ## General Development Rules
 
@@ -110,13 +127,6 @@ Sidekiq handles asynchronous tasks:
 - Scoped permissions system for API access
 - Strong parameters and CSRF protection throughout
 
-### Key Service Objects & Patterns
-- **Query Objects**: Complex database queries isolated in `app/queries/`
-- **Service Objects**: Business logic in `app/services/`
-- **Form Objects**: Complex forms with validation
-- **Concerns**: Shared functionality across models/controllers
-- **Jobs**: Background processing logic
-
 ### Testing Philosophy
 - Comprehensive test coverage using Rails' built-in Minitest
 - Fixtures for test data (avoid FactoryBot)
@@ -145,28 +155,119 @@ Sidekiq handles asynchronous tasks:
 
 ### Convention 1: Minimize Dependencies
 - Push Rails to its limits before adding new dependencies
-- When adding dependencies, favor old and reliable over new and flashy
-- Strong technical or business reason required for new dependencies
+- Strong technical/business reason required for new dependencies
+- Favor old and reliable over new and flashy
 
-### Convention 2: POROs and Concerns over Service Objects
-- "Skinny controller, fat models" convention
-- Everything in `app/models/` folder, avoid separate folders like `app/services/`
-- Use Rails concerns for better organization (can be one-off concerns)
-- Models should answer questions about themselves (e.g., `account.balance_series`)
+### Convention 2: Skinny Controllers, Fat Models
+- Business logic in `app/models/` folder, avoid `app/services/`
+- Use Rails concerns and POROs for organization
+- Models should answer questions about themselves: `account.balance_series` not `AccountSeries.new(account).call`
 
-### Convention 3: Leverage Hotwire and Server-Side Solutions
-- Native HTML preferred over JS components (e.g., `<dialog>`, `<details>`)
-- Use Turbo frames to break up pages
-- Leverage query params for state over local storage
-- Format values server-side, pass to Stimulus for display only
-- Client-side code only where it truly shines (e.g., bulk selections)
+### Convention 3: Hotwire-First Frontend
+- **Native HTML preferred over JS components**
+  - Use `<dialog>` for modals, `<details><summary>` for disclosures
+- **Leverage Turbo frames** for page sections over client-side solutions
+- **Query params for state** over localStorage/sessions
+- **Server-side formatting** for currencies, numbers, dates
+- **Always use `icon` helper** in `application_helper.rb`, NEVER `lucide_icon` directly
 
-### Convention 4: Optimize for Simplicity and Clarity
+### Convention 4: Optimize for Simplicity
 - Prioritize good OOP domain design over performance
-- Only focus on performance in critical/global areas
-- Be mindful of N+1 queries and large data payloads
+- Focus performance only on critical/global areas (avoid N+1 queries, mindful of global layouts)
 
-### Convention 5: ActiveRecord for Complex Validations, DB for Simple Ones
-- Enforce null checks, unique indexes in the DB
-- ActiveRecord validations for convenience in forms
+### Convention 5: Database vs ActiveRecord Validations
+- Simple validations (null checks, unique indexes) in DB
+- ActiveRecord validations for convenience in forms (prefer client-side when possible)
 - Complex validations and business logic in ActiveRecord
+
+## TailwindCSS Design System
+
+### Design System Rules
+- **Always reference `app/assets/tailwind/maybe-design-system.css`** for primitives and tokens
+- **Use functional tokens** defined in design system:
+  - `text-primary` instead of `text-white`
+  - `bg-container` instead of `bg-white`
+  - `border border-primary` instead of `border border-gray-200`
+- **NEVER create new styles** in design system files without permission
+- **Always generate semantic HTML**
+
+## Component Architecture
+
+### ViewComponent vs Partials Decision Making
+
+**Use ViewComponents when:**
+- Element has complex logic or styling patterns
+- Element will be reused across multiple views/contexts
+- Element needs structured styling with variants/sizes
+- Element requires interactive behavior or Stimulus controllers
+- Element has configurable slots or complex APIs
+- Element needs accessibility features or ARIA support
+
+**Use Partials when:**
+- Element is primarily static HTML with minimal logic
+- Element is used in only one or few specific contexts
+- Element is simple template content
+- Element doesn't need variants, sizes, or complex configuration
+- Element is more about content organization than reusable functionality
+
+**Component Guidelines:**
+- Prefer components over partials when available
+- Keep domain logic OUT of view templates
+- Logic belongs in component files, not template files
+
+### Stimulus Controller Guidelines
+
+**Declarative Actions (Required):**
+```erb
+<!-- GOOD: Declarative - HTML declares what happens -->
+<div data-controller="toggle">
+  <button data-action="click->toggle#toggle" data-toggle-target="button">Show</button>
+  <div data-toggle-target="content" class="hidden">Hello World!</div>
+</div>
+```
+
+**Controller Best Practices:**
+- Keep controllers lightweight and simple (< 7 targets)
+- Use private methods and expose clear public API
+- Single responsibility or highly related responsibilities
+- Component controllers stay in component directory, global controllers in `app/javascript/controllers/`
+- Pass data via `data-*-value` attributes, not inline JavaScript
+
+## Testing Philosophy
+
+### General Testing Rules
+- **ALWAYS use Minitest + fixtures** (NEVER RSpec or factories)
+- Keep fixtures minimal (2-3 per model for base cases)
+- Create edge cases on-the-fly within test context
+- Use Rails helpers for large fixture creation needs
+
+### Test Quality Guidelines
+- **Write minimal, effective tests** - system tests sparingly
+- **Only test critical and important code paths**
+- **Test boundaries correctly:**
+  - Commands: test they were called with correct params
+  - Queries: test output
+  - Don't test implementation details of other classes
+
+### Testing Examples
+
+```ruby
+# GOOD - Testing critical domain business logic
+test "syncs balances" do
+  Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+  assert_difference "@account.balances.count", 2 do
+    Balance::Syncer.new(@account, strategy: :forward).sync_balances
+  end
+end
+
+# BAD - Testing ActiveRecord functionality
+test "saves balance" do 
+  balance_record = Balance.new(balance: 100, currency: "USD")
+  assert balance_record.save
+end
+```
+
+### Stubs and Mocks
+- Use `mocha` gem
+- Prefer `OpenStruct` for mock instances
+- Only mock what's necessary
