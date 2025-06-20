@@ -298,35 +298,4 @@ class Transaction::SearchTest < ActiveSupport::TestCase
     assert_equal Money.new(0, "USD"), totals.expense_money
     assert_equal Money.new(0, "USD"), totals.income_money
   end
-
-  test "totals respects excluded transactions filter from search" do
-    # Create an excluded transaction (should be excluded by default)
-    excluded_entry = create_transaction(
-      account: @checking_account,
-      amount: 100,
-      kind: "standard"
-    )
-    excluded_entry.update!(excluded: true) # Marks it as excluded
-
-    # Create a normal transaction
-    normal_entry = create_transaction(
-      account: @checking_account,
-      amount: 50,
-      kind: "standard"
-    )
-
-    # Default behavior should exclude excluded transactions
-    search = Transaction::Search.new(@family)
-    totals = search.totals
-
-    assert_equal 1, totals.count
-    assert_equal Money.new(50, "USD"), totals.expense_money # Only non-excluded transaction
-
-    # Explicitly include excluded transactions
-    search_with_excluded = Transaction::Search.new(@family, filters: { excluded_transactions: true })
-    totals_with_excluded = search_with_excluded.totals
-
-    assert_equal 2, totals_with_excluded.count
-    assert_equal Money.new(150, "USD"), totals_with_excluded.expense_money # Both transactions
-  end
 end

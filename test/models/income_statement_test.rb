@@ -204,6 +204,20 @@ class IncomeStatementTest < ActiveSupport::TestCase
     assert_equal Money.new(900, @family.currency), totals.expense_money
   end
 
+  test "excludes excluded transactions from income statement calculations" do
+    # Create an excluded transaction
+    excluded_transaction_entry = create_transaction(account: @checking_account, amount: 250, category: @groceries_category)
+    excluded_transaction_entry.update!(excluded: true)
+
+    income_statement = IncomeStatement.new(@family)
+    totals = income_statement.totals
+
+    # Should exclude excluded transactions
+    assert_equal 4, totals.transactions_count # Only original 4 transactions
+    assert_equal Money.new(1000, @family.currency), totals.income_money
+    assert_equal Money.new(900, @family.currency), totals.expense_money
+  end
+
   # NEW TESTS: Interval-Based Calculations
   test "different intervals return different statistical results with multi-period data" do
     # Clear existing transactions
