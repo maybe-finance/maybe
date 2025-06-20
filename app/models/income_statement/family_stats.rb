@@ -44,7 +44,8 @@ class IncomeStatement::FamilyStats
             er.to_currency = :target_currency
           )
           WHERE a.family_id = :family_id
-                          AND t.kind NOT IN ('funds_movement', 'one_time', 'cc_payment')
+            AND t.kind NOT IN ('funds_movement', 'one_time', 'cc_payment')
+            AND ae.excluded = false
           GROUP BY period, CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END
         )
         SELECT

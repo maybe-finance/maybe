@@ -6,9 +6,10 @@
   <%= turbo_frame_tag dom_id(transaction) do %>
     <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 lg:p-4
                 <%= @focused_record == entry || @focused_record == transaction ?
-                    "border border-gray-900 rounded-lg" : "" %>">
+                    "border border-gray-900 rounded-lg" : "" %>
+                <%= entry.excluded ? "opacity-50 text-gray-400" : "" %>">
 
-      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == 'global' ? 'lg:col-span-8' : 'lg:col-span-6' %>">
+      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == "global" ? "lg:col-span-8" : "lg:col-span-6" %>">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer.present?,
             class: "checkbox checkbox--light",
@@ -61,7 +62,7 @@
                   </div>
 
                   <div class="flex items-center gap-1 flex-shrink-0">
-                    <% if entry.excluded %>
+                    <% if transaction.one_time? %>
                       <span class="text-orange-500" title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
                         <%= icon "asterisk", size: "sm", color: "current" %>
                       </span>

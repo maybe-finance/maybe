@@ -45,6 +45,7 @@ class IncomeStatement::Totals
           er.to_currency = :target_currency
         )
         WHERE at.kind NOT IN ('funds_movement', 'one_time', 'cc_payment')
+          AND ae.excluded = false
         GROUP BY c.id, c.parent_id, CASE WHEN ae.amount < 0 THEN 'income' ELSE 'expense' END;
       SQL
     end

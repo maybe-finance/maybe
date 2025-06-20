@@ -14,7 +14,6 @@ class Transaction::Search
   attribute :merchants, array: true
   attribute :tags, array: true
   attribute :active_accounts_only, :boolean, default: true
-  attribute :excluded_transactions, :boolean, default: false
 
   attr_reader :family
 
@@ -29,7 +28,6 @@ class Transaction::Search
       query = family.transactions
 
       query = apply_active_accounts_filter(query, active_accounts_only)
-      query = apply_excluded_transactions_filter(query, excluded_transactions)
       query = apply_category_filter(query, categories)
       query = apply_type_filter(query, types)
       query = apply_merchant_filter(query, merchants)
@@ -89,13 +87,6 @@ class Transaction::Search
       end
     end
 
-    def apply_excluded_transactions_filter(query, excluded_transactions_filter)
-      unless excluded_transactions_filter
-        query.where(entries: { excluded: false })
-      else
-        query
-      end
-    end
 
     def apply_category_filter(query, categories)
       return query unless categories.present?
