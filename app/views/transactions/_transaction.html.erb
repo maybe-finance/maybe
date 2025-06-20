@@ -39,7 +39,7 @@
                   <% if transaction.transfer? %>
                     <%= link_to(
                           entry.name,
-                          transaction_transfer_path(transaction),
+                          entry_path(entry),
                           data: {
                             turbo_frame: "drawer",
                             turbo_prefetch: false

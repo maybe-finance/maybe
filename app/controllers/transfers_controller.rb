@@ -50,15 +50,11 @@ class TransfersController < ApplicationController
 
   private
     def set_transfer
-      if params[:transaction_id]
-        @transfer = Current.family.transactions.find(params[:transaction_id]).transfer
-      else
-        # Finds the transfer and ensures the family owns it
-        @transfer = Transfer
-                      .where(id: params[:id])
-                      .where(inflow_transaction_id: Current.family.transactions.select(:id))
-                      .first
-      end
+      # Finds the transfer and ensures the family owns it
+      @transfer = Transfer
+                    .where(id: params[:id])
+                    .where(inflow_transaction_id: Current.family.transactions.select(:id))
+                    .first
     end
 
     def transfer_params
