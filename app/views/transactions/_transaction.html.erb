@@ -9,7 +9,7 @@
                     "border border-gray-900 rounded-lg" : "" %>
                 <%= entry.excluded ? "opacity-50 text-gray-400" : "" %>">
 
-      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == 'global' ? 'lg:col-span-8' : 'lg:col-span-6' %>">
+      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == "global" ? "lg:col-span-8" : "lg:col-span-6" %>">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer.present?,
             class: "checkbox checkbox--light",

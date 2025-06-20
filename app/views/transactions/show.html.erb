@@ -127,9 +127,9 @@
                 <p class="text-secondary">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
               </div>
 
-              <%= ef.toggle :kind, { 
-                    checked: @entry.transaction.one_time?, 
-                    data: { auto_submit_form_target: "auto" } 
+              <%= ef.toggle :kind, {
+                    checked: @entry.transaction.one_time?,
+                    data: { auto_submit_form_target: "auto" }
                   }, "one_time", "standard" %>
             </div>
           <% end %>
