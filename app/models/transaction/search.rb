@@ -13,37 +13,88 @@ class Transaction::Search
   attribute :categories, array: true
   attribute :merchants, array: true
   attribute :tags, array: true
+  attribute :active_accounts_only, :boolean, default: true
+  attribute :excluded_transactions, :boolean, default: false
 
-  def build_query(scope)
-    query = scope.joins(entry: :account)
-                 .joins(transfer_join)
+  attr_reader :family
 
-    query = apply_category_filter(query, categories)
-    query = apply_type_filter(query, types)
-    query = apply_merchant_filter(query, merchants)
-    query = apply_tag_filter(query, tags)
-    query = EntrySearch.apply_search_filter(query, search)
-    query = EntrySearch.apply_date_filters(query, start_date, end_date)
-    query = EntrySearch.apply_amount_filter(query, amount, amount_operator)
-    query = EntrySearch.apply_accounts_filter(query, accounts, account_ids)
+  def initialize(family, filters: {})
+    @family = family
+    super(filters)
+  end
 
-    query
+  def transactions_scope
+    @transactions_scope ||= begin
+      # This already joins entries + accounts. To avoid expensive double-joins, don't join them again (causes full table scan)
+      query = family.transactions
+
+      query = apply_active_accounts_filter(query, active_accounts_only)
+      query = apply_excluded_transactions_filter(query, excluded_transactions)
+      query = apply_category_filter(query, categories)
+      query = apply_type_filter(query, types)
+      query = apply_merchant_filter(query, merchants)
+      query = apply_tag_filter(query, tags)
+      query = EntrySearch.apply_search_filter(query, search)
+      query = EntrySearch.apply_date_filters(query, start_date, end_date)
+      query = EntrySearch.apply_amount_filter(query, amount, amount_operator)
+      query = EntrySearch.apply_accounts_filter(query, accounts, account_ids)
+
+      query
+    end
+  end
+
+  # Computes totals for the specific search
+  def totals
+    @totals ||= begin
+      Rails.cache.fetch("transaction_search_totals/#{cache_key_base}") do
+        result = transactions_scope
+                  .select(
+                    "COALESCE(SUM(CASE WHEN entries.amount >= 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as expense_total",
+                    "COALESCE(SUM(CASE WHEN entries.amount < 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as income_total",
+                    "COUNT(entries.id) as transactions_count"
+                  )
+                  .joins(
+                    ActiveRecord::Base.sanitize_sql_array([
+                      "LEFT JOIN exchange_rates er ON (er.date = entries.date AND er.from_currency = entries.currency AND er.to_currency = ?)",
+                      family.currency
+                    ])
+                  )
+                  .take
+
+        Totals.new(
+          count: result.transactions_count.to_i,
+          income_money: Money.new(result.income_total.to_i, family.currency),
+          expense_money: Money.new(result.expense_total.to_i, family.currency)
+        )
+      end
+    end
+  end
+
+  def cache_key_base
+    [
+      family.id,
+      Digest::SHA256.hexdigest(attributes.sort.to_h.to_json), # cached by filters
+      family.entries_cache_version
+    ].join("/")
   end
 
   private
-    def transfer_join
-      <<~SQL
-        LEFT JOIN (
-          SELECT t.*, t.id as transfer_id, a.accountable_type
-          FROM transfers t
-          JOIN entries ae ON ae.entryable_id = t.inflow_transaction_id
-          AND ae.entryable_type = 'Transaction'
-        JOIN accounts a ON a.id = ae.account_id
-        ) transfer_info ON (
-          transfer_info.inflow_transaction_id = transactions.id OR
-            transfer_info.outflow_transaction_id = transactions.id
-        )
-      SQL
+    Totals = Data.define(:count, :income_money, :expense_money)
+
+    def apply_active_accounts_filter(query, active_accounts_only_filter)
+      if active_accounts_only_filter
+        query.where(accounts: { is_active: true })
+      else
+        query
+      end
+    end
+
+    def apply_excluded_transactions_filter(query, excluded_transactions_filter)
+      unless excluded_transactions_filter
+        query.where(entries: { excluded: false })
+      else
+        query
+      end
     end
 
     def apply_category_filter(query, categories)
@@ -51,7 +102,7 @@ class Transaction::Search
 
       query = query.left_joins(:category).where(
         "categories.name IN (?) OR (
-        categories.id IS NULL AND (transfer_info.transfer_id IS NULL OR transfer_info.accountable_type = 'Loan')
+        categories.id IS NULL AND (transactions.kind NOT IN ('funds_movement', 'cc_payment'))
       )",
         categories
       )
@@ -67,7 +118,7 @@ class Transaction::Search
       return query unless types.present?
       return query if types.sort == [ "expense", "income", "transfer" ]
 
-      transfer_condition = "transfer_info.transfer_id IS NOT NULL"
+      transfer_condition = "transactions.kind IN ('funds_movement', 'cc_payment', 'loan_payment')"
       expense_condition = "entries.amount >= 0"
       income_condition = "entries.amount <= 0"
 

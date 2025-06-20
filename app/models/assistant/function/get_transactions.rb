@@ -163,7 +163,7 @@ class Assistant::Function::GetTransactions < Assistant::Function
         category: txn.category&.name,
         merchant: txn.merchant&.name,
         tags: txn.tags.map(&:name),
-        is_transfer: txn.transfer.present?
+        is_transfer: txn.transfer?
       }
     end
 

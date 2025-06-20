@@ -1,5 +1,7 @@
 class TransfersController < ApplicationController
-  before_action :set_transfer, only: %i[destroy show update]
+  include StreamExtensions
+
+  before_action :set_transfer, only: %i[show destroy update]
 
   def new
     @transfer = Transfer.new
@@ -10,25 +12,19 @@ class TransfersController < ApplicationController
   end
 
   def create
-    from_account = Current.family.accounts.find(transfer_params[:from_account_id])
-    to_account = Current.family.accounts.find(transfer_params[:to_account_id])
-
-    @transfer = Transfer.from_accounts(
-      from_account: from_account,
-      to_account: to_account,
+    @transfer = Transfer::Creator.new(
+      family: Current.family,
+      source_account_id: transfer_params[:from_account_id],
+      destination_account_id: transfer_params[:to_account_id],
       date: transfer_params[:date],
       amount: transfer_params[:amount].to_d
-    )
+    ).create
 
-    if @transfer.save
-      @transfer.sync_account_later
-
-      flash[:notice] = t(".success")
-
+    if @transfer.persisted?
+      success_message = "Transfer created"
       respond_to do |format|
-        format.html { redirect_back_or_to transactions_path }
-        redirect_target_url = request.referer || transactions_path
-        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, redirect_target_url) }
+        format.html { redirect_back_or_to transactions_path, notice: success_message }
+        format.turbo_stream { stream_redirect_back_or_to transactions_path, notice: success_message }
       end
     else
       render :new, status: :unprocessable_entity
@@ -54,9 +50,11 @@ class TransfersController < ApplicationController
 
   private
     def set_transfer
-      @transfer = Transfer.find(params[:id])
-
-      raise ActiveRecord::RecordNotFound unless @transfer.belongs_to_family?(Current.family)
+      # Finds the transfer and ensures the family owns it
+      @transfer = Transfer
+                    .where(id: params[:id])
+                    .where(inflow_transaction_id: Current.family.transactions.select(:id))
+                    .first
     end
 
     def transfer_params

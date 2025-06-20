@@ -1,17 +1,27 @@
 class TradesController < ApplicationController
   include EntryableResource
 
+  # Defaults to a buy trade
+  def new
+    @account = Current.family.accounts.find_by(id: params[:account_id])
+    @model = Current.family.entries.new(
+      account: @account,
+      currency: @account ? @account.currency : Current.family.currency,
+      entryable: Trade.new
+    )
+  end
+
+  # Can create a trade, transaction (e.g. "fees"), or transfer (e.g. "withdrawal")
   def create
-    @entry = build_entry
+    @account = Current.family.accounts.find(params[:account_id])
+    @model = Trade::CreateForm.new(create_params.merge(account: @account)).create
 
-    if @entry.save
-      @entry.sync_account_later
-
+    if @model.persisted?
       flash[:notice] = t("entries.create.success")
 
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account) }
-        format.turbo_stream { stream_redirect_back_or_to account_path(@entry.account) }
+        format.html { redirect_back_or_to account_path(@account) }
+        format.turbo_stream { stream_redirect_back_or_to account_path(@account) }
       end
     else
       render :new, status: :unprocessable_entity
@@ -41,11 +51,6 @@ class TradesController < ApplicationController
   end
 
   private
-    def build_entry
-      account = Current.family.accounts.find(params.dig(:entry, :account_id))
-      TradeBuilder.new(create_entry_params.merge(account: account))
-    end
-
     def entry_params
       params.require(:entry).permit(
         :name, :date, :amount, :currency, :excluded, :notes, :nature,
@@ -53,8 +58,8 @@ class TradesController < ApplicationController
       )
     end
 
-    def create_entry_params
-      params.require(:entry).permit(
+    def create_params
+      params.require(:model).permit(
         :date, :amount, :currency, :qty, :price, :ticker, :manual_ticker, :type, :transfer_account_id
       )
     end

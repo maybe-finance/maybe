@@ -2,5 +2,7 @@ one:
   category: food_and_drink
   merchant: amazon
 
-transfer_out: { }
-transfer_in: { }
+transfer_out:
+  kind: payment
+transfer_in:
+  kind: transfer
