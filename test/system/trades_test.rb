@@ -42,7 +42,7 @@ class TradesTest < ApplicationSystemTestCase
     open_new_trade_modal
 
     select "Sell", from: "Type"
-    fill_in "Ticker symbol", with: aapl.ticker
+    fill_in "Ticker symbol", with: "AAPL"
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: qty
     fill_in "model[price]", with: 215.33

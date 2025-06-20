@@ -2,6 +2,7 @@ require "sidekiq/web"
 require "sidekiq/cron/web"
 
 Rails.application.routes.draw do
+  use_doorkeeper
   # MFA routes
   resource :mfa, controller: "mfa", only: [ :new, :create ] do
     get :verify
@@ -55,6 +56,7 @@ Rails.application.routes.draw do
     end
     resource :billing, only: :show
     resource :security, only: :show
+    resource :api_key, only: [ :show, :new, :create, :destroy ]
   end
 
   resource :subscription, only: %i[new show create] do
@@ -179,6 +181,38 @@ Rails.application.routes.draw do
   resources :invitations, only: [ :new, :create, :destroy ] do
     get :accept, on: :member
   end
+
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      # Authentication endpoints
+      post "auth/signup", to: "auth#signup"
+      post "auth/login", to: "auth#login"
+      post "auth/refresh", to: "auth#refresh"
+
+      # Production API endpoints
+      resources :accounts, only: [ :index ]
+      resources :transactions, only: [ :index, :show, :create, :update, :destroy ]
+      resource :usage, only: [ :show ], controller: "usage"
+
+      resources :chats, only: [ :index, :show, :create, :update, :destroy ] do
+        resources :messages, only: [ :create ] do
+          post :retry, on: :collection
+        end
+      end
+
+      # Test routes for API controller testing (only available in test environment)
+      if Rails.env.test?
+        get "test", to: "test#index"
+        get "test_not_found", to: "test#not_found"
+        get "test_family_access", to: "test#family_access"
+        get "test_scope_required", to: "test#scope_required"
+        get "test_multiple_scopes_required", to: "test#multiple_scopes_required"
+      end
+    end
+  end
+
+
 
   resources :currencies, only: %i[show]
 

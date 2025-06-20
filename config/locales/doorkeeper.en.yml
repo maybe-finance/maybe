@@ -1,0 +1,155 @@
+en:
+  activerecord:
+    attributes:
+      doorkeeper/application:
+        name: 'Name'
+        redirect_uri: 'Redirect URI'
+    errors:
+      models:
+        doorkeeper/application:
+          attributes:
+            redirect_uri:
+              fragment_present: 'cannot contain a fragment.'
+              invalid_uri: 'must be a valid URI.'
+              unspecified_scheme: 'must specify a scheme.'
+              relative_uri: 'must be an absolute URI.'
+              secured_uri: 'must be an HTTPS/SSL URI.'
+              forbidden_uri: 'is forbidden by the server.'
+            scopes:
+              not_match_configured: "doesn't match configured on the server."
+
+  doorkeeper:
+    applications:
+      confirmations:
+        destroy: 'Are you sure?'
+      buttons:
+        edit: 'Edit'
+        destroy: 'Destroy'
+        submit: 'Submit'
+        cancel: 'Cancel'
+        authorize: 'Authorize'
+      form:
+        error: 'Whoops! Check your form for possible errors'
+      help:
+        confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
+        redirect_uri: 'Use one line per URI'
+        blank_redirect_uri: "Leave it blank if you configured your provider to use Client Credentials, Resource Owner Password Credentials or any other grant type that doesn't require redirect URI."
+        scopes: 'Separate scopes with spaces. Leave blank to use the default scopes.'
+      edit:
+        title: 'Edit application'
+      index:
+        title: 'Your applications'
+        new: 'New Application'
+        name: 'Name'
+        callback_url: 'Callback URL'
+        confidential: 'Confidential?'
+        actions: 'Actions'
+        confidentiality:
+          'yes': 'Yes'
+          'no': 'No'
+      new:
+        title: 'New Application'
+      show:
+        title: 'Application: %{name}'
+        application_id: 'UID'
+        secret: 'Secret'
+        secret_hashed: 'Secret hashed'
+        scopes: 'Scopes'
+        confidential: 'Confidential'
+        callback_urls: 'Callback urls'
+        actions: 'Actions'
+        not_defined: 'Not defined'
+
+    authorizations:
+      buttons:
+        authorize: 'Authorize'
+        deny: 'Deny'
+      error:
+        title: 'An error has occurred'
+      new:
+        title: 'Authorization required'
+        prompt: 'Authorize %{client_name} to use your account?'
+        able_to: 'This application will be able to'
+      show:
+        title: 'Authorization code'
+      form_post:
+        title: 'Submit this form'
+
+    authorized_applications:
+      confirmations:
+        revoke: 'Are you sure?'
+      buttons:
+        revoke: 'Revoke'
+      index:
+        title: 'Your authorized applications'
+        application: 'Application'
+        created_at: 'Created At'
+        date_format: '%Y-%m-%d %H:%M:%S'
+
+    pre_authorization:
+      status: 'Pre-authorization'
+
+    errors:
+      messages:
+        # Common error messages
+        invalid_request:
+          unknown: 'The request is missing a required parameter, includes an unsupported parameter value, or is otherwise malformed.'
+          missing_param: 'Missing required parameter: %{value}.'
+          request_not_authorized: 'Request need to be authorized. Required parameter for authorizing request is missing or invalid.'
+          invalid_code_challenge: 'Code challenge is required.'
+        invalid_redirect_uri: "The requested redirect uri is malformed or doesn't match client redirect URI."
+        unauthorized_client: 'The client is not authorized to perform this request using this method.'
+        access_denied: 'The resource owner or authorization server denied the request.'
+        invalid_scope: 'The requested scope is invalid, unknown, or malformed.'
+        invalid_code_challenge_method:
+          zero: 'The authorization server does not support PKCE as there are no accepted code_challenge_method values.'
+          one: 'The code_challenge_method must be %{challenge_methods}.'
+          other: 'The code_challenge_method must be one of %{challenge_methods}.'
+        server_error: 'The authorization server encountered an unexpected condition which prevented it from fulfilling the request.'
+        temporarily_unavailable: 'The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server.'
+
+        # Configuration error messages
+        credential_flow_not_configured: 'Resource Owner Password Credentials flow failed due to Doorkeeper.configure.resource_owner_from_credentials being unconfigured.'
+        resource_owner_authenticator_not_configured: 'Resource Owner find failed due to Doorkeeper.configure.resource_owner_authenticator being unconfigured.'
+        admin_authenticator_not_configured: 'Access to admin panel is forbidden due to Doorkeeper.configure.admin_authenticator being unconfigured.'
+
+        # Access grant errors
+        unsupported_response_type: 'The authorization server does not support this response type.'
+        unsupported_response_mode: 'The authorization server does not support this response mode.'
+
+        # Access token errors
+        invalid_client: 'Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method.'
+        invalid_grant: 'The provided authorization grant is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.'
+        unsupported_grant_type: 'The authorization grant type is not supported by the authorization server.'
+
+        invalid_token:
+          revoked: "The access token was revoked"
+          expired: "The access token expired"
+          unknown: "The access token is invalid"
+        revoke:
+          unauthorized: "You are not authorized to revoke this token"
+
+        forbidden_token:
+          missing_scope: 'Access to this resource requires scope "%{oauth_scopes}".'
+
+    flash:
+      applications:
+        create:
+          notice: 'Application created.'
+        destroy:
+          notice: 'Application deleted.'
+        update:
+          notice: 'Application updated.'
+      authorized_applications:
+        destroy:
+          notice: 'Application revoked.'
+
+    layouts:
+      admin:
+        title: 'Doorkeeper'
+        nav:
+          oauth2_provider: 'OAuth2 Provider'
+          applications: 'Applications'
+          home: 'Home'
+      application:
+        title: 'OAuth authorization required'
