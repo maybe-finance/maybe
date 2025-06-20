@@ -35,38 +35,42 @@
 
             <div class="truncate">
               <div class="space-y-0.5">
-                <div class="flex items-center gap-1">
-                  <% if transaction.transfer? %>
-                    <%= link_to(
-                          entry.name,
-                          transaction.transfer.present? ? transfer_path(transaction.transfer) : entry_path(entry),
-                          data: {
-                            turbo_frame: "drawer",
-                            turbo_prefetch: false
-                          },
-                          class: "hover:underline"
-                        ) %>
-                  <% else %>
-                    <%= link_to(
-                          entry.name,
-                          entry_path(entry),
-                          data: {
-                            turbo_frame: "drawer",
-                            turbo_prefetch: false
-                          },
-                          class: "hover:underline"
-                        ) %>
-                  <% end %>
+                <div class="flex items-center gap-1 min-w-0">
+                  <div class="truncate flex-shrink">
+                    <% if transaction.transfer? %>
+                      <%= link_to(
+                            entry.name,
+                            transaction.transfer.present? ? transfer_path(transaction.transfer) : entry_path(entry),
+                            data: {
+                              turbo_frame: "drawer",
+                              turbo_prefetch: false
+                            },
+                            class: "hover:underline"
+                          ) %>
+                    <% else %>
+                      <%= link_to(
+                            entry.name,
+                            entry_path(entry),
+                            data: {
+                              turbo_frame: "drawer",
+                              turbo_prefetch: false
+                            },
+                            class: "hover:underline"
+                          ) %>
+                    <% end %>
+                  </div>
 
-                  <% if entry.excluded %>
-                    <span class="text-orange-500" title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
-                      <%= icon "asterisk", size: "sm", color: "current" %>
-                    </span>
-                  <% end %>
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <% if entry.excluded %>
+                      <span class="text-orange-500" title="One-time <%= entry.amount.negative? ? "income" : "expense" %> (excluded from averages)">
+                        <%= icon "asterisk", size: "sm", color: "current" %>
+                      </span>
+                    <% end %>
 
-                  <% if transaction.transfer.present? %>
-                    <%= render "transactions/transfer_match", transaction: transaction %>
-                  <% end %>
+                    <% if transaction.transfer.present? %>
+                      <%= render "transactions/transfer_match", transaction: transaction %>
+                    <% end %>
+                  </div>
                 </div>
 
                 <div class="text-secondary text-xs font-normal hidden lg:block">
