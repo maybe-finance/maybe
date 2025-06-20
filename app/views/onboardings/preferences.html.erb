@@ -63,7 +63,7 @@
 
     <p class="text-secondary text-xs mb-4"><%= t(".preview") %></p>
 
-    <%= styled_form_with model: @user, data: { turbo: false } do |form| %>
+    <%= styled_form_with model: @user, method: :patch, data: { turbo: false } do |form| %>
       <%= form.hidden_field :set_onboarding_preferences_at, value: Time.current %>
       <%= form.hidden_field :redirect_to, value: "goals" %>
 
