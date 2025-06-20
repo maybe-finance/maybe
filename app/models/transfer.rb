@@ -12,10 +12,31 @@ class Transfer < ApplicationRecord
   validate :transfer_within_date_range
   validate :transfer_has_same_family
 
+  class << self
+    def kind_for_account(account)
+      if account.loan?
+        "loan_payment"
+      elsif account.liability?
+        "cc_payment"
+      else
+        "funds_movement"
+      end
+    end
+  end
+
   def reject!
     Transfer.transaction do
       RejectedTransfer.find_or_create_by!(inflow_transaction_id: inflow_transaction_id, outflow_transaction_id: outflow_transaction_id)
       destroy!
+    end
+  end
+
+  # Once transfer is destroyed, we need to mark the denormalized kind fields on the transactions
+  def destroy!
+    Transfer.transaction do
+      inflow_transaction.update!(kind: "standard")
+      outflow_transaction.update!(kind: "standard")
+      super
     end
   end
 

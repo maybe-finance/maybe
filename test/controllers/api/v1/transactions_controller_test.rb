@@ -313,13 +313,13 @@ end
       accountable: Depository.new
     )
 
-    transfer = Transfer.from_accounts(
-      from_account: from_account,
-      to_account: to_account,
+    transfer = Transfer::Creator.new(
+      family: @family,
+      source_account_id: from_account.id,
+      destination_account_id: to_account.id,
       date: Date.current,
       amount: 100
-    )
-    transfer.save!
+    ).create
 
     get api_v1_transaction_url(transfer.inflow_transaction), headers: api_headers(@api_key)
     assert_response :success

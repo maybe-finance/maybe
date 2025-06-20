@@ -17,7 +17,8 @@ class TransactionsController < ApplicationController
                        .reverse_chronological
                        .includes(
                          { entry: :account },
-                         :category, :merchant, :tags
+                         :category, :merchant, :tags,
+                         :transfer_as_inflow, :transfer_as_outflow
                        )
 
     @pagy, @transactions = pagy(base_scope, limit: per_page, params: ->(p) { p.except(:focused_record_id) })
