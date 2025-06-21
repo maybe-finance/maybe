@@ -1,0 +1,14 @@
+<%# Add thinking indicator to messages area %>
+<%= turbo_stream.append "messages" do %>
+  <%= render "chats/thinking_indicator", chat: @chat %>
+<% end %>
+
+<%# Reset the form by replacing it with a fresh version %>
+<%= turbo_stream.replace "chat-form" do %>
+  <%= render "messages/chat_form", chat: @chat %>
+<% end %>
+
+<%# Focus the input after form replacement using Stimulus %>
+<%= turbo_stream.append "messages" do %>
+  <div data-controller="focus-chat-input"></div>
+<% end %>
