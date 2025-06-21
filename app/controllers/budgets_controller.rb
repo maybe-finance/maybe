@@ -1,5 +1,5 @@
 class BudgetsController < ApplicationController
-  before_action :set_budget, only: %i[show edit update]
+  before_action :set_budget, only: %i[show edit update copy_previous]
 
   def index
     redirect_to_current_month_budget
@@ -15,6 +15,19 @@ class BudgetsController < ApplicationController
   def update
     @budget.update!(budget_params)
     redirect_to budget_budget_categories_path(@budget)
+  end
+
+  def copy_previous
+    prev_date = @budget.start_date - 1.month
+    previous_budget = Current.family.budgets.find_by(start_date: prev_date.beginning_of_month)
+
+    if previous_budget
+      @budget.copy_from!(previous_budget)
+      notice = "Budget copied from #{previous_budget.name}"
+      redirect_to budget_budget_categories_path(@budget), notice: notice
+    else
+      redirect_to budget_budget_categories_path(@budget), alert: "Previous month's budget not found"
+    end
   end
 
   def picker
