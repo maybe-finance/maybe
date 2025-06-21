@@ -185,10 +185,21 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
+      # Authentication endpoints
+      post "auth/signup", to: "auth#signup"
+      post "auth/login", to: "auth#login"
+      post "auth/refresh", to: "auth#refresh"
+
       # Production API endpoints
       resources :accounts, only: [ :index ]
       resources :transactions, only: [ :index, :show, :create, :update, :destroy ]
       resource :usage, only: [ :show ], controller: "usage"
+
+      resources :chats, only: [ :index, :show, :create, :update, :destroy ] do
+        resources :messages, only: [ :create ] do
+          post :retry, on: :collection
+        end
+      end
 
       # Test routes for API controller testing (only available in test environment)
       if Rails.env.test?

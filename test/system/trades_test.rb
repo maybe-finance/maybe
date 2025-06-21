@@ -24,7 +24,7 @@ class TradesTest < ApplicationSystemTestCase
     fill_in "Ticker symbol", with: "AAPL"
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: shares_qty
-    fill_in "entry[price]", with: 214.23
+    fill_in "model[price]", with: 214.23
 
     click_button "Add transaction"
 
@@ -45,7 +45,7 @@ class TradesTest < ApplicationSystemTestCase
     fill_in "Ticker symbol", with: "AAPL"
     fill_in "Date", with: Date.current
     fill_in "Quantity", with: qty
-    fill_in "entry[price]", with: 215.33
+    fill_in "model[price]", with: 215.33
 
     click_button "Add transaction"
 

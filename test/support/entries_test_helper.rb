@@ -1,7 +1,7 @@
 module EntriesTestHelper
   def create_transaction(attributes = {})
-    entry_attributes = attributes.except(:category, :tags, :merchant)
-    transaction_attributes = attributes.slice(:category, :tags, :merchant)
+    entry_attributes = attributes.except(:category, :tags, :merchant, :kind)
+    transaction_attributes = attributes.slice(:category, :tags, :merchant, :kind)
 
     entry_defaults = {
       account: accounts(:depository),

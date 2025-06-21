@@ -53,6 +53,9 @@ module Family::AutoTransferMatchable
           outflow_transaction_id: match.outflow_transaction_id,
         )
 
+        Transaction.find(match.inflow_transaction_id).update!(kind: "funds_movement")
+        Transaction.find(match.outflow_transaction_id).update!(kind: Transfer.kind_for_account(Transaction.find(match.outflow_transaction_id).entry.account))
+
         used_transaction_ids << match.inflow_transaction_id
         used_transaction_ids << match.outflow_transaction_id
       end

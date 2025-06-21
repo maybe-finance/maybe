@@ -631,8 +631,8 @@ DEPENDENCIES
   climate_control
   csv
   debug
-  doorkeeper
   derailed_benchmarks
+  doorkeeper
   dotenv-rails
   erb_lint
   faker

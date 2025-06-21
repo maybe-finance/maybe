@@ -6,6 +6,9 @@ class Api::V1::BaseController < ApplicationController
   # Skip regular session-based authentication for API
   skip_authentication
 
+  # Skip CSRF protection for API endpoints
+  skip_before_action :verify_authenticity_token
+
   # Skip onboarding requirements for API endpoints
   skip_before_action :require_onboarding_and_upgrade
 
@@ -264,6 +267,13 @@ class Api::V1::BaseController < ApplicationController
           )
           Current.session = session
         end
+      end
+    end
+
+    # Check if AI features are enabled for the current user
+    def require_ai_enabled
+      unless current_resource_owner&.ai_enabled?
+        render_json({ error: "feature_disabled", message: "AI features are not enabled for this user" }, status: :forbidden)
       end
     end
 end

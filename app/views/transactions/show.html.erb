@@ -106,12 +106,33 @@
               data: { controller: "auto-submit-form" } do |f| %>
           <div class="flex cursor-pointer items-center gap-4 justify-between">
             <div class="text-sm space-y-1">
-              <h4 class="text-primary">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
-              <p class="text-secondary">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
+              <h4 class="text-primary">Exclude</h4>
+              <p class="text-secondary">Excluded transactions will be removed from budgeting calculations and reports.</p>
             </div>
 
             <%= f.toggle :excluded, { data: { auto_submit_form_target: "auto" } } %>
           </div>
+        <% end %>
+      </div>
+
+      <div class="pb-4">
+        <%= styled_form_with model: @entry,
+              url: transaction_path(@entry),
+              class: "p-3",
+              data: { controller: "auto-submit-form" } do |f| %>
+          <%= f.fields_for :entryable do |ef| %>
+            <div class="flex cursor-pointer items-center gap-4 justify-between">
+              <div class="text-sm space-y-1">
+                <h4 class="text-primary">One-time <%= @entry.amount.negative? ? "Income" : "Expense" %></h4>
+                <p class="text-secondary">One-time transactions will be excluded from certain budgeting calculations and reports to help you see what's really important.</p>
+              </div>
+
+              <%= ef.toggle :kind, {
+                    checked: @entry.transaction.one_time?,
+                    data: { auto_submit_form_target: "auto" }
+                  }, "one_time", "standard" %>
+            </div>
+          <% end %>
         <% end %>
 
         <div class="flex items-center justify-between gap-4 p-3">

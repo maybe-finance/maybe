@@ -13,34 +13,14 @@ class Transfer < ApplicationRecord
   validate :transfer_has_same_family
 
   class << self
-    def from_accounts(from_account:, to_account:, date:, amount:)
-      # Attempt to convert the amount to the to_account's currency.
-      # If the conversion fails, use the original amount.
-      converted_amount = begin
-        Money.new(amount.abs, from_account.currency).exchange_to(to_account.currency)
-      rescue Money::ConversionError
-        Money.new(amount.abs, from_account.currency)
+    def kind_for_account(account)
+      if account.loan?
+        "loan_payment"
+      elsif account.liability?
+        "cc_payment"
+      else
+        "funds_movement"
       end
-
-      new(
-        inflow_transaction: Transaction.new(
-          entry: to_account.entries.build(
-            amount: converted_amount.amount.abs * -1,
-            currency: converted_amount.currency.iso_code,
-            date: date,
-            name: "Transfer from #{from_account.name}",
-          )
-        ),
-        outflow_transaction: Transaction.new(
-          entry: from_account.entries.build(
-            amount: amount.abs,
-            currency: from_account.currency,
-            date: date,
-            name: "Transfer to #{to_account.name}",
-          )
-        ),
-        status: "confirmed"
-      )
     end
   end
 
@@ -51,17 +31,26 @@ class Transfer < ApplicationRecord
     end
   end
 
+  # Once transfer is destroyed, we need to mark the denormalized kind fields on the transactions
+  def destroy!
+    Transfer.transaction do
+      inflow_transaction.update!(kind: "standard")
+      outflow_transaction.update!(kind: "standard")
+      super
+    end
+  end
+
   def confirm!
     update!(status: "confirmed")
+  end
+
+  def date
+    inflow_transaction.entry.date
   end
 
   def sync_account_later
     inflow_transaction&.entry&.sync_account_later
     outflow_transaction&.entry&.sync_account_later
-  end
-
-  def belongs_to_family?(family)
-    family.transactions.include?(inflow_transaction)
   end
 
   def to_account
@@ -87,6 +76,24 @@ class Transfer < ApplicationRecord
 
   def payment?
     to_account&.liability?
+  end
+
+  def loan_payment?
+    outflow_transaction&.kind == "loan_payment"
+  end
+
+  def liability_payment?
+    outflow_transaction&.kind == "cc_payment"
+  end
+
+  def regular_transfer?
+    outflow_transaction&.kind == "funds_movement"
+  end
+
+  def transfer_type
+    return "loan_payment" if loan_payment?
+    return "liability_payment" if liability_payment?
+    "transfer"
   end
 
   def categorizable?

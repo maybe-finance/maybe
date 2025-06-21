@@ -1,0 +1,4 @@
+<%- submit_btn_css ||= "btn btn-link" %>
+<%= form_tag oauth_authorized_application_path(application), method: :delete do %>
+  <%= submit_tag t("doorkeeper.authorized_applications.buttons.revoke"), onclick: "return confirm('#{ t('doorkeeper.authorized_applications.confirmations.revoke') }')", class: submit_btn_css %>
+<% end %>

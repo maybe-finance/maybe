@@ -1,0 +1,17 @@
+<div class="bg-container rounded-xl p-6 space-y-6">
+  <div class="text-center space-y-2">
+    <div class="mx-auto w-12 h-12 rounded-full bg-success-surface flex items-center justify-center mb-4">
+      <%= icon("check", class: "w-6 h-6 text-success") %>
+    </div>
+    <h1 class="text-2xl font-medium text-primary"><%= t(".title") %></h1>
+  </div>
+
+  <div class="bg-surface-inset rounded-lg p-4">
+    <p class="text-xs text-secondary mb-2">Authorization Code:</p>
+    <code id="authorization_code" class="block text-sm font-mono text-primary break-all"><%= params[:code] %></code>
+  </div>
+
+  <p class="text-sm text-secondary text-center">
+    Copy this code and paste it into the application.
+  </p>
+</div>

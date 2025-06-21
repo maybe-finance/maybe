@@ -1,0 +1,24 @@
+<header class="page-header">
+  <h1><%= t("doorkeeper.authorized_applications.index.title") %></h1>
+</header>
+
+<main role="main">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th><%= t("doorkeeper.authorized_applications.index.application") %></th>
+      <th><%= t("doorkeeper.authorized_applications.index.created_at") %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @applications.each do |application| %>
+      <tr>
+        <td><%= application.name %></td>
+        <td><%= application.created_at.strftime(t("doorkeeper.authorized_applications.index.date_format")) %></td>
+        <td><%= render "delete_form", application: application %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</main>

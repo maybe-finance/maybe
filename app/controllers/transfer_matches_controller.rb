@@ -8,7 +8,12 @@ class TransferMatchesController < ApplicationController
 
   def create
     @transfer = build_transfer
-    @transfer.save!
+    Transfer.transaction do
+      @transfer.save!
+      @transfer.outflow_transaction.update!(kind: Transfer.kind_for_account(@transfer.outflow_transaction.entry.account))
+      @transfer.inflow_transaction.update!(kind: "funds_movement")
+    end
+
     @transfer.sync_account_later
 
     redirect_back_or_to transactions_path, notice: "Transfer created"
