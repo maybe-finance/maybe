@@ -35,7 +35,10 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     assert_equal 0, @account.balances.count
 
     expected = [ 0, 0 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate
+    end
 
     assert_equal expected, calculated.map(&:balance)
   end
@@ -45,8 +48,10 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_valuation(account: @account, date: 2.days.ago.to_date, amount: 19000)
 
     expected = [ 0, 17000, 17000, 19000, 19000, 19000 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
@@ -55,8 +60,10 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100) # expense
 
     expected = [ 0, 500, 500, 400, 400, 400 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
@@ -69,23 +76,38 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 1.day.ago.to_date, amount: 100)
 
     expected = [ 0, 5000, 5000, 17000, 17000, 17500, 17000, 17000, 16900, 16900 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
   test "multi-currency sync" do
-    ExchangeRate.create! date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2
+    load_exchange_prices
 
-    create_transaction(account: @account, date: 3.days.ago.to_date, amount: -100, currency: "USD")
-    create_transaction(account: @account, date: 2.days.ago.to_date, amount: -300, currency: "USD")
+    expected = [ 0.0 ]
 
-    # Transaction in different currency than the account's main currency
-    create_transaction(account: @account, date: 1.day.ago.to_date, amount: -500, currency: "EUR") # €500 * 1.2 = $600
+    for i in (3).downto(0) do
+      amount = 0
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "USD")
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "CAD")
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "EUR")
 
-    expected = [ 0, 100, 400, 1000, 1000 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+      amount = @account.entries.where(date: i.days.ago.to_date).map do |e|
+        e.amount_money.exchange_to(
+          @account.currency,
+          date: e.date,
+        ).amount
+      end
 
+      expected << expected.last + (amount.sum * -1)
+    end
+
+    calculated = nil
+    assert_queries_count(4) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
@@ -104,8 +126,10 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     # Given constant prices, overall balance (account value) should be constant
     # (the single trade doesn't affect balance; it just alters cash vs. holdings composition)
     expected = [ 0, 5000, 5000, 5000 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
@@ -122,8 +146,65 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     # Start at zero, then valuation of $5000, then tack on $1000 of holdings for remaining 2 days
     expected = [ 0, 5000, 6000, 6000 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
+
+  private
+    def load_exchange_prices
+      cad_rates = {
+        4.days.ago.to_date => 1.36,
+        3.days.ago.to_date => 1.37,
+        2.days.ago.to_date => 1.38,
+        1.day.ago.to_date  => 1.39,
+        Date.current => 1.40
+      }
+
+      eur_rates = {
+        4.days.ago.to_date => 1.17,
+        3.days.ago.to_date => 1.18,
+        2.days.ago.to_date => 1.19,
+        1.day.ago.to_date  => 1.2,
+        Date.current => 1.21
+      }
+
+      cad_rates.each do |date, rate|
+        # USD to CAD
+        ExchangeRate.create!(
+          from_currency: "USD",
+          to_currency: "CAD",
+          date: date,
+          rate: rate
+        )
+
+        # CAD to USD (inverse)
+        ExchangeRate.create!(
+          from_currency: "CAD",
+          to_currency: "USD",
+          date: date,
+          rate: (1.0 / rate).round(6)
+        )
+      end
+
+      eur_rates.each do |date, rate|
+        # USD to EUR
+        ExchangeRate.create!(
+          from_currency: "EUR",
+          to_currency: "USD",
+          date: date,
+          rate: rate
+        )
+
+        # EUR to USD (inverse)
+        ExchangeRate.create!(
+          from_currency: "USD",
+          to_currency: "EUR",
+          date: date,
+          rate: (1.0 / rate).round(6)
+        )
+      end
+    end
 end
