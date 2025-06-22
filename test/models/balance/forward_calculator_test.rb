@@ -2,6 +2,7 @@ require "test_helper"
 
 class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   include EntriesTestHelper
+  include ExchangeRateTestHelper
 
   setup do
     @account = families(:empty).accounts.create!(
@@ -55,8 +56,10 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100) # expense
 
     expected = [ 0, 500, 500, 400, 400, 400 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
+    calculated = nil
+    assert_queries_count(3) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 
@@ -75,17 +78,30 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   end
 
   test "multi-currency sync" do
-    ExchangeRate.create! date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2
+    load_exchange_prices
 
-    create_transaction(account: @account, date: 3.days.ago.to_date, amount: -100, currency: "USD")
-    create_transaction(account: @account, date: 2.days.ago.to_date, amount: -300, currency: "USD")
+    expected = [ 0.0 ]
 
-    # Transaction in different currency than the account's main currency
-    create_transaction(account: @account, date: 1.day.ago.to_date, amount: -500, currency: "EUR") # €500 * 1.2 = $600
+    for i in (3).downto(0) do
+      amount = 0
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "USD")
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "CAD")
+      create_transaction(account: @account, date: i.days.ago.to_date, amount: -100, currency: "EUR")
 
-    expected = [ 0, 100, 400, 1000, 1000 ]
-    calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+      amount = @account.entries.where(date: i.days.ago.to_date).map do |e|
+        e.amount_money.exchange_to(
+          @account.currency,
+          date: e.date,
+        ).amount
+      end
 
+      expected << expected.last + (amount.sum * -1)
+    end
+
+    calculated = nil
+    assert_queries_count(4) do
+      calculated = Balance::ForwardCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
+    end
     assert_equal expected, calculated
   end
 

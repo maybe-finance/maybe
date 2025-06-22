@@ -2,6 +2,7 @@ require "test_helper"
 
 class Family::AutoTransferMatchableTest < ActiveSupport::TestCase
   include EntriesTestHelper
+  include ExchangeRateTestHelper
 
   setup do
     @family = families(:dylan_family)
@@ -116,33 +117,4 @@ class Family::AutoTransferMatchableTest < ActiveSupport::TestCase
       @family.auto_match_transfers!
     end
   end
-
-  private
-    def load_exchange_prices
-      rates = {
-        4.days.ago.to_date => 1.36,
-        3.days.ago.to_date => 1.37,
-        2.days.ago.to_date => 1.38,
-        1.day.ago.to_date  => 1.39,
-        Date.current => 1.40
-      }
-
-      rates.each do |date, rate|
-        # USD to CAD
-        ExchangeRate.create!(
-          from_currency: "USD",
-          to_currency: "CAD",
-          date: date,
-          rate: rate
-        )
-
-        # CAD to USD (inverse)
-        ExchangeRate.create!(
-          from_currency: "CAD",
-          to_currency: "USD",
-          date: date,
-          rate: (1.0 / rate).round(6)
-        )
-      end
-    end
 end
