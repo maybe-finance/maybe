@@ -12,8 +12,8 @@ class UpdateOutdatedTimezones < ActiveRecord::Migration[7.2]
   def up
     TIMEZONE_MAPPINGS.each do |old_tz, new_tz|
       execute <<-SQL
-        UPDATE families 
-        SET timezone = '#{new_tz}' 
+        UPDATE families#{' '}
+        SET timezone = '#{new_tz}'#{' '}
         WHERE timezone = '#{old_tz}'
       SQL
     end
@@ -22,8 +22,8 @@ class UpdateOutdatedTimezones < ActiveRecord::Migration[7.2]
   def down
     TIMEZONE_MAPPINGS.each do |old_tz, new_tz|
       execute <<-SQL
-        UPDATE families 
-        SET timezone = '#{old_tz}' 
+        UPDATE families#{' '}
+        SET timezone = '#{old_tz}'#{' '}
         WHERE timezone = '#{new_tz}'
       SQL
     end
