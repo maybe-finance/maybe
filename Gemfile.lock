@@ -364,7 +364,7 @@ GEM
     octokit (10.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    ostruct (0.6.1)
+    ostruct (0.6.2)
     pagy (9.3.4)
     parallel (1.27.0)
     parser (3.3.8.0)
