@@ -53,7 +53,7 @@ module Security::Provided
 
     price = response.data
     Security::Price.find_or_create_by!(
-      security_id: price.security.id,
+      security_id: self.id,
       date: price.date,
       price: price.price,
       currency: price.currency
