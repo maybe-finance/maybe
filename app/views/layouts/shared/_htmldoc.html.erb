@@ -7,7 +7,7 @@
   data-theme="<%= theme %>"
   data-controller="theme intercom"
   data-theme-user-preference-value="<%= Current.user&.theme || "system" %>"
-  class="h-screen text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
+  class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
   <head>
     <%= render "layouts/shared/head" %>
     <%= yield :head %>
