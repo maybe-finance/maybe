@@ -151,7 +151,7 @@ GEM
       addressable
     csv (3.3.5)
     date (3.4.1)
-    debug (1.10.0)
+    debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
     derailed_benchmarks (2.2.1)
@@ -198,11 +198,11 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-multipart (1.1.0)
+    faraday-multipart (1.1.1)
       multipart-post (~> 2.0)
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
-    faraday-retry (2.3.1)
+    faraday-retry (2.3.2)
       faraday (~> 2.0)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
@@ -301,7 +301,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    lookbook (2.3.9)
+    lookbook (2.3.11)
       activemodel
       css_parser
       htmlbeautifier (~> 1.3)
@@ -364,7 +364,7 @@ GEM
     octokit (10.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    ostruct (0.6.1)
+    ostruct (0.6.2)
     pagy (9.3.4)
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -448,7 +448,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.9.4)
       logger
-    rdoc (6.14.0)
+    rdoc (6.14.1)
       erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
@@ -651,7 +651,7 @@ DEPENDENCIES
   jwt
   letter_opener
   logtail-rails
-  lookbook (= 2.3.9)
+  lookbook (= 2.3.11)
   lucide-rails!
   mocha
   octokit
