@@ -7,13 +7,13 @@
   data-theme="<%= theme %>"
   data-controller="theme intercom"
   data-theme-user-preference-value="<%= Current.user&.theme || "system" %>"
-  class="h-full text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
+  class="h-screen text-primary overflow-hidden lg:overflow-auto font-sans <%= @os %>">
   <head>
     <%= render "layouts/shared/head" %>
     <%= yield :head %>
   </head>
 
-  <body class="bg-surface overflow-hidden lg:overflow-auto antialiased">
+  <body class="h-full bg-surface overflow-hidden lg:overflow-auto antialiased">
     <% if Rails.env.development? %>
       <button hidden data-controller="hotkey" data-hotkey="t t /" data-action="theme#toggle"></button>
     <% end %>
