@@ -2,20 +2,22 @@
   <%= tag.summary class: class_names(
     "px-3 py-2 rounded-xl cursor-pointer flex items-center justify-between bg-surface"
   ) do %>
-    <div class="flex items-center gap-3">
-      <% if align == :left %>
-        <%= helpers.icon "chevron-right", class: "group-open:transform group-open:rotate-90" %>
-      <% end %>
-
-      <%= tag.span class: class_names("font-medium", align == :left ? "text-sm text-primary" : "text-xs uppercase text-secondary") do %>
-        <%= title %>
-      <% end %>
-    </div>
-
-    <% if align == :right %>
-      <%= helpers.icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
-    <% elsif summary_content? %>
+    <% if summary_content? %>
       <%= summary_content %>
+    <% else %>
+      <div class="flex items-center gap-3">
+        <% if align == :left %>
+          <%= helpers.icon "chevron-right", class: "group-open:transform group-open:rotate-90" %>
+        <% end %>
+
+        <%= tag.span class: class_names("font-medium", align == :left ? "text-sm text-primary" : "text-xs uppercase text-secondary") do %>
+          <%= title %>
+        <% end %>
+      </div>
+
+      <% if align == :right %>
+        <%= helpers.icon "chevron-down", class: "group-open:transform group-open:rotate-180" %>
+      <% end %>
     <% end %>
   <% end %>
 

@@ -12,15 +12,11 @@
 
         <div class="flex items-center gap-2">
           <div class="truncate">
-            <h2 class="font-medium text-xl truncate"><%= title || account.name %></h2>
+            <h2 class="font-medium text-xl truncate <%= "animate-pulse" if account.syncing? %>"><%= title || account.name %></h2>
             <% if subtitle.present? %>
               <p class="text-sm text-secondary"><%= subtitle %></p>
             <% end %>
           </div>
-
-          <% if account.syncing? %>
-            <%= render partial: "shared/sync_indicator", locals: { size: "sm" } %>
-          <% end %>
         </div>
       </div>
     <% end %>
