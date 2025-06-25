@@ -84,9 +84,12 @@ class PlaidAccount::Processor
       if plaid_account.plaid_type == "investment"
         @balance_calculator ||= PlaidAccount::Investments::BalanceCalculator.new(plaid_account, security_resolver: security_resolver)
       else
+        balance = plaid_account.current_balance || plaid_account.available_balance || 0
+
+        # We don't currently distinguish "cash" vs. "non-cash" balances for non-investment accounts.
         OpenStruct.new(
-          balance: plaid_account.current_balance || plaid_account.available_balance,
-          cash_balance: plaid_account.available_balance || 0
+          balance: balance,
+          cash_balance: balance
         )
       end
     end
