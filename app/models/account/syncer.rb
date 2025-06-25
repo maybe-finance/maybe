@@ -7,7 +7,6 @@ class Account::Syncer
 
   def perform_sync(sync)
     Rails.logger.info("Processing balances (#{account.linked? ? 'reverse' : 'forward'})")
-    sleep 10
     import_market_data
     materialize_balances
   end
