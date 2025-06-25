@@ -19,6 +19,8 @@ class Sync < ApplicationRecord
   scope :incomplete, -> { where("syncs.status IN (?)", %w[pending syncing]) }
   scope :visible, -> { incomplete.where("syncs.created_at > ?", VISIBLE_FOR.ago) }
 
+  after_commit :update_family_sync_timestamp
+
   validate :window_valid
 
   # Sync state machine
@@ -169,7 +171,6 @@ class Sync < ApplicationRecord
 
     def handle_transition
       log_status_change
-      family.touch(:latest_sync_activity_at)
     end
 
     def handle_completion_transition
@@ -180,6 +181,10 @@ class Sync < ApplicationRecord
       if window_start_date && window_end_date && window_start_date > window_end_date
         errors.add(:window_end_date, "must be greater than window_start_date")
       end
+    end
+
+    def update_family_sync_timestamp
+      family.touch(:latest_sync_activity_at)
     end
 
     def family
