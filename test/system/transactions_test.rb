@@ -189,7 +189,7 @@ class TransactionsTest < ApplicationSystemTestCase
     end
     select "Deposit", from: "Type"
     fill_in "Date", with: transfer_date
-    fill_in "entry[amount]", with: 175.25
+    fill_in "model[amount]", with: 175.25
     click_button "Add transaction"
     within "#entry-group-" + transfer_date.to_s do
       assert_text "175.25"
@@ -203,6 +203,7 @@ class TransactionsTest < ApplicationSystemTestCase
     inflow_entry = create_transaction("inflow", 1.day.ago.to_date, -500, account: investment_account)
     @user.family.auto_match_transfers!
     visit transactions_url
+
     within "#entry-group-" + Date.current.to_s + "-totals" do
       assert_text "-$100.00" # transaction eleven from setup
     end

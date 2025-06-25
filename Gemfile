@@ -26,7 +26,7 @@ gem "view_component"
 
 # https://github.com/lookbook-hq/lookbook/issues/712
 # TODO: Remove max version constraint when fixed
-gem "lookbook", "2.3.9"
+gem "lookbook", "2.3.11"
 
 gem "hotwire_combobox"
 
@@ -51,6 +51,11 @@ gem "image_processing", ">= 1.2"
 gem "ostruct"
 gem "bcrypt", "~> 3.1"
 gem "jwt"
+gem "jbuilder"
+
+# OAuth & API Security
+gem "doorkeeper"
+gem "rack-attack", "~> 6.6"
 gem "faraday"
 gem "faraday-retry"
 gem "faraday-multipart"

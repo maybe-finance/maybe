@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<% theme = Current.user&.theme || "system" %>
+<html
+  lang="en"
+  data-theme="<%= theme %>"
+  data-controller="theme"
+  data-theme-user-preference-value="<%= Current.user&.theme || "system" %>"
+  class="h-full text-primary overflow-hidden lg:overflow-auto font-sans">
+  <head>
+    <%= render "layouts/shared/head" %>
+  </head>
+
+  <body class="h-full overflow-hidden lg:overflow-auto antialiased">
+    <div class="flex flex-col h-full">
+      <div class="flex flex-col h-full px-6 py-12 bg-surface">
+        <div class="grow flex flex-col justify-center">
+          <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="flex justify-center mt-2 md:mb-6">
+              <%= image_tag "logo-color.png", class: "w-16 mb-6" %>
+            </div>
+            <div class="space-y-2">
+              <h2 class="text-3xl font-medium text-primary text-center">
+                Maybe Authorization
+              </h2>
+            </div>
+          </div>
+
+          <div class="mt-5 md:mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+            <%- if flash[:notice].present? %>
+              <div class="mb-4 p-3 rounded-lg bg-surface-inset text-sm text-secondary">
+                <%= flash[:notice] %>
+              </div>
+            <% end -%>
+            <%- if flash[:alert].present? %>
+              <div class="mb-4 p-3 rounded-lg bg-destructive-surface text-sm text-destructive">
+                <%= flash[:alert] %>
+              </div>
+            <% end -%>
+
+            <%= yield %>
+          </div>
+        </div>
+
+        <%= render "layouts/shared/footer" %>
+      </div>
+    </div>
+  </body>
+</html>

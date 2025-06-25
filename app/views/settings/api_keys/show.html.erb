@@ -1,0 +1,192 @@
+<%= content_for :page_title, "API Key" %>
+
+<% if @newly_created && @plain_key %>
+  <%= settings_section title: "API Key Created Successfully", subtitle: "Your new API key has been generated successfully." do %>
+    <div class="space-y-4">
+      <div class="p-3 shadow-border-xs bg-container rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= render FilledIconComponent.new(
+            icon: "check-circle",
+            rounded: true,
+            size: "lg",
+            variant: :success
+          ) %>
+          <div class="flex-1">
+            <h3 class="font-medium text-primary">API Key Created Successfully!</h3>
+            <p class="text-secondary text-sm mt-1">Your new API key "<%= @current_api_key.name %>" has been created and is ready to use.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">Your API Key</h4>
+        <p class="text-secondary text-sm mb-3">Copy and store this key securely. You'll need it to authenticate your API requests.</p>
+
+        <div class="bg-container rounded-lg p-3 border border-primary" data-controller="clipboard">
+          <div class="flex items-center justify-between gap-3">
+            <code id="api-key-display" class="font-mono text-sm text-primary break-all" data-clipboard-target="source"><%= @current_api_key.plain_key %></code>
+            <%= render ButtonComponent.new(
+              text: "Copy API Key",
+              variant: "ghost",
+              icon: "copy",
+              data: { action: "clipboard#copy" }
+            ) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">How to use your API key</h4>
+        <p class="text-secondary text-sm mb-3">Include your API key in the X-Api-Key header when making requests:</p>
+        <div class="bg-container rounded-lg p-3 font-mono text-sm text-primary border border-primary">
+          curl -H "X-Api-Key: <%= @current_api_key.plain_key %>" <%= request.base_url %>/api/v1/accounts
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-4 border-t border-primary">
+        <%= render LinkComponent.new(
+          text: "Continue to API Key Settings",
+          href: settings_api_key_path,
+          variant: "primary"
+        ) %>
+      </div>
+    </div>
+  <% end %>
+<% elsif @current_api_key %>
+  <%= settings_section title: "Your API Key", subtitle: "Manage your API key for programmatic access to your Maybe data." do %>
+    <div class="space-y-4">
+      <div class="p-3 shadow-border-xs bg-container rounded-lg flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <%= render FilledIconComponent.new(
+            icon: "key",
+            rounded: true,
+            size: "lg"
+          ) %>
+
+          <div class="text-sm space-y-1">
+            <p class="text-primary font-medium"><%= @current_api_key.name %></p>
+            <p class="text-secondary">
+              Created <%= time_ago_in_words(@current_api_key.created_at) %> ago
+              <% if @current_api_key.last_used_at %>
+                • Last used <%= time_ago_in_words(@current_api_key.last_used_at) %> ago
+              <% else %>
+                • Never used
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-md bg-success px-2 py-1">
+          <p class="text-success-foreground font-medium text-xs">Active</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">Permissions</h4>
+        <div class="flex flex-wrap gap-2">
+          <% @current_api_key.scopes.each do |scope| %>
+            <span class="inline-flex items-center gap-1 px-2 py-1 bg-primary text-primary-foreground rounded-full text-xs font-medium">
+              <%= icon("shield-check", class: "w-3 h-3") %>
+              <%= case scope
+                  when "read" then "Read Only"
+                  when "read_write" then "Read/Write"
+                  else scope.humanize
+                  end %>
+            </span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">Your API Key</h4>
+        <p class="text-secondary text-sm mb-3">Copy and store this key securely. You'll need it to authenticate your API requests.</p>
+
+        <div class="bg-container rounded-lg p-3 border border-primary" data-controller="clipboard">
+          <div class="flex items-center justify-between gap-3">
+            <code id="api-key-display" class="font-mono text-sm text-primary break-all" data-clipboard-target="source"><%= @current_api_key.plain_key %></code>
+            <%= render ButtonComponent.new(
+              text: "Copy API Key",
+              variant: "ghost",
+              icon: "copy",
+              data: { action: "clipboard#copy" }
+            ) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">How to use your API key</h4>
+        <p class="text-secondary text-sm mb-3">Include your API key in the X-Api-Key header when making requests:</p>
+        <div class="bg-container rounded-lg p-3 font-mono text-sm text-primary border border-primary">
+          curl -H "X-Api-Key: <%= @current_api_key.plain_key %>" <%= request.base_url %>/api/v1/accounts
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-primary">
+        <%= render LinkComponent.new(
+          text: "Create New Key",
+          href: new_settings_api_key_path(regenerate: true),
+          variant: "secondary"
+        ) %>
+
+        <%= render ButtonComponent.new(
+          text: "Revoke Key",
+          href: settings_api_key_path,
+          method: :delete,
+          variant: "destructive",
+          data: {
+            turbo_confirm: "Are you sure you want to revoke this API key?"
+          }
+        ) %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <%= settings_section title: "Create Your API Key", subtitle: "Get programmatic access to your Maybe data" do %>
+    <div class="space-y-4">
+      <div class="p-3 shadow-border-xs bg-container rounded-lg">
+        <div class="flex items-start gap-3">
+          <%= render FilledIconComponent.new(
+            icon: "key",
+            rounded: true,
+            size: "lg"
+          ) %>
+          <div class="flex-1">
+            <h3 class="font-medium text-primary">Access your account data programmatically</h3>
+            <p class="text-secondary text-sm mt-1">Generate an API key to integrate with your applications and access your financial data securely.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-inset rounded-xl p-4">
+        <h4 class="font-medium text-primary mb-3">What you can do with API keys:</h4>
+        <ul class="space-y-2 text-sm text-secondary">
+          <li class="flex items-start gap-2">
+            <%= icon("check", class: "w-4 h-4 text-primary mt-0.5") %>
+            <span>Access your accounts and balances</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon("check", class: "w-4 h-4 text-primary mt-0.5") %>
+            <span>View transaction history</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon("check", class: "w-4 h-4 text-primary mt-0.5") %>
+            <span>Create new transactions</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon("check", class: "w-4 h-4 text-primary mt-0.5") %>
+            <span>Integrate with third-party applications</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex justify-start">
+        <%= render LinkComponent.new(
+          text: "Create API Key",
+          href: new_settings_api_key_path,
+          variant: "primary"
+        ) %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

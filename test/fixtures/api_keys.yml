@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+active_key:
+  display_key: "test_key_123"
+  name: "Production API Key"
+  user: family_admin
+  scopes: ["read_write"]
+  last_used_at: <%= 1.hour.ago %>
+  expires_at: <%= 1.year.from_now %>
+  revoked_at: null
+
+expired_key:
+  display_key: "expired_key_456"
+  name: "Expired API Key"
+  user: family_member
+  scopes: ["read"]
+  last_used_at: <%= 1.week.ago %>
+  expires_at: <%= 1.day.ago %>
+  revoked_at: null
+
+revoked_key:
+  display_key: "revoked_key_789"
+  name: "Revoked API Key"
+  user: family_admin
+  scopes: ["read_write"]
+  last_used_at: <%= 1.day.ago %>
+  expires_at: null
+  revoked_at: <%= 1.hour.ago %>
+
+one:
+  id: <%= SecureRandom.uuid %>
+  user: family_admin
+  name: "Test API Key"
+  display_key: "test_one_key_123"
+  scopes: [ "read" ]
+
+two:
+  id: <%= SecureRandom.uuid %>
+  user: family_admin
+  name: "Second API Key"
+  display_key: "test_two_key_456"
+  scopes: [ "read_write" ]
+  revoked_at: <%= 1.day.ago %>

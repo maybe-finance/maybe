@@ -1,0 +1,60 @@
+<%= content_for :page_title, "Create New API Key" %>
+
+<%= settings_section title: "Create New API Key", subtitle: "Generate a new API key to access your Maybe data programmatically." do %>
+  <%= styled_form_with model: @api_key, url: settings_api_key_path, class: "space-y-4" do |form| %>
+    <%= form.text_field :name,
+        placeholder: "e.g., My Budget App, Portfolio Tracker",
+        label: "API Key Name",
+        help_text: "Choose a descriptive name to help you identify this key later." %>
+
+    <div>
+      <%= form.label :scopes, "Permissions", class: "block text-sm font-medium text-primary mb-2" %>
+      <p class="text-sm text-secondary mb-3">Select the permissions this API key should have:</p>
+
+      <div class="space-y-2">
+        <% [
+          ["read", "Read Only", "View your accounts, transactions, and balances"],
+          ["read_write", "Read/Write", "View your data and create new transactions"]
+        ].each do |value, label, description| %>
+          <div class="bg-surface-inset rounded-lg p-3 border border-primary">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <%= radio_button_tag "api_key[scopes]", value, (@api_key&.scopes || []).include?(value),
+                  class: "mt-1" %>
+              <div class="flex-1">
+                <div class="font-medium text-primary"><%= label %></div>
+                <div class="text-sm text-secondary mt-1"><%= description %></div>
+              </div>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bg-warning-50 border border-warning-200 rounded-xl p-4">
+      <div class="flex items-start gap-2">
+        <%= icon("alert-triangle", class: "w-5 h-5 text-warning-600 mt-0.5") %>
+        <div>
+          <h4 class="font-medium text-warning-800 text-sm">Security Warning</h4>
+          <p class="text-warning-700 text-sm mt-1">
+            Your API key will be displayed only once after creation. Make sure to copy and store it securely.
+            Anyone with access to this key can access your data according to the permissions you select.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-4 border-t border-primary">
+      <%= render LinkComponent.new(
+        text: "Cancel",
+        href: settings_api_key_path,
+        variant: "ghost"
+      ) %>
+
+      <%= render ButtonComponent.new(
+        text: "Create API Key",
+        variant: "primary",
+        type: "submit"
+      ) %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,22 @@
+<div class="bg-container rounded-xl p-6 space-y-6">
+  <div class="text-center space-y-2">
+    <div class="mx-auto w-12 h-12 rounded-full bg-surface-inset flex items-center justify-center mb-4">
+      <%= icon("loader-circle", class: "w-6 h-6 text-primary animate-spin") %>
+    </div>
+    <h1 class="text-2xl font-medium text-primary"><%= t(".title") %></h1>
+    <p class="text-sm text-secondary">Redirecting you back to the application...</p>
+  </div>
+</div>
+
+<% turbo_disabled = @pre_auth.redirect_uri&.start_with?("maybeapp://") || params[:display] == "mobile" %>
+<%= form_tag @pre_auth.redirect_uri, method: :post, name: :redirect_form, authenticity_token: false, data: { turbo: !turbo_disabled } do %>
+  <% auth.body.compact.each do |key, value| %>
+    <%= hidden_field_tag key, value %>
+  <% end %>
+<% end %>
+
+<script>
+  window.onload = function () {
+    document.forms['redirect_form'].submit();
+  };
+</script>

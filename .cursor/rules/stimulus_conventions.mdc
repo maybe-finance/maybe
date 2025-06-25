@@ -1,0 +1,64 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+This rule describes how to write Stimulus controllers.
+
+- **Use declarative actions, not imperative event listeners**
+  - Instead of assigning a Stimulus target and binding it to an event listener in the initializer, always write Controllers + ERB views declaratively by using Stimulus actions in ERB to call methods in the Stimulus JS controller.  Below are good vs. bad code.
+
+  BAD code:
+
+  ```js
+  // BAD!!!! DO NOT DO THIS!!
+  // Imperative - controller does all the work
+  export default class extends Controller {
+    static targets = ["button", "content"]
+
+    connect() {
+      this.buttonTarget.addEventListener("click", this.toggle.bind(this))
+    }
+
+    toggle() {
+      this.contentTarget.classList.toggle("hidden")
+      this.buttonTarget.textContent = this.contentTarget.classList.contains("hidden") ? "Show" : "Hide"
+    }
+  }
+  ```
+
+  GOOD code:
+
+  ```erb
+  <!-- Declarative - HTML declares what happens -->
+
+  <div data-controller="toggle">
+    <button data-action="click->toggle#toggle" data-toggle-target="button">Show</button>
+    <div data-toggle-target="content" class="hidden">Hello World!</div>
+  </div>
+  ```
+
+  ```js
+  // Declarative - controller just responds
+  export default class extends Controller {
+    static targets = ["button", "content"]
+
+    toggle() {
+      this.contentTarget.classList.toggle("hidden")
+      this.buttonTarget.textContent = this.contentTarget.classList.contains("hidden") ? "Show" : "Hide"
+    }
+  }
+  ```
+
+- **Keep Stimulus controllers lightweight and simple**
+  - Always aim for less than 7 controller targets. Any more is a sign of too much complexity.
+  - Use private methods and expose a clear public API
+
+- **Keep Stimulus controllers focused on what they do best**
+  - Domain logic does NOT belong in a Stimulus controller
+  - Stimulus controllers should aim for a single responsibility, or a group of highly related responsibilities
+  - Make good use of Stimulus's callbacks, actions, targets, values, and classes
+
+- **Component controllers should not be used outside the component**
+  - If a Stimulus controller is in the app/components directory, it should only be used in its component view. It should not be used anywhere in app/views.
+

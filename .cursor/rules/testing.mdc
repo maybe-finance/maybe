@@ -1,0 +1,87 @@
+---
+description: 
+globs: test/**
+alwaysApply: false
+---
+Use this rule to learn how to write tests for the Maybe codebase.
+
+Due to the open-source nature of this project, we have chosen Minitest + Fixtures for testing to maximize familiarity and predictability.
+
+- **General testing rules**
+  - Always use Minitest and fixtures for testing, NEVER rspec or factories
+  - Keep fixtures to a minimum.  Most models should have 2-3 fixtures maximum that represent the "base cases" for that model.  "Edge cases" should be created on the fly, within the context of the test which it is needed.
+  - For tests that require a large number of fixture records to be created, use Rails helpers to help create the records needed for the test, then inline the creation. For example, [entries_test_helper.rb](mdc:test/support/entries_test_helper.rb) provides helpers to easily do this.
+
+- **Write minimal, effective tests**
+  - Use system tests sparingly as they increase the time to complete the test suite
+  - Only write tests for critical and important code paths
+  - Write tests as you go, when required
+  - Take a practical approach to testing.  Tests are effective when their presence _significantly increases confidence in the codebase_.
+
+  Below are examples of necessary vs. unnecessary tests:
+
+  ```rb
+  # GOOD!!
+  # Necessary test - in this case, we're testing critical domain business logic
+  test "syncs balances" do
+    Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
+
+    @account.expects(:start_date).returns(2.days.ago.to_date)
+
+    Balance::ForwardCalculator.any_instance.expects(:calculate).returns(
+      [
+        Balance.new(date: 1.day.ago.to_date, balance: 1000, cash_balance: 1000, currency: "USD"),
+        Balance.new(date: Date.current, balance: 1000, cash_balance: 1000, currency: "USD")
+      ]
+    )
+
+    assert_difference "@account.balances.count", 2 do
+      Balance::Syncer.new(@account, strategy: :forward).sync_balances
+    end
+  end
+
+  # BAD!!
+  # Unnecessary test - in this case, this is simply testing ActiveRecord's functionality
+  test "saves balance" do 
+    balance_record = Balance.new(balance: 100, currency: "USD")
+
+    assert balance_record.save
+  end
+  ```
+
+- **Test boundaries correctly**
+  - Distinguish between commands and query methods. Test output of query methods; test that commands were called with the correct params. See an example below:
+
+  ```rb
+  class ExampleClass
+    def do_something
+      result = 2 + 2
+
+      CustomEventProcessor.process_result(result)
+
+      result
+    end
+  end
+
+  class ExampleClass < ActiveSupport::TestCase
+    test "boundaries are tested correctly" do 
+      result = ExampleClass.new.do_something
+
+      # GOOD - we're only testing that the command was received, not internal implementation details
+      # The actual tests for CustomEventProcessor belong in a different test suite!
+      CustomEventProcessor.expects(:process_result).with(4).once
+
+      # GOOD - we're testing the implementation of ExampleClass inside its own test suite
+      assert_equal 4, result
+    end
+  end
+  ```
+
+  - Never test the implementation details of one class in another classes test suite
+
+- **Stubs and mocks**
+  - Use `mocha` gem 
+  - Always prefer `OpenStruct` when creating mock instances, or in complex cases, a mock class
+  - Only mock what's necessary. If you're not testing return values, don't mock a return value.
+
+

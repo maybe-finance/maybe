@@ -39,9 +39,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Entry.count } => 2,
                       -> { Transaction.count } => 2,
                       -> { Transfer.count } => 1 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "deposit",
           date: Date.current,
           amount: 10,
@@ -60,9 +59,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Entry.count } => 2,
                       -> { Transaction.count } => 2,
                       -> { Transfer.count } => 1 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "withdrawal",
           date: Date.current,
           amount: 10,
@@ -79,9 +77,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Entry.count } => 1,
                       -> { Transaction.count } => 1,
                       -> { Transfer.count } => 0 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "withdrawal",
           date: Date.current,
           amount: 10,
@@ -98,9 +95,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
 
   test "creates interest entry" do
     assert_difference [ "Entry.count", "Transaction.count" ], 1 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "interest",
           date: Date.current,
           amount: 10,
@@ -117,9 +113,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
 
   test "creates trade buy entry" do
     assert_difference [ "Entry.count", "Trade.count", "Security.count" ], 1 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "buy",
           date: Date.current,
           ticker: "NVDA (NASDAQ)",
@@ -141,9 +136,8 @@ class TradesControllerTest < ActionDispatch::IntegrationTest
 
   test "creates trade sell entry" do
     assert_difference [ "Entry.count", "Trade.count" ], 1 do
-      post trades_url, params: {
-        entry: {
-          account_id: @entry.account_id,
+      post trades_url(account_id: @entry.account_id), params: {
+        model: {
           type: "sell",
           ticker: "AAPL (NYSE)",
           date: Date.current,

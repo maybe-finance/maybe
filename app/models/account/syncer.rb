@@ -13,13 +13,6 @@ class Account::Syncer
 
   def perform_post_sync
     account.family.auto_match_transfers!
-
-    # Warm IncomeStatement caches so subsequent requests are fast
-    # TODO: this is a temporary solution to speed up pages. Long term we'll throw a materialized view / pre-computed table
-    # in for family stats.
-    income_statement = IncomeStatement.new(account.family)
-    Rails.logger.info("Warming IncomeStatement caches")
-    income_statement.warm_caches!
   end
 
   private

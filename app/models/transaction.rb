@@ -9,10 +9,17 @@ class Transaction < ApplicationRecord
 
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
-  class << self
-    def search(params)
-      Search.new(params).build_query(all)
-    end
+  enum :kind, {
+    standard: "standard", # A regular transaction, included in budget analytics
+    funds_movement: "funds_movement", # Movement of funds between accounts, excluded from budget analytics
+    cc_payment: "cc_payment", # A CC payment, excluded from budget analytics (CC payments offset the sum of expense transactions)
+    loan_payment: "loan_payment", # A payment to a Loan account, treated as an expense in budgets
+    one_time: "one_time" # A one-time expense/income, excluded from budget analytics
+  }
+
+  # Overarching grouping method for all transfer-type transactions
+  def transfer?
+    funds_movement? || cc_payment? || loan_payment?
   end
 
   def set_category!(category)

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t("doorkeeper.layouts.admin.title") %></title>
+  <%= stylesheet_link_tag "doorkeeper/admin/application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+  <%= link_to t("doorkeeper.layouts.admin.nav.oauth2_provider"), oauth_applications_path, class: "navbar-brand" %>
+
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%= "active" if request.path == oauth_applications_path %>">
+        <%= link_to t("doorkeeper.layouts.admin.nav.applications"), oauth_applications_path, class: "nav-link" %>
+      </li>
+      <% if respond_to?(:root_path) %>
+        <li class="nav-item">
+          <%= link_to t("doorkeeper.layouts.admin.nav.home"), root_path, class: "nav-link" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</nav>
+
+<div class="doorkeeper-admin container">
+  <%- if flash[:notice].present? %>
+    <div class="alert alert-info">
+      <%= flash[:notice] %>
+    </div>
+  <% end -%>
+
+  <%= yield %>
+</div>
+</body>
+</html>
