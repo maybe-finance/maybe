@@ -14,7 +14,8 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
   end
 
   test "no holdings" do
-    calculated = Holding::ReverseCalculator.new(@account).calculate
+    empty_snapshot = OpenStruct.new(to_h: {})
+    calculated = Holding::ReverseCalculator.new(@account, portfolio_snapshot: empty_snapshot).calculate
     assert_equal [], calculated
   end
 
@@ -36,7 +37,9 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
       create_trade(voo, qty: 10, date: "2025-01-03", price: 500, account: @account)
 
       expected = [ [ "2025-01-02", 0 ], [ "2025-01-03", 5000 ], [ "2025-01-04", 5000 ] ]
-      calculated = Holding::ReverseCalculator.new(@account).calculate
+      # Mock snapshot with the holdings we created
+      snapshot = OpenStruct.new(to_h: { voo.id => 10 })
+      calculated = Holding::ReverseCalculator.new(@account, portfolio_snapshot: snapshot).calculate
 
       assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.amount ] }
     end
@@ -50,7 +53,9 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
 
     create_trade(voo, qty: -10, date: Date.current, price: 470, account: @account)
 
-    calculated = Holding::ReverseCalculator.new(@account).calculate
+    # Mock empty portfolio since no current day holdings
+    snapshot = OpenStruct.new(to_h: { voo.id => 0 })
+    calculated = Holding::ReverseCalculator.new(@account, portfolio_snapshot: snapshot).calculate
     assert_equal 2, calculated.length
   end
 
@@ -96,7 +101,9 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
       Holding.new(security: @amzn, date: Date.current, qty: 0, price: 200, amount: 0)
     ]
 
-    calculated = Holding::ReverseCalculator.new(@account).calculate
+    # Mock snapshot with today's portfolio from load_today_portfolio
+    snapshot = OpenStruct.new(to_h: { @voo.id => 10, @wmt.id => 100, @amzn.id => 0 })
+    calculated = Holding::ReverseCalculator.new(@account, portfolio_snapshot: snapshot).calculate
 
     assert_equal expected.length, calculated.length
 
@@ -136,7 +143,9 @@ class Holding::ReverseCalculatorTest < ActiveSupport::TestCase
       Holding.new(security: wmt, date: Date.current, qty: 50, price: 100, amount: 5000) # Uses holding price, not market price
     ]
 
-    calculated = Holding::ReverseCalculator.new(@account).calculate
+    # Mock snapshot with WMT holding from the test setup
+    snapshot = OpenStruct.new(to_h: { wmt.id => 50 })
+    calculated = Holding::ReverseCalculator.new(@account, portfolio_snapshot: snapshot).calculate
 
     assert_equal expected.length, calculated.length
 

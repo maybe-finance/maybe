@@ -10,9 +10,12 @@ class PlaidAccount::Investments::HoldingsProcessor
 
       return unless resolved_security_result.security.present?
 
+      security = resolved_security_result.security
+      holding_date = plaid_holding["institution_price_as_of"] || Date.current
+
       holding = account.holdings.find_or_initialize_by(
-        security: resolved_security_result.security,
-        date: Date.current,
+        security: security,
+        date: holding_date,
         currency: plaid_holding["iso_currency_code"]
       )
 
@@ -23,6 +26,12 @@ class PlaidAccount::Investments::HoldingsProcessor
       )
 
       holding.save!
+
+      # Delete all holdings for this security after the institution price date
+      account.holdings
+        .where(security: security)
+        .where("date > ?", holding_date)
+        .destroy_all
     end
   end
 
