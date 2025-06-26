@@ -2,13 +2,14 @@
 
 <div id="<%= account_group.dom_id(tab: all_tab ? :all : nil, mobile: mobile) %>">
   <% is_open = open.nil? ? account_group.accounts.any? { |account| page_active?(account_path(account)) } : open %>
-  <%= render DisclosureComponent.new(title: account_group.name, align: :left, open: is_open) do |disclosure| %>
+  <%= render DisclosureComponent.new(align: :left, open: is_open) do |disclosure| %>
     <% disclosure.with_summary_content do %>
-      <% if account_group.syncing? %>
-        <div class="ml-2 group-open:hidden">
-          <%= render partial: "shared/sync_indicator", locals: { size: "xs" } %>
-        </div>
-      <% end %>
+      <div class="flex items-center gap-3">
+        <%= icon "chevron-right", class: "group-open:transform group-open:rotate-90" %>
+        <%= tag.span class: class_names("text-sm text-primary font-medium", "animate-pulse" => account_group.syncing?) do %>
+          <%= account_group.name %>
+        <% end %>
+      </div>
 
       <div class="ml-auto text-right grow">
         <%= tag.p format_money(account_group.total_money), class: "text-sm font-medium text-primary" %>
@@ -32,10 +33,7 @@
 
           <div class="min-w-0 grow">
             <div class="flex items-center gap-2 mb-0.5">
-              <%= tag.p account.name, class: "text-sm text-primary font-medium truncate" %>
-              <% if account.syncing? %>
-                <%= render partial: "shared/sync_indicator", locals: { size: "xs" } %>
-              <% end %>
+              <%= tag.p account.name, class: class_names("text-sm text-primary font-medium truncate", "animate-pulse" => account.syncing?) %>
             </div>
             <%= tag.p account.short_subtype_label, class: "text-sm text-secondary truncate" %>
           </div>

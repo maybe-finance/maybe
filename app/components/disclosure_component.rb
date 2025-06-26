@@ -3,7 +3,7 @@ class DisclosureComponent < ViewComponent::Base
 
   attr_reader :title, :align, :open, :opts
 
-  def initialize(title:, align: "right", open: false, **opts)
+  def initialize(title: nil, align: "right", open: false, **opts)
     @title = title
     @align = align.to_sym
     @open = open

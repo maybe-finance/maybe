@@ -5,7 +5,7 @@
     <div class="bg-container shadow-border-xs rounded-xl space-y-4 p-4">
       <div class="flex items-center gap-2">
         <h2 class="text-lg font-medium inline-flex items-center gap-1.5">
-          <span>
+          <span class="<%= "animate-pulse" if classification_group.syncing? %>">
             <%= classification_group.name %>
           </span>
 
@@ -14,10 +14,6 @@
             <span class="text-secondary font-medium text-lg"><%= classification_group.total_money.format(precision: 0) %></span>
           <% end %>
         </h2>
-
-        <% if classification_group.syncing? %>
-          <%= render partial: "shared/sync_indicator", locals: { size: "sm" } %>
-        <% end %>
       </div>
 
       <% if classification_group.account_groups.any? %>
