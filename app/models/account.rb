@@ -87,7 +87,7 @@ class Account < ApplicationRecord
             .where(
               id: holdings.select("DISTINCT ON (security_id) id")
                           .where(currency: currency)
-                          .order(:security_id, :date => :desc)
+                          .order(:security_id, date: :desc)
             )
             .order(amount: :desc)
   end
