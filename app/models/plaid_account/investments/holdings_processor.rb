@@ -8,7 +8,7 @@ class PlaidAccount::Investments::HoldingsProcessor
     holdings.each do |plaid_holding|
       resolved_security_result = security_resolver.resolve(plaid_security_id: plaid_holding["security_id"])
 
-      return unless resolved_security_result.security.present?
+      next unless resolved_security_result.security.present?
 
       security = resolved_security_result.security
       holding_date = plaid_holding["institution_price_as_of"] || Date.current
@@ -25,13 +25,15 @@ class PlaidAccount::Investments::HoldingsProcessor
         amount: plaid_holding["quantity"] * plaid_holding["institution_price"]
       )
 
-      holding.save!
+      ActiveRecord::Base.transaction do
+        holding.save!
 
-      # Delete all holdings for this security after the institution price date
-      account.holdings
-        .where(security: security)
-        .where("date > ?", holding_date)
-        .destroy_all
+        # Delete all holdings for this security after the institution price date
+        account.holdings
+          .where(security: security)
+          .where("date > ?", holding_date)
+          .destroy_all
+      end
     end
   end
 

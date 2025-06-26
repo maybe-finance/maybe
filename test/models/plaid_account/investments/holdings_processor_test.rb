@@ -151,4 +151,47 @@ class PlaidAccount::Investments::HoldingsProcessorTest < ActiveSupport::TestCase
     assert account.holdings.exists?(security: third_security, date: 1.day.ago.to_date, qty: 75)
     assert account.holdings.exists?(security: securities(:aapl), date: 1.day.ago.to_date, qty: 100)
   end
+
+  test "continues processing other holdings when security resolution fails" do
+    test_investments_payload = {
+      securities: [],
+      holdings: [
+        {
+          "security_id" => "fail",
+          "quantity" => 100,
+          "institution_price" => 100,
+          "iso_currency_code" => "USD"
+        },
+        {
+          "security_id" => "success",
+          "quantity" => 200,
+          "institution_price" => 200,
+          "iso_currency_code" => "USD"
+        }
+      ],
+      transactions: []
+    }
+
+    @plaid_account.update!(raw_investments_payload: test_investments_payload)
+
+    # First security fails to resolve
+    @security_resolver.expects(:resolve)
+                      .with(plaid_security_id: "fail")
+                      .returns(OpenStruct.new(security: nil))
+
+    # Second security succeeds
+    @security_resolver.expects(:resolve)
+                      .with(plaid_security_id: "success")
+                      .returns(OpenStruct.new(security: securities(:aapl)))
+
+    processor = PlaidAccount::Investments::HoldingsProcessor.new(@plaid_account, security_resolver: @security_resolver)
+
+    # Should create only 1 holding (the successful one)
+    assert_difference "Holding.count", 1 do
+      processor.process
+    end
+
+    # Should have created the successful holding
+    assert @plaid_account.account.holdings.exists?(security: securities(:aapl), qty: 200)
+  end
 end
