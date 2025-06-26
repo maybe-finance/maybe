@@ -6,7 +6,6 @@ class PlaidAccount::Investments::TransactionsProcessorTest < ActiveSupport::Test
     @security_resolver = PlaidAccount::Investments::SecurityResolver.new(@plaid_account)
   end
 
-
   test "creates regular trade entries" do
     test_investments_payload = {
       transactions: [
@@ -16,6 +15,7 @@ class PlaidAccount::Investments::TransactionsProcessorTest < ActiveSupport::Test
           "type" => "buy",
           "quantity" => 1, # Positive, so "buy 1 share"
           "price" => 100,
+          "amount" => 100,
           "iso_currency_code" => "USD",
           "date" => Date.current,
           "name" => "Buy 1 share of AAPL"
@@ -107,5 +107,44 @@ class PlaidAccount::Investments::TransactionsProcessorTest < ActiveSupport::Test
     assert_equal "USD", entry.currency
     assert_equal Date.current, entry.date
     assert_equal "Miscellaneous fee", entry.name
+  end
+
+  test "handles bad plaid quantity signage data" do
+    test_investments_payload = {
+      transactions: [
+        {
+          "transaction_id" => "123",
+          "type" => "sell", # Correct type
+          "subtype" => "sell", # Correct subtype
+          "quantity" => 1, # ***Incorrect signage***, this should be negative
+          "price" => 100, # Correct price
+          "amount" => -100, # Correct amount
+          "iso_currency_code" => "USD",
+          "date" => Date.current,
+          "name" => "Sell 1 share of AAPL"
+        }
+      ]
+    }
+
+    @plaid_account.update!(raw_investments_payload: test_investments_payload)
+
+    @security_resolver.expects(:resolve).returns(OpenStruct.new(
+      security: securities(:aapl)
+    ))
+
+    processor = PlaidAccount::Investments::TransactionsProcessor.new(@plaid_account, security_resolver: @security_resolver)
+
+    assert_difference [ "Entry.count", "Trade.count" ], 1 do
+      processor.process
+    end
+
+    entry = Entry.order(created_at: :desc).first
+
+    assert_equal -100, entry.amount
+    assert_equal "USD", entry.currency
+    assert_equal Date.current, entry.date
+    assert_equal "Sell 1 share of AAPL", entry.name
+
+    assert_equal -1, entry.trade.qty
   end
 end
