@@ -43,14 +43,14 @@ class PlaidAccount::Investments::TransactionsProcessor
       end
 
       entry.assign_attributes(
-        amount: transaction["quantity"] * transaction["price"],
+        amount: derived_qty(transaction) * transaction["price"],
         currency: transaction["iso_currency_code"],
         date: transaction["date"]
       )
 
       entry.trade.assign_attributes(
         security: resolved_security_result.security,
-        qty: transaction["quantity"],
+        qty: derived_qty(transaction),
         price: transaction["price"],
         currency: transaction["iso_currency_code"]
       )
@@ -86,5 +86,22 @@ class PlaidAccount::Investments::TransactionsProcessor
 
     def transactions
       plaid_account.raw_investments_payload["transactions"] || []
+    end
+
+    # Plaid unfortunately returns incorrect signage on some `quantity` values. They claim all "sell" transactions
+    # are negative signage, but we have found multiple instances of production data where this is not the case.
+    #
+    # This method attempts to use several Plaid data points to derive the true quantity with the correct signage.
+    def derived_qty(transaction)
+      reported_qty = transaction["quantity"]
+      abs_qty = reported_qty.abs
+
+      if transaction["type"] == "sell" || transaction["amount"] < 0
+        -abs_qty
+      elsif transaction["type"] == "buy" || transaction["amount"] > 0
+        abs_qty
+      else
+        reported_qty
+      end
     end
 end
