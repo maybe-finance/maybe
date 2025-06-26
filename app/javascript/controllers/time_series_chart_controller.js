@@ -508,15 +508,31 @@ export default class extends Controller {
   }
 
   get _d3YScale() {
-    const reductionPercent = this.useLabelsValue ? 0.3 : 0.05;
     const dataMin = d3.min(this._normalDataPoints, this._getDatumValue);
     const dataMax = d3.max(this._normalDataPoints, this._getDatumValue);
-    const padding = (dataMax - dataMin) * reductionPercent;
+    
+    // Use 0 as baseline, but allow negative values if they exist
+    const yMin = Math.min(0, dataMin);
+    
+    // Handle edge case where all values are the same (including all zeros)
+    const range = dataMax - yMin;
+    if (range === 0) {
+      // If all values are 0, show 0-100 scale. Otherwise center the value with padding.
+      const padding = dataMax === 0 ? 100 : Math.abs(dataMax) * 0.5;
+      return d3
+        .scaleLinear()
+        .rangeRound([this._d3ContainerHeight, 0])
+        .domain([yMin - padding, dataMax + padding]);
+    }
+    
+    // Add padding to prevent overlapping with labels and for visual breathing room
+    const topPadding = range * 0.1;
+    const bottomPadding = range * (this.useLabelsValue ? 0.15 : 0.05);
 
     return d3
       .scaleLinear()
       .rangeRound([this._d3ContainerHeight, 0])
-      .domain([dataMin - padding, dataMax + padding]);
+      .domain([yMin - bottomPadding, dataMax + topPadding]);
   }
 
   _setupResizeObserver() {
