@@ -510,29 +510,55 @@ export default class extends Controller {
   get _d3YScale() {
     const dataMin = d3.min(this._normalDataPoints, this._getDatumValue);
     const dataMax = d3.max(this._normalDataPoints, this._getDatumValue);
-    
-    // Use 0 as baseline, but allow negative values if they exist
-    const yMin = Math.min(0, dataMin);
-    
-    // Handle edge case where all values are the same (including all zeros)
-    const range = dataMax - yMin;
-    if (range === 0) {
-      // If all values are 0, show 0-100 scale. Otherwise center the value with padding.
+
+    // Handle edge case where all values are the same
+    if (dataMin === dataMax) {
       const padding = dataMax === 0 ? 100 : Math.abs(dataMax) * 0.5;
       return d3
         .scaleLinear()
         .rangeRound([this._d3ContainerHeight, 0])
-        .domain([yMin - padding, dataMax + padding]);
+        .domain([dataMin - padding, dataMax + padding]);
     }
-    
-    // Add padding to prevent overlapping with labels and for visual breathing room
-    const topPadding = range * 0.1;
-    const bottomPadding = range * (this.useLabelsValue ? 0.15 : 0.05);
+
+    const dataRange = dataMax - dataMin;
+    const avgValue = (dataMax + dataMin) / 2;
+
+    // Calculate relative change as a percentage
+    const relativeChange = avgValue !== 0 ? dataRange / Math.abs(avgValue) : 1;
+
+    // Dynamic baseline calculation
+    let yMin;
+    let yMax;
+
+    // For small relative changes (< 10%), use a tighter scale
+    if (relativeChange < 0.1 && dataMin > 0) {
+      // Start axis at a percentage below the minimum, not at 0
+      const baselinePadding = dataRange * 2; // Show 2x the data range below min
+      yMin = Math.max(0, dataMin - baselinePadding);
+      yMax = dataMax + dataRange * 0.5; // Add 50% padding above
+    } else {
+      // For larger changes or when data crosses zero, use more context
+      // Always include 0 when data is negative or close to 0
+      if (dataMin < 0 || (dataMin >= 0 && dataMin < avgValue * 0.1)) {
+        yMin = Math.min(0, dataMin * 1.1);
+      } else {
+        // Otherwise use dynamic baseline
+        yMin = dataMin - dataRange * 0.3;
+      }
+      yMax = dataMax + dataRange * 0.1;
+    }
+
+    // Adjust padding for labels if needed
+    if (this.useLabelsValue) {
+      const extraPadding = (yMax - yMin) * 0.1;
+      yMin -= extraPadding;
+      yMax += extraPadding;
+    }
 
     return d3
       .scaleLinear()
       .rangeRound([this._d3ContainerHeight, 0])
-      .domain([yMin - bottomPadding, dataMax + topPadding]);
+      .domain([yMin, yMax]);
   }
 
   _setupResizeObserver() {
