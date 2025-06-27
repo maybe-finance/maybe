@@ -147,4 +147,37 @@ class PlaidAccount::Investments::TransactionsProcessorTest < ActiveSupport::Test
 
     assert_equal -1, entry.trade.qty
   end
+
+  test "creates transfer transactions as cash transactions" do
+    test_investments_payload = {
+      transactions: [
+        {
+          "investment_transaction_id" => "123",
+          "type" => "transfer",
+          "amount" => -100.0,
+          "iso_currency_code" => "USD",
+          "date" => Date.current,
+          "name" => "Bank Transfer"
+        }
+      ]
+    }
+
+    @plaid_account.update!(raw_investments_payload: test_investments_payload)
+
+    @security_resolver.expects(:resolve).never
+
+    processor = PlaidAccount::Investments::TransactionsProcessor.new(@plaid_account, security_resolver: @security_resolver)
+
+    assert_difference [ "Entry.count", "Transaction.count" ], 1 do
+      processor.process
+    end
+
+    entry = Entry.order(created_at: :desc).first
+
+    assert_equal -100.0, entry.amount
+    assert_equal "USD", entry.currency
+    assert_equal Date.current, entry.date
+    assert_equal "Bank Transfer", entry.name
+    assert_instance_of Transaction, entry.entryable
+  end
 end
