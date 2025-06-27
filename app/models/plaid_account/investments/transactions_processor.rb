@@ -24,7 +24,7 @@ class PlaidAccount::Investments::TransactionsProcessor
     end
 
     def cash_transaction?(transaction)
-      transaction["type"] == "cash" || transaction["type"] == "fee"
+      transaction["type"] == "cash" || transaction["type"] == "fee" || transaction["type"] == "transfer"
     end
 
     def find_or_create_trade_entry(transaction)
