@@ -1,3 +1,6 @@
+> [!NOTE]
+> For Plaid integration your Maybe instance needs to be accessible by the internet behind a domain with working SSL.
+
 # Setting Up Plaid
 
 ## 1. Create Your Plaid Account
