@@ -10,7 +10,10 @@ class MessagesController < ApplicationController
       ai_model: message_params[:ai_model]
     )
 
-    redirect_to chat_path(@chat, thinking: true)
+    respond_to do |format|
+      format.html { redirect_to chat_path(@chat, thinking: true) }
+      format.turbo_stream
+    end
   end
 
   private
