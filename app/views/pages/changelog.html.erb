@@ -5,7 +5,7 @@
     <div class="w-full md:w-1/3">
       <div class="md:px-3 flex items-center gap-3">
         <% if @release_notes[:avatar].present? %>
-          <div class="text-white shrink-0 w-9 h-9">
+          <div class="fg-inverse shrink-0 w-9 h-9">
             <%= image_tag @release_notes[:avatar], class: "rounded-full w-full h-full object-cover" %>
           </div>
         <% else %>
