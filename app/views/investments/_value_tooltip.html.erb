@@ -3,14 +3,14 @@
 <div data-controller="tooltip" data-tooltip-placement-value="right" data-tooltip-offset-value=10 data-tooltip-cross-axis-value=50>
   <%= icon("info", size: "sm") %>
   <div role="tooltip" data-tooltip-target="tooltip" class="tooltip bg-gray-700 text-sm p-2 rounded w-64">
-    <div class="text-white">
+    <div class="fg-inverse">
       <%= t(".total_value_tooltip") %>
     </div>
     <div class="flex pt-3">
       <div class="text-gray-300">
         <%= t(".cash") %>
       </div>
-      <div class="text-white ml-auto">
+      <div class="fg-inverse ml-auto">
         <%= tag.p format_money(cash, precision: 0) %>
       </div>
     </div>
@@ -18,18 +18,18 @@
       <div class="text-gray-300">
         <%= t(".holdings") %>
       </div>
-      <div class="text-white ml-auto">
+      <div class="fg-inverse ml-auto">
         <%= tag.p format_money(holdings, precision: 0) %>
       </div>
     </div>
 
-    <hr class="my-2 border-gray-500">
+    <hr class="my-2 border-secondary">
 
     <div class="flex">
       <div class="text-gray-300">
         <%= t(".total") %>
       </div>
-      <div class="text-white font-bold ml-auto">
+      <div class="fg-inverse font-bold ml-auto">
         <%= tag.p format_money(balance, precision: 0) %>
       </div>
     </div>
