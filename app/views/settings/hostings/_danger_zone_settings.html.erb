@@ -7,12 +7,12 @@
       </div>
       <%=
             button_to t("settings.hostings.show.clear_cache"), clear_cache_settings_hosting_path, method: :delete,
-              class: "w-full md:w-auto bg-orange-500 text-white text-sm font-medium rounded-lg px-4 py-2",
+              class: "w-full md:w-auto bg-yellow-600 fg-inverse text-sm font-medium rounded-lg px-4 py-2",
               data: { turbo_confirm: {
                 title: t("settings.hostings.show.confirm_clear_cache.title"),
                 body: t("settings.hostings.show.confirm_clear_cache.body"),
                 accept: t("settings.hostings.show.clear_cache"),
-                acceptClass: "w-full bg-orange-500 text-white rounded-xl text-center p-[10px] border mb-2"
+                acceptClass: "w-full bg-yellow-600 fg-inverse rounded-xl text-center p-[10px] border mb-2"
               }}
       %>
     </div>
