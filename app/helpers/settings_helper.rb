@@ -1,19 +1,19 @@
 module SettingsHelper
   SETTINGS_ORDER = [
-    { name: I18n.t("settings.settings_nav.profile_label"), path: :settings_profile_path },
-    { name: I18n.t("settings.settings_nav.preferences_label"), path: :settings_preferences_path },
-    { name: I18n.t("settings.settings_nav.security_label"), path: :settings_security_path },
-    { name: I18n.t("settings.settings_nav.self_hosting_label"), path: :settings_hosting_path, condition: :self_hosted? },
+    { name: "Account", path: :settings_profile_path },
+    { name: "Preferences", path: :settings_preferences_path },
+    { name: "Security", path: :settings_security_path },
+    { name: "Self hosting", path: :settings_hosting_path, condition: :self_hosted? },
     { name: "API Key", path: :settings_api_key_path },
-    { name: I18n.t("settings.settings_nav.billing_label"), path: :settings_billing_path, condition: :not_self_hosted? },
-    { name: I18n.t("settings.settings_nav.accounts_label"), path: :accounts_path },
-    { name: I18n.t("settings.settings_nav.imports_label"), path: :imports_path },
-    { name: I18n.t("settings.settings_nav.tags_label"), path: :tags_path },
-    { name: I18n.t("settings.settings_nav.categories_label"), path: :categories_path },
+    { name: "Billing", path: :settings_billing_path, condition: :not_self_hosted? },
+    { name: "Accounts", path: :accounts_path },
+    { name: "Imports", path: :imports_path },
+    { name: "Tags", path: :tags_path },
+    { name: "Categories", path: :categories_path },
     { name: "Rules", path: :rules_path },
-    { name: I18n.t("settings.settings_nav.merchants_label"), path: :family_merchants_path },
-    { name: I18n.t("settings.settings_nav.whats_new_label"), path: :changelog_path },
-    { name: I18n.t("settings.settings_nav.feedback_label"), path: :feedback_path }
+    { name: "Merchants", path: :family_merchants_path },
+    { name: "What's new", path: :changelog_path },
+    { name: "Feedback", path: :feedback_path }
   ]
 
   def adjacent_setting(current_path, offset)
