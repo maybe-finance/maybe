@@ -1,0 +1,50 @@
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: "Enter property manually") %>
+  <% dialog.with_body do %>
+    <div class="flex gap-4 pb-4">
+      <!-- Left sidebar with tabs -->
+      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
+        <%= link_to edit_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Overview
+        <% end %>
+
+        <%= link_to value_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg bg-surface-inset text-sm font-medium text-primary" do %>
+          Value
+        <% end %>
+
+        <%= link_to address_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Address
+        <% end %>
+      </div>
+
+      <!-- Right content area with form -->
+      <div class="flex-1">
+        <%= styled_form_with model: @account, url: update_value_property_path(@account), method: :patch, local: true do |form| %>
+          <div class="flex flex-col gap-4 min-h-[320px]">
+            <%= form.select :currency,
+                Money::Currency.as_options.map(&:iso_code),
+                { selected: @account.currency, label: "Currency" } %>
+
+            <%= form.money_field :balance,
+                label: "Estimated current value",
+                placeholder: "0" %>
+          </div>
+
+          <!-- Next button -->
+          <div class="flex justify-end mt-4">
+            <%= render ButtonComponent.new(
+              text: "Next",
+              variant: "primary",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

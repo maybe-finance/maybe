@@ -166,7 +166,17 @@ Rails.application.routes.draw do
 
   resources :depositories, except: :index
   resources :investments, except: :index
-  resources :properties, except: :index
+  resources :properties, except: :index do
+    member do
+      # Tab routes
+      get :value
+      get :address
+
+      # Update routes for each tab
+      patch :update_value
+      patch :update_address
+    end
+  end
   resources :vehicles, except: :index
   resources :credit_cards, except: :index
   resources :loans, except: :index

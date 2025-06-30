@@ -1,6 +1,71 @@
 <%= render DialogComponent.new do |dialog| %>
-  <% dialog.with_header(title: t(".edit", account: @account.name)) %>
+  <% dialog.with_header(title: "Enter property manually") %>
   <% dialog.with_body do %>
-    <%= render "form", account: @account, url: property_path(@account) %>
+    <div class="flex gap-4">
+      <!-- Left sidebar with tabs -->
+      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
+        <%= link_to edit_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg bg-surface-inset text-sm font-medium text-primary" do %>
+          Overview
+        <% end %>
+
+        <%= link_to value_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Value
+        <% end %>
+
+        <%= link_to address_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Address
+        <% end %>
+      </div>
+
+      <!-- Right content area with form -->
+      <div class="flex-1">
+        <%= styled_form_with model: @account, url: property_path(@account), method: :patch, local: true do |form| %>
+          <div class="flex flex-col gap-4 min-h-[320px]">
+            <%= form.text_field :name,
+                label: "Name",
+                placeholder: "Vacation home",
+                required: true %>
+
+            <%= form.select :subtype,
+                Property::SUBTYPES.map { |k, v| [v[:long], k] },
+                { prompt: "Select type", label: "Property type", required: true } %>
+
+            <%= form.fields_for :accountable do |property_form| %>
+              <div class="flex items-center gap-2">
+                <%= property_form.number_field :year_built,
+                      label: "Year Built",
+                      placeholder: "1990",
+                      min: 1800,
+                      max: Time.current.year %>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <%= property_form.number_field :area_value,
+                      label: "Area",
+                      placeholder: "1200",
+                      min: 0 %>
+                <%= property_form.select :area_unit,
+                      [["Square Feet", "sqft"], ["Square Meters", "sqm"]],
+                      { label: "Area Unit" } %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Save button -->
+          <div class="flex justify-end mt-4">
+            <%= render ButtonComponent.new(
+              text: "Save",
+              variant: "primary",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 <% end %>

@@ -1,0 +1,68 @@
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: "Enter property manually") %>
+  <% dialog.with_body do %>
+    <div class="flex gap-4 pb-4">
+      <!-- Left sidebar with tabs -->
+      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
+        <%= link_to edit_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Overview
+        <% end %>
+
+        <%= link_to value_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-surface-inset-hover" do %>
+          Value
+        <% end %>
+
+        <%= link_to address_property_path(@account),
+            data: { turbo_frame: :modal },
+            class: "flex items-center px-3 py-2 rounded-lg bg-surface-inset text-sm font-medium text-primary" do %>
+          Address
+        <% end %>
+      </div>
+
+      <!-- Right content area with form -->
+      <div class="flex-1">
+        <%= styled_form_with model: @account, url: update_address_property_path(@account), method: :patch, data: { turbo_frame: :_top } do |form| %>
+          <div class="flex flex-col gap-4 min-h-[320px]">
+            <%= form.fields_for :accountable do |property_form| %>
+              <%= property_form.fields_for :address do |address_form| %>
+                <%= address_form.text_field :line1,
+                    label: "Address Line 1",
+                    placeholder: "123 Main Street" %>
+
+                <div class="flex items-center gap-2">
+                  <%= address_form.text_field :locality,
+                      label: "City",
+                      placeholder: "San Francisco" %>
+                  <%= address_form.text_field :region,
+                      label: "State/Region",
+                      placeholder: "CA" %>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <%= address_form.text_field :postal_code,
+                      label: "Postal Code",
+                      placeholder: "12345" %>
+                  <%= address_form.text_field :country,
+                      label: "Country",
+                      placeholder: "USA" %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+
+          <!-- Save button -->
+          <div class="flex justify-end mt-4">
+            <%= render ButtonComponent.new(
+              text: "Save",
+              variant: "primary",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
