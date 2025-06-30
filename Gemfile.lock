@@ -273,7 +273,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.12.2)
-    jwt (2.10.1)
+    jwt (2.10.2)
       base64
     language_server-protocol (3.17.0.5)
     launchy (3.1.1)
