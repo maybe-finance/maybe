@@ -27,6 +27,23 @@ module ExchangeRate::Provided
       rate
     end
 
+    def fetch_rate(from:, to:, date: Date.current, cache: true)
+      return nil unless provider.present? # No provider configured (some self-hosted apps)
+
+      response = provider.fetch_exchange_rate(from: from, to: to, date: date)
+
+      return nil unless response.success? # Provider error
+
+      rate = response.data
+      ExchangeRate.find_or_create_by!(
+        from_currency: rate.from,
+        to_currency: rate.to,
+        date: rate.date,
+        rate: rate.rate
+      ) if cache
+      rate
+    end
+
     # @return [Integer] The number of exchange rates synced
     def import_provider_rates(from:, to:, start_date:, end_date:, clear_cache: false)
       unless provider.present?
