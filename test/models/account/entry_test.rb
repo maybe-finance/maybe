@@ -73,7 +73,7 @@ class EntryTest < ActiveSupport::TestCase
     inactive_transaction = create_transaction(account: accounts(:credit_card), name: "Inactive transaction")
 
     # Update account statuses
-    accounts(:credit_card).update!(is_active: false)
+    accounts(:credit_card).disable!
 
     # Test the scope
     active_entries = Entry.active

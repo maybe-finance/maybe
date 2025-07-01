@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   include Syncable, Monetizable, Chartable, Linkable, Enrichable
+  include AASM
 
   validates :name, :balance, :currency, presence: true
 
@@ -18,7 +19,7 @@ class Account < ApplicationRecord
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :active, -> { where(is_active: true) }
+  scope :active, -> { where(status: "active") }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
@@ -29,6 +30,30 @@ class Account < ApplicationRecord
   delegated_type :accountable, types: Accountable::TYPES, dependent: :destroy
 
   accepts_nested_attributes_for :accountable, update_only: true
+
+  # Account state machine
+  aasm column: :status, timestamps: true do
+    state :draft, initial: true
+    state :active
+    state :disabled
+    state :pending_deletion
+
+    event :activate do
+      transitions from: [:draft, :disabled], to: :active
+    end
+
+    event :disable do
+      transitions from: [:draft, :active], to: :disabled
+    end
+
+    event :enable do
+      transitions from: :disabled, to: :active
+    end
+
+    event :mark_for_deletion do
+      transitions from: [:draft, :active, :disabled], to: :pending_deletion
+    end
+  end
 
   class << self
     def create_and_sync(attributes)
@@ -77,8 +102,18 @@ class Account < ApplicationRecord
   end
 
   def destroy_later
-    update!(scheduled_for_deletion: true, is_active: false)
+    mark_for_deletion!
     DestroyJob.perform_later(self)
+  end
+
+  # Override destroy to handle error recovery for accounts
+  def destroy
+    super
+  rescue => e
+    # If destruction fails, transition back to disabled state
+    # This provides a cleaner recovery path than the generic scheduled_for_deletion flag
+    disable! if may_disable?
+    raise e
   end
 
   def current_holdings

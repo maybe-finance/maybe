@@ -22,7 +22,7 @@ class Assistant::Function::GetAccounts < Assistant::Function
           type: account.accountable_type,
           start_date: account.start_date,
           is_plaid_linked: account.plaid_account_id.present?,
-          is_active: account.is_active,
+          status: account.status,
           historical_balances: historical_balances(account)
         }
       end

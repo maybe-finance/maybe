@@ -74,7 +74,7 @@ module AccountableResource
 
     def account_params
       params.require(:account).permit(
-        :name, :is_active, :balance, :subtype, :currency, :accountable_type, :return_to,
+        :name, :balance, :subtype, :currency, :accountable_type, :return_to,
         accountable_attributes: self.class.permitted_accountable_attributes
       )
     end

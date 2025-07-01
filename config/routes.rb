@@ -152,6 +152,7 @@ Rails.application.routes.draw do
       post :sync
       get :chart
       get :sparkline
+      patch :toggle_active
     end
   end
 

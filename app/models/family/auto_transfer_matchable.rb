@@ -30,8 +30,8 @@ module Family::AutoTransferMatchable
       .joins("JOIN accounts inflow_accounts ON inflow_accounts.id = inflow_candidates.account_id")
       .joins("JOIN accounts outflow_accounts ON outflow_accounts.id = outflow_candidates.account_id")
       .where("inflow_accounts.family_id = ? AND outflow_accounts.family_id = ?", self.id, self.id)
-      .where("inflow_accounts.is_active = true")
-      .where("outflow_accounts.is_active = true")
+      .where("inflow_accounts.status = 'active'")
+      .where("outflow_accounts.status = 'active'")
       .where("inflow_candidates.entryable_type = 'Transaction' AND outflow_candidates.entryable_type = 'Transaction'")
       .where("
         (

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_23_162207) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_01_161640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_23_162207) do
     t.boolean "scheduled_for_deletion", default: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
+    t.string "status", default: "draft"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"
