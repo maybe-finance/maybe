@@ -1,62 +1,85 @@
 <%# locals: (form:, amount_method:, currency_method:, **options) %>
 
 <% currency_value = if options[:currency_value_override].present?
-                      options[:currency_value_override]
-                    elsif form.object && form.object.respond_to?(currency_method)
-                      form.object.public_send(currency_method)
-                    end
+                     options[:currency_value_override]
+                   elsif form.object && form.object.respond_to?(currency_method)
+                     form.object.public_send(currency_method)
+                   end
    currency = Money::Currency.new(currency_value || options[:default_currency] || "USD") %>
 
-<div class="form-field pr-0 <%= options[:container_class] %>" data-controller="money-field">
-  <%= form.label options[:label] || t(".label"), class: "form-field__label" do %>
-    <%= options[:label] || t(".label") %>
-    <% if options[:required] %>
-      <span class="text-red-500">*</span>
-    <% end %>
-  <% end %>
-
-  <div class="flex items-center gap-1">
-    <div class="flex items-center grow gap-1">
-      <span class="text-subdued text-sm" data-money-field-target="symbol">
-        <%= currency.symbol %>
-      </span>
-
-      <%= form.number_field amount_method,
-        class: "form-field__input",
-        inline: true,
-        placeholder: "100",
-        value: if options[:value]
-          sprintf("%.#{currency.default_precision}f", options[:value])
-        elsif form.object && form.object.respond_to?(amount_method)
-          val = form.object.public_send(amount_method)
-          sprintf("%.#{currency.default_precision}f", val) if val.present?
-        end,
-        min: options[:min] || -99999999999999,
-        max: options[:max] || 99999999999999,
-        step: currency.step,
-        disabled: options[:disabled],
-        data: {
-          "money-field-target": "amount",
-          "auto-submit-form-target": ("auto" if options[:auto_submit])
-        }.compact,
-        required: options[:required] %>
-    </div>
-
-    <% unless options[:hide_currency] %>
-      <div>
-        <%= form.select currency_method,
-                      Money::Currency.as_options.map(&:iso_code),
-                      { inline: true, selected: currency.iso_code },
-                      {
-                        class: "w-fit pr-5 disabled:text-subdued form-field__input",
-                        disabled: options[:disable_currency],
-                        data: {
-                          "money-field-target": "currency",
-                          action: "change->money-field#handleCurrencyChange",
-                          "auto-submit-form-target": ("auto" if options[:auto_submit])
-                        }.compact
-                      } %>
+<div class="form-field <%= options[:container_class] %>" data-controller="money-field">
+  <% if options[:label_tooltip] %>
+    <div class="form-field__header">
+      <%= form.label options[:label] || t(".label"), class: "form-field__label" do %>
+        <%= options[:label] || t(".label") %>
+        <% if options[:required] %>
+          <span class="text-red-500 ml-0.5">*</span>
+        <% end %>
+      <% end %>
+      <div class="form-field__actions">
+        <div data-controller="tooltip">
+          <%= icon "help-circle", size: "sm", color: "default", class: "cursor-help" %>
+          <div role="tooltip" data-tooltip-target="tooltip" class="tooltip bg-gray-700 text-sm p-2 rounded w-64 text-white">
+            <%= options[:label_tooltip] %>
+          </div>
+        </div>
       </div>
+    </div>
+  <% end %>
+  
+  <div class="form-field__body">
+    <% unless options[:label_tooltip] %>
+      <%= form.label options[:label] || t(".label"), class: "form-field__label" do %>
+        <%= options[:label] || t(".label") %>
+        <% if options[:required] %>
+          <span class="text-red-500 ml-0.5">*</span>
+        <% end %>
+      <% end %>
     <% end %>
+    
+    <div class="flex items-center gap-1">
+      <div class="flex items-center grow gap-1">
+        <span class="text-subdued text-sm" data-money-field-target="symbol">
+          <%= currency.symbol %>
+        </span>
+
+        <%= form.number_field amount_method,
+          class: "form-field__input",
+          inline: true,
+          placeholder: "100",
+          value: if options[:value]
+            sprintf("%.#{currency.default_precision}f", options[:value])
+          elsif form.object && form.object.respond_to?(amount_method)
+            val = form.object.public_send(amount_method)
+            sprintf("%.#{currency.default_precision}f", val) if val.present?
+          end,
+          min: options[:min] || -99999999999999,
+          max: options[:max] || 99999999999999,
+          step: currency.step,
+          disabled: options[:disabled],
+          data: {
+            "money-field-target": "amount",
+            "auto-submit-form-target": ("auto" if options[:auto_submit])
+          }.compact,
+          required: options[:required] %>
+      </div>
+
+      <% unless options[:hide_currency] %>
+        <div>
+          <%= form.select currency_method,
+                        Money::Currency.as_options.map(&:iso_code),
+                        { inline: true, selected: currency.iso_code },
+                        {
+                          class: "w-fit pr-5 disabled:text-subdued form-field__input",
+                          disabled: options[:disable_currency],
+                          data: {
+                            "money-field-target": "currency",
+                            action: "change->money-field#handleCurrencyChange",
+                            "auto-submit-form-target": ("auto" if options[:auto_submit])
+                          }.compact
+                        } %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

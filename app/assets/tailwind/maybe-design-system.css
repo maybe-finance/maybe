@@ -334,6 +334,19 @@
     }
   }
 
+  /* New form field structure components */
+  .form-field__header {
+    @apply flex items-center justify-between gap-2;
+  }
+
+  .form-field__body {
+    @apply flex flex-col gap-1;
+  }
+
+  .form-field__actions {
+    @apply flex items-center gap-1;
+  }
+
   .form-field__label {
     @apply block text-xs text-secondary peer-disabled:text-subdued;
   }
@@ -347,16 +360,20 @@
     @apply transition-opacity duration-300;
     @apply placeholder:text-subdued;
 
-    &select {
-      @apply pr-8;
-    }
-
     @variant theme-dark {
       &::-webkit-calendar-picker-indicator {
         filter: invert(1);
         cursor: pointer;
       }
     }
+  }
+  
+  select.form-field__input {
+    @apply pr-10 appearance-none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right -0.15rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem 1.25rem;
   }
 
   .form-field__radio {
@@ -425,7 +442,5 @@
     @variant theme-dark {
       fill: var(--color-white);
     }
-
   }
 }
-
