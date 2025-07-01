@@ -18,7 +18,7 @@
     <%= form_with url: user_path(Current.user), method: :patch, class: "w-full", data: { turbo: false } do |form| %>
       <%= form.hidden_field "user[ai_enabled]", value: true %>
       <%= form.hidden_field "user[redirect_to]", value: "home" %>
-      <%= form.submit "Enable Maybe AI", class: "cursor-pointer hover:bg-black w-full py-2 px-4 bg-gray-800 text-white rounded-lg text-sm font-medium" %>
+      <%= form.submit "Enable Maybe AI", class: "cursor-pointer hover:bg-inverse-hover w-full py-2 px-4 bg-inverse fg-inverse rounded-lg text-sm font-medium" %>
     <% end %>
   <% end %>
 
