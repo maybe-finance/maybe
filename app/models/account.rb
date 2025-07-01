@@ -39,11 +39,11 @@ class Account < ApplicationRecord
     state :pending_deletion
 
     event :activate do
-      transitions from: [:draft, :disabled], to: :active
+      transitions from: [ :draft, :disabled ], to: :active
     end
 
     event :disable do
-      transitions from: [:draft, :active], to: :disabled
+      transitions from: [ :draft, :active ], to: :disabled
     end
 
     event :enable do
@@ -51,7 +51,7 @@ class Account < ApplicationRecord
     end
 
     event :mark_for_deletion do
-      transitions from: [:draft, :active, :disabled], to: :pending_deletion
+      transitions from: [ :draft, :active, :disabled ], to: :pending_deletion
     end
   end
 

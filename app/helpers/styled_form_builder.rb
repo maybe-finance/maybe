@@ -6,7 +6,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
       def #{selector}(method, options = {})
         form_options = options.slice(:label, :label_tooltip, :inline, :container_class, :required)
         html_options = options.except(:label, :label_tooltip, :inline, :container_class)
-        
+      #{'  '}
         build_field(method, form_options, html_options) do |merged_options|
           super(method, merged_options)
         end
@@ -21,7 +21,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
 
   def select(method, choices, options = {}, html_options = {})
     field_options = normalize_options(options, html_options)
-    
+
     build_field(method, field_options, html_options) do |merged_html_options|
       super(method, choices, options, merged_html_options)
     end
@@ -29,7 +29,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
     field_options = normalize_options(options, html_options)
-    
+
     build_field(method, field_options, html_options) do |merged_html_options|
       super(method, collection, value_method, text_method, options, merged_html_options)
     end
@@ -84,8 +84,8 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
       label_element = build_label(method, options)
       field_element = yield({ class: "form-field__input" }.merge(html_options))
 
-      container_classes = ["form-field", options[:container_class]].compact
-      
+      container_classes = [ "form-field", options[:container_class] ].compact
+
       @template.tag.div class: container_classes do
         if options[:label_tooltip]
           @template.tag.div(class: "form-field__header") do
