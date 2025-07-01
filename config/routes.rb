@@ -108,14 +108,6 @@ Rails.application.routes.draw do
     resources :mappings, only: :update, module: :import
   end
 
-  resources :accounts, only: %i[index new], shallow: true do
-    member do
-      post :sync
-      get :chart
-      get :sparkline
-    end
-  end
-
   resources :holdings, only: %i[index new show destroy]
   resources :trades, only: %i[show new create update destroy]
   resources :valuations, only: %i[show new create update destroy]
@@ -155,11 +147,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :accounts, only: %i[index new], shallow: true do
+    member do
+      post :sync
+      get :chart
+      get :sparkline
+    end
+  end
+
   # Convenience routes for polymorphic paths
   # Example: account_path(Account.new(accountable: Depository.new)) => /depositories/123
   direct :account do |model, options|
     route_for model.accountable_name, model, options
   end
+
   direct :edit_account do |model, options|
     route_for "edit_#{model.accountable_name}", model, options
   end
@@ -168,12 +169,10 @@ Rails.application.routes.draw do
   resources :investments, except: :index
   resources :properties, except: :index do
     member do
-      # Tab routes
-      get :value
-      get :address
+      get :balances
+      patch :update_balances
 
-      # Update routes for each tab
-      patch :update_value
+      get :address
       patch :update_address
     end
   end

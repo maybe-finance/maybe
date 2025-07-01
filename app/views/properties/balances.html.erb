@@ -2,25 +2,28 @@
   <% dialog.with_header(title: "Enter property manually") %>
   <% dialog.with_body do %>
     <div class="flex gap-4">
-      <!-- Left sidebar with tabs -->
       <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
-        <%= render "properties/form_tab", label: "Overview", active: true %>
-        <%= render "properties/form_tab", label: "Value", href: balances_property_path(@account) %>
+        <%= render "properties/form_tab", label: "Overview", href: edit_property_path(@account) %>
+        <%= render "properties/form_tab", label: "Value", active: true %>
         <%= render "properties/form_tab", label: "Address", href: address_property_path(@account) %>
       </div>
 
       <!-- Right content area with form -->
       <div class="flex-1">
-        <%= styled_form_with model: @account, url: property_path(@account), method: :patch do |form| %>
-          <div class="min-h-[320px]">
+        <%= styled_form_with model: @account, url: update_balances_property_path(@account), method: :patch do |form| %>
+          <div class="flex flex-col gap-4 min-h-[320px]">
             <%= render "properties/form_alert", notice: @success_message, error: @error_message %>
-            <%= render "properties/overview_fields", form: form %>
+
+            <%= form.money_field :balance,
+                label: "Estimated market value",
+                label_tooltip: "The estimated market value of your property. This number can often be found on sites like Zillow or Redfin, and is never an exact number.",
+                placeholder: "0" %>
           </div>
 
-          <!-- Save button -->
+          <!-- Next button -->
           <div class="flex justify-end mt-4">
             <%= render ButtonComponent.new(
-              text: "Save",
+              text: "Next",
               variant: "primary",
             ) %>
           </div>

@@ -1,0 +1,16 @@
+<%# locals: (label:, href: nil, active: false) %>
+
+<% classes = class_names(
+  "flex items-center px-3 py-2 rounded-lg text-sm font-medium",
+  active ? "bg-surface-inset text-primary" : "text-secondary",
+) %>
+
+<% if href.present? %>
+  <%= link_to href, data: { turbo_frame: :modal }, class: class_names(classes, "cursor-pointer hover:bg-surface-inset-hover hover:text-primary") do %>
+    <%= label %>
+  <% end %>
+<% else %>
+  <%= tag.span class: classes do %>
+    <%= label %>
+  <% end %>
+<% end %>
