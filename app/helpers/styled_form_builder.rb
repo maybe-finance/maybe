@@ -6,7 +6,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
       def #{selector}(method, options = {})
         form_options = options.slice(:label, :label_tooltip, :inline, :container_class, :required)
         html_options = options.except(:label, :label_tooltip, :inline, :container_class)
-      #{'  '}
+
         build_field(method, form_options, html_options) do |merged_options|
           super(method, merged_options)
         end
