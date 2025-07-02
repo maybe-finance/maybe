@@ -19,7 +19,7 @@ class Account < ApplicationRecord
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :visible, -> { where(status: ["draft", "active"]) }
+  scope :visible, -> { where(status: [ "draft", "active" ]) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
@@ -127,53 +127,9 @@ class Account < ApplicationRecord
             .order(amount: :desc)
   end
 
-  def update_with_sync!(attributes)
-    should_update_balance = attributes[:balance] && attributes[:balance].to_d != balance
 
-    initial_balance = attributes.dig(:accountable_attributes, :initial_balance)
-    should_update_initial_balance = initial_balance && initial_balance.to_d != accountable.initial_balance
-
-    transaction do
-      update!(attributes)
-      update_balance!(attributes[:balance]) if should_update_balance
-      update_inital_balance!(attributes[:accountable_attributes][:initial_balance]) if should_update_initial_balance
-    end
-
-    sync_later
-  end
-
-  def update_balance!(balance)
-    valuation = entries.valuations.find_by(date: Date.current)
-
-    if valuation
-      valuation.update! amount: balance
-    else
-      entries.create! \
-        date: Date.current,
-        name: "Balance update",
-        amount: balance,
-        currency: currency,
-        entryable: Valuation.new
-    end
-  end
-
-  def update_inital_balance!(initial_balance)
-    valuation = first_valuation
-
-    if valuation
-      valuation.update! amount: initial_balance
-    else
-      entries.create! \
-        date: Date.current,
-        name: "Initial Balance",
-        amount: initial_balance,
-        currency: currency,
-        entryable: Valuation.new
-    end
-  end
-
-  def update_balance(balance:, date: Date.current, currency: nilt)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:).update
+  def update_balance(balance:, date: Date.current, currency: nil, notes: nil)
+    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:).update
   end
 
   def start_date

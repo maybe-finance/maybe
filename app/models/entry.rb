@@ -15,7 +15,7 @@ class Entry < ApplicationRecord
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
   scope :visible, -> {
-    joins(:account).where(accounts: { status: ["draft", "active"] })
+    joins(:account).where(accounts: { status: [ "draft", "active" ] })
   }
 
   scope :chronological, -> {

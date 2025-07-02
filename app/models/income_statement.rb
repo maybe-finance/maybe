@@ -62,7 +62,7 @@ class IncomeStatement
     end
 
     def build_period_total(classification:, period:)
-      totals = totals_query(transactions_scope: family.transactions.active.in_period(period)).select { |t| t.classification == classification }
+      totals = totals_query(transactions_scope: family.transactions.visible.in_period(period)).select { |t| t.classification == classification }
       classification_total = totals.sum(&:total)
 
       uncategorized_category = family.categories.uncategorized
