@@ -12,9 +12,15 @@ class AddAccountStatus < ActiveRecord::Migration[7.2]
         ELSE 'draft'
       END
     SQL
+
+    remove_column :accounts, :is_active
+    remove_column :accounts, :scheduled_for_deletion
   end
 
   def down
+    add_column :accounts, :is_active, :boolean, default: true, null: false
+    add_column :accounts, :scheduled_for_deletion, :boolean, default: false
+
     # Restore the original boolean fields based on status
     execute <<-SQL
       UPDATE accounts

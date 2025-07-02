@@ -29,11 +29,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_01_161640) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
-    t.boolean "is_active", default: true, null: false
     t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
-    t.boolean "scheduled_for_deletion", default: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
     t.string "status", default: "active"
