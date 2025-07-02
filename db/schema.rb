@@ -36,7 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_01_161640) do
     t.boolean "scheduled_for_deletion", default: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
     t.jsonb "locked_attributes", default: {}
-    t.string "status", default: "draft"
+    t.string "status", default: "active"
     t.index ["accountable_id", "accountable_type"], name: "index_accounts_on_accountable_id_and_accountable_type"
     t.index ["accountable_type"], name: "index_accounts_on_accountable_type"
     t.index ["family_id", "accountable_type"], name: "index_accounts_on_family_id_and_accountable_type"

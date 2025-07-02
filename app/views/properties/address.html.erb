@@ -3,11 +3,7 @@
   <% dialog.with_body do %>
     <div class="flex gap-4">
       <!-- Left sidebar with tabs -->
-      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
-        <%= render "properties/form_tab", label: "Overview", href: edit_property_path(@account) %>
-        <%= render "properties/form_tab", label: "Value", href: balances_property_path(@account) %>
-        <%= render "properties/form_tab", label: "Address", active: true %>
-      </div>
+      <%= render "properties/form_tabs", account: @account, active_tab: "address" %>
 
       <!-- Right content area with form -->
       <div class="flex-1">
@@ -42,17 +38,10 @@
 
           <!-- Save button -->
           <div class="flex justify-end mt-4">
-            <% if @property.address.persisted? %>
-              <%= render ButtonComponent.new(
-                text: "Save",
-                variant: "primary",
-              ) %>
-            <% else %>
-              <%= render ButtonComponent.new(
-                text: "Create property",
-                variant: "primary",
-              ) %>
-            <% end %>
+            <%= render ButtonComponent.new(
+              text: "Save",
+              variant: "primary",
+            ) %>
           </div>
         <% end %>
       </div>

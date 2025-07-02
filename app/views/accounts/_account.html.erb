@@ -30,7 +30,9 @@
       <% end %>
     </div>
     <div class="flex items-center gap-8">
-      <% if account.syncing? %>
+      <% if account.draft? %>
+        <!-- Balance hidden for draft accounts -->
+      <% elsif account.syncing? %>
         <div class="w-16 h-6 bg-loader rounded-full animate-pulse"></div>
       <% else %>
         <p class="text-sm font-medium <%= account.active? ? "text-primary" : "text-subdued" %>">
@@ -38,11 +40,21 @@
         </p>
       <% end %>
 
-      <% unless account.pending_deletion? %>
-        <%= button_to toggle_active_account_path(account), method: :patch, data: { turbo_frame: "_top" }, class: "inline-flex" do %>
-          <button type="submit" class="group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 <%= account.active? ? "bg-indigo-600" : "bg-gray-200" %>" role="switch" aria-checked="<%= account.active? %>">
-            <span class="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out <%= account.active? ? "translate-x-5" : "translate-x-0" %>"></span>
-          </button>
+      <% if account.draft? %>
+        <%= render LinkComponent.new(
+          text: "Complete setup",
+          href: edit_account_path(account, return_to: return_to),
+          variant: :outline,
+          frame: :modal
+        ) %>
+      <% elsif account.active? || account.disabled? %>
+        <%= form_with model: account, url: toggle_active_account_path(account), method: :patch, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
+          <%= render ToggleComponent.new(
+            id: "account_#{account.id}_active",
+            name: "active",
+            checked: account.active?,
+            data: { auto_submit_form_target: "auto" }
+          ) %>
         <% end %>
       <% end %>
     </div>

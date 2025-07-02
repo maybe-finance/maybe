@@ -81,7 +81,7 @@ class Transaction::Search
 
     def apply_active_accounts_filter(query, active_accounts_only_filter)
       if active_accounts_only_filter
-        query.where(accounts: { status: "active" })
+        query.where(accounts: { status: ["draft", "active"] })
       else
         query
       end

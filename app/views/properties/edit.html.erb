@@ -3,16 +3,12 @@
   <% dialog.with_body do %>
     <div class="flex gap-4">
       <!-- Left sidebar with tabs -->
-      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
-        <%= render "properties/form_tab", label: "Overview", active: true %>
-        <%= render "properties/form_tab", label: "Value", href: balances_property_path(@account) %>
-        <%= render "properties/form_tab", label: "Address", href: address_property_path(@account) %>
-      </div>
+      <%= render "properties/form_tabs", account: @account, active_tab: "overview" %>
 
       <!-- Right content area with form -->
       <div class="flex-1">
         <%= styled_form_with model: @account, url: property_path(@account), method: :patch do |form| %>
-          <div class="min-h-[320px]">
+          <div class="flex flex-col gap-2 min-h-[320px]">
             <%= render "properties/form_alert", notice: @success_message, error: @error_message %>
             <%= render "properties/overview_fields", form: form %>
           </div>
@@ -20,7 +16,7 @@
           <!-- Save button -->
           <div class="flex justify-end mt-4">
             <%= render ButtonComponent.new(
-              text: "Save",
+              text: @account.active? ? "Save" : "Next",
               variant: "primary",
             ) %>
           </div>

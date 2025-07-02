@@ -14,8 +14,8 @@ class Entry < ApplicationRecord
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { valuation? }
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
-  scope :active, -> {
-    joins(:account).where(accounts: { status: "active" })
+  scope :visible, -> {
+    joins(:account).where(accounts: { status: ["draft", "active"] })
   }
 
   scope :chronological, -> {

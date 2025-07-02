@@ -1,12 +1,7 @@
 class PropertiesController < ApplicationController
-  include AccountableResource
+  include AccountableResource, StreamExtensions
 
   before_action :set_property, only: [ :balances, :address, :update_balances, :update_address ]
-
-  permitted_accountable_attributes(
-    :id, :year_built, :area_unit, :area_value,
-    address_attributes: [ :line1, :line2, :locality, :region, :country, :postal_code ]
-  )
 
   def new
     @account = Current.family.accounts.build(accountable: Property.new)
@@ -14,7 +9,7 @@ class PropertiesController < ApplicationController
 
   def create
     @account = Current.family.accounts.create!(
-      property_params.merge(currency: Current.family.currency, balance: 0)
+      property_params.merge(currency: Current.family.currency, balance: 0, status: "draft")
     )
 
     redirect_to balances_property_path(@account)
@@ -23,7 +18,12 @@ class PropertiesController < ApplicationController
   def update
     if @account.update(property_params)
       @success_message = "Property details updated successfully."
-      render :edit
+
+      if @account.active?
+        render :edit
+      else
+        redirect_to balances_property_path(@account)
+      end
     else
       @error_message = "Unable to update property details."
       render :edit, status: :unprocessable_entity
@@ -37,10 +37,20 @@ class PropertiesController < ApplicationController
   end
 
   def update_balances
-    safe_params = params.require(:account).permit(:balance, :currency)
-    @account.update!(safe_params)
+    result = @account.update_balance(balance: balance_params[:balance], currency: balance_params[:currency])
 
-    redirect_to address_property_path(@account)
+    if result.success?
+      @success_message = result.updated? ? "Balance updated successfully." : "No changes made. Account is already up to date."
+
+      if @account.active?
+        render :balances
+      else
+        redirect_to address_property_path(@account)
+      end
+    else
+      @error_message = result.error_message
+      render :balances, status: :unprocessable_entity
+    end
   end
 
   def address
@@ -50,8 +60,17 @@ class PropertiesController < ApplicationController
 
   def update_address
     if @account.property.update(address_params)
-      @success_message = "Address updated successfully."
-      render :address
+      if @account.draft?
+        @account.activate!
+
+        respond_to do |format|
+          format.html { redirect_to account_path(@account) }
+          format.turbo_stream { stream_redirect_to account_path(@account) }
+        end
+      else
+        @success_message = "Address updated successfully."
+        render :address
+      end
     else
       @error_message = "Unable to update address. Please check the required fields."
       render :address, status: :unprocessable_entity
@@ -59,6 +78,10 @@ class PropertiesController < ApplicationController
   end
 
   private
+    def balance_params
+      params.require(:account).permit(:balance, :currency)
+    end
+
     def address_params
       params.require(:property)
             .permit(address_attributes: [ :line1, :line2, :locality, :region, :country, :postal_code ])

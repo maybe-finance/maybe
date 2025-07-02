@@ -1,6 +1,6 @@
 class AddAccountStatus < ActiveRecord::Migration[7.2]
   def up
-    add_column :accounts, :status, :string, default: "draft"
+    add_column :accounts, :status, :string, default: "active"
 
     # Migrate existing data
     execute <<-SQL

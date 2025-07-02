@@ -10,7 +10,7 @@ class IncomeStatement
   end
 
   def totals(transactions_scope: nil)
-    transactions_scope ||= family.transactions.active
+    transactions_scope ||= family.transactions.visible
 
     result = totals_query(transactions_scope: transactions_scope)
 

@@ -9,7 +9,7 @@ class Api::V1::AccountsController < Api::V1::BaseController
   def index
     # Test with Pagy pagination
     family = current_resource_owner.family
-    accounts_query = family.accounts.active.alphabetically
+    accounts_query = family.accounts.visible.alphabetically
 
     # Handle pagination with Pagy
     @pagy, @accounts = pagy(

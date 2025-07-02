@@ -8,7 +8,7 @@ class AlertComponent < ViewComponent::Base
     attr_reader :message, :variant
 
     def container_classes
-      base_classes = "flex items-center gap-3 p-4 rounded-lg border"
+      base_classes = "flex items-start gap-3 p-4 rounded-lg border"
 
       variant_classes = case variant
       when :info

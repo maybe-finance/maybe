@@ -2,11 +2,7 @@
   <% dialog.with_header(title: "Enter property manually") %>
   <% dialog.with_body do %>
     <div class="flex gap-4">
-      <div class="flex flex-col gap-0.5 w-[156px] shrink-0">
-        <%= render "properties/form_tab", label: "Overview", href: edit_property_path(@account) %>
-        <%= render "properties/form_tab", label: "Value", active: true %>
-        <%= render "properties/form_tab", label: "Address", href: address_property_path(@account) %>
-      </div>
+      <%= render "properties/form_tabs", account: @account, active_tab: "value" %>
 
       <!-- Right content area with form -->
       <div class="flex-1">
@@ -23,7 +19,7 @@
           <!-- Next button -->
           <div class="flex justify-end mt-4">
             <%= render ButtonComponent.new(
-              text: "Next",
+              text: @account.active? ? "Save" : "Next",
               variant: "primary",
             ) %>
           </div>

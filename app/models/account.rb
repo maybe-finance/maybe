@@ -19,7 +19,7 @@ class Account < ApplicationRecord
 
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
-  scope :active, -> { where(status: "active") }
+  scope :visible, -> { where(status: ["draft", "active"]) }
   scope :assets, -> { where(classification: "asset") }
   scope :liabilities, -> { where(classification: "liability") }
   scope :alphabetically, -> { order(:name) }
@@ -170,6 +170,10 @@ class Account < ApplicationRecord
         currency: currency,
         entryable: Valuation.new
     end
+  end
+
+  def update_balance(balance:, date: Date.current, currency: nilt)
+    Account::BalanceUpdater.new(self, balance:, currency:, date:).update
   end
 
   def start_date

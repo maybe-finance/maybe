@@ -12,11 +12,6 @@
               url: entry_path(entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.text_field :name,
-                label: t(".name_label"),
-                placeholder: t(".name_placeholder"),
-                "data-auto-submit-form-target": "auto" %>
-
           <%= f.date_field :date,
                 label: t(".date_label"),
                 max: Date.current,
