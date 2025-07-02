@@ -1,30 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Dangerous Eval",
-      "warning_code": 13,
-      "fingerprint": "2e922b984de4f804bbedc714b9f33ded46f26b5e8ee7510fcc66a2be5151855c",
-      "check_name": "Evaluation",
-      "message": "Dynamic string evaluated as code",
-      "file": "app/helpers/styled_form_builder.rb",
-      "line": 5,
-      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "class_eval(\"      def #{selector}(method, options = {})\\n        form_options = options.slice(:label, :label_tooltip, :inline, :container_class, :required)\\n        html_options = options.except(:label, :label_tooltip, :inline, :container_class)\\n        \\n        build_field(method, form_options, html_options) do |merged_options|\\n          super(method, merged_options)\\n        end\\n      end\\n\", \"app/helpers/styled_form_builder.rb\", (5 + 1))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "StyledFormBuilder",
-        "method": null
-      },
-      "user_input": null,
-      "confidence": "Weak",
-      "cwe_id": [
-        913,
-        95
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "85e2c11853dd6c69b1953a6ec3ad661cd0ce3df55e4e5beff92365b6ed601171",
@@ -69,6 +45,30 @@
         915
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "c154514a0f86341473e4abf35e77721495b326c7855e4967d284b4942371819c",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/helpers/styled_form_builder.rb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "class_eval(\"      def #{selector}(method, options = {})\\n        form_options = options.slice(:label, :label_tooltip, :inline, :container_class, :required)\\n        html_options = options.except(:label, :label_tooltip, :inline, :container_class)\\n\\n        build_field(method, form_options, html_options) do |merged_options|\\n          super(method, merged_options)\\n        end\\n      end\\n\", \"app/helpers/styled_form_builder.rb\", (5 + 1))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StyledFormBuilder",
+        "method": null
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ],
+      "note": "Uses similar pattern to Rails internal form builder"
     },
     {
       "warning_type": "Dynamic Render Path",
