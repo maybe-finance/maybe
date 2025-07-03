@@ -100,7 +100,8 @@ class Family < ApplicationRecord
     [
       id,
       key,
-      data_invalidation_key
+      data_invalidation_key,
+      accounts.maximum(:updated_at)
     ].compact.join("_")
   end
 

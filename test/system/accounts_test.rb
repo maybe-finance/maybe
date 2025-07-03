@@ -23,15 +23,40 @@ class AccountsTest < ApplicationSystemTestCase
   end
 
   test "can create property account" do
-    assert_account_created "Property" do
-      fill_in "Year built", with: 2005
-      fill_in "Living area", with: 2250
-      fill_in "Street address", with: "123 Main St"
-      fill_in "City", with: "San Francisco"
-      fill_in "State/Province", with: "CA"
-      fill_in "ZIP/Postal code", with: "94101"
-      fill_in "Country", with: "US"
-    end
+    # Step 1: Select property type and enter basic details
+    click_link "Property"
+
+    account_name = "[system test] Property Account"
+    fill_in "Name*", with: account_name
+    select "Single Family Home", from: "Property type*"
+    fill_in "Year Built (optional)", with: 2005
+    fill_in "Area (optional)", with: 2250
+
+    click_button "Next"
+
+    # Step 2: Enter balance information
+    assert_text "Value"
+    fill_in "account[balance]", with: 500000
+    click_button "Next"
+
+    # Step 3: Enter address information
+    assert_text "Address"
+    fill_in "Address Line 1", with: "123 Main St"
+    fill_in "City", with: "San Francisco"
+    fill_in "State/Region", with: "CA"
+    fill_in "Postal Code", with: "94101"
+    fill_in "Country", with: "US"
+
+    click_button "Save"
+
+    # Verify account was created and is now active
+    assert_text account_name
+
+    created_account = Account.order(:created_at).last
+    assert_equal "active", created_account.status
+    assert_equal 500000, created_account.balance
+    assert_equal "123 Main St", created_account.property.address.line1
+    assert_equal "San Francisco", created_account.property.address.locality
   end
 
   test "can create vehicle account" do

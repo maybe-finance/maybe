@@ -1,6 +1,6 @@
 class Rule::Registry::TransactionResource < Rule::Registry
   def resource_scope
-    family.transactions.active.with_entry.where(entry: { date: rule.effective_date.. })
+    family.transactions.visible.with_entry.where(entry: { date: rule.effective_date.. })
   end
 
   def condition_filters

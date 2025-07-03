@@ -1,0 +1,7 @@
+<%# locals: (account:, active_tab:) %>
+
+<div class="flex flex-col gap-0.5 w-[156px] shrink-0">
+  <%= render "properties/form_tab", label: "Overview", href: account.new_record? ? nil : edit_property_path(@account), active: active_tab == "overview" %>
+  <%= render "properties/form_tab", label: "Value", href: account.new_record? ? nil : balances_property_path(@account), active: active_tab == "value" %>
+  <%= render "properties/form_tab", label: "Address", href: account.new_record? ? nil : address_property_path(@account), active: active_tab == "address" %>
+</div>

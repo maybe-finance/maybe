@@ -42,6 +42,14 @@ class Property < ApplicationRecord
     Trend.new(current: account.balance_money, previous: first_valuation_amount)
   end
 
+  def balance_display_name
+    "market value"
+  end
+
+  def opening_balance_display_name
+    "original purchase price"
+  end
+
   private
     def first_valuation_amount
       account.entries.valuations.order(:date).first&.amount_money || account.balance_money

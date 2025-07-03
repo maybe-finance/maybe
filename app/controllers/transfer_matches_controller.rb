@@ -2,7 +2,7 @@ class TransferMatchesController < ApplicationController
   before_action :set_entry
 
   def new
-    @accounts = Current.family.accounts.alphabetically.where.not(id: @entry.account_id)
+    @accounts = Current.family.accounts.visible.alphabetically.where.not(id: @entry.account_id)
     @transfer_match_candidates = @entry.transaction.transfer_match_candidates
   end
 

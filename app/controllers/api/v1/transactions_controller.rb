@@ -10,7 +10,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def index
     family = current_resource_owner.family
-    transactions_query = family.transactions.active
+    transactions_query = family.transactions.visible
 
     # Apply filters
     transactions_query = apply_filters(transactions_query)

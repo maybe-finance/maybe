@@ -56,7 +56,7 @@ class Assistant::Function
     end
 
     def family_account_names
-      @family_account_names ||= family.accounts.active.pluck(:name)
+      @family_account_names ||= family.accounts.visible.pluck(:name)
     end
 
     def family_category_names

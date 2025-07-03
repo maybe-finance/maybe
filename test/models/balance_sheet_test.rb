@@ -39,7 +39,7 @@ class BalanceSheetTest < ActiveSupport::TestCase
     create_account(balance: 10000, accountable: Depository.new)
 
     other_liability = create_account(balance: 5000, accountable: OtherLiability.new)
-    other_liability.update!(is_active: false)
+    other_liability.disable!
 
     assert_equal 10000 - 1000, BalanceSheet.new(@family).net_worth
     assert_equal 10000, BalanceSheet.new(@family).assets.total

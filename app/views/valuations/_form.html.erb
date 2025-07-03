@@ -1,10 +1,10 @@
-<%# locals: (entry:) %>
+<%# locals: (entry:, error_message:) %>
 
 <%= styled_form_with model: entry, url: valuations_path, class: "space-y-4" do |form| %>
   <%= form.hidden_field :account_id %>
 
-  <% if entry.errors.any? %>
-    <%= render "shared/form_errors", model: entry %>
+  <% if error_message.present? %>
+    <%= render AlertComponent.new(message: error_message, variant: :error) %>
   <% end %>
 
   <div class="space-y-3">

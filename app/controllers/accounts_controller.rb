@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[sync chart sparkline]
+  before_action :set_account, only: %i[sync chart sparkline toggle_active]
   include Periodable
 
   def index
@@ -31,6 +31,15 @@ class AccountsController < ApplicationController
       @sparkline_series = @account.sparkline_series
       render layout: false
     end
+  end
+
+  def toggle_active
+    if @account.active?
+      @account.disable!
+    elsif @account.disabled?
+      @account.enable!
+    end
+    redirect_to accounts_path
   end
 
   private

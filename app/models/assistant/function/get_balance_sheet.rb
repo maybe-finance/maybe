@@ -44,7 +44,7 @@ class Assistant::Function::GetBalanceSheet < Assistant::Function
 
   private
     def historical_data(period, classification: nil)
-      scope = family.accounts.active
+      scope = family.accounts.visible
       scope = scope.where(classification: classification) if classification.present?
 
       if period.start_date == Date.current

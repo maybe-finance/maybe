@@ -5,6 +5,7 @@ other_asset:
   currency: USD
   accountable_type: OtherAsset
   accountable: one
+  status: active
 
 other_liability:
   family: dylan_family
@@ -13,6 +14,7 @@ other_liability:
   currency: USD
   accountable_type: OtherLiability
   accountable: one
+  status: active
 
 depository:
   family: dylan_family
@@ -21,6 +23,7 @@ depository:
   currency: USD
   accountable_type: Depository
   accountable: one
+  status: active
 
 connected:
   family: dylan_family
@@ -31,6 +34,7 @@ connected:
   accountable_type: Depository
   accountable: two
   plaid_account: one
+  status: active
 
 credit_card:
   family: dylan_family
@@ -39,6 +43,7 @@ credit_card:
   currency: USD
   accountable_type: CreditCard
   accountable: one
+  status: active
 
 investment:
   family: dylan_family
@@ -48,6 +53,7 @@ investment:
   currency: USD
   accountable_type: Investment
   accountable: one
+  status: active
 
 loan:
   family: dylan_family
@@ -56,6 +62,7 @@ loan:
   currency: USD
   accountable_type: Loan
   accountable: one
+  status: active
 
 property:
   family: dylan_family
@@ -64,6 +71,7 @@ property:
   currency: USD
   accountable_type: Property
   accountable: one
+  status: active
 
 vehicle:
   family: dylan_family
@@ -72,6 +80,7 @@ vehicle:
   currency: USD
   accountable_type: Vehicle
   accountable: one
+  status: active
 
 crypto:
   family: dylan_family
@@ -80,3 +89,4 @@ crypto:
   currency: USD
   accountable_type: Crypto
   accountable: one
+  status: active

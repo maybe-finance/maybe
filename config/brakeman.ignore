@@ -3,6 +3,29 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
+      "fingerprint": "85e2c11853dd6c69b1953a6ec3ad661cd0ce3df55e4e5beff92365b6ed601171",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/api/v1/transactions_controller.rb",
+      "line": 255,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:transaction).permit(:account_id, :date, :amount, :name, :description, :notes, :currency, :category_id, :merchant_id, :nature, :tag_ids => ([]))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::V1::TransactionsController",
+        "method": "transaction_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": "account_id is properly validated in create action - line 79 ensures account belongs to user's family: family.accounts.find(transaction_params[:account_id])"
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
       "fingerprint": "aaccd8db0be34afdc88e5af08d91ae2e8b7765dfea2f3fc6e1c37db0adc7b991",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -26,13 +49,13 @@
     {
       "warning_type": "Dangerous Eval",
       "warning_code": 13,
-      "fingerprint": "c193307bb82f931950d3bf2855f82f9a7f50d94c5bd950ee2803cb8a8abe5253",
+      "fingerprint": "c154514a0f86341473e4abf35e77721495b326c7855e4967d284b4942371819c",
       "check_name": "Evaluation",
       "message": "Dynamic string evaluated as code",
       "file": "app/helpers/styled_form_builder.rb",
-      "line": 7,
+      "line": 5,
       "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "class_eval(\"      def #{selector}(method, options = {})\\n        merged_options = { class: \\\"form-field__input\\\" }.merge(options)\\n        label = build_label(method, options)\\n        field = super(method, merged_options)\\n\\n        build_styled_field(label, field, merged_options)\\n      end\\n\", \"app/helpers/styled_form_builder.rb\", (7 + 1))",
+      "code": "class_eval(\"      def #{selector}(method, options = {})\\n        form_options = options.slice(:label, :label_tooltip, :inline, :container_class, :required)\\n        html_options = options.except(:label, :label_tooltip, :inline, :container_class)\\n\\n        build_field(method, form_options, html_options) do |merged_options|\\n          super(method, merged_options)\\n        end\\n      end\\n\", \"app/helpers/styled_form_builder.rb\", (5 + 1))",
       "render_path": null,
       "location": {
         "type": "method",
@@ -45,7 +68,7 @@
         913,
         95
       ],
-      "note": "This is safe as 'selector' comes from a predefined list of Rails form helpers (StyledFormBuilder.text_field_helpers)."
+      "note": "Uses similar pattern to Rails internal form builder"
     },
     {
       "warning_type": "Dynamic Render Path",
@@ -80,29 +103,6 @@
         22
       ],
       "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "85e2c11853dd6c69b1953a6ec3ad661cd0ce3df55e4e5beff92365b6ed601171",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/api/v1/transactions_controller.rb",
-      "line": 255,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:transaction).permit(:account_id, :date, :amount, :name, :description, :notes, :currency, :category_id, :merchant_id, :nature, :tag_ids => ([]))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Api::V1::TransactionsController",
-        "method": "transaction_params"
-      },
-      "user_input": ":account_id",
-      "confidence": "High",
-      "cwe_id": [
-        915
-      ],
-      "note": "account_id is properly validated in create action - line 79 ensures account belongs to user's family: family.accounts.find(transaction_params[:account_id])"
     }
   ],
   "brakeman_version": "7.0.2"
