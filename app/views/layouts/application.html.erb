@@ -155,7 +155,7 @@
     <% end %>
 
     <%# MOBILE - Bottom Nav %>
-    <%= tag.nav class: "lg:hidden bg-surface shrink-0 z-10 pb-[env(safe-area-inset-bottom)] border-t border-tertiary flex justify-around" do %>
+    <%= tag.nav class: "lg:hidden bg-surface shrink-0 z-10 border-t border-tertiary flex justify-around" do %>
       <% mobile_nav_items.each do |nav_item| %>
         <%= render "layouts/shared/nav_item", **nav_item %>
       <% end %>
