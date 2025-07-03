@@ -58,7 +58,7 @@ class Account < ApplicationRecord
   class << self
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
-      account = new(attributes.merge(cash_balance: attributes[:balance], status: "active"))
+      account = new(attributes.merge(cash_balance: attributes[:balance]))
       initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
 
       transaction do
