@@ -1,6 +1,27 @@
 <%= render DialogComponent.new do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: "Enter property manually") %>
   <% dialog.with_body do %>
-    <%= render "properties/form", account: @account, url: properties_path(return_to: params[:return_to]) %>
+    <div class="flex gap-4">
+      <!-- Left sidebar with tabs -->
+      <%= render "properties/form_tabs", account: @account, active_tab: "overview" %>
+
+      <!-- Right content area with form -->
+      <div class="flex-1">
+        <%= styled_form_with model: @account, url: properties_path do |form| %>
+          <div class="flex flex-col gap-2 min-h-[320px]">
+            <%= render "properties/form_alert", notice: @success_message, error: @error_message %>
+            <%= render "properties/overview_fields", form: form %>
+          </div>
+
+          <!-- Create button -->
+          <div class="flex justify-end mt-4">
+            <%= render ButtonComponent.new(
+              text: "Next",
+              variant: "primary",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 <% end %>

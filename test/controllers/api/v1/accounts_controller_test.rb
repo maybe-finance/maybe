@@ -81,7 +81,7 @@ end
   test "should only return active accounts" do
     # Make one account inactive
     inactive_account = accounts(:depository)
-    inactive_account.update!(is_active: false)
+    inactive_account.disable!
 
     access_token = Doorkeeper::AccessToken.create!(
       application: @oauth_app,

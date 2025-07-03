@@ -43,9 +43,25 @@ module AccountableResource
   end
 
   def update
-    @account.update_with_sync!(account_params.except(:return_to))
-    @account.lock_saved_attributes!
+    # Handle balance update if provided
+    if account_params[:balance].present?
+      result = @account.update_balance(balance: account_params[:balance], currency: account_params[:currency])
+      unless result.success?
+        @error_message = result.error_message
+        render :edit, status: :unprocessable_entity
+        return
+      end
+    end
 
+    # Update remaining account attributes
+    update_params = account_params.except(:return_to, :balance, :currency)
+    unless @account.update(update_params)
+      @error_message = @account.errors.full_messages.join(", ")
+      render :edit, status: :unprocessable_entity
+      return
+    end
+
+    @account.lock_saved_attributes!
     redirect_back_or_to @account, notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
   end
 
@@ -74,7 +90,7 @@ module AccountableResource
 
     def account_params
       params.require(:account).permit(
-        :name, :is_active, :balance, :subtype, :currency, :accountable_type, :return_to,
+        :name, :balance, :subtype, :currency, :accountable_type, :return_to,
         accountable_attributes: self.class.permitted_accountable_attributes
       )
     end

@@ -89,7 +89,7 @@ class Family::AutoTransferMatchableTest < ActiveSupport::TestCase
   end
 
   test "does not consider inactive accounts when matching transfers" do
-    @depository.update!(is_active: false)
+    @depository.disable!
 
     outflow = create_transaction(date: Date.current, account: @depository, amount: 500)
     inflow = create_transaction(date: Date.current, account: @credit_card, amount: -500)

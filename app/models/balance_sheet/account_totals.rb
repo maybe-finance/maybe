@@ -23,8 +23,8 @@ class BalanceSheet::AccountTotals
       delegate_missing_to :account
     end
 
-    def active_accounts
-      @active_accounts ||= family.accounts.active.with_attached_logo
+    def visible_accounts
+      @visible_accounts ||= family.accounts.visible.with_attached_logo
     end
 
     def account_rows
@@ -46,7 +46,7 @@ class BalanceSheet::AccountTotals
 
     def query
       @query ||= Rails.cache.fetch(cache_key) do
-        active_accounts
+        visible_accounts
           .joins(ActiveRecord::Base.sanitize_sql_array([
             "LEFT JOIN exchange_rates ON exchange_rates.date = ? AND accounts.currency = exchange_rates.from_currency AND exchange_rates.to_currency = ?",
             Date.current,

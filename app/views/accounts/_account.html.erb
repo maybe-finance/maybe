@@ -6,7 +6,7 @@
       <%= render "accounts/logo", account: account, size: "md" %>
 
       <div>
-        <% if account.scheduled_for_deletion? %>
+        <% if account.pending_deletion? %>
           <p class="text-sm font-medium text-primary">
             <span>
               <%= account.name %>
@@ -16,31 +16,45 @@
             </span>
           </p>
         <% else %>
-          <%= link_to account.name, account, class: [(account.is_active ? "text-primary" : "text-subdued"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
+          <%= link_to account.name, account, class: [(account.active? ? "text-primary" : "text-subdued"), "text-sm font-medium hover:underline"], data: { turbo_frame: "_top" } %>
           <% if account.long_subtype_label %>
             <p class="text-sm text-secondary truncate"><%= account.long_subtype_label %></p>
           <% end %>
         <% end %>
       </div>
 
-      <% unless account.scheduled_for_deletion? %>
+      <% unless account.pending_deletion? %>
         <%= link_to edit_account_path(account, return_to: return_to), data: { turbo_frame: :modal }, class: "group-hover/account:flex hidden hover:opacity-80 items-center justify-center" do %>
           <%= icon("pencil-line", size: "sm") %>
         <% end %>
       <% end %>
     </div>
     <div class="flex items-center gap-8">
-      <% if account.syncing? %>
+      <% if account.draft? %>
+        <!-- Balance hidden for draft accounts -->
+      <% elsif account.syncing? %>
         <div class="w-16 h-6 bg-loader rounded-full animate-pulse"></div>
       <% else %>
-        <p class="text-sm font-medium <%= account.is_active ? "text-primary" : "text-subdued" %>">
+        <p class="text-sm font-medium <%= account.active? ? "text-primary" : "text-subdued" %>">
           <%= format_money account.balance_money %>
         </p>
       <% end %>
 
-      <% unless account.scheduled_for_deletion? %>
-        <%= styled_form_with model: account, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
-          <%= f.toggle :is_active, { data: { auto_submit_form_target: "auto" } } %>
+      <% if account.draft? %>
+        <%= render LinkComponent.new(
+          text: "Complete setup",
+          href: edit_account_path(account, return_to: return_to),
+          variant: :outline,
+          frame: :modal
+        ) %>
+      <% elsif account.active? || account.disabled? %>
+        <%= form_with model: account, url: toggle_active_account_path(account), method: :patch, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
+          <%= render ToggleComponent.new(
+            id: "account_#{account.id}_active",
+            name: "active",
+            checked: account.active?,
+            data: { auto_submit_form_target: "auto" }
+          ) %>
         <% end %>
       <% end %>
     </div>

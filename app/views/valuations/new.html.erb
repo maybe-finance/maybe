@@ -1,6 +1,6 @@
 <%= render DialogComponent.new do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <% dialog.with_body do %>
-    <%= render "form", entry: @entry %>
+    <%= render "form", entry: @entry, error_message: @error_message %>
   <% end %>
 <% end %>

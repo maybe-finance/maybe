@@ -6,17 +6,18 @@
   <% end %>
 
   <% dialog.with_body do %>
+    <% if @error_message.present? %>
+      <div class="mb-4">
+        <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+      </div>
+    <% end %>
+
     <% dialog.with_section(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
               url: entry_path(entry),
               class: "space-y-2",
               data: { controller: "auto-submit-form" } do |f| %>
-          <%= f.text_field :name,
-                label: t(".name_label"),
-                placeholder: t(".name_placeholder"),
-                "data-auto-submit-form-target": "auto" %>
-
           <%= f.date_field :date,
                 label: t(".date_label"),
                 max: Date.current,

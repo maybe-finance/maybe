@@ -1,30 +1,42 @@
 class ValuationsController < ApplicationController
-  include EntryableResource
+  include EntryableResource, StreamExtensions
 
   def create
     account = Current.family.accounts.find(params.dig(:entry, :account_id))
-    @entry = account.entries.new(entry_params.merge(entryable: Valuation.new))
 
-    if @entry.save
-      @entry.sync_account_later
+    result = account.update_balance(
+      balance: entry_params[:amount],
+      date: entry_params[:date],
+      currency: entry_params[:currency],
+      notes: entry_params[:notes]
+    )
 
-      flash[:notice] = "Balance created"
+    if result.success?
+      @success_message = result.updated? ? "Balance updated" : "No changes made. Account is already up to date."
 
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account) }
-        format.turbo_stream { stream_redirect_back_or_to(account_path(@entry.account)) }
+        format.html { redirect_back_or_to account_path(account), notice: @success_message }
+        format.turbo_stream { stream_redirect_back_or_to(account_path(account), notice: @success_message) }
       end
     else
+      @error_message = result.error_message
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    if @entry.update(entry_params)
-      @entry.sync_account_later
+    result = @entry.account.update_balance(
+      date: @entry.date,
+      balance: entry_params[:amount],
+      currency: entry_params[:currency],
+      notes: entry_params[:notes]
+    )
+
+    if result.success?
+      @entry.reload
 
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: "Balance updated" }
+        format.html { redirect_back_or_to account_path(@entry.account), notice: result.updated? ? "Balance updated" : "No changes made. Account is already up to date." }
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace(
@@ -37,6 +49,7 @@ class ValuationsController < ApplicationController
         end
       end
     else
+      @error_message = result.error_message
       render :show, status: :unprocessable_entity
     end
   end
@@ -44,6 +57,6 @@ class ValuationsController < ApplicationController
   private
     def entry_params
       params.require(:entry)
-            .permit(:name, :date, :amount, :currency, :notes)
+            .permit(:date, :amount, :currency, :notes)
     end
 end

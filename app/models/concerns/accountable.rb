@@ -72,6 +72,14 @@ module Accountable
     self.class.display_name
   end
 
+  def balance_display_name
+    "account value"
+  end
+
+  def opening_balance_display_name
+    "opening balance"
+  end
+
   def icon
     self.class.icon
   end

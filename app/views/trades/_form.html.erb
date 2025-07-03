@@ -45,7 +45,7 @@
       <% end %>
 
       <% if %w[deposit withdrawal].include?(type) %>
-        <%= form.collection_select :transfer_account_id, Current.family.accounts.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") } %>
+        <%= form.collection_select :transfer_account_id, Current.family.accounts.visible.alphabetically, :id, :name, { prompt: t(".account_prompt"), label: t(".account") } %>
       <% end %>
 
       <% if %w[buy sell].include?(type) %>
