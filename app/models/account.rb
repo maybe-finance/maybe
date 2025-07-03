@@ -33,8 +33,8 @@ class Account < ApplicationRecord
 
   # Account state machine
   aasm column: :status, timestamps: true do
-    state :draft, initial: true
-    state :active
+    state :active, initial: true
+    state :draft
     state :disabled
     state :pending_deletion
 
@@ -58,7 +58,7 @@ class Account < ApplicationRecord
   class << self
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
-      account = new(attributes.merge(cash_balance: attributes[:balance]))
+      account = new(attributes.merge(cash_balance: attributes[:balance], status: "active"))
       initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
 
       transaction do

@@ -204,7 +204,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_01_161640) do
     t.uuid "account_id", null: false
     t.string "entryable_type"
     t.uuid "entryable_id"
-    t.decimal "amount", precision: 19, scale: 4
+    t.decimal "amount", precision: 19, scale: 4, null: false
     t.string "currency"
     t.date "date"
     t.string "name", null: false

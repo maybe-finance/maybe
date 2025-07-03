@@ -36,7 +36,7 @@ class ValuationsController < ApplicationController
       @entry.reload
 
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: @success_message }
+        format.html { redirect_back_or_to account_path(@entry.account), notice: result.updated? ? "Balance updated" : "No changes made. Account is already up to date." }
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace(
