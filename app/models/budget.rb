@@ -127,6 +127,25 @@ class Budget < ApplicationRecord
     self.class.date_to_param(next_date)
   end
 
+  def copy_from!(other_budget)
+    raise ArgumentError, "Family mismatch" if other_budget.family_id != family_id
+
+    transaction do
+      update!(
+        budgeted_spending: other_budget.budgeted_spending,
+        expected_income: other_budget.expected_income
+      )
+
+      sync_budget_categories
+      other_budget.sync_budget_categories
+
+      other_budget.budget_categories.each do |other_bc|
+        bc = budget_categories.find_by(category_id: other_bc.category_id)
+        bc.update!(budgeted_spending: other_bc.budgeted_spending) if bc
+      end
+    end
+  end
+
   def to_donut_segments_json
     unused_segment_id = "unused"
 
