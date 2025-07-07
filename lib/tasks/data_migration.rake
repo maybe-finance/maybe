@@ -111,4 +111,47 @@ namespace :data_migration do
 
     puts "✅  Duplicate security migration complete."
   end
+
+  desc "Migrate account valuation anchors"
+  # 2025-01-07: Set opening_anchor kinds for valuations to support event-sourced ledger model.
+  # Manual accounts get their oldest valuation marked as opening_anchor, which acts as the
+  # starting balance for the account. Current anchors are only used for Plaid accounts.
+  task migrate_account_valuation_anchors: :environment do
+    puts "==> Migrating account valuation anchors..."
+
+    manual_accounts = Account.manual.includes(valuations: :entry)
+    total_accounts = manual_accounts.count
+    accounts_processed = 0
+    opening_anchors_set = 0
+
+    manual_accounts.find_each do |account|
+      accounts_processed += 1
+
+      # Find oldest valuation for opening anchor
+      oldest_valuation = account.valuations
+                               .joins(:entry)
+                               .order("entries.date ASC, entries.created_at ASC")
+                               .first
+
+      if oldest_valuation && !oldest_valuation.opening_anchor?
+        derived_valuation_name = "#{account.name} Opening Balance"
+
+        Account.transaction do
+          oldest_valuation.update!(kind: "opening_anchor")
+          oldest_valuation.entry.update!(name: derived_valuation_name)
+        end
+        opening_anchors_set += 1
+      end
+
+      if accounts_processed % 100 == 0
+        puts "[#{accounts_processed}/#{total_accounts}] Processed #{accounts_processed} accounts..."
+      end
+    rescue => e
+      puts "ERROR processing account #{account.id}: #{e.message}"
+    end
+
+    puts "✅  Account valuation anchor migration complete."
+    puts "    Processed: #{accounts_processed} accounts"
+    puts "    Opening anchors set: #{opening_anchors_set}"
+  end
 end

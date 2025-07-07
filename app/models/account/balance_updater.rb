@@ -23,7 +23,7 @@ class Account::BalanceUpdater
 
       valuation_entry.amount = balance
       valuation_entry.currency = currency if currency.present?
-      valuation_entry.name = "Manual #{account.accountable.balance_display_name} update"
+      valuation_entry.name = valuation_name(valuation_entry.entryable, account)
       valuation_entry.notes = notes if notes.present?
       valuation_entry.save!
     end
@@ -43,5 +43,9 @@ class Account::BalanceUpdater
 
     def requires_update?
       date != Date.current || account.balance != balance || account.currency != currency
+    end
+
+    def valuation_name(valuation_entry, account)
+      Valuation::Name.new(valuation_entry.entryable.kind, account.accountable_type).to_s
     end
 end

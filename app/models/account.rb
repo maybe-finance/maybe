@@ -59,28 +59,22 @@ class Account < ApplicationRecord
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
-      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
+      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || account.balance
 
-      transaction do
-        # Create 2 valuations for new accounts to establish a value history for users to see
-        account.entries.build(
-          name: "Current Balance",
-          date: Date.current,
-          amount: account.balance,
-          currency: account.currency,
-          entryable: Valuation.new
+      account.entries.build(
+        name: Valuation::Name.new("opening_anchor", account.accountable_type).to_s,
+        date: 2.years.ago.to_date,
+        amount: initial_balance,
+        currency: account.currency,
+        entryable: Valuation.new(
+          kind: "opening_anchor",
+          balance: initial_balance,
+          cash_balance: initial_balance,
+          currency: account.currency
         )
-        account.entries.build(
-          name: "Initial Balance",
-          date: 1.day.ago.to_date,
-          amount: initial_balance,
-          currency: account.currency,
-          entryable: Valuation.new
-        )
+      )
 
-        account.save!
-      end
-
+      account.save!
       account.sync_later
       account
     end

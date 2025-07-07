@@ -14,6 +14,11 @@ class Entry < ApplicationRecord
   validates :date, uniqueness: { scope: [ :account_id, :entryable_type ] }, if: -> { valuation? }
   validates :date, comparison: { greater_than: -> { min_supported_date } }
 
+  # To ensure we can recreate balance history solely from Entries, all entries must post on or before the current anchor (i.e. "Current balance"),
+  # and after the opening anchor (i.e. "Opening balance").  This domain invariant should be enforced by the Account model when adding/modifying entries.
+  validate :date_after_opening_anchor
+  validate :date_on_or_before_current_anchor
+
   scope :visible, -> {
     joins(:account).where(accounts: { status: [ "draft", "active" ] })
   }
@@ -96,4 +101,39 @@ class Entry < ApplicationRecord
       all.size
     end
   end
+
+  private
+    def date_after_opening_anchor
+      return unless account && date
+
+      # Skip validation for anchor valuations themselves
+      return if valuation? && entryable.kind.in?(%w[opening_anchor current_anchor])
+
+      opening_anchor_date = account.valuations
+                                   .joins(:entry)
+                                   .where(kind: "opening_anchor")
+                                   .pluck(Arel.sql("entries.date"))
+                                   .first
+
+      if opening_anchor_date && date <= opening_anchor_date
+        errors.add(:date, "must be after the opening balance date (#{opening_anchor_date})")
+      end
+    end
+
+    def date_on_or_before_current_anchor
+      return unless account && date
+
+      # Skip validation for anchor valuations themselves
+      return if valuation? && entryable.kind.in?(%w[opening_anchor current_anchor])
+
+      current_anchor_date = account.valuations
+                                   .joins(:entry)
+                                   .where(kind: "current_anchor")
+                                   .pluck(Arel.sql("entries.date"))
+                                   .first
+
+      if current_anchor_date && date > current_anchor_date
+        errors.add(:date, "must be on or before the current balance date (#{current_anchor_date})")
+      end
+    end
 end
