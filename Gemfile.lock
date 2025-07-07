@@ -454,7 +454,7 @@ GEM
     redcarpet (3.6.1)
     redis (5.4.0)
       redis-client (>= 0.22.0)
-    redis-client (0.24.0)
+    redis-client (0.25.0)
       connection_pool
     regexp_parser (2.10.0)
     reline (0.6.1)
@@ -531,7 +531,7 @@ GEM
     sentry-sidekiq (5.26.0)
       sentry-ruby (~> 5.26.0)
       sidekiq (>= 3.0)
-    sidekiq (8.0.4)
+    sidekiq (8.0.5)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
       logger (>= 1.6.2)
