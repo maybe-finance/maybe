@@ -16,16 +16,19 @@ module EntriesTestHelper
   end
 
   def create_valuation(attributes = {})
+    entry_attributes = attributes.except(:kind)
+    valuation_attributes = attributes.slice(:kind)
+
     entry_defaults = {
       account: accounts(:depository),
       name: "Valuation",
       date: 1.day.ago.to_date,
       currency: "USD",
       amount: 5000,
-      entryable: Valuation.new
+      entryable: Valuation.new(valuation_attributes.merge(balance: 5000, cash_balance: 5000))
     }
 
-    Entry.create! entry_defaults.merge(attributes)
+    Entry.create! entry_defaults.merge(entry_attributes)
   end
 
   def create_trade(security, account:, qty:, date:, price: nil, currency: "USD")

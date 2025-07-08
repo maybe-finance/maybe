@@ -18,12 +18,16 @@ class Account::BalanceUpdater
       end
 
       valuation_entry = account.entries.valuations.find_or_initialize_by(date: date) do |entry|
-        entry.entryable = Valuation.new
+        entry.entryable = Valuation.new(
+          kind: "recon",
+          balance: balance,
+          cash_balance: balance
+        )
       end
 
       valuation_entry.amount = balance
       valuation_entry.currency = currency if currency.present?
-      valuation_entry.name = valuation_name(valuation_entry.entryable, account)
+      valuation_entry.name = valuation_name(valuation_entry, account)
       valuation_entry.notes = notes if notes.present?
       valuation_entry.save!
     end

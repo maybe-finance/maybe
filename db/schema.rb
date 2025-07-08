@@ -783,7 +783,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.string "kind", default: "recon", null: false
     t.decimal "balance", precision: 19, scale: 4, null: false
     t.decimal "cash_balance", precision: 19, scale: 4, null: false
-    t.string "currency", null: false
   end
 
   create_table "vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

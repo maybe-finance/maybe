@@ -11,6 +11,7 @@ class Valuation < ApplicationRecord
   # Each account can have at most 1 opening anchor and 1 current anchor. All valuations between these anchors should
   # be either "recon" or "snapshot". This ensures we can reliably construct the account balance history solely from Entries.
   validate :unique_anchor_per_account, if: -> { opening_anchor? || current_anchor? }
+  validate :manual_accounts_cannot_have_current_anchor
 
   private
     def unique_anchor_per_account
@@ -24,6 +25,14 @@ class Valuation < ApplicationRecord
 
       if existing_anchor
         errors.add(:kind, "#{kind.humanize} already exists for this account")
+      end
+    end
+
+    def manual_accounts_cannot_have_current_anchor
+      return unless entry&.account
+
+      if entry.account.unlinked? && current_anchor?
+        errors.add(:kind, "Manual accounts cannot have a current anchor")
       end
     end
 end

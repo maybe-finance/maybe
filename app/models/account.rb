@@ -57,20 +57,20 @@ class Account < ApplicationRecord
 
   class << self
     def create_and_sync(attributes)
+      start_date = attributes.delete(:tracking_start_date) || 2.years.ago.to_date
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
       initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || account.balance
 
       account.entries.build(
         name: Valuation::Name.new("opening_anchor", account.accountable_type).to_s,
-        date: 2.years.ago.to_date,
+        date: start_date,
         amount: initial_balance,
         currency: account.currency,
         entryable: Valuation.new(
           kind: "opening_anchor",
           balance: initial_balance,
-          cash_balance: initial_balance,
-          currency: account.currency
+          cash_balance: initial_balance
         )
       )
 

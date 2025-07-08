@@ -1,2 +1,3 @@
-one: { }
-two: { }
+one:
+  balance: 4995
+  cash_balance: 4995

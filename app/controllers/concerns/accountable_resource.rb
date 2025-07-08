@@ -2,7 +2,7 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
-    include ScrollFocusable, Periodable
+    include ScrollFocusable, Periodable, StreamExtensions
 
     before_action :set_account, only: [ :show, :edit, :update, :destroy ]
     before_action :set_link_options, only: :new
@@ -39,7 +39,10 @@ module AccountableResource
     @account = Current.family.accounts.create_and_sync(account_params.except(:return_to))
     @account.lock_saved_attributes!
 
-    redirect_to account_params[:return_to].presence || @account, notice: t("accounts.create.success", type: accountable_type.name.underscore.humanize)
+    respond_to do |format|
+      format.html { redirect_to account_params[:return_to].presence || @account, notice: accountable_type.name.underscore.humanize + " account created" }
+      format.turbo_stream { stream_redirect_to account_params[:return_to].presence || account_path(@account), notice: accountable_type.name.underscore.humanize + " account created" }
+    end
   end
 
   def update
@@ -54,7 +57,7 @@ module AccountableResource
     end
 
     # Update remaining account attributes
-    update_params = account_params.except(:return_to, :balance, :currency)
+    update_params = account_params.except(:return_to, :balance, :currency, :tracking_start_date)
     unless @account.update(update_params)
       @error_message = @account.errors.full_messages.join(", ")
       render :edit, status: :unprocessable_entity
@@ -62,7 +65,11 @@ module AccountableResource
     end
 
     @account.lock_saved_attributes!
-    redirect_back_or_to @account, notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
+
+    respond_to do |format|
+      format.html { redirect_back_or_to @account, notice: accountable_type.name.underscore.humanize + " account updated" }
+      format.turbo_stream { stream_redirect_to @account, notice: accountable_type.name.underscore.humanize + " account updated" }
+    end
   end
 
   def destroy
@@ -90,7 +97,7 @@ module AccountableResource
 
     def account_params
       params.require(:account).permit(
-        :name, :balance, :subtype, :currency, :accountable_type, :return_to,
+        :name, :balance, :subtype, :currency, :accountable_type, :return_to, :tracking_start_date,
         accountable_attributes: self.class.permitted_accountable_attributes
       )
     end
