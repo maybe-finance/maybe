@@ -8,26 +8,26 @@ class Api::V1::TransactionsControllerTest < ActionDispatch::IntegrationTest
     @family = @user.family
     @account = @family.accounts.first
     @transaction = @family.transactions.first
-    
+
     # Destroy existing active API keys to avoid validation errors
     @user.api_keys.active.destroy_all
-    
+
     # Create fresh API keys instead of using fixtures to avoid parallel test conflicts
     @api_key = ApiKey.create!(
       user: @user,
       name: "Test Read-Write Key",
-      scopes: ["read_write"],
+      scopes: [ "read_write" ],
       display_key: "test_rw_#{SecureRandom.hex(8)}"
     )
-    
+
     @read_only_api_key = ApiKey.create!(
       user: @user,
-      name: "Test Read-Only Key", 
-      scopes: ["read"],
+      name: "Test Read-Only Key",
+      scopes: [ "read" ],
       display_key: "test_ro_#{SecureRandom.hex(8)}",
       source: "mobile"  # Use different source to allow multiple keys
     )
-    
+
     # Clear any existing rate limit data
     Redis.new.del("api_rate_limit:#{@api_key.id}")
     Redis.new.del("api_rate_limit:#{@read_only_api_key.id}")

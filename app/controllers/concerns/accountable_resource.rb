@@ -40,7 +40,7 @@ module AccountableResource
     @account.lock_saved_attributes!
 
     respond_to do |format|
-      format.html { redirect_to account_params[:return_to].presence || @account, notice: accountable_type.name.underscore.humanize + " account created" }
+      format.html { redirect_to account_params[:return_to].presence || account_path(@account), notice: accountable_type.name.underscore.humanize + " account created" }
       format.turbo_stream { stream_redirect_to account_params[:return_to].presence || account_path(@account), notice: accountable_type.name.underscore.humanize + " account created" }
     end
   end
@@ -67,8 +67,8 @@ module AccountableResource
     @account.lock_saved_attributes!
 
     respond_to do |format|
-      format.html { redirect_back_or_to @account, notice: accountable_type.name.underscore.humanize + " account updated" }
-      format.turbo_stream { stream_redirect_to @account, notice: accountable_type.name.underscore.humanize + " account updated" }
+      format.html { redirect_back_or_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
+      format.turbo_stream { stream_redirect_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
     end
   end
 

@@ -20,7 +20,10 @@ class AccountImport < Import
           currency: row.currency,
           date: Date.current,
           name: "Imported account value",
-          entryable: Valuation.new
+          entryable: Valuation.new(
+            balance: row.amount.to_d,
+            cash_balance: row.amount.to_d
+          )
         )
       end
     end

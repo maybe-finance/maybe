@@ -14,17 +14,17 @@
     <%= form.text_field :name, placeholder: t(".name_placeholder"), required: "required", label: t(".name_label") %>
 
     <% unless account.linked? %>
-      <%= form.money_field :balance, 
-                           label: t(".balance"), 
-                           required: true, 
+      <%= form.money_field :balance,
+                           label: t(".balance"),
+                           required: true,
                            default_currency: Current.family.currency,
                            label_tooltip: "The current balance or value of the account, which is typically the balance reported by your financial institution." %>
 
       <% unless account.persisted? %>
-        <%= form.date_field :tracking_start_date, 
-                            label: "Tracking start date", 
-                            required: true, 
-                            value: 2.years.ago.to_date, 
+        <%= form.date_field :tracking_start_date,
+                            label: "Tracking start date",
+                            required: true,
+                            value: 2.years.ago.to_date,
                             label_tooltip: "The date we will start tracking the balance for this account. If you're not sure, we recommend using the default of 2 years ago so net worth graphs have adequate historical data." %>
       <% end %>
     <% end %>
