@@ -22,6 +22,15 @@ class Transaction < ApplicationRecord
     funds_movement? || cc_payment? || loan_payment?
   end
 
+  # Eager loading scope for transfer details to prevent N+1 queries
+  scope :with_transfer_details, -> {
+    includes(
+      { entry: :account },
+      { transfer_as_inflow: { inflow_transaction: { entry: :account }, outflow_transaction: { entry: :account } } },
+      { transfer_as_outflow: { inflow_transaction: { entry: :account }, outflow_transaction: { entry: :account } } }
+    )
+  }
+
   def set_category!(category)
     if category.is_a?(String)
       category = entry.account.family.categories.find_or_create_by!(
@@ -31,4 +40,13 @@ class Transaction < ApplicationRecord
 
     update!(category: category)
   end
+
+  # Invalidate caches when transaction is updated
+  after_update :invalidate_caches
+
+  private
+    def invalidate_caches
+      # Touch the family to invalidate entries_cache_version
+      entry.account.family.touch(:updated_at)
+    end
 end

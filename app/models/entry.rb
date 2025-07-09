@@ -60,40 +60,49 @@ class Entry < ApplicationRecord
     plaid_id.present?
   end
 
-  class << self
-    def search(params)
-      EntrySearch.new(params).build_query(all)
+  # Invalidate caches when entry is updated
+  after_update :invalidate_caches
+
+  private
+    def invalidate_caches
+      # Touch the family to invalidate entries_cache_version
+      account.family.touch(:updated_at)
     end
 
-    # arbitrary cutoff date to avoid expensive sync operations
-    def min_supported_date
-      30.years.ago.to_date
-    end
-
-    def bulk_update!(bulk_update_params)
-      bulk_attributes = {
-        date: bulk_update_params[:date],
-        notes: bulk_update_params[:notes],
-        entryable_attributes: {
-          category_id: bulk_update_params[:category_id],
-          merchant_id: bulk_update_params[:merchant_id],
-          tag_ids: bulk_update_params[:tag_ids]
-        }.compact_blank
-      }.compact_blank
-
-      return 0 if bulk_attributes.blank?
-
-      transaction do
-        all.each do |entry|
-          bulk_attributes[:entryable_attributes][:id] = entry.entryable_id if bulk_attributes[:entryable_attributes].present?
-          entry.update! bulk_attributes
-
-          entry.lock_saved_attributes!
-          entry.entryable.lock_attr!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
-        end
+    class << self
+      def search(params)
+        EntrySearch.new(params).build_query(all)
       end
 
-      all.size
+      # arbitrary cutoff date to avoid expensive sync operations
+      def min_supported_date
+        30.years.ago.to_date
+      end
+
+      def bulk_update!(bulk_update_params)
+        bulk_attributes = {
+          date: bulk_update_params[:date],
+          notes: bulk_update_params[:notes],
+          entryable_attributes: {
+            category_id: bulk_update_params[:category_id],
+            merchant_id: bulk_update_params[:merchant_id],
+            tag_ids: bulk_update_params[:tag_ids]
+          }.compact_blank
+        }.compact_blank
+
+        return 0 if bulk_attributes.blank?
+
+        transaction do
+          all.each do |entry|
+            bulk_attributes[:entryable_attributes][:id] = entry.entryable_id if bulk_attributes[:entryable_attributes].present?
+            entry.update! bulk_attributes
+
+            entry.lock_saved_attributes!
+            entry.entryable.lock_attr!(:tag_ids) if entry.transaction? && entry.transaction.tags.any?
+          end
+        end
+
+        all.size
+      end
     end
-  end
 end

@@ -15,13 +15,19 @@ class TransactionsController < ApplicationController
 
     base_scope = @search.transactions_scope
                        .reverse_chronological
-                       .includes(
-                         { entry: :account },
-                         :category, :merchant, :tags,
-                         :transfer_as_inflow, :transfer_as_outflow
-                       )
+                       .with_transfer_details
+                       .includes(:category, :merchant, :tags)
 
     @pagy, @transactions = pagy(base_scope, limit: per_page, params: ->(p) { p.except(:focused_record_id) })
+
+    # Pre-compute transfer data to avoid view-level N+1s
+    @transactions.each do |transaction|
+      if transaction.transfer.present?
+        # Pre-load transfer data to avoid N+1 queries in views
+        transaction.transfer.to_account
+        transaction.transfer.from_account
+      end
+    end
 
     # No performance penalty by default. Only runs queries if the record is set.
     if params[:focused_record_id].present?
