@@ -116,4 +116,74 @@ class Family < ApplicationRecord
   def self_hoster?
     Rails.application.config.app_mode.self_hosted?
   end
+
+  def create_property_account!(name:, current_value:, purchase_price: nil, purchase_date: nil, currency: nil)
+    Family.transaction do
+      property = accounts.create!(
+        name: name,
+        balance: current_value,
+        cash_balance: 0,
+        currency: currency.presence || self.currency,
+        accountable: Property.new
+      )
+
+      property.set_or_update_opening_balance!(
+        balance: purchase_price || 0,
+        cash_balance: 0,
+        date: purchase_date
+      )
+
+      property
+    end
+  end
+
+  def create_vehicle_account(current_value:, purchase_price: nil, purchase_date: nil, currency: nil)
+    # TODO
+  end
+
+  def create_depository_account(current_balance:, opening_date: nil, currency: nil)
+    # TODO
+  end
+
+  # Investment account values are built up by adding holdings / trades, not by initializing a "balance"
+  def create_investment_account(currency: nil)
+    # TODO
+  end
+
+  def create_other_asset_account(current_value:, purchase_price: nil, purchase_date: nil, currency: nil)
+    # TODO
+  end
+
+  def create_other_liability_account(current_debt:, original_debt: nil, origination_date: nil, currency: nil)
+    # TODO
+  end
+
+  # For now, crypto accounts are very simple; we just track overall value
+  def create_crypto_account(current_value:, currency: nil)
+    # TODO
+  end
+
+  def create_credit_card_account(current_debt:, opening_date: nil, currency: nil)
+    # TODO
+  end
+
+  def create_loan_account(current_principal:, original_principal: nil, origination_date: nil, currency: nil)
+    # TODO
+  end
+
+  def link_depository_account
+    # TODO
+  end
+
+  def link_investment_account
+    # TODO
+  end
+
+  def link_credit_card_account
+    # TODO
+  end
+
+  def link_loan_account
+    # TODO
+  end
 end
