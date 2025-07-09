@@ -35,9 +35,10 @@ class AccountTest < ActiveSupport::TestCase
   # Currency updates earn their own method because updating an account currency incurs
   # side effects like recalculating balances, etc.
   test "can update the account currency" do
-    @account.update_currency("EUR")
+    @account.update_currency!("EUR")
 
     assert_equal "EUR", @account.currency
+    assert_equal "EUR", @account.entries.valuations.first.currency
   end
 
   # If a user has an opening balance (valuation) for their manual account and has 1+ transactions, the intent of

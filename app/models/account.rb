@@ -128,6 +128,15 @@ class Account < ApplicationRecord
     Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:).update
   end
 
+  def update_currency!(new_currency)
+    raise "Currency cannot be changed" if linked?
+
+    transaction do
+      update!(currency: new_currency)
+      entries.valuations.update_all(currency: new_currency)
+    end
+  end
+
   def update_current_balance(balance:, cash_balance:)
     raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance > balance
 
