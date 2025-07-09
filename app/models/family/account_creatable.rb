@@ -128,23 +128,23 @@ module Family::AccountCreatable
 
   private
 
-  def create_manual_account!(name:, balance:, cash_balance:, accountable_type:, opening_balance: nil, opening_cash_balance: nil, opening_date: nil, currency: nil)
-    Family.transaction do
-      account = accounts.create!(
-        name: name,
-        balance: balance,
-        cash_balance: cash_balance,
-        currency: currency.presence || self.currency,
-        accountable: accountable_type.new
-      )
+    def create_manual_account!(name:, balance:, cash_balance:, accountable_type:, opening_balance: nil, opening_cash_balance: nil, opening_date: nil, currency: nil)
+      Family.transaction do
+        account = accounts.create!(
+          name: name,
+          balance: balance,
+          cash_balance: cash_balance,
+          currency: currency.presence || self.currency,
+          accountable: accountable_type.new
+        )
 
-      account.set_or_update_opening_balance!(
-        balance: opening_balance || balance,
-        cash_balance: opening_cash_balance || cash_balance,
-        date: opening_date
-      )
+        account.set_or_update_opening_balance!(
+          balance: opening_balance || balance,
+          cash_balance: opening_cash_balance || cash_balance,
+          date: opening_date
+        )
 
-      account
+        account
+      end
     end
-  end
 end
