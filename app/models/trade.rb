@@ -8,9 +8,11 @@ class Trade < ApplicationRecord
   validates :qty, presence: true
   validates :price, :currency, presence: true
 
-  def self.build_name(type, qty, ticker)
-    prefix = type == "buy" ? "Buy" : "Sell"
-    "#{prefix} #{qty.to_d.abs} shares of #{ticker}"
+  class << self
+    def build_name(type, qty, ticker)
+      prefix = type == "buy" ? "Buy" : "Sell"
+      "#{prefix} #{qty.to_d.abs} shares of #{ticker}"
+    end
   end
 
   def unrealized_gain_loss
