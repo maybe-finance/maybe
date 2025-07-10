@@ -215,7 +215,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_225721) do
     t.boolean "excluded", default: false
     t.string "plaid_id"
     t.jsonb "locked_attributes", default: {}
-    t.string "kind", default: "recon", null: false
     t.index ["account_id"], name: "index_entries_on_account_id"
     t.index ["import_id"], name: "index_entries_on_import_id"
   end
@@ -780,7 +779,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_225721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "locked_attributes", default: {}
-    t.string "kind", default: "current", null: false
+    t.string "kind", default: "reconciliation", null: false
   end
 
   create_table "vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
