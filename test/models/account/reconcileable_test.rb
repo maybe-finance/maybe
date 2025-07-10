@@ -6,16 +6,9 @@ class Account::ReconcileableTest < ActiveSupport::TestCase
     @family = families(:dylan_family)
   end
 
-  # Currency updates earn their own method because updating an account currency incurs
-  # side effects like recalculating balances, etc.
-  test "can update the account currency" do
-    @account.update_currency!("EUR")
-
-    assert_equal "EUR", @account.currency
-    assert_equal "EUR", @account.entries.valuations.first.currency
-  end
-
-  # If a user has an opening balance (valuation) for their manual account and has 1+ transactions, the intent of
+  # Scope: Depository Only
+  #
+  # If a user has an opening balance (valuation) for their manual *Depository* account and has 1+ transactions, the intent of
   # "updating current balance" typically means that their start balance is incorrect. We follow that user intent
   # by default and find the delta required, and update the opening balance so that the timeline reflects this current balance
   #

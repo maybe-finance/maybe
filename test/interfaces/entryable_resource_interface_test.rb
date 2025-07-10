@@ -4,7 +4,7 @@ module EntryableResourceInterfaceTest
   extend ActiveSupport::Testing::Declarative
 
   test "shows new form" do
-    get new_polymorphic_url(@entry.entryable)
+    get new_polymorphic_url(@entry.entryable, account_id: @entry.account_id)
     assert_response :success
   end
 

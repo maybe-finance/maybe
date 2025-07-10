@@ -1,6 +1,6 @@
 <%= container do %>
   <% if icon && (icon_position != :right) %>
-    <%= helpers.icon(icon, size: size, color: icon_color) %>
+    <%= helpers.icon(icon, size: size, color: icon_color, class: icon_classes) %>
   <% end %>
 
   <% unless icon_only? %>

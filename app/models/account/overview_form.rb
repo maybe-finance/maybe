@@ -42,6 +42,7 @@ class Account::OverviewForm
       # Update name if provided
       if name.present? && name != account.name
         account.update!(name: name)
+        account.lock_attr!(:name)
         updated = true
       end
 

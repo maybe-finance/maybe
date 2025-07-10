@@ -29,9 +29,16 @@ module Account::Reconcileable
     @opening_date ||= opening_anchor_valuation&.entry&.date
   end
 
-  def reconcile_balance!(balance:, cash_balance:, date:)
-    raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance > balance
+  def reconcile_balance!(balance:, cash_balance: nil, date: nil)
+    raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance.present? && cash_balance > balance
     raise InvalidBalanceError, "Linked accounts cannot be reconciled" if linked?
+
+    derived_cash_balance = cash_balance.present? ? cash_balance : choose_cash_balance_from_balance(balance)
+
+    if date.nil?
+      update_current_balance!(balance:, cash_balance: derived_cash_balance)
+      return
+    end
 
     existing_valuation = valuations.joins(:entry).where(kind: "recon", entry: { date: date }).first
 
@@ -39,8 +46,9 @@ module Account::Reconcileable
       if existing_valuation.present?
         existing_valuation.update!(
           balance: balance,
-          cash_balance: cash_balance
+          cash_balance: derived_cash_balance
         )
+        existing_valuation.entry.update!(amount: balance)
       else
         entries.create!(
           date: date,
@@ -50,41 +58,34 @@ module Account::Reconcileable
           entryable: Valuation.new(
             kind: "recon",
             balance: balance,
-            cash_balance: cash_balance
+            cash_balance: derived_cash_balance
           )
         )
       end
 
       # Update cached balance fields on account when reconciling for current date
       if date == Date.current
-        update!(balance: balance, cash_balance: cash_balance)
+        update!(balance: balance, cash_balance: derived_cash_balance)
       end
     end
   end
 
-  def update_current_balance!(balance:, cash_balance:)
-    raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance > balance
+  def update_current_balance!(balance:, cash_balance: nil)
+    raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance.present? && cash_balance > balance
+
+    derived_cash_balance = cash_balance.present? ? cash_balance : choose_cash_balance_from_balance(balance)
 
     transaction do
-      if opening_anchor_valuation.present? && valuations.where(kind: "recon").empty?
-        adjust_opening_balance_with_delta(balance:, cash_balance:)
+      # See test for explanation - Depository accounts are handled as a special case for current balance updates
+      if opening_anchor_valuation.present? && valuations.where(kind: "recon").empty? && self.depository?
+        adjust_opening_balance_with_delta!(balance:, cash_balance: derived_cash_balance)
       else
-        reconcile_balance!(balance:, cash_balance:, date: Date.current)
+        reconcile_balance!(balance:, cash_balance: derived_cash_balance, date: Date.current)
       end
 
       # Always update cached balance fields when updating current balance
-      update!(balance: balance, cash_balance: cash_balance)
+      update!(balance: balance, cash_balance: derived_cash_balance)
     end
-  end
-
-  def adjust_opening_balance_with_delta(balance:, cash_balance:)
-    delta = self.balance - balance
-    cash_delta = self.cash_balance - cash_balance
-
-    set_or_update_opening_balance!(
-      balance: balance - delta,
-      cash_balance: cash_balance - cash_delta
-    )
   end
 
   def set_or_update_opening_balance!(balance:, cash_balance:, date: nil)
@@ -129,5 +130,25 @@ module Account::Reconcileable
 
     def current_anchor_valuation
       valuations.current_anchor.first
+    end
+
+    def adjust_opening_balance_with_delta!(balance:, cash_balance:)
+      delta = self.balance - balance
+      cash_delta = self.cash_balance - cash_balance
+
+      set_or_update_opening_balance!(
+        balance: balance - delta,
+        cash_balance: cash_balance - cash_delta
+      )
+    end
+
+    # For depository accounts, the cash balance is the same as the balance always
+    # Otherwise, if not specified, we assume cash balance is 0
+    def choose_cash_balance_from_balance(balance)
+      if self.depository?
+        balance
+      else
+        0
+      end
     end
 end

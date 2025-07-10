@@ -1,6 +1,12 @@
+<% term = @entry.account.asset? ? "value" : "balance" %>
+
 <%= render DialogComponent.new do |dialog| %>
-  <% dialog.with_header(title: t(".title")) %>
+  <% dialog.with_header(title: "Account #{term} update") %>
   <% dialog.with_body do %>
     <%= render "form", entry: @entry, error_message: @error_message %>
+
+    <p class="text-sm text-secondary mt-4">
+      This action "resets" the account's <%= term %> to the new value, on the date. Subsequent entries after this date will reference the new value.
+    </p>
   <% end %>
 <% end %>

@@ -46,29 +46,24 @@ module AccountableResource
   end
 
   def update
-    # Handle balance update if provided
-    if account_params[:balance].present?
-      result = @account.update_balance(balance: account_params[:balance], currency: account_params[:currency])
-      unless result.success?
-        @error_message = result.error_message
-        render :edit, status: :unprocessable_entity
-        return
+    form = Account::OverviewForm.new(
+      account: @account,
+      name: account_params[:name],
+      currency: account_params[:currency],
+      current_balance: account_params[:balance],
+      current_cash_balance: @account.depository? ? account_params[:balance] : "0"
+    )
+
+    result = form.save
+
+    if result.success?
+      respond_to do |format|
+        format.html { redirect_back_or_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
+        format.turbo_stream { stream_redirect_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
       end
-    end
-
-    # Update remaining account attributes
-    update_params = account_params.except(:return_to, :balance, :currency, :tracking_start_date)
-    unless @account.update(update_params)
-      @error_message = @account.errors.full_messages.join(", ")
+    else
+      @error_message = result.error || "Unable to update account details."
       render :edit, status: :unprocessable_entity
-      return
-    end
-
-    @account.lock_saved_attributes!
-
-    respond_to do |format|
-      format.html { redirect_back_or_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
-      format.turbo_stream { stream_redirect_to account_path(@account), notice: accountable_type.name.underscore.humanize + " account updated" }
     end
   end
 

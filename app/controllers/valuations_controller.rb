@@ -4,59 +4,55 @@ class ValuationsController < ApplicationController
   def create
     account = Current.family.accounts.find(params.dig(:entry, :account_id))
 
-    result = account.update_balance(
-      balance: entry_params[:amount],
-      date: entry_params[:date],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
-    )
-
-    if result.success?
-      @success_message = result.updated? ? "Balance updated" : "No changes made. Account is already up to date."
-
-      respond_to do |format|
-        format.html { redirect_back_or_to account_path(account), notice: @success_message }
-        format.turbo_stream { stream_redirect_back_or_to(account_path(account), notice: @success_message) }
-      end
+    if entry_params[:date].to_date == Date.current
+      account.update_current_balance!(balance: entry_params[:amount].to_d)
     else
-      @error_message = result.error_message
-      render :new, status: :unprocessable_entity
+      account.reconcile_balance!(
+        balance: entry_params[:amount].to_d,
+        date: entry_params[:date].to_date
+      )
+    end
+
+    account.sync_later
+
+    respond_to do |format|
+      format.html { redirect_back_or_to account_path(account), notice: "Account value updated" }
+      format.turbo_stream { stream_redirect_back_or_to(account_path(account), notice: "Account value updated") }
     end
   end
 
   def update
-    result = @entry.account.update_balance(
-      date: @entry.date,
-      balance: entry_params[:amount],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
+    # ActiveRecord::Base.transaction do
+    @entry.account.reconcile_balance!(
+      balance: entry_params[:amount].to_d,
+      date: entry_params[:date].to_date
     )
 
-    if result.success?
-      @entry.reload
+    if entry_params[:notes].present?
+      @entry.update!(notes: entry_params[:notes])
+    end
 
-      respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: result.updated? ? "Balance updated" : "No changes made. Account is already up to date." }
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace(
-              dom_id(@entry, :header),
-              partial: "valuations/header",
-              locals: { entry: @entry }
-            ),
-            turbo_stream.replace(@entry)
-          ]
-        end
+    @entry.account.sync_later
+
+    @entry.reload
+
+    respond_to do |format|
+      format.html { redirect_back_or_to account_path(@entry.account), notice: "Account value updated" }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            dom_id(@entry, :header),
+            partial: "valuations/header",
+            locals: { entry: @entry }
+          ),
+          turbo_stream.replace(@entry)
+        ]
       end
-    else
-      @error_message = result.error_message
-      render :show, status: :unprocessable_entity
     end
   end
 
   private
     def entry_params
-      params.require(:entry)
-            .permit(:date, :amount, :currency, :notes)
+      params.require(:entry).permit(:date, :amount, :notes)
     end
 end

@@ -30,6 +30,7 @@ class Account::OverviewFormTest < ActiveSupport::TestCase
     )
 
     @account.expects(:update!).with(name: "New Property Name").once
+    @account.expects(:lock_attr!).with(:name).once
     @account.expects(:sync_later).never  # Name change should not trigger sync
 
     result = form.save
@@ -84,6 +85,7 @@ class Account::OverviewFormTest < ActiveSupport::TestCase
 
     # Simulate a validation error on opening balance update
     @account.expects(:update!).with(name: "New Name").once
+    @account.expects(:lock_attr!).with(:name).once
     @account.expects(:set_or_update_opening_balance!).raises(Account::Reconcileable::InvalidBalanceError.new("Cash balance cannot exceed balance"))
     @account.expects(:sync_later).never  # Should NOT sync if any update fails
 

@@ -14,8 +14,6 @@ class Account < ApplicationRecord
   has_many :holdings, dependent: :destroy
   has_many :balances, dependent: :destroy
 
-
-
   enum :classification, { asset: "asset", liability: "liability" }, validate: { allow_nil: true }
 
   scope :visible, -> { where(status: [ "draft", "active" ]) }
@@ -120,11 +118,6 @@ class Account < ApplicationRecord
             .order(amount: :desc)
   end
 
-
-  def update_balance(balance:, date: Date.current, currency: nil, notes: nil)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:).update
-  end
-
   def update_currency!(new_currency)
     raise "Currency cannot be changed" if linked?
 
@@ -133,7 +126,6 @@ class Account < ApplicationRecord
       entries.valuations.update_all(currency: new_currency)
     end
   end
-
 
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current

@@ -38,7 +38,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
         entry: {
           amount: 20000,
           currency: "USD",
-          date: Date.current
+          date: @entry.date
         }
       }
     end

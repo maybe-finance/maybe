@@ -23,20 +23,22 @@ class AccountsTest < ApplicationSystemTestCase
   end
 
   test "can create property account" do
-    # Step 1: Select property type and enter basic details
+    # Step 1: Enter basic property details
     click_link "Property"
 
     account_name = "[system test] Property Account"
-    fill_in "Name*", with: account_name
-    select "Single Family Home", from: "Property type*"
-    fill_in "Year Built (optional)", with: 2005
-    fill_in "Area (optional)", with: 2250
+    fill_in "Name", with: account_name
+    fill_in "account[current_estimated_value]", with: 500000
+    fill_in "account[purchase_price]", with: 450000
+    fill_in "account[purchase_date]", with: "01/15/2020"
 
     click_button "Next"
 
-    # Step 2: Enter balance information
-    assert_text "Value"
-    fill_in "account[balance]", with: 500000
+    # Step 2: Enter property details
+    assert_text "Property type"
+    select "Single Family Home", from: "Property type"
+    fill_in "Year built", with: 2005
+    fill_in "Area", with: 2250
     click_button "Next"
 
     # Step 3: Enter address information

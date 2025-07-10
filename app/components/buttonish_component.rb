@@ -5,7 +5,7 @@ class ButtonishComponent < ViewComponent::Base
       icon_classes: "fg-inverse"
     },
     secondary: {
-      container_classes: "text-secondary bg-gray-50 theme-dark:bg-gray-700 hover:bg-gray-100 theme-dark:hover:bg-gray-600 disabled:bg-gray-200 theme-dark:disabled:bg-gray-600",
+      container_classes: "text-primary bg-gray-50 theme-dark:bg-gray-700 hover:bg-gray-100 theme-dark:hover:bg-gray-600 disabled:bg-gray-200 theme-dark:disabled:bg-gray-600",
       icon_classes: "fg-primary"
     },
     destructive: {

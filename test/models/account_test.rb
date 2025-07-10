@@ -31,4 +31,13 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal "Investments", account.short_subtype_label
     assert_equal "Investments", account.long_subtype_label
   end
+
+  # Currency updates earn their own method because updating an account currency incurs
+  # side effects like recalculating balances, etc.
+  test "can update the account currency" do
+    @account.update_currency!("EUR")
+
+    assert_equal "EUR", @account.currency
+    assert_equal "EUR", @account.entries.valuations.first.currency
+  end
 end
