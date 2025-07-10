@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.uuid "accountable_id"
     t.decimal "balance", precision: 19, scale: 4
     t.string "currency"
-    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY ((ARRAY['Loan'::character varying, 'CreditCard'::character varying, 'OtherLiability'::character varying])::text[])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
+    t.virtual "classification", type: :string, as: "\nCASE\n    WHEN ((accountable_type)::text = ANY (ARRAY[('Loan'::character varying)::text, ('CreditCard'::character varying)::text, ('OtherLiability'::character varying)::text])) THEN 'liability'::text\n    ELSE 'asset'::text\nEND", stored: true
     t.uuid "import_id"
     t.uuid "plaid_account_id"
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
@@ -215,7 +215,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.boolean "excluded", default: false
     t.string "plaid_id"
     t.jsonb "locked_attributes", default: {}
+    t.index ["account_id", "date"], name: "index_entries_on_account_id_and_date"
     t.index ["account_id"], name: "index_entries_on_account_id"
+    t.index ["amount"], name: "index_entries_on_amount"
+    t.index ["date"], name: "index_entries_on_date"
+    t.index ["entryable_id", "entryable_type"], name: "index_entries_on_entryable"
+    t.index ["excluded"], name: "index_entries_on_excluded"
     t.index ["import_id"], name: "index_entries_on_import_id"
   end
 
@@ -226,6 +231,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.date "date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["date", "from_currency", "to_currency"], name: "index_exchange_rates_on_date_and_currencies"
     t.index ["from_currency", "to_currency", "date"], name: "index_exchange_rates_on_base_converted_date_unique", unique: true
     t.index ["from_currency"], name: "index_exchange_rates_on_from_currency"
     t.index ["to_currency"], name: "index_exchange_rates_on_to_currency"
@@ -435,7 +441,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "oauth_application_id"
-    t.index ["device_id"], name: "index_mobile_devices_on_device_id", unique: true
     t.index ["oauth_application_id"], name: "index_mobile_devices_on_oauth_application_id"
     t.index ["user_id", "device_id"], name: "index_mobile_devices_on_user_id_and_device_id", unique: true
     t.index ["user_id"], name: "index_mobile_devices_on_user_id"
@@ -684,6 +689,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_07_130134) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type"], name: "index_taggings_on_taggable_id_and_type"
     t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
   end
 
