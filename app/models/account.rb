@@ -64,14 +64,14 @@ class Account < ApplicationRecord
       transaction do
         # Create 2 valuations for new accounts to establish a value history for users to see
         account.entries.build(
-          name: "Current Balance",
+          name: Valuation.build_current_anchor_name(account.accountable_type),
           date: Date.current,
           amount: account.balance,
           currency: account.currency,
           entryable: Valuation.new
         )
         account.entries.build(
-          name: "Initial Balance",
+          name: Valuation.build_opening_anchor_name(account.accountable_type),
           date: 1.day.ago.to_date,
           amount: initial_balance,
           currency: account.currency,

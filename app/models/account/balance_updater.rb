@@ -23,7 +23,7 @@ class Account::BalanceUpdater
 
       valuation_entry.amount = balance
       valuation_entry.currency = currency if currency.present?
-      valuation_entry.name = "Manual #{account.accountable.balance_display_name} update"
+      valuation_entry.name = Valuation.build_reconciliation_name(account.accountable_type)
       valuation_entry.notes = notes if notes.present?
       valuation_entry.save!
     end

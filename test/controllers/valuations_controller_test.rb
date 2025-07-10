@@ -23,7 +23,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     created_entry = Entry.order(created_at: :desc).first
-    assert_equal "Manual account value update", created_entry.name
+    assert_equal "Manual value update", created_entry.name
     assert_equal Date.current, created_entry.date
     assert_equal account.balance + 100, created_entry.amount_money.to_f
 

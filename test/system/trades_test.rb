@@ -31,7 +31,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_trades
 
     within_trades do
-      assert_text "Buy #{shares_qty} shares of AAPL"
+      assert_text "Buy #{shares_qty}.0 shares of AAPL"
     end
   end
 
@@ -52,7 +52,7 @@ class TradesTest < ApplicationSystemTestCase
     visit_trades
 
     within_trades do
-      assert_text "Sell #{qty} shares of AAPL"
+      assert_text "Sell #{qty}.0 shares of AAPL"
     end
   end
 
