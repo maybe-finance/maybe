@@ -17,39 +17,63 @@ module Account::Reconcileable
     balance - cash_balance
   end
 
+  def opening_balance
+    @opening_balance ||= opening_anchor_valuation&.balance
+  end
+
+  def opening_cash_balance
+    @opening_cash_balance ||= opening_anchor_valuation&.cash_balance
+  end
+
+  def opening_date
+    @opening_date ||= opening_anchor_valuation&.entry&.date
+  end
+
   def reconcile_balance!(balance:, cash_balance:, date:)
     raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance > balance
     raise InvalidBalanceError, "Linked accounts cannot be reconciled" if linked?
 
-    existing_valuation = valuations.joins(:entry).where(kind: "recon", entry: { date: Date.current }).first
+    existing_valuation = valuations.joins(:entry).where(kind: "recon", entry: { date: date }).first
 
-    if existing_valuation.present?
-      existing_valuation.update!(
-        balance: balance,
-        cash_balance: cash_balance
-      )
-    else
-      entries.create!(
-        date: date,
-        name: Valuation::Name.new("recon", self.accountable_type),
-        amount: balance,
-        currency: self.currency,
-        entryable: Valuation.new(
-          kind: "recon",
+    transaction do
+      if existing_valuation.present?
+        existing_valuation.update!(
           balance: balance,
           cash_balance: cash_balance
         )
-      )
+      else
+        entries.create!(
+          date: date,
+          name: Valuation::Name.new("recon", self.accountable_type),
+          amount: balance,
+          currency: self.currency,
+          entryable: Valuation.new(
+            kind: "recon",
+            balance: balance,
+            cash_balance: cash_balance
+          )
+        )
+      end
+
+      # Update cached balance fields on account when reconciling for current date
+      if date == Date.current
+        update!(balance: balance, cash_balance: cash_balance)
+      end
     end
   end
 
-  def update_current_balance(balance:, cash_balance:)
+  def update_current_balance!(balance:, cash_balance:)
     raise InvalidBalanceError, "Cash balance cannot exceed balance" if cash_balance > balance
 
-    if opening_anchor_valuation.present? && valuations.where(kind: "recon").empty?
-      adjust_opening_balance_with_delta(balance:, cash_balance:)
-    else
-      reconcile_balance!(balance:, cash_balance:, date: Date.current)
+    transaction do
+      if opening_anchor_valuation.present? && valuations.where(kind: "recon").empty?
+        adjust_opening_balance_with_delta(balance:, cash_balance:)
+      else
+        reconcile_balance!(balance:, cash_balance:, date: Date.current)
+      end
+
+      # Always update cached balance fields when updating current balance
+      update!(balance: balance, cash_balance: cash_balance)
     end
   end
 
@@ -100,7 +124,7 @@ module Account::Reconcileable
 
   private
     def opening_anchor_valuation
-      valuations.opening_anchor.first
+      @opening_anchor_valuation ||= valuations.opening_anchor.includes(:entry).first
     end
 
     def current_anchor_valuation

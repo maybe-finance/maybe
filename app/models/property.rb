@@ -52,6 +52,7 @@ class Property < ApplicationRecord
 
   private
     def first_valuation_amount
+      return nil unless account
       account.entries.valuations.order(:date).first&.amount_money || account.balance_money
     end
 end

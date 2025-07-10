@@ -1,0 +1,50 @@
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: "Enter property manually") %>
+  <% dialog.with_body do %>
+    <div class="flex gap-4">
+      <!-- Left sidebar with tabs -->
+      <%= render "properties/form_tabs", account: @account, active_tab: "details" %>
+
+      <!-- Right content area with form -->
+      <div class="flex-1">
+        <%= styled_form_with model: @account, url: update_details_property_path(@account), method: :patch do |form| %>
+          <div class="flex flex-col gap-4 min-h-[320px]">
+            <%= render "properties/form_alert", notice: @success_message, error: @error_message %>
+
+            <%= form.select :subtype,
+                options_for_select(Property::SUBTYPES.map { |k, v| [v[:long], k] }, @account.subtype),
+                { label: "Property type" },
+                { class: "form-field__input" } %>
+
+            <%= form.fields_for :accountable do |property_form| %>
+              <div class="flex items-center gap-2">
+                <%= property_form.number_field :area_value,
+                    label: "Area",
+                    placeholder: "1200",
+                    min: 0 %>
+                <%= property_form.select :area_unit,
+                    [["Square Feet", "sqft"], ["Square Meters", "sqm"]],
+                    { label: "Area unit", selected: @account.accountable.area_unit } %>
+              </div>
+
+              <%= property_form.number_field :year_built,
+                  label: "Year built",
+                  placeholder: "2000",
+                  step: 1,
+                  min: 1800,
+                  max: Date.current.year %>
+            <% end %>
+          </div>
+
+          <!-- Next/Save button -->
+          <div class="flex justify-end mt-4">
+            <%= render ButtonComponent.new(
+              text: @account.active? ? "Save" : "Next",
+              variant: "primary",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

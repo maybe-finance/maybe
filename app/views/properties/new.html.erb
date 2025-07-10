@@ -10,7 +10,7 @@
         <%= styled_form_with model: @account, url: properties_path do |form| %>
           <div class="flex flex-col gap-2 min-h-[320px]">
             <%= render "properties/form_alert", notice: @success_message, error: @error_message %>
-            <%= render "properties/overview_fields", form: form %>
+            <%= render "properties/property_overview_fields", form: form, account: @account %>
           </div>
 
           <!-- Create button -->

@@ -1,0 +1,30 @@
+<%# locals: (form:, account:) %>
+
+<div class="flex flex-col gap-2">
+  <%= form.text_field :name,
+                  label: "Name",
+                  placeholder: "Vacation home",
+                  required: true %>
+
+  <%= form.money_field :current_estimated_value,
+                    label: "Current estimated value",
+                    label_tooltip: "The estimated market value of your property. This number can often be found on sites like Zillow or Redfin, and is never an exact number.",
+                    placeholder: Money.new(0, form.object.currency || Current.family.currency),
+                    value: account.balance,
+                    required: true,
+                    sync_currency: true %>
+
+  <%= form.money_field :purchase_price,
+                    label: "Purchase price",
+                    label_tooltip: "The amount you paid when you purchased the property. Leave blank if unknown.",
+                    placeholder: Money.new(0, form.object.currency || Current.family.currency),
+                    value: account.opening_balance,
+                    sync_currency: true %>
+
+  <%= form.date_field :purchase_date,
+                  label: "Purchase date",
+                  label_tooltip: "The date you purchased the property. This helps track your property's value over time.",
+                  value: account.opening_date %>
+
+  <%= form.hidden_field :current_cash_balance, value: 0 %>
+</div>

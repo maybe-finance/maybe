@@ -7,7 +7,7 @@
                    end
    currency = Money::Currency.new(currency_value || options[:default_currency] || "USD") %>
 
-<div class="form-field <%= options[:container_class] %>" data-controller="money-field">
+<div class="form-field <%= options[:container_class] %>" data-controller="money-field" <%= "data-money-field-sync-currency-value=\"true\"" if options[:sync_currency] %>>
   <% if options[:label_tooltip] %>
     <div class="form-field__header">
       <%= form.label options[:label] || t(".label"), class: "form-field__label" do %>

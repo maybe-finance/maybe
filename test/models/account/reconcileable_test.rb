@@ -64,7 +64,7 @@ class Account::ReconcileableTest < ActiveSupport::TestCase
 
     # No new valuation is appended; we're just adjusting the opening valuation anchor
     assert_no_difference "account.entries.count" do
-      account.update_current_balance(balance: 1000, cash_balance: 1000)
+      account.update_current_balance!(balance: 1000, cash_balance: 1000)
     end
 
     opening_valuation = account.valuations.first
@@ -113,7 +113,7 @@ class Account::ReconcileableTest < ActiveSupport::TestCase
     assert_equal 2, account.valuations.count
 
     # Here, we assume user is once again "overriding" the balance to 1400
-    account.update_current_balance(balance: 1400, cash_balance: 1400)
+    account.update_current_balance!(balance: 1400, cash_balance: 1400)
 
     most_recent_valuation = account.valuations.joins(:entry).order("entries.date DESC").first
 

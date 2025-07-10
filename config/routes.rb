@@ -170,8 +170,8 @@ Rails.application.routes.draw do
   resources :investments, except: :index
   resources :properties, except: :index do
     member do
-      get :balances
-      patch :update_balances
+      get :details
+      patch :update_details
 
       get :address
       patch :update_address
