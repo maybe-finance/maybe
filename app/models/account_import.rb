@@ -18,8 +18,8 @@ class AccountImport < Import
         account.entries.create!(
           amount: row.amount,
           currency: row.currency,
-          date: Date.current,
-          name: "Imported account value",
+          date: 2.years.ago.to_date,
+          name: Valuation.build_opening_anchor_name(account.accountable_type),
           entryable: Valuation.new
         )
       end
