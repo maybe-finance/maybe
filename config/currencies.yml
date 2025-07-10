@@ -1641,8 +1641,8 @@ amd:
   priority: 100
   iso_code: AMD
   iso_numeric: "051"
-  html_code: ""
-  symbol: դր.
+  html_code: "&#1423;"
+  symbol: ֏
   minor_unit: Luma
   minor_unit_conversion: 100
   smallest_denomination: 10
