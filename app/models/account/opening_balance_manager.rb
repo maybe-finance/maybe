@@ -51,10 +51,10 @@ class Account::OpeningBalanceManager
       @oldest_entry_date ||= account.entries.minimum(:date)
     end
 
-    # Depository accounts are "all cash" accounts, so cash_balance and balance are the same. All other types are "non-cash" accounts
+    # Depository/CC accounts are "all cash" accounts, so cash_balance and balance are the same. All other types are "non-cash" accounts (or "hybrid" like Investment/Crypto)
     def default_cash_balance(balance)
       case account.accountable_type
-      when "Depository"
+      when "Depository", "CreditCard"
         balance
       else
         0

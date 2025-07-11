@@ -9,7 +9,8 @@ class AddValuationKind < ActiveRecord::Migration[7.2]
       UPDATE valuations
       SET
         balance = entries.amount,
-        cash_balance = CASE WHEN accounts.accountable_type = 'Depository' THEN entries.amount ELSE 0 END
+        -- Depository/CC accounts are "all cash" accounts where their cash balance == balance
+        cash_balance = CASE WHEN accounts.accountable_type IN ('Depository', 'CreditCard') THEN entries.amount ELSE 0 END
       FROM entries
       JOIN accounts ON entries.account_id = accounts.id
       WHERE entries.entryable_type = 'Valuation' AND entries.entryable_id = valuations.id
