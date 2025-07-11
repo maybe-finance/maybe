@@ -19,7 +19,7 @@ module EntriesTestHelper
     account = attributes[:account] || accounts(:depository)
     amount = attributes[:amount] || 5000
     cash_balance = account.accountable_type == "Depository" ? amount : 0
-    
+
     entry_defaults = {
       account: account,
       name: "Valuation",

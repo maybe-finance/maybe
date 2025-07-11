@@ -63,7 +63,7 @@ class Account < ApplicationRecord
 
       transaction do
         account.save!
-        
+
         manager = Account::OpeningBalanceManager.new(account)
         result = manager.set_opening_balance(balance: initial_balance || account.balance)
         raise result.error if result.error
