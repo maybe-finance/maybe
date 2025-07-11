@@ -24,6 +24,14 @@ class Transfer < ApplicationRecord
     end
   end
 
+  # Eager loading scope for transfer details to prevent N+1 queries
+  scope :with_transaction_details, -> {
+    includes(
+      { inflow_transaction: { entry: :account } },
+      { outflow_transaction: { entry: :account } }
+    )
+  }
+
   def reject!
     Transfer.transaction do
       RejectedTransfer.find_or_create_by!(inflow_transaction_id: inflow_transaction_id, outflow_transaction_id: outflow_transaction_id)
@@ -53,12 +61,13 @@ class Transfer < ApplicationRecord
     outflow_transaction&.entry&.sync_account_later
   end
 
+  # Memoize accessors for accounts to prevent N+1 queries
   def to_account
-    inflow_transaction&.entry&.account
+    @to_account ||= inflow_transaction&.entry&.account
   end
 
   def from_account
-    outflow_transaction&.entry&.account
+    @from_account ||= outflow_transaction&.entry&.account
   end
 
   def amount_abs
@@ -97,8 +106,9 @@ class Transfer < ApplicationRecord
   end
 
   def categorizable?
-    to_account&.accountable_type == "Loan"
-  end
+    @categorizable ||= to_account&.accountable_type == "Loan"
+    @categorizable
+ end
 
   private
     def transfer_has_different_accounts
