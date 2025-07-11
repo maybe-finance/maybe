@@ -62,11 +62,11 @@ class Account < ApplicationRecord
       initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d
 
       transaction do
+        account.save!
+        
         manager = Account::OpeningBalanceManager.new(account)
         result = manager.set_opening_balance(balance: initial_balance || account.balance)
         raise result.error if result.error
-
-        account.save!
       end
 
       account.sync_later

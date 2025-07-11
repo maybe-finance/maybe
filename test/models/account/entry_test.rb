@@ -17,7 +17,7 @@ class EntryTest < ActiveSupport::TestCase
     existing_valuation = entries :valuation
 
     new_valuation = Entry.new \
-      entryable: Valuation.new,
+      entryable: Valuation.new(kind: "reconciliation", balance: existing_valuation.amount, cash_balance: 0),
       account: existing_valuation.account,
       date: existing_valuation.date, # invalid
       currency: existing_valuation.currency,

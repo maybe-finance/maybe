@@ -1174,7 +1174,7 @@ class Demo::Generator
 
       # Property valuations (these accounts are valued, not transaction-driven)
       @home.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor", balance: 350_000, cash_balance: 0),
         amount: 350_000,
         name: Valuation.build_current_anchor_name(@home.accountable_type),
         currency: "USD",
@@ -1183,7 +1183,7 @@ class Demo::Generator
 
       # Vehicle valuations (these depreciate over time)
       @honda_accord.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor", balance: 18_000, cash_balance: 0),
         amount: 18_000,
         name: Valuation.build_current_anchor_name(@honda_accord.accountable_type),
         currency: "USD",
@@ -1191,7 +1191,7 @@ class Demo::Generator
       )
 
       @tesla_model3.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor", balance: 4_500, cash_balance: 0),
         amount: 4_500,
         name: Valuation.build_current_anchor_name(@tesla_model3.accountable_type),
         currency: "USD",
@@ -1199,7 +1199,7 @@ class Demo::Generator
       )
 
       @jewelry.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "reconciliation", balance: 2000, cash_balance: 0),
         amount: 2000,
         name: Valuation.build_reconciliation_name(@jewelry.accountable_type),
         currency: "USD",
@@ -1207,7 +1207,7 @@ class Demo::Generator
       )
 
       @personal_loc.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "reconciliation", balance: 800, cash_balance: 0),
         amount: 800,
         name: Valuation.build_reconciliation_name(@personal_loc.accountable_type),
         currency: "USD",

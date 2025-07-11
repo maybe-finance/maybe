@@ -16,13 +16,17 @@ module EntriesTestHelper
   end
 
   def create_valuation(attributes = {})
+    account = attributes[:account] || accounts(:depository)
+    amount = attributes[:amount] || 5000
+    cash_balance = account.accountable_type == "Depository" ? amount : 0
+    
     entry_defaults = {
-      account: accounts(:depository),
+      account: account,
       name: "Valuation",
       date: 1.day.ago.to_date,
       currency: "USD",
-      amount: 5000,
-      entryable: Valuation.new
+      amount: amount,
+      entryable: Valuation.new(kind: "reconciliation", balance: amount, cash_balance: cash_balance)
     }
 
     Entry.create! entry_defaults.merge(attributes)
