@@ -1,6 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Enrichable
-  include AASM
+  include AASM, Syncable, Monetizable, Chartable, Linkable, Enrichable, Anchorable
 
   validates :name, :balance, :currency, presence: true
 

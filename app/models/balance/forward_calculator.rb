@@ -13,16 +13,18 @@ class Balance::ForwardCalculator
 
   private
     def calculate_balances
-      current_cash_balance = 0
+      current_cash_balance = account.opening_cash_balance
       next_cash_balance = nil
 
       @balances = []
 
-      account.start_date.upto(Date.current).each do |date|
+      end_date = [ account.entries.order(:date).last&.date, account.holdings.order(:date).last&.date ].compact.max || Date.current
+
+      account.opening_date.upto(end_date).each do |date|
         entries = sync_cache.get_entries(date)
         holdings = sync_cache.get_holdings(date)
         holdings_value = holdings.sum(&:amount)
-        valuation = sync_cache.get_valuation(date)
+        valuation = sync_cache.get_reconciliation_valuation(date)
 
         next_cash_balance = if valuation
           valuation.amount - holdings_value

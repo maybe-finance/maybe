@@ -5,6 +5,19 @@ class Account::OpeningBalanceManager
     @account = account
   end
 
+  # Most accounts should have an opening anchor. If not, we derive the opening date from the oldest entry date
+  def opening_date
+    opening_anchor_valuation&.entry&.date || account.entries.order(:date).first&.date || Date.current
+  end
+
+  def opening_balance
+    opening_anchor_valuation&.balance || 0
+  end
+
+  def opening_cash_balance
+    opening_anchor_valuation&.cash_balance || 0
+  end
+
   def set_opening_balance(balance:, cash_balance: nil, date: nil)
     resolved_date = date || default_date
     resolved_cash_balance = cash_balance || default_cash_balance(balance)
