@@ -780,6 +780,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_225721) do
     t.datetime "updated_at", null: false
     t.jsonb "locked_attributes", default: {}
     t.string "kind", default: "reconciliation", null: false
+    t.decimal "balance", precision: 16, scale: 4, null: false
+    t.decimal "cash_balance", precision: 16, scale: 4, null: false
   end
 
   create_table "vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
