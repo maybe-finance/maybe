@@ -1176,7 +1176,7 @@ class Demo::Generator
       @home.entries.create!(
         entryable: Valuation.new,
         amount: 350_000,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@home.accountable_type),
         currency: "USD",
         date: Date.current
       )
@@ -1185,7 +1185,7 @@ class Demo::Generator
       @honda_accord.entries.create!(
         entryable: Valuation.new,
         amount: 18_000,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@honda_accord.accountable_type),
         currency: "USD",
         date: Date.current
       )
@@ -1193,7 +1193,7 @@ class Demo::Generator
       @tesla_model3.entries.create!(
         entryable: Valuation.new,
         amount: 4_500,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@tesla_model3.accountable_type),
         currency: "USD",
         date: Date.current
       )
@@ -1201,7 +1201,7 @@ class Demo::Generator
       @jewelry.entries.create!(
         entryable: Valuation.new,
         amount: 2000,
-        name: "Current Market Value",
+        name: Valuation.build_reconciliation_name(@jewelry.accountable_type),
         currency: "USD",
         date: 90.days.ago.to_date
       )
@@ -1209,7 +1209,7 @@ class Demo::Generator
       @personal_loc.entries.create!(
         entryable: Valuation.new,
         amount: 800,
-        name: "Owed",
+        name: Valuation.build_reconciliation_name(@personal_loc.accountable_type),
         currency: "USD",
         date: 120.days.ago.to_date
       )
