@@ -35,7 +35,7 @@ class Balance::ForwardCalculator
 
       end_date = [ account.entries.order(:date).last&.date, account.holdings.order(:date).last&.date ].compact.max || Date.current
 
-      account.opening_date.upto(end_date).each do |date|
+      account.opening_anchor_date.upto(end_date).each do |date|
         entries = sync_cache.get_entries(date)
         holdings = sync_cache.get_holdings(date)
         holdings_value = holdings.sum(&:amount)

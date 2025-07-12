@@ -9,21 +9,33 @@ module Account::Anchorable
     monetize :opening_balance
   end
 
-  def set_opening_balance(**opts)
+  def set_opening_anchor_balance(**opts)
     opening_balance_manager.set_opening_balance(**opts)
   end
 
-  def opening_date
+  def opening_anchor_date
     opening_balance_manager.opening_date
   end
 
-  def opening_balance
+  def opening_anchor_balance
     opening_balance_manager.opening_balance
+  end
+
+  def set_current_anchor_balance(balance)
+    current_balance_manager.set_current_balance(balance)
+  end
+
+  def current_anchor_balance
+    current_balance_manager.current_balance
   end
 
 
   private
     def opening_balance_manager
       @opening_balance_manager ||= Account::OpeningBalanceManager.new(self)
+    end
+
+    def current_balance_manager
+      @current_balance_manager ||= Account::CurrentBalanceManager.new(self)
     end
 end
