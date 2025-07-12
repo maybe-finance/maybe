@@ -33,6 +33,15 @@ module EntriesTestHelper
     )
   end
 
+  def create_current_anchor_valuation(account:, balance:, date: Date.current)
+    create_valuation(
+      account: account,
+      kind: "current_anchor",
+      amount: balance,
+      date: date
+    )
+  end
+
   def create_valuation(attributes = {})
     entry_attributes = attributes.except(:kind)
     valuation_attributes = attributes.slice(:kind)

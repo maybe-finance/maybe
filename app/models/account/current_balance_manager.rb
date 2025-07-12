@@ -18,6 +18,14 @@ class Account::CurrentBalanceManager
     end
   end
 
+  def current_date
+    if current_anchor_valuation
+      current_anchor_valuation.entry.date
+    else
+      Date.current
+    end
+  end
+
   def set_current_balance(balance)
     # A current balance anchor implies there is an external data source that will keep it updated. Since manual accounts
     # are tracked by the user, a current balance anchor is not appropriate.

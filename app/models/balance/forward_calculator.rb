@@ -14,7 +14,7 @@ class Balance::ForwardCalculator
   private
     def calculate_balances
       # Derive initial balances from opening anchor
-      opening_balance = opening_balance_manager.opening_balance
+      opening_balance = account.opening_anchor_balance
 
       if cash_only_account?
         current_cash_balance = opening_balance
@@ -23,7 +23,7 @@ class Balance::ForwardCalculator
         current_cash_balance = 0
         current_non_cash_balance = opening_balance
       else # mixed_account?
-        opening_holdings_value = holdings_value_for_date(opening_balance_manager.opening_date)
+        opening_holdings_value = holdings_value_for_date(account.opening_anchor_date)
         current_cash_balance = opening_balance - opening_holdings_value
         current_non_cash_balance = opening_holdings_value
       end
@@ -87,9 +87,6 @@ class Balance::ForwardCalculator
       @sync_cache ||= Balance::SyncCache.new(account)
     end
 
-    def opening_balance_manager
-      @opening_balance_manager ||= Account::OpeningBalanceManager.new(account)
-    end
 
     def holdings_value_for_date(date)
       holdings = sync_cache.get_holdings(date)

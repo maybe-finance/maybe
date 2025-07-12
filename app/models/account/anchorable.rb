@@ -29,6 +29,10 @@ module Account::Anchorable
     current_balance_manager.current_balance
   end
 
+  def current_anchor_date
+    current_balance_manager.current_date
+  end
+
 
   private
     def opening_balance_manager
