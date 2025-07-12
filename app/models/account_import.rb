@@ -1,4 +1,6 @@
 class AccountImport < Import
+  OpeningBalanceError = Class.new(StandardError)
+
   def import!
     transaction do
       rows.each do |row|
@@ -15,13 +17,13 @@ class AccountImport < Import
 
         account.save!
 
-        account.entries.create!(
-          amount: row.amount,
-          currency: row.currency,
-          date: 2.years.ago.to_date,
-          name: Valuation.build_opening_anchor_name(account.accountable_type),
-          entryable: Valuation.new
-        )
+        manager = Account::OpeningBalanceManager.new(account)
+        result = manager.set_opening_balance(balance: row.amount.to_d)
+
+        # Re-raise since we should never have an error here
+        if result.error
+          raise OpeningBalanceError, result.error
+        end
       end
     end
   end

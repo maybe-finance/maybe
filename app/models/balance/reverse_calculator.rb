@@ -13,6 +13,13 @@ class Balance::ReverseCalculator
 
   private
     def calculate_balances
+      # TODO: This is a temporary implementation that relies on the account.cash_balance field.
+      # In the future, we'll introduce HoldingValuation as an Entryable type that tracks
+      # individual holdings values. The reverse calculator will then:
+      # 1. Read HoldingValuations to get the holdings breakdown
+      # 2. Use the current anchor Valuation for the total balance
+      # 3. Derive cash balance as: total_balance - sum(holding_valuations)
+      # This will give us a fully event-sourced approach without relying on cached/derived fields.
       current_cash_balance = account.cash_balance
       previous_cash_balance = nil
 
@@ -36,7 +43,7 @@ class Balance::ReverseCalculator
           # If date is today, we don't distinguish cash vs. total since provider's are inconsistent with treatment
           # of the cash component.  Instead, just set the balance equal to the "total value" reported by the provider
           if date == Date.current
-            @balances << build_balance(date, account.cash_balance, account.balance - account.cash_balance)
+            @balances << build_balance(date, account.cash_balance, account.current_anchor_balance - account.cash_balance)
           else
             @balances << build_balance(date, current_cash_balance, holdings_value)
           end

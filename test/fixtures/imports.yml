@@ -7,3 +7,8 @@ trade:
   family: dylan_family
   type: TradeImport
   status: pending
+
+account:
+  family: dylan_family
+  type: AccountImport
+  status: pending

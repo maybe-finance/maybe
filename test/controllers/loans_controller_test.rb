@@ -11,8 +11,8 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
   test "creates with loan details" do
     assert_difference -> { Account.count } => 1,
       -> { Loan.count } => 1,
-      -> { Valuation.count } => 2,
-      -> { Entry.count } => 2 do
+      -> { Valuation.count } => 1,
+      -> { Entry.count } => 1 do
       post loans_path, params: {
         account: {
           name: "New Loan",

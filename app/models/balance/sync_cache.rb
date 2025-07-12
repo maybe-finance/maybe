@@ -7,6 +7,10 @@ class Balance::SyncCache
     converted_entries.find { |e| e.date == date && e.valuation? }
   end
 
+  def get_reconciliation_valuation(date)
+    converted_entries.find { |e| e.date == date && e.valuation? && e.valuation.reconciliation? }
+  end
+
   def get_holdings(date)
     converted_holdings.select { |h| h.date == date }
   end

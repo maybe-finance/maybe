@@ -1,2 +1,2 @@
-one: { }
-two: { }
+one:
+  kind: reconciliation

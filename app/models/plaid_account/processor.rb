@@ -51,6 +51,13 @@ class PlaidAccount::Processor
         )
 
         account.save!
+
+        # Create or update the current balance anchor valuation for event-sourced ledger
+        # Note: This is a partial implementation. In the future, we'll introduce HoldingValuation
+        # to properly track the holdings vs. cash breakdown, but for now we're only tracking
+        # the total balance in the current anchor. The cash_balance field on the account model
+        # is still being used for the breakdown.
+        account.set_current_anchor_balance(balance_calculator.balance)
       end
     end
 

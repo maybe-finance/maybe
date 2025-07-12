@@ -11,8 +11,8 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
   test "creates with vehicle details" do
     assert_difference -> { Account.count } => 1,
       -> { Vehicle.count } => 1,
-      -> { Valuation.count } => 2,
-      -> { Entry.count } => 2 do
+      -> { Valuation.count } => 1,
+      -> { Entry.count } => 1 do
       post vehicles_path, params: {
         account: {
           name: "Vehicle",

@@ -18,7 +18,7 @@ class Balance::TrendCalculator
     BalanceTrend.new(
       trend: Trend.new(
         current: Money.new(balance.balance, balance.currency),
-        previous: Money.new(prior_balance.balance, balance.currency),
+        previous: prior_balance.present? ? Money.new(prior_balance.balance, balance.currency) : nil,
         favorable_direction: balance.account.favorable_direction
       ),
       cash: Money.new(balance.cash_balance, balance.currency),
