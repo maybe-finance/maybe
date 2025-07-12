@@ -58,9 +58,8 @@ class AccountImportTest < ActiveSupport::TestCase
     accounts.each do |account|
       valuation = account.valuations.last
       assert_not_nil valuation
-      assert_equal account.balance, valuation.balance
-      assert_equal account.balance, valuation.cash_balance
       assert_equal "opening_anchor", valuation.kind
+      assert_equal account.balance, valuation.entry.amount
     end
   end
 

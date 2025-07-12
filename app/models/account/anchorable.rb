@@ -6,7 +6,7 @@ module Account::Anchorable
   included do
     include Monetizable
 
-    monetize :opening_balance, :opening_cash_balance
+    monetize :opening_balance
   end
 
   def set_opening_balance(**opts)
@@ -21,9 +21,6 @@ module Account::Anchorable
     opening_balance_manager.opening_balance
   end
 
-  def opening_cash_balance
-    opening_balance_manager.opening_cash_balance
-  end
 
   private
     def opening_balance_manager

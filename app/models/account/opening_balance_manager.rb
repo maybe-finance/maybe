@@ -11,16 +11,11 @@ class Account::OpeningBalanceManager
   end
 
   def opening_balance
-    opening_anchor_valuation&.balance || 0
+    opening_anchor_valuation&.entry&.amount || 0
   end
 
-  def opening_cash_balance
-    opening_anchor_valuation&.cash_balance || 0
-  end
-
-  def set_opening_balance(balance:, cash_balance: nil, date: nil)
+  def set_opening_balance(balance:, date: nil)
     resolved_date = date || default_date
-    resolved_cash_balance = cash_balance || default_cash_balance(balance)
 
     # Validate date is before oldest entry
     if date && oldest_entry_date && resolved_date >= oldest_entry_date
@@ -30,12 +25,11 @@ class Account::OpeningBalanceManager
     if opening_anchor_valuation.nil?
       create_opening_anchor(
         balance: balance,
-        cash_balance: resolved_cash_balance,
         date: resolved_date
       )
       Result.new(success?: true, changes_made?: true, error: nil)
     else
-      changes_made = update_opening_anchor(balance: balance, cash_balance: cash_balance, date: date)
+      changes_made = update_opening_anchor(balance: balance, date: date)
       Result.new(success?: true, changes_made?: changes_made, error: nil)
     end
   end
@@ -51,15 +45,6 @@ class Account::OpeningBalanceManager
       @oldest_entry_date ||= account.entries.minimum(:date)
     end
 
-    # Depository/CC accounts are "all cash" accounts, so cash_balance and balance are the same. All other types are "non-cash" accounts (or "hybrid" like Investment/Crypto)
-    def default_cash_balance(balance)
-      case account.accountable_type
-      when "Depository", "CreditCard"
-        balance
-      else
-        0
-      end
-    end
 
     def default_date
       if oldest_entry_date
@@ -69,37 +54,22 @@ class Account::OpeningBalanceManager
       end
     end
 
-    def create_opening_anchor(balance:, cash_balance:, date:)
+    def create_opening_anchor(balance:, date:)
       account.entries.create!(
         date: date,
         name: Valuation.build_opening_anchor_name(account.accountable_type),
         amount: balance,
         currency: account.currency,
         entryable: Valuation.new(
-          kind: "opening_anchor",
-          balance: balance,
-          cash_balance: cash_balance
+          kind: "opening_anchor"
         )
       )
     end
 
-    def update_opening_anchor(balance:, cash_balance: nil, date: nil)
+    def update_opening_anchor(balance:, date: nil)
       changes_made = false
 
       ActiveRecord::Base.transaction do
-        # Update valuation attributes
-        if opening_anchor_valuation.balance != balance
-          opening_anchor_valuation.balance = balance
-          changes_made = true
-        end
-
-        if cash_balance.present? && opening_anchor_valuation.cash_balance != cash_balance
-          opening_anchor_valuation.cash_balance = cash_balance
-          changes_made = true
-        end
-
-        opening_anchor_valuation.save! if opening_anchor_valuation.changed?
-
         # Update associated entry attributes
         entry = opening_anchor_valuation.entry
 

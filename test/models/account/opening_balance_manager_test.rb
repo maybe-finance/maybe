@@ -13,7 +13,6 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
                      -> { @depository_account.valuations.count } => 1 do
       result = manager.set_opening_balance(
         balance: 1000,
-        cash_balance: 500,
         date: 1.year.ago.to_date
       )
 
@@ -24,8 +23,7 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
 
     opening_anchor = @depository_account.valuations.opening_anchor.first
     assert_not_nil opening_anchor
-    assert_equal 1000, opening_anchor.balance
-    assert_equal 500, opening_anchor.cash_balance
+    assert_equal 1000, opening_anchor.entry.amount
     assert_equal "opening_anchor", opening_anchor.kind
 
     entry = opening_anchor.entry
@@ -34,7 +32,7 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     assert_equal "Opening balance", entry.name
   end
 
-  test "when no existing anchor and no cash balance provided, provides default based on balance and account type" do
+  test "when no existing anchor, creates with provided balance" do
     # Test with Depository account (should default to balance)
     depository_manager = Account::OpeningBalanceManager.new(@depository_account)
 
@@ -45,8 +43,7 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     end
 
     depository_anchor = @depository_account.valuations.opening_anchor.first
-    assert_equal 2000, depository_anchor.balance
-    assert_equal 2000, depository_anchor.cash_balance # Should default to balance for Depository
+    assert_equal 2000, depository_anchor.entry.amount
 
     # Test with Investment account (should default to 0)
     investment_manager = Account::OpeningBalanceManager.new(@investment_account)
@@ -58,8 +55,7 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     end
 
     investment_anchor = @investment_account.valuations.opening_anchor.first
-    assert_equal 5000, investment_anchor.balance
-    assert_equal 0, investment_anchor.cash_balance # Should default to 0 for non-Depository
+    assert_equal 5000, investment_anchor.entry.amount
   end
 
   test "when no existing anchor and no date provided, provides default based on account type" do
@@ -126,7 +122,6 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     manager = Account::OpeningBalanceManager.new(@depository_account)
     result = manager.set_opening_balance(
       balance: 1000,
-      cash_balance: 800,
       date: 6.months.ago.to_date
     )
     assert result.success?
@@ -140,7 +135,6 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
       assert_no_difference -> { @depository_account.valuations.count } do
         result = manager.set_opening_balance(
           balance: 2000,
-          cash_balance: 1500,
           date: 8.months.ago.to_date
         )
         assert result.success?
@@ -151,43 +145,37 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     opening_anchor.reload
     assert_equal original_id, opening_anchor.id # Same valuation record
     assert_equal original_entry_id, opening_anchor.entry.id # Same entry record
-    assert_equal 2000, opening_anchor.balance
-    assert_equal 1500, opening_anchor.cash_balance
+    assert_equal 2000, opening_anchor.entry.amount
     assert_equal 2000, opening_anchor.entry.amount
     assert_equal 8.months.ago.to_date, opening_anchor.entry.date
   end
 
-  test "when existing anchor and no cash balance provided, only update balance" do
-    # First create an opening anchor with specific cash balance
+  test "when existing anchor and no date provided, only update balance" do
+    # First create an opening anchor
     manager = Account::OpeningBalanceManager.new(@depository_account)
     result = manager.set_opening_balance(
       balance: 1000,
-      cash_balance: 700,
       date: 3.months.ago.to_date
     )
     assert result.success?
 
     opening_anchor = @depository_account.valuations.opening_anchor.first
-    original_cash_balance = opening_anchor.cash_balance
 
-    # Update without providing cash_balance
+    # Update without providing date
     result = manager.set_opening_balance(balance: 1500)
     assert result.success?
     assert result.changes_made?
 
     opening_anchor.reload
-    assert_equal 1500, opening_anchor.balance
-    assert_equal original_cash_balance, opening_anchor.cash_balance # Should remain unchanged
     assert_equal 1500, opening_anchor.entry.amount
   end
 
-  test "when existing anchor and no date provided, only update balance" do
+  test "when existing anchor and updating balance only, preserves original date" do
     # First create an opening anchor with specific date
     manager = Account::OpeningBalanceManager.new(@depository_account)
     original_date = 4.months.ago.to_date
     result = manager.set_opening_balance(
       balance: 1000,
-      cash_balance: 1000,
       date: original_date
     )
     assert result.success?
@@ -195,13 +183,12 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     opening_anchor = @depository_account.valuations.opening_anchor.first
 
     # Update without providing date
-    result = manager.set_opening_balance(balance: 2500, cash_balance: 2000)
+    result = manager.set_opening_balance(balance: 2500)
     assert result.success?
     assert result.changes_made?
 
     opening_anchor.reload
-    assert_equal 2500, opening_anchor.balance
-    assert_equal 2000, opening_anchor.cash_balance
+    assert_equal 2500, opening_anchor.entry.amount
     assert_equal original_date, opening_anchor.entry.date # Should remain unchanged
   end
 
@@ -247,7 +234,6 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     manager = Account::OpeningBalanceManager.new(@depository_account)
     result = manager.set_opening_balance(
       balance: 1000,
-      cash_balance: 1000,
       date: 2.months.ago.to_date
     )
     assert result.success?
@@ -256,7 +242,6 @@ class Account::OpeningBalanceManagerTest < ActiveSupport::TestCase
     # Try to set the same values
     result = manager.set_opening_balance(
       balance: 1000,
-      cash_balance: 1000,
       date: 2.months.ago.to_date
     )
 

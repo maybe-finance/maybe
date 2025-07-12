@@ -15,31 +15,27 @@ module EntriesTestHelper
     Entry.create! entry_defaults.merge(entry_attributes)
   end
 
-  def create_opening_anchor_valuation(account:, balance:, cash_balance:, date:)
+  def create_opening_anchor_valuation(account:, balance:, date:)
     create_valuation(
       account: account,
       kind: "opening_anchor",
       amount: balance,
-      balance: balance,
-      cash_balance: cash_balance,
       date: date
     )
   end
 
-  def create_reconciliation_valuation(account:, balance:, cash_balance:, date:)
+  def create_reconciliation_valuation(account:, balance:, date:)
     create_valuation(
       account: account,
       kind: "reconciliation",
       amount: balance,
-      balance: balance,
-      cash_balance: cash_balance,
       date: date
     )
   end
 
   def create_valuation(attributes = {})
-    entry_attributes = attributes.except(:kind, :balance, :cash_balance)
-    valuation_attributes = attributes.slice(:kind, :balance, :cash_balance)
+    entry_attributes = attributes.except(:kind)
+    valuation_attributes = attributes.slice(:kind)
 
     account = attributes[:account] || accounts(:depository)
     amount = attributes[:amount] || 5000
@@ -50,7 +46,7 @@ module EntriesTestHelper
       date: 1.day.ago.to_date,
       currency: "USD",
       amount: amount,
-      entryable: Valuation.new({ kind: "reconciliation", balance: amount, cash_balance: 0 }.merge(valuation_attributes))
+      entryable: Valuation.new({ kind: "reconciliation" }.merge(valuation_attributes))
     }
 
     Entry.create! entry_defaults.merge(entry_attributes)

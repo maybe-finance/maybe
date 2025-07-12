@@ -77,43 +77,77 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     calculated = Balance::ForwardCalculator.new(@depository).calculate
 
     # Since we start at 0, this transaction (inflow) simply increases balance from 0 -> 1000
-    expected = [ 1000 ]
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 2.days.ago.to_date, { balance: 1000, cash_balance: 1000 } ]
+      ]
+    )
 
-    create_reconciliation_valuation(account: @depository, balance: 18000, cash_balance: 18000, date: 3.days.ago.to_date)
-
-    balances = calculated.map(&:balance)
-    cash_balances = calculated.map(&:cash_balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    create_reconciliation_valuation(account: @depository, balance: 18000, date: 3.days.ago.to_date)
 
     @depository.reload
 
     # First valuation sets balance to 18000, then transaction increases balance to 19000
-    expected = [ 18000, 19000 ]
     calculated = Balance::ForwardCalculator.new(@depository).calculate
 
-    balances = calculated.map(&:balance)
-    cash_balances = calculated.map(&:cash_balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 3.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ],
+        [ 2.days.ago.to_date, { balance: 19000, cash_balance: 19000 } ]
+      ]
+    )
   end
 
-  test "any account type can use valuations only to construct balances" do
-    [ @depository, @investment, @property, @loan ].each do |account|
-      create_opening_anchor_valuation(account: account, balance: 17000, cash_balance: 17000, date: 3.days.ago.to_date)
-      create_reconciliation_valuation(account: account, balance: 18000, cash_balance: 18000, date: 2.days.ago.to_date)
+  test "cash-only accounts (depository, credit card) use valuations where cash balance equals total balance" do
+    [ @depository, @credit_card ].each do |account|
+      create_opening_anchor_valuation(account: account, balance: 17000, date: 3.days.ago.to_date)
+      create_reconciliation_valuation(account: account, balance: 18000, date: 2.days.ago.to_date)
 
-      expected = [ 17000, 18000 ]
       calculated = Balance::ForwardCalculator.new(account).calculate
 
-      balances = calculated.map(&:balance)
-      cash_balances = calculated.map(&:cash_balance)
-
-      assert_equal expected, balances
-      assert_equal expected, cash_balances
+      assert_balances(
+        calculated_data: calculated,
+        expected_balances: [
+          [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+          [ 2.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ]
+        ]
+      )
     end
+  end
+
+  test "non-cash accounts (property, loan) use valuations where cash balance is always zero" do
+    [ @property, @loan ].each do |account|
+      create_opening_anchor_valuation(account: account, balance: 17000, date: 3.days.ago.to_date)
+      create_reconciliation_valuation(account: account, balance: 18000, date: 2.days.ago.to_date)
+
+      calculated = Balance::ForwardCalculator.new(account).calculate
+
+      assert_balances(
+        calculated_data: calculated,
+        expected_balances: [
+          [ 3.days.ago.to_date, { balance: 17000, cash_balance: 0.0 } ],
+          [ 2.days.ago.to_date, { balance: 18000, cash_balance: 0.0 } ]
+        ]
+      )
+    end
+  end
+
+  test "mixed accounts (investment) use valuations where cash balance is total minus holdings" do
+    create_opening_anchor_valuation(account: @investment, balance: 17000, date: 3.days.ago.to_date)
+    create_reconciliation_valuation(account: @investment, balance: 18000, date: 2.days.ago.to_date)
+
+    # Without holdings, cash balance equals total balance
+    calculated = Balance::ForwardCalculator.new(@investment).calculate
+
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+        [ 2.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ]
+      ]
+    )
   end
 
   # ------------------------------------------------------------------------------------------------
@@ -121,38 +155,44 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   # ------------------------------------------------------------------------------------------------
 
   test "transactions on depository accounts affect cash balance" do
-    create_opening_anchor_valuation(account: @depository, balance: 20000, cash_balance: 20000, date: 5.days.ago.to_date)
+    create_opening_anchor_valuation(account: @depository, balance: 20000, date: 5.days.ago.to_date)
     create_transaction(account: @depository, date: 4.days.ago.to_date, amount: -500) # income
     create_transaction(account: @depository, date: 2.days.ago.to_date, amount: 100) # expense
 
-    expected = [ 20000, 20500, 20500, 20400 ]
-    calculated = Balance::ForwardCalculator.new(@depository).calculate.sort_by(&:date)
+    calculated = Balance::ForwardCalculator.new(@depository).calculate
 
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 5.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
+        [ 4.days.ago.to_date, { balance: 20500, cash_balance: 20500 } ],
+        [ 3.days.ago.to_date, { balance: 20500, cash_balance: 20500 } ],
+        [ 2.days.ago.to_date, { balance: 20400, cash_balance: 20400 } ]
+      ]
+    )
   end
 
 
   test "transactions on credit card accounts affect cash balance inversely" do
-    create_opening_anchor_valuation(account: @credit_card, balance: 1000, cash_balance: 1000, date: 5.days.ago.to_date)
+    create_opening_anchor_valuation(account: @credit_card, balance: 1000, date: 5.days.ago.to_date)
     create_transaction(account: @credit_card, date: 4.days.ago.to_date, amount: -500) # CC payment
     create_transaction(account: @credit_card, date: 2.days.ago.to_date, amount: 100) # expense
 
-    expected = [ 1000, 500, 500, 600 ]
-    calculated = Balance::ForwardCalculator.new(@credit_card).calculate.sort_by(&:date)
+    calculated = Balance::ForwardCalculator.new(@credit_card).calculate
 
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 5.days.ago.to_date, { balance: 1000, cash_balance: 1000 } ],
+        [ 4.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
+        [ 3.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
+        [ 2.days.ago.to_date, { balance: 600, cash_balance: 600 } ]
+      ]
+    )
   end
 
   test "depository account with transactions and balance reconciliations" do
-    create_opening_anchor_valuation(account: @depository, balance: 20000, cash_balance: 20000, date: 10.days.ago.to_date)
+    create_opening_anchor_valuation(account: @depository, balance: 20000, date: 10.days.ago.to_date)
     create_transaction(account: @depository, date: 8.days.ago.to_date, amount: -5000)
     create_valuation(account: @depository, date: 6.days.ago.to_date, amount: 17000)
     create_transaction(account: @depository, date: 6.days.ago.to_date, amount: -500)
@@ -160,20 +200,29 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     create_valuation(account: @depository, date: 3.days.ago.to_date, amount: 17000)
     create_transaction(account: @depository, date: 1.day.ago.to_date, amount: 100)
 
-    expected = [ 20000, 20000, 25000, 25000, 17000, 17000, 17500, 17000, 17000, 16900 ]
-    calculated = Balance::ForwardCalculator.new(@depository).calculate.sort_by(&:date)
+    calculated = Balance::ForwardCalculator.new(@depository).calculate
 
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 10.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
+        [ 9.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
+        [ 8.days.ago.to_date, { balance: 25000, cash_balance: 25000 } ],
+        [ 7.days.ago.to_date, { balance: 25000, cash_balance: 25000 } ],
+        [ 6.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+        [ 5.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+        [ 4.days.ago.to_date, { balance: 17500, cash_balance: 17500 } ],
+        [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+        [ 2.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
+        [ 1.day.ago.to_date, { balance: 16900, cash_balance: 16900 } ]
+      ]
+    )
   end
 
   test "accounts with transactions in multiple currencies convert to the account currency" do
     ExchangeRate.create! date: 1.day.ago.to_date, from_currency: "EUR", to_currency: "USD", rate: 1.2
 
-    create_opening_anchor_valuation(account: @depository, balance: 100, cash_balance: 100, date: 4.days.ago.to_date)
+    create_opening_anchor_valuation(account: @depository, balance: 100, date: 4.days.ago.to_date)
 
     create_transaction(account: @depository, date: 3.days.ago.to_date, amount: -100, currency: "USD")
     create_transaction(account: @depository, date: 2.days.ago.to_date, amount: -300, currency: "USD")
@@ -181,60 +230,56 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     # Transaction in different currency than the account's main currency
     create_transaction(account: @depository, date: 1.day.ago.to_date, amount: -500, currency: "EUR") # €500 * 1.2 = $600
 
-    expected = [ 100, 200, 500, 1100 ]
-    calculated = Balance::ForwardCalculator.new(@depository).calculate.sort_by(&:date)
+    calculated = Balance::ForwardCalculator.new(@depository).calculate
 
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected, balances
-    assert_equal expected, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 4.days.ago.to_date, { balance: 100, cash_balance: 100 } ],
+        [ 3.days.ago.to_date, { balance: 200, cash_balance: 200 } ],
+        [ 2.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
+        [ 1.day.ago.to_date, { balance: 1100, cash_balance: 1100 } ]
+      ]
+    )
   end
 
   # A loan is a special case where despite being a "non-cash" account, it is typical to have "payment" transactions that reduce the loan principal (non cash balance)
   test "loan payment transactions affect non cash balance" do
-    skip "TODO: Calculator needs to be updated to support this logic."
-
-    create_opening_anchor_valuation(
-      account: @loan,
-      balance: 20000, # "Principal balance" (100% non-cash)
-      cash_balance: 0, # Loans don't have cash balances
-      date: 2.days.ago.to_date
-    )
+    create_opening_anchor_valuation(account: @loan, balance: 20000, date: 2.days.ago.to_date)
 
     # "Loan payment" of $2000, which reduces the principal
     # TODO: We'll eventually need to calculate which portion of the txn was "interest" vs. "principal", but for now we'll just assume it's all principal
     # since we don't have a first-class way to track interest payments yet.
     create_transaction(account: @loan, date: 1.day.ago.to_date, amount: -2000)
 
-    expected_cash_balances = [ 0, 0 ]
-    expected_balances = [ 20000, 18000 ]
-    calculated = Balance::ForwardCalculator.new(@loan).calculate.sort_by(&:date)
+    calculated = Balance::ForwardCalculator.new(@loan).calculate
 
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected_balances, balances
-    assert_equal expected_cash_balances, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 0 } ],
+        [ 1.day.ago.to_date, { balance: 18000, cash_balance: 0 } ]
+      ]
+    )
   end
 
   # We use Property as a "proxy" for all non-cash accounts (OtherAsset, OtherLiability, Vehicle, Property)
   test "non cash accounts can only use valuations and transactions will be recorded but ignored for balance calculation" do
-    skip "TODO: Calculator needs to be updated to support this logic."
-
-    create_opening_anchor_valuation(account: @property, balance: 500000, cash_balance: 0, date: 3.days.ago.to_date)
+    create_opening_anchor_valuation(account: @property, balance: 500000, date: 3.days.ago.to_date)
 
     # This simulates a "down payment", where even though the user wants to see this transaction in the account, it shouldn't affect
     # the "opening" balance that we set as the "purchase price" of the property.
     create_transaction(account: @property, date: 2.days.ago.to_date, amount: -50000)
 
-    expected_cash_balances = [ 0, 0  ]
-    expected_balances = [ 500000, 500000 ]
+    calculated = Balance::ForwardCalculator.new(@property).calculate
 
-    calculated = Balance::ForwardCalculator.new(@property).calculate.sort_by(&:date)
-
-    assert_equal expected_cash_balances, calculated.map(&:cash_balance)
-    assert_equal expected_balances, calculated.map(&:balance)
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 3.days.ago.to_date, { balance: 500000, cash_balance: 0 } ],
+        [ 2.days.ago.to_date, { balance: 500000, cash_balance: 0 } ]
+      ]
+    )
   end
 
   # ------------------------------------------------------------------------------------------------
@@ -249,7 +294,7 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     aapl = securities(:aapl)
 
     # Account starts with brokerage cash of $5000 and no holdings
-    create_opening_anchor_valuation(account: @investment, balance: 5000, cash_balance: 5000, date: 3.days.ago.to_date)
+    create_opening_anchor_valuation(account: @investment, balance: 5000, date: 3.days.ago.to_date)
 
     # Share purchase reduces cash balance by $1000, but keeps overall balance same
     create_trade(aapl, account: @investment, qty: 10, date: 1.day.ago.to_date, price: 100)
@@ -260,40 +305,30 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     # Given constant prices, overall balance (account value) should be constant
     # (the single trade doesn't affect balance; it just alters cash vs. holdings composition)
-    expected_cash_balances = [ 5000, 5000, 4000, 4000 ]
-    expected_balances = [ 5000, 5000, 5000, 5000 ]
+    calculated = Balance::ForwardCalculator.new(@investment).calculate
 
-    calculated = Balance::ForwardCalculator.new(@investment).calculate.sort_by(&:date)
-
-    cash_balances = calculated.map(&:cash_balance)
-    balances = calculated.map(&:balance)
-
-    assert_equal expected_balances, balances
-    assert_equal expected_cash_balances, cash_balances
+    assert_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ 3.days.ago.to_date, { balance: 5000, cash_balance: 5000 } ],
+        [ 2.days.ago.to_date, { balance: 5000, cash_balance: 5000 } ],
+        [ 1.day.ago.to_date, { balance: 5000, cash_balance: 4000 } ],
+        [ Date.current, { balance: 5000, cash_balance: 4000 } ]
+      ]
+    )
   end
 
-  # A scenario where the user has set the opening valuation to have a non-zero holdings value, so we need to track that even though it's "unknown" set of holdings.
-  test "investment accounts can use valuations to set both cash and non-cash balances" do
-    skip "TODO: Calculator needs to be updated to support this logic."
+  private
 
-    # Account starts with balance of $17,000, which consists of cash of $5,000 (brokerage cash) and non-cash of $12,000 (holdings value)
-    create_opening_anchor_valuation(account: @investment, balance: 17000, cash_balance: 5000, date: 3.days.ago.to_date)
+    def assert_balances(calculated_data:, expected_balances:)
+      # Sort calculated data by date to ensure consistent ordering
+      sorted_data = calculated_data.sort_by(&:date)
 
-    # A trade increases cash balance by $1000, reduces non-cash balance by $1000 (overall balance stays the same)
-    create_trade(securities(:aapl), account: @investment, qty: 10, date: 1.day.ago.to_date, price: 100)
+      # Extract actual values as [date, { balance:, cash_balance: }]
+      actual_balances = sorted_data.map do |b|
+        [ b.date, { balance: b.balance, cash_balance: b.cash_balance } ]
+      end
 
-    # In this scenario, our calculated holdings add up to $1,000. This does NOT match the $12,000 in "holdings value" we initialized the account with.
-    # In other words, we have $1,000 in "known" holdings, and "$11,000" in "unknown" holdings that the user has told us to track, but hasn't told us details for.
-    # Our calculator must respect this "valuation" and still keep the "holdings value" at $12,000, despite the total of holdings only being $1,000.
-    Holding.create!(date: 1.day.ago.to_date, account: @investment, security: securities(:aapl), qty: 10, price: 100, amount: 1000, currency: "USD")
-    Holding.create!(date: Date.current, account: @investment, security: securities(:aapl), qty: 10, price: 100, amount: 1000, currency: "USD")
-
-    expected_cash_balances = [ 5000, 5000, 4000, 4000 ]
-    expected_balances = [ 17000, 17000, 17000, 17000 ] # Balances stay the same
-
-    calculated = Balance::ForwardCalculator.new(@investment).calculate.sort_by(&:date)
-
-    assert_equal expected_cash_balances, calculated.map(&:cash_balance)
-    assert_equal expected_balances, calculated.map(&:balance)
-  end
+      assert_equal expected_balances, actual_balances
+    end
 end
