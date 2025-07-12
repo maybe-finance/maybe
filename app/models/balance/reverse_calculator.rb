@@ -20,33 +20,28 @@ class Balance::ReverseCalculator
       # 2. Use the current anchor Valuation for the total balance
       # 3. Derive cash balance as: total_balance - sum(holding_valuations)
       # This will give us a fully event-sourced approach without relying on cached/derived fields.
-      current_cash_balance = account.cash_balance
+      current_cash_balance = account.current_anchor_balance - holdings_value_for_date(account.current_anchor_date)
       previous_cash_balance = nil
 
       @balances = []
 
-      Date.current.downto(account.start_date).map do |date|
+      account.current_anchor_date.downto(account.opening_anchor_date).map do |date|
         entries = sync_cache.get_entries(date)
         holdings = sync_cache.get_holdings(date)
         holdings_value = holdings.sum(&:amount)
-        valuation = sync_cache.get_valuation(date)
+        valuation_entry = sync_cache.get_valuation(date)
 
-        previous_cash_balance = if valuation
-          valuation.amount - holdings_value
+        # Reverse syncs ignore valuations *except* the current and opening anchors. See the test suite for an explanation of why we do this.
+        previous_cash_balance = if valuation_entry.present? && valuation_entry.valuation.opening_anchor?
+          valuation_entry.amount - holdings_value
         else
           calculate_next_balance(current_cash_balance, entries, direction: :reverse)
         end
 
-        if valuation.present?
+        if valuation_entry.present? && valuation_entry.valuation.opening_anchor?
           @balances << build_balance(date, previous_cash_balance, holdings_value)
         else
-          # If date is today, we don't distinguish cash vs. total since provider's are inconsistent with treatment
-          # of the cash component.  Instead, just set the balance equal to the "total value" reported by the provider
-          if date == Date.current
-            @balances << build_balance(date, account.cash_balance, account.current_anchor_balance - account.cash_balance)
-          else
-            @balances << build_balance(date, current_cash_balance, holdings_value)
-          end
+          @balances << build_balance(date, current_cash_balance, holdings_value)
         end
 
         current_cash_balance = previous_cash_balance
@@ -67,6 +62,11 @@ class Balance::ReverseCalculator
         cash_balance: cash_balance,
         currency: account.currency
       )
+    end
+
+    def holdings_value_for_date(date)
+      holdings = sync_cache.get_holdings(date)
+      holdings.sum(&:amount)
     end
 
     def calculate_next_balance(prior_balance, transactions, direction: :forward)
