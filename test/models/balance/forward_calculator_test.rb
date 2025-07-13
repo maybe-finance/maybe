@@ -249,7 +249,7 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
   # A loan is a special case where despite being a "non-cash" account, it is typical to have "payment" transactions that reduce the loan principal (non cash balance)
   test "loan payment transactions affect non cash balance" do
     account = create_account_with_ledger(
-      account: { type: Loan, balance: 10000, cash_balance: 10000, currency: "USD" },
+      account: { type: Loan, balance: 10000, cash_balance: 0, currency: "USD" },
       entries: [
         { type: "opening_anchor", date: 2.days.ago.to_date, balance: 20000 },
         # "Loan payment" of $2000, which reduces the principal
@@ -270,27 +270,28 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     )
   end
 
-  # We use Property as a "proxy" for all non-cash accounts (OtherAsset, OtherLiability, Vehicle, Property)
   test "non cash accounts can only use valuations and transactions will be recorded but ignored for balance calculation" do
-    account = create_account_with_ledger(
-      account: { type: Property, balance: 10000, cash_balance: 10000, currency: "USD" },
-      entries: [
-        { type: "opening_anchor", date: 3.days.ago.to_date, balance: 500000 },
-        # This simulates a "down payment", where even though the user wants to see this transaction in the account, it shouldn't affect
-        # the "opening" balance that we set as the "purchase price" of the property.
-        { type: "transaction", date: 2.days.ago.to_date, amount: -50000 }
-      ]
-    )
+    [ Property, Vehicle, OtherAsset, OtherLiability ].each do |account_type|
+      account = create_account_with_ledger(
+        account: { type: account_type, balance: 10000, cash_balance: 10000, currency: "USD" },
+        entries: [
+          { type: "opening_anchor", date: 3.days.ago.to_date, balance: 500000 },
 
-    calculated = Balance::ForwardCalculator.new(account).calculate
+          # Will be ignored for balance calculation due to account type of non-cash
+          { type: "transaction", date: 2.days.ago.to_date, amount: -50000 }
+        ]
+      )
 
-    assert_calculated_ledger_balances(
-      calculated_data: calculated,
-      expected_balances: [
-        [ 3.days.ago.to_date, { balance: 500000, cash_balance: 0 } ],
-        [ 2.days.ago.to_date, { balance: 500000, cash_balance: 0 } ]
-      ]
-    )
+      calculated = Balance::ForwardCalculator.new(account).calculate
+
+      assert_calculated_ledger_balances(
+        calculated_data: calculated,
+        expected_balances: [
+          [ 3.days.ago.to_date, { balance: 500000, cash_balance: 0 } ],
+          [ 2.days.ago.to_date, { balance: 500000, cash_balance: 0 } ]
+        ]
+      )
+    end
   end
 
   # ------------------------------------------------------------------------------------------------

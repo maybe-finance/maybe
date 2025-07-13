@@ -133,6 +133,56 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     )
   end
 
+  # A loan is a special case where despite being a "non-cash" account, it is typical to have "payment" transactions that reduce the loan principal (non cash balance)
+  test "loan payment transactions affect non cash balance" do
+    account = create_account_with_ledger(
+      account: { type: Loan, balance: 198000, cash_balance: 0, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 198000 },
+        # "Loan payment" of $2000, which reduces the principal
+        # TODO: We'll eventually need to calculate which portion of the txn was "interest" vs. "principal", but for now we'll just assume it's all principal
+        # since we don't have a first-class way to track interest payments yet.
+        { type: "transaction", date: 1.day.ago.to_date, amount: -2000 }
+      ]
+    )
+
+    calculated = Balance::ReverseCalculator.new(account).calculate
+
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 198000, cash_balance: 0 } ],
+        [ 1.day.ago, { balance: 198000, cash_balance: 0 } ],
+        [ 2.days.ago, { balance: 200000, cash_balance: 0 } ]
+      ]
+    )
+  end
+
+  test "non cash accounts can only use valuations and transactions will be recorded but ignored for balance calculation" do
+    [ Property, Vehicle, OtherAsset, OtherLiability ].each do |account_type|
+      account = create_account_with_ledger(
+        account: { type: account_type, balance: 1000, cash_balance: 0, currency: "USD" },
+        entries: [
+          { type: "current_anchor", date: Date.current, balance: 1000 },
+
+          # Will be ignored for balance calculation due to account type of non-cash
+          { type: "transaction", date: 1.day.ago, amount: -100 }
+        ]
+      )
+
+      calculated = Balance::ReverseCalculator.new(account).calculate
+
+      assert_calculated_ledger_balances(
+        calculated_data: calculated,
+        expected_balances: [
+          [ Date.current, { balance: 1000, cash_balance: 0 } ],
+          [ 1.day.ago, { balance: 1000, cash_balance: 0 } ],
+          [ 2.days.ago, { balance: 1000, cash_balance: 0 } ]
+        ]
+      )
+    end
+  end
+
   # When syncing backwards, trades from the past should NOT affect the current balance or previous balances.
   # They should only affect the *cash* component of the historical balances
   test "holdings and trades sync" do
