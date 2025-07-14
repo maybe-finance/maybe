@@ -1,29 +1,17 @@
-class Balance::ReverseCalculator
-  attr_reader :account
-
-  def initialize(account)
-    @account = account
-  end
-
+class Balance::ReverseCalculator < Balance::BaseCalculator
   def calculate
     Rails.logger.tagged("Balance::ReverseCalculator") do
-      calculate_balances
-    end
-  end
+      current_balance = account.current_anchor_balance
+      current_holdings_value = holdings_value_for_date(account.current_anchor_date)
 
-  private
-    def calculate_balances
-      # TODO: This is a temporary implementation that relies on the account.cash_balance field.
-      # In the future, we'll introduce HoldingValuation as an Entryable type that tracks
-      # individual holdings values. The reverse calculator will then:
-      # 1. Read HoldingValuations to get the holdings breakdown
-      # 2. Use the current anchor Valuation for the total balance
-      # 3. Derive cash balance as: total_balance - sum(holding_valuations)
-      # This will give us a fully event-sourced approach without relying on cached/derived fields.
-      current_cash_balance = account.current_anchor_balance - holdings_value_for_date(account.current_anchor_date)
-      previous_cash_balance = nil
+      current_balance_components = balance_transformer.apply_valuation(
+        OpenStruct.new(amount: current_balance),
+        non_cash_valuation: current_holdings_value
+      )
 
-      @balances = []
+      previous_balance_components = nil
+
+      balances = []
 
       account.current_anchor_date.downto(account.opening_anchor_date).map do |date|
         entries = sync_cache.get_entries(date)
@@ -32,47 +20,54 @@ class Balance::ReverseCalculator
         valuation_entry = sync_cache.get_valuation(date)
 
         # Reverse syncs ignore valuations *except* the current and opening anchors. See the test suite for an explanation of why we do this.
-        previous_cash_balance = if valuation_entry.present? && valuation_entry.valuation.opening_anchor?
-          valuation_entry.amount - holdings_value
-        else
-          calculate_next_balance(current_cash_balance, entries, direction: :reverse)
-        end
-
         if valuation_entry.present? && valuation_entry.valuation.opening_anchor?
-          @balances << build_balance(date, previous_cash_balance, holdings_value)
+          # Opening anchor valuation sets the total balance
+          previous_balance_components = balance_transformer.apply_valuation(
+            OpenStruct.new(amount: valuation_entry.amount),
+            non_cash_valuation: holdings_value
+          )
         else
-          @balances << build_balance(date, current_cash_balance, holdings_value)
+          # Apply transactions in reverse
+          # For mixed accounts, use holdings value as non-cash balance
+          non_cash_balance = if account.accountable_type.in?([ "Investment", "Crypto" ])
+            holdings_value
+          else
+            current_balance_components.non_cash_balance
+          end
+
+          previous_balance_components = balance_transformer.transform(
+            cash_balance: current_balance_components.cash_balance,
+            non_cash_balance: non_cash_balance,
+            entries: entries
+          )
         end
 
-        current_cash_balance = previous_cash_balance
+        # Build the balance for this date
+        if valuation_entry.present? && valuation_entry.valuation.opening_anchor?
+          # For opening anchor, use the calculated previous values
+          if account.accountable_type.in?([ "Investment", "Crypto" ])
+            balances << build_balance(date, previous_balance_components.cash_balance, holdings_value)
+          else
+            balances << build_balance(date, previous_balance_components.cash_balance, previous_balance_components.non_cash_balance)
+          end
+        else
+          # For all other dates, use current values
+          if account.accountable_type.in?([ "Investment", "Crypto" ])
+            balances << build_balance(date, current_balance_components.cash_balance, holdings_value)
+          else
+            balances << build_balance(date, current_balance_components.cash_balance, current_balance_components.non_cash_balance)
+          end
+        end
+
+        current_balance_components = previous_balance_components
       end
 
-      @balances
+      balances
     end
+  end
 
-    def sync_cache
-      @sync_cache ||= Balance::SyncCache.new(account)
-    end
-
-    def build_balance(date, cash_balance, holdings_value)
-      Balance.new(
-        account_id: account.id,
-        date: date,
-        balance: holdings_value + cash_balance,
-        cash_balance: cash_balance,
-        currency: account.currency
-      )
-    end
-
-    def holdings_value_for_date(date)
-      holdings = sync_cache.get_holdings(date)
-      holdings.sum(&:amount)
-    end
-
-    def calculate_next_balance(prior_balance, transactions, direction: :forward)
-      flows = transactions.sum(&:amount)
-      negated = direction == :forward ? account.asset? : account.liability?
-      flows *= -1 if negated
-      prior_balance + flows
+  private
+    def balance_transformer
+      @balance_transformer ||= Balance::Transformer.new(account, transformation_direction: :reverse)
     end
 end
