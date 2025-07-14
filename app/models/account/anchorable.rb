@@ -21,6 +21,10 @@ module Account::Anchorable
     opening_balance_manager.opening_balance
   end
 
+  def has_opening_anchor?
+    opening_balance_manager.has_opening_anchor?
+  end
+
   def set_current_anchor_balance(balance)
     current_balance_manager.set_current_balance(balance)
   end
@@ -33,6 +37,9 @@ module Account::Anchorable
     current_balance_manager.current_date
   end
 
+  def has_current_anchor?
+    current_balance_manager.has_current_anchor?
+  end
 
   private
     def opening_balance_manager

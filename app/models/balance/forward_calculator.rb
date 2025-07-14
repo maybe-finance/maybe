@@ -1,30 +1,22 @@
 class Balance::ForwardCalculator < Balance::BaseCalculator
   def calculate
     Rails.logger.tagged("Balance::ForwardCalculator") do
-      # Derive initial balances from opening anchor
-      opening_balance = account.opening_anchor_balance
-      opening_holdings_value = holdings_value_for_date(account.opening_anchor_date)
-
-      current_balance_components = balance_transformer.apply_valuation(
-        OpenStruct.new(amount: opening_balance),
-        non_cash_valuation: opening_holdings_value
+      current_balance_components = balance_transformer.set_absolute_balance(
+        total_balance: account.opening_anchor_balance,
+        # non_cash_balance: derive_non_cash_balance_for_date(account.opening_anchor_date, prior_non_cash_balance: nil),
+        holdings_value: holdings_value_for_date(account.opening_anchor_date)
       )
 
-      next_balance_components = nil
-
-      balances = []
-
-      calc_start_date.upto(calc_end_date).each do |date|
+      calc_start_date.upto(calc_end_date).map do |date|
         entries = sync_cache.get_entries(date)
-        holdings = sync_cache.get_holdings(date)
-        holdings_value = holdings.sum(&:amount)
+        holdings_value = holdings_value_for_date(date)
         valuation = sync_cache.get_reconciliation_valuation(date)
 
         if valuation
           # Reconciliation valuation sets the total balance
-          next_balance_components = balance_transformer.apply_valuation(
-            valuation,
-            non_cash_valuation: holdings_value
+          next_balance_components = balance_transformer.set_absolute_balance(
+            total_balance: valuation.amount,
+            holdings_value: holdings_value
           )
         else
           # Apply transactions
@@ -35,25 +27,32 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
             current_balance_components.non_cash_balance
           end
 
-          next_balance_components = balance_transformer.transform(
-            cash_balance: current_balance_components.cash_balance,
-            non_cash_balance: non_cash_balance,
-            entries: entries
+          next_balance_components = balance_transformer.transform_balance(
+            start_cash_balance: current_balance_components.cash_balance,
+            start_non_cash_balance: non_cash_balance,
+            today_entries: entries,
+            today_holdings_value: holdings_value
           )
         end
 
-        balances << build_balance(date, next_balance_components.cash_balance, next_balance_components.non_cash_balance)
-
         current_balance_components = next_balance_components
-      end
 
-      balances
+        build_balance(date, next_balance_components.cash_balance, next_balance_components.non_cash_balance)
+      end
     end
   end
 
   private
     def balance_transformer
       @balance_transformer ||= Balance::Transformer.new(account, transformation_direction: :forward)
+    end
+
+    def derive_non_cash_balance_for_date(date, prior_non_cash_balance:)
+      if account.balance_type == :investment
+        holdings_value_for_date(date)
+      else
+        prior_non_cash_balance
+      end
     end
 
     def calc_start_date

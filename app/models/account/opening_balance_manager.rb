@@ -5,6 +5,10 @@ class Account::OpeningBalanceManager
     @account = account
   end
 
+  def has_opening_anchor?
+    opening_anchor_valuation.present?
+  end
+
   # Most accounts should have an opening anchor. If not, we derive the opening date from the oldest entry date
   def opening_date
     return opening_anchor_valuation.entry.date if opening_anchor_valuation.present?

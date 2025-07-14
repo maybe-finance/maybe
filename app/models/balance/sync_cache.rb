@@ -3,10 +3,6 @@ class Balance::SyncCache
     @account = account
   end
 
-  def get_valuation(date)
-    converted_entries.find { |e| e.date == date && e.valuation? }
-  end
-
   def get_reconciliation_valuation(date)
     converted_entries.find { |e| e.date == date && e.valuation? && e.valuation.reconciliation? }
   end

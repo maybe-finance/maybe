@@ -146,4 +146,18 @@ class Account < ApplicationRecord
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
   end
+
+  # Determines which balance "component" (cash, non-cash) is the primary one for the account.
+  def balance_type
+    case accountable_type
+    when "Depository", "CreditCard"
+      :cash
+    when "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability"
+      :non_cash
+    when "Investment", "Crypto"
+      :investment
+    else
+      raise "Unknown account type: #{accountable_type}"
+    end
+  end
 end

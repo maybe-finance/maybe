@@ -7,6 +7,10 @@ class Account::CurrentBalanceManager
     @account = account
   end
 
+  def has_current_anchor?
+    current_anchor_valuation.present?
+  end
+
   # The fallback here is not ideal. We should not be relying on `account.balance` as it is a "cached/derived" value, set
   # by the balance calculators. Our system should always make sure there is a current anchor, and that it is up to date.
   def current_balance
