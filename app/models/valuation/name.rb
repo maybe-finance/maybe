@@ -20,11 +20,11 @@ class Valuation::Name
 
     def opening_anchor_name
       case accountable_type
-      when "Property"
+      when "Property", "Vehicle"
         "Original purchase price"
       when "Loan"
         "Original principal"
-      when "Investment"
+      when "Investment", "Crypto", "OtherAsset"
         "Opening account value"
       else
         "Opening balance"
@@ -33,11 +33,11 @@ class Valuation::Name
 
     def current_anchor_name
       case accountable_type
-      when "Property"
+      when "Property", "Vehicle"
         "Current market value"
       when "Loan"
         "Current loan balance"
-      when "Investment"
+      when "Investment", "Crypto", "OtherAsset"
         "Current account value"
       else
         "Current balance"
@@ -46,7 +46,7 @@ class Valuation::Name
 
     def recon_name
       case accountable_type
-      when "Property", "Investment"
+      when "Property", "Investment", "Vehicle", "Crypto", "OtherAsset"
         "Manual value update"
       when "Loan"
         "Manual principal update"

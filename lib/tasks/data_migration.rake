@@ -127,18 +127,18 @@ namespace :data_migration do
     manual_accounts.find_each do |account|
       accounts_processed += 1
 
-      # Find oldest valuation for opening anchor
-      oldest_valuation = account.valuations
-                               .joins(:entry)
-                               .order("entries.date ASC, entries.created_at ASC")
-                               .first
+      # Find oldest account entry
+      oldest_entry = account.entries
+                           .order("date ASC, created_at ASC")
+                           .first
 
-      if oldest_valuation && !oldest_valuation.opening_anchor?
+      # Check if it's a valuation that isn't already an anchor
+      if oldest_entry && oldest_entry.valuation?
         derived_valuation_name = Valuation.build_opening_anchor_name(account.accountable_type)
 
         Account.transaction do
-          oldest_valuation.update!(kind: "opening_anchor")
-          oldest_valuation.entry.update!(name: derived_valuation_name)
+          oldest_entry.valuation.update!(kind: "opening_anchor")
+          oldest_entry.update!(name: derived_valuation_name)
         end
         opening_anchors_set += 1
       end
