@@ -17,6 +17,21 @@ class Valuation::NameTest < ActiveSupport::TestCase
     assert_equal "Opening account value", name.to_s
   end
 
+  test "generates opening anchor name for Vehicle" do
+    name = Valuation::Name.new("opening_anchor", "Vehicle")
+    assert_equal "Original purchase price", name.to_s
+  end
+
+  test "generates opening anchor name for Crypto" do
+    name = Valuation::Name.new("opening_anchor", "Crypto")
+    assert_equal "Opening account value", name.to_s
+  end
+
+  test "generates opening anchor name for OtherAsset" do
+    name = Valuation::Name.new("opening_anchor", "OtherAsset")
+    assert_equal "Opening account value", name.to_s
+  end
+
   test "generates opening anchor name for other account types" do
     name = Valuation::Name.new("opening_anchor", "Depository")
     assert_equal "Opening balance", name.to_s
@@ -38,6 +53,21 @@ class Valuation::NameTest < ActiveSupport::TestCase
     assert_equal "Current account value", name.to_s
   end
 
+  test "generates current anchor name for Vehicle" do
+    name = Valuation::Name.new("current_anchor", "Vehicle")
+    assert_equal "Current market value", name.to_s
+  end
+
+  test "generates current anchor name for Crypto" do
+    name = Valuation::Name.new("current_anchor", "Crypto")
+    assert_equal "Current account value", name.to_s
+  end
+
+  test "generates current anchor name for OtherAsset" do
+    name = Valuation::Name.new("current_anchor", "OtherAsset")
+    assert_equal "Current account value", name.to_s
+  end
+
   test "generates current anchor name for other account types" do
     name = Valuation::Name.new("current_anchor", "Depository")
     assert_equal "Current balance", name.to_s
@@ -51,6 +81,21 @@ class Valuation::NameTest < ActiveSupport::TestCase
 
   test "generates recon name for Investment" do
     name = Valuation::Name.new("reconciliation", "Investment")
+    assert_equal "Manual value update", name.to_s
+  end
+
+  test "generates recon name for Vehicle" do
+    name = Valuation::Name.new("reconciliation", "Vehicle")
+    assert_equal "Manual value update", name.to_s
+  end
+
+  test "generates recon name for Crypto" do
+    name = Valuation::Name.new("reconciliation", "Crypto")
+    assert_equal "Manual value update", name.to_s
+  end
+
+  test "generates recon name for OtherAsset" do
+    name = Valuation::Name.new("reconciliation", "OtherAsset")
     assert_equal "Manual value update", name.to_s
   end
 

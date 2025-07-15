@@ -1,6 +1,12 @@
 class Valuation < ApplicationRecord
   include Entryable
 
+  enum :kind, {
+    reconciliation: "reconciliation",
+    opening_anchor: "opening_anchor",
+    current_anchor: "current_anchor"
+  }, validate: true, default: "reconciliation"
+
   class << self
     def build_reconciliation_name(accountable_type)
       Valuation::Name.new("reconciliation", accountable_type).to_s
@@ -13,11 +19,5 @@ class Valuation < ApplicationRecord
     def build_current_anchor_name(accountable_type)
       Valuation::Name.new("current_anchor", accountable_type).to_s
     end
-  end
-
-  # TODO: Remove this method when `kind` column is added to valuations table
-  # This is a temporary implementation until the database migration is complete
-  def kind
-    "reconciliation"
   end
 end

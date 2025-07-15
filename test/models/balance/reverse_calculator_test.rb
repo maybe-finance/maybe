@@ -1,142 +1,279 @@
 require "test_helper"
 
 class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
-  include EntriesTestHelper
+  include LedgerTestingHelper
 
-  setup do
-    @account = families(:empty).accounts.create!(
-      name: "Test",
-      balance: 20000,
-      cash_balance: 20000,
-      currency: "USD",
-      accountable: Investment.new
+  # When syncing backwards, we start with the account balance and generate everything from there.
+  test "when missing anchor and no entries, falls back to cached account balance" do
+    account = create_account_with_ledger(
+      account: { type: Depository, balance: 20000, cash_balance: 20000, currency: "USD" },
+      entries: []
+    )
+
+    assert_equal 20000, account.balance
+
+    calculated = Balance::ReverseCalculator.new(account).calculate
+
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 20000 } ]
+      ]
     )
   end
 
-  # When syncing backwards, we start with the account balance and generate everything from there.
-  test "no entries sync" do
-    assert_equal 0, @account.balances.count
+  # An artificial constraint we put on the reverse sync because it's confusing in both the code and the UI
+  # to think about how an absolute "Valuation" affects balances when syncing backwards. Furthermore, since
+  # this is typically a Plaid sync, we expect Plaid to provide us the history.
+  # Note: while "reconciliation" valuations don't affect balance, `current_anchor` and `opening_anchor` do.
+  test "reconciliation valuations do not affect balance for reverse syncs" do
+    account = create_account_with_ledger(
+      account: { type: Depository, balance: 20000, cash_balance: 20000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 },
+        { type: "reconciliation", date: 1.day.ago, balance: 17000 }, # Ignored
+        { type: "reconciliation", date: 2.days.ago, balance: 17000 }, # Ignored
+        { type: "opening_anchor", date: 4.days.ago, balance: 15000 }
+      ]
+    )
 
-    expected = [ @account.balance, @account.balance ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate
+    calculated = Balance::ReverseCalculator.new(account).calculate
 
-    assert_equal expected, calculated.map(&:balance)
+    # The "opening anchor" works slightly differently than most would expect. Since it's an artificial
+    # value provided by the user to set the date/balance of the start of the account, we must assume
+    # that there are "missing" entries following it. Because of this, we cannot "carry forward" this value
+    # like we do for a "forward sync". We simply sync backwards normally, then set the balance on opening
+    # date equal to this anchor. This is not "ideal", but is a constraint put on us since we cannot guarantee
+    # a 100% full entries history.
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 20000 } ], # Current anchor
+        [ 1.day.ago, { balance: 20000, cash_balance: 20000 } ],
+        [ 2.days.ago, { balance: 20000, cash_balance: 20000 } ],
+        [ 3.days.ago, { balance: 20000, cash_balance: 20000 } ],
+        [ 4.days.ago, { balance: 15000, cash_balance: 15000 } ] # Opening anchor
+      ]
+    )
   end
 
-  test "balance generation respects user timezone and last generated date is current user date" do
-    # Simulate user in EST timezone
-    Time.use_zone("America/New_York") do
-      # Set current time to 1am UTC on Jan 5, 2025
-      # This would be 8pm EST on Jan 4, 2025 (user's time, and the last date we should generate balances for)
-      travel_to Time.utc(2025, 01, 05, 1, 0, 0)
+  # Investment account balances are made of two components: cash and holdings.
+  test "anchors on investment accounts calculate cash balance dynamically based on holdings value" do
+    account = create_account_with_ledger(
+      account: { type: Investment, balance: 20000, cash_balance: 10000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 }, # "Total account value is $20,000 today"
+        { type: "opening_anchor", date: 1.day.ago, balance: 15000 } # "Total account value was $15,000 at the start of the account"
+      ],
+      holdings: [
+        { date: Date.current, ticker: "AAPL", qty: 100, price: 100, amount: 10000 },
+        { date: 1.day.ago, ticker: "AAPL", qty: 100, price: 100, amount: 10000 }
+      ]
+    )
 
-      create_valuation(account: @account, date: "2025-01-03", amount: 17000)
+    calculated = Balance::ReverseCalculator.new(account).calculate
 
-      expected = [ [ "2025-01-02", 17000 ], [ "2025-01-03", 17000 ], [ "2025-01-04", @account.balance ] ]
-      calculated = Balance::ReverseCalculator.new(@account).calculate
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 10000 } ], # Since $10,000 of holdings, cash has to be $10,000 to reach $20,000 total value
+        [ 1.day.ago, { balance: 15000, cash_balance: 5000 } ] # Since $10,000 of holdings, cash has to be $5,000 to reach $15,000 total value
+      ]
+    )
+  end
 
-      assert_equal expected, calculated.sort_by(&:date).map { |b| [ b.date.to_s, b.balance ] }
+  test "transactions on depository accounts affect cash balance" do
+    account = create_account_with_ledger(
+      account: { type: Depository, balance: 20000, cash_balance: 20000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 },
+        { type: "transaction", date: 4.days.ago, amount: -500 }, # income
+        { type: "transaction", date: 2.days.ago, amount: 100 } # expense
+      ]
+    )
+
+    calculated = Balance::ReverseCalculator.new(account).calculate
+
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 20000 } ], # Current balance
+        [ 1.day.ago, { balance: 20000, cash_balance: 20000 } ], # No change
+        [ 2.days.ago, { balance: 20000, cash_balance: 20000 } ], # After expense (+100)
+        [ 3.days.ago, { balance: 20100, cash_balance: 20100 } ], # Before expense
+        [ 4.days.ago, { balance: 20100, cash_balance: 20100 } ], # After income (-500)
+        [ 5.days.ago, { balance: 19600, cash_balance: 19600 } ] # After income (-500)
+      ]
+    )
+  end
+
+  test "transactions on credit card accounts affect cash balance inversely" do
+    account = create_account_with_ledger(
+      account: { type: CreditCard, balance: 2000, cash_balance: 2000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 2000 },
+        { type: "transaction", date: 2.days.ago, amount: 100 }, # expense (increases cash balance)
+        { type: "transaction", date: 4.days.ago, amount: -500 } # CC payment (reduces cash balance)
+      ]
+    )
+
+    calculated = Balance::ReverseCalculator.new(account).calculate
+
+    # Reversed order: showing how we work backwards
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 2000, cash_balance: 2000 } ],  # Current balance
+        [ 1.day.ago, { balance: 2000, cash_balance: 2000 } ], # No change
+        [ 2.days.ago, { balance: 2000, cash_balance: 2000 } ], # After expense (+100)
+        [ 3.days.ago, { balance: 1900, cash_balance: 1900 } ], # Before expense
+        [ 4.days.ago, { balance: 1900, cash_balance: 1900 } ], # After CC payment (-500)
+        [ 5.days.ago, { balance: 2400, cash_balance: 2400 } ]
+      ]
+    )
+  end
+
+  # A loan is a special case where despite being a "non-cash" account, it is typical to have "payment" transactions that reduce the loan principal (non cash balance)
+  test "loan payment transactions affect non cash balance" do
+    account = create_account_with_ledger(
+      account: { type: Loan, balance: 198000, cash_balance: 0, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 198000 },
+        # "Loan payment" of $2000, which reduces the principal
+        # TODO: We'll eventually need to calculate which portion of the txn was "interest" vs. "principal", but for now we'll just assume it's all principal
+        # since we don't have a first-class way to track interest payments yet.
+        { type: "transaction", date: 1.day.ago.to_date, amount: -2000 }
+      ]
+    )
+
+    calculated = Balance::ReverseCalculator.new(account).calculate
+
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 198000, cash_balance: 0 } ],
+        [ 1.day.ago, { balance: 198000, cash_balance: 0 } ],
+        [ 2.days.ago, { balance: 200000, cash_balance: 0 } ]
+      ]
+    )
+  end
+
+  test "non cash accounts can only use valuations and transactions will be recorded but ignored for balance calculation" do
+    [ Property, Vehicle, OtherAsset, OtherLiability ].each do |account_type|
+      account = create_account_with_ledger(
+        account: { type: account_type, balance: 1000, cash_balance: 0, currency: "USD" },
+        entries: [
+          { type: "current_anchor", date: Date.current, balance: 1000 },
+
+          # Will be ignored for balance calculation due to account type of non-cash
+          { type: "transaction", date: 1.day.ago, amount: -100 }
+        ]
+      )
+
+      calculated = Balance::ReverseCalculator.new(account).calculate
+
+      assert_calculated_ledger_balances(
+        calculated_data: calculated,
+        expected_balances: [
+          [ Date.current, { balance: 1000, cash_balance: 0 } ],
+          [ 1.day.ago, { balance: 1000, cash_balance: 0 } ],
+          [ 2.days.ago, { balance: 1000, cash_balance: 0 } ]
+        ]
+      )
     end
-  end
-
-  test "valuations sync" do
-    create_valuation(account: @account, date: 4.days.ago.to_date, amount: 17000)
-    create_valuation(account: @account, date: 2.days.ago.to_date, amount: 19000)
-
-    expected = [ 17000, 17000, 19000, 19000, 20000, 20000 ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
-  end
-
-  test "transactions sync" do
-    create_transaction(account: @account, date: 4.days.ago.to_date, amount: -500) # income
-    create_transaction(account: @account, date: 2.days.ago.to_date, amount: 100) # expense
-
-    expected = [ 19600, 20100, 20100, 20000, 20000, 20000 ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
-  end
-
-  test "multi-entry sync" do
-    create_transaction(account: @account, date: 8.days.ago.to_date, amount: -5000)
-    create_valuation(account: @account, date: 6.days.ago.to_date, amount: 17000)
-    create_transaction(account: @account, date: 6.days.ago.to_date, amount: -500)
-    create_transaction(account: @account, date: 4.days.ago.to_date, amount: -500)
-    create_valuation(account: @account, date: 3.days.ago.to_date, amount: 17000)
-    create_transaction(account: @account, date: 1.day.ago.to_date, amount: 100)
-
-    expected = [ 12000, 17000, 17000, 17000, 16500, 17000, 17000, 20100, 20000, 20000 ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
   end
 
   # When syncing backwards, trades from the past should NOT affect the current balance or previous balances.
   # They should only affect the *cash* component of the historical balances
   test "holdings and trades sync" do
-    aapl = securities(:aapl)
-
     # Account starts with $20,000 total value, $19,000 cash, $1,000 in holdings
-    @account.update!(cash_balance: 19000, balance: 20000)
+    account = create_account_with_ledger(
+      account: { type: Investment, balance: 20000, cash_balance: 19000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 },
+        # Bought 10 AAPL shares 1 day ago, so cash is $19,000, $1,000 in holdings, total value is $20,000
+        { type: "trade", date: 1.day.ago.to_date, ticker: "AAPL", qty: 10, price: 100 }
+      ],
+      holdings: [
+        { date: Date.current, ticker: "AAPL", qty: 10, price: 100, amount: 1000 },
+        { date: 1.day.ago.to_date, ticker: "AAPL", qty: 10, price: 100, amount: 1000 }
+      ]
+    )
 
-    # Bought 10 AAPL shares 1 day ago, so cash is $19,000, $1,000 in holdings, total value is $20,000
-    create_trade(aapl, account: @account, qty: 10, date: 1.day.ago.to_date, price: 100)
-
-    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
-    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 10, price: 100, amount: 1000, currency: "USD")
+    calculated = Balance::ReverseCalculator.new(account).calculate
 
     # Given constant prices, overall balance (account value) should be constant
     # (the single trade doesn't affect balance; it just alters cash vs. holdings composition)
-    expected = [ 20000, 20000, 20000 ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 19000 } ],      # Current: $19k cash + $1k holdings (anchor)
+        [ 1.day.ago.to_date, { balance: 20000, cash_balance: 19000 } ], # After trade: $19k cash + $1k holdings
+        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ] # At first, account is 100% cash, no holdings (no trades)
+      ]
+    )
   end
 
   # A common scenario with Plaid is they'll give us holding records for today, but no trade history for some of them.
   # This is because they only supply 2 years worth of historical data.  Our system must properly handle this.
   test "properly calculates balances when a holding has no trade history" do
-    aapl = securities(:aapl)
-    msft = securities(:msft)
-
     # Account starts with $20,000 total value, $19,000 cash, $1,000 in holdings ($500 AAPL, $500 MSFT)
-    @account.update!(cash_balance: 19000, balance: 20000)
+    account = create_account_with_ledger(
+      account: { type: Investment, balance: 20000, cash_balance: 19000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 },
+        # A holding *with* trade history (5 shares of AAPL, purchased 1 day ago)
+        { type: "trade", date: 1.day.ago.to_date, ticker: "AAPL", qty: 5, price: 100 }
+      ],
+      holdings: [
+        # AAPL holdings
+        { date: Date.current, ticker: "AAPL", qty: 5, price: 100, amount: 500 },
+        { date: 1.day.ago.to_date, ticker: "AAPL", qty: 5, price: 100, amount: 500 },
+        # MSFT holdings without trade history - Balance calculator doesn't care how the holdings were created. It just reads them and assumes they are accurate.
+        { date: Date.current, ticker: "MSFT", qty: 5, price: 100, amount: 500 },
+        { date: 1.day.ago.to_date, ticker: "MSFT", qty: 5, price: 100, amount: 500 },
+        { date: 2.days.ago.to_date, ticker: "MSFT", qty: 5, price: 100, amount: 500 }
+      ]
+    )
 
-    # A holding *with* trade history (5 shares of AAPL, purchased 1 day ago, results in 2 holdings)
-    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 5, price: 100, amount: 500, currency: "USD")
-    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 5, price: 100, amount: 500, currency: "USD")
-    create_trade(aapl, account: @account, qty: 5, date: 1.day.ago.to_date, price: 100)
+    calculated = Balance::ReverseCalculator.new(account).calculate
 
-    # A holding *without* trade history (5 shares of MSFT, no trade history, results in 1 holding)
-    # We assume if no history is provided, this holding has existed since beginning of account
-    Holding.create!(date: Date.current, account: @account, security: msft, qty: 5, price: 100, amount: 500, currency: "USD")
-    Holding.create!(date: 1.day.ago.to_date, account: @account, security: msft, qty: 5, price: 100, amount: 500, currency: "USD")
-    Holding.create!(date: 2.days.ago.to_date, account: @account, security: msft, qty: 5, price: 100, amount: 500, currency: "USD")
-
-    expected = [ 20000, 20000, 20000 ]
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        [ Date.current, { balance: 20000, cash_balance: 19000 } ],      # Current: $19k cash + $1k holdings ($500 MSFT, $500 AAPL)
+        [ 1.day.ago.to_date, { balance: 20000, cash_balance: 19000 } ], # After AAPL trade: $19k cash + $1k holdings
+        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 19500 } ] # Before AAPL trade: $19.5k cash + $500 MSFT
+      ]
+    )
   end
 
   test "uses provider reported holdings and cash value on current day" do
-    aapl = securities(:aapl)
-
     # Implied holdings value of $1,000 from provider
-    @account.update!(cash_balance: 19000, balance: 20000)
+    account = create_account_with_ledger(
+      account: { type: Investment, balance: 20000, cash_balance: 19000, currency: "USD" },
+      entries: [
+        { type: "current_anchor", date: Date.current, balance: 20000 },
+        { type: "opening_anchor", date: 2.days.ago, balance: 15000 }
+      ],
+      holdings: [
+        # Create holdings that differ in value from provider ($2,000 vs. the $1,000 reported by provider)
+        { date: Date.current, ticker: "AAPL", qty: 10, price: 100, amount: 2000 },
+        { date: 1.day.ago, ticker: "AAPL", qty: 10, price: 100, amount: 2000 }
+      ]
+    )
 
-    # Create a holding that differs in value from provider ($2,000 vs. the $1,000 reported by provider)
-    Holding.create!(date: Date.current, account: @account, security: aapl, qty: 10, price: 100, amount: 2000, currency: "USD")
-    Holding.create!(date: 1.day.ago.to_date, account: @account, security: aapl, qty: 10, price: 100, amount: 2000, currency: "USD")
+    calculated = Balance::ReverseCalculator.new(account).calculate
 
-    # Today reports the provider value.  Yesterday, provider won't give us any data, so we MUST look at the generated holdings value
-    # to calculate the end balance ($19,000 cash + $2,000 holdings = $21,000 total value)
-    expected = [ 21000, 20000 ]
-
-    calculated = Balance::ReverseCalculator.new(@account).calculate.sort_by(&:date).map(&:balance)
-
-    assert_equal expected, calculated
+    assert_calculated_ledger_balances(
+      calculated_data: calculated,
+      expected_balances: [
+        # No matter what, we force current day equal to the "anchor" balance (what provider gave us), and let "cash" float based on holdings value
+        # This ensures the user sees the same top-line number reported by the provider (even if it creates a discrepancy in the cash balance)
+        [ Date.current, { balance: 20000, cash_balance: 18000 } ],
+        [ 1.day.ago, { balance: 20000, cash_balance: 18000 } ],
+        [ 2.days.ago, { balance: 15000, cash_balance: 15000 } ] # Opening anchor sets absolute balance
+      ]
+    )
   end
 end

@@ -1,6 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Enrichable
-  include AASM
+  include AASM, Syncable, Monetizable, Chartable, Linkable, Enrichable, Anchorable
 
   validates :name, :balance, :currency, presence: true
 
@@ -59,26 +58,14 @@ class Account < ApplicationRecord
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
-      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
+      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d
 
       transaction do
-        # Create 2 valuations for new accounts to establish a value history for users to see
-        account.entries.build(
-          name: Valuation.build_current_anchor_name(account.accountable_type),
-          date: Date.current,
-          amount: account.balance,
-          currency: account.currency,
-          entryable: Valuation.new
-        )
-        account.entries.build(
-          name: Valuation.build_opening_anchor_name(account.accountable_type),
-          date: 1.day.ago.to_date,
-          amount: initial_balance,
-          currency: account.currency,
-          entryable: Valuation.new
-        )
-
         account.save!
+
+        manager = Account::OpeningBalanceManager.new(account)
+        result = manager.set_opening_balance(balance: initial_balance || account.balance)
+        raise result.error if result.error
       end
 
       account.sync_later

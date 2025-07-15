@@ -18,7 +18,7 @@ class Account::BalanceUpdater
       end
 
       valuation_entry = account.entries.valuations.find_or_initialize_by(date: date) do |entry|
-        entry.entryable = Valuation.new
+        entry.entryable = Valuation.new(kind: "reconciliation")
       end
 
       valuation_entry.amount = balance

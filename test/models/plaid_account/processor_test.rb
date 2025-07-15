@@ -94,10 +94,21 @@ class PlaidAccount::ProcessorTest < ActiveSupport::TestCase
   test "calculates balance using BalanceCalculator for investment accounts" do
     @plaid_account.update!(plaid_type: "investment")
 
-    PlaidAccount::Investments::BalanceCalculator.any_instance.expects(:balance).returns(1000).once
+    # Balance is called twice: once for account.balance and once for set_current_balance
+    PlaidAccount::Investments::BalanceCalculator.any_instance.expects(:balance).returns(1000).twice
     PlaidAccount::Investments::BalanceCalculator.any_instance.expects(:cash_balance).returns(1000).once
 
     PlaidAccount::Processor.new(@plaid_account).process
+
+    # Verify that the balance was set correctly
+    account = @plaid_account.account
+    assert_equal 1000, account.balance
+    assert_equal 1000, account.cash_balance
+
+    # Verify current balance anchor was created with correct value
+    current_anchor = account.valuations.current_anchor.first
+    assert_not_nil current_anchor
+    assert_equal 1000, current_anchor.entry.amount
   end
 
   test "processes credit liability data" do
@@ -140,6 +151,76 @@ class PlaidAccount::ProcessorTest < ActiveSupport::TestCase
     PlaidAccount::Liabilities::StudentLoanProcessor.any_instance.expects(:process).once
 
     PlaidAccount::Processor.new(@plaid_account).process
+  end
+
+  test "creates current balance anchor when processing account" do
+    expect_default_subprocessor_calls
+
+    # Clear out accounts to start fresh
+    Account.destroy_all
+
+    @plaid_account.update!(
+      plaid_id: "test_plaid_id",
+      plaid_type: "depository",
+      plaid_subtype: "checking",
+      current_balance: 1500,
+      available_balance: 1500,
+      currency: "USD",
+      name: "Test Account with Anchor",
+      mask: "1234"
+    )
+
+    assert_difference "Account.count", 1 do
+      assert_difference "Entry.count", 1 do
+        assert_difference "Valuation.count", 1 do
+          PlaidAccount::Processor.new(@plaid_account).process
+        end
+      end
+    end
+
+    account = Account.order(created_at: :desc).first
+    assert_equal 1500, account.balance
+
+    # Verify current balance anchor was created
+    current_anchor = account.valuations.current_anchor.first
+    assert_not_nil current_anchor
+    assert_equal "current_anchor", current_anchor.kind
+    assert_equal 1500, current_anchor.entry.amount
+    assert_equal Date.current, current_anchor.entry.date
+    assert_equal "Current balance", current_anchor.entry.name
+  end
+
+  test "updates existing current balance anchor when reprocessing" do
+    # First process creates the account and anchor
+    expect_default_subprocessor_calls
+    PlaidAccount::Processor.new(@plaid_account).process
+
+    account = @plaid_account.account
+    original_anchor = account.valuations.current_anchor.first
+    assert_not_nil original_anchor
+    original_anchor_id = original_anchor.id
+    original_entry_id = original_anchor.entry.id
+    original_balance = original_anchor.entry.amount
+
+    # Update the plaid account balance
+    @plaid_account.update!(current_balance: 2500)
+
+    # Expect subprocessor calls again for the second processing
+    expect_default_subprocessor_calls
+
+    # Reprocess should update the existing anchor
+    assert_no_difference "Valuation.count" do
+      assert_no_difference "Entry.count" do
+        PlaidAccount::Processor.new(@plaid_account).process
+      end
+    end
+
+    # Verify the anchor was updated
+    original_anchor.reload
+    assert_equal original_anchor_id, original_anchor.id
+    assert_equal original_entry_id, original_anchor.entry.id
+    assert_equal 2500, original_anchor.entry.amount
+    assert_not_equal original_balance, original_anchor.entry.amount
   end
 
   private

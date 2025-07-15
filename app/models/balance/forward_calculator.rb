@@ -1,61 +1,66 @@
-class Balance::ForwardCalculator
-  attr_reader :account
-
-  def initialize(account)
-    @account = account
-  end
-
+class Balance::ForwardCalculator < Balance::BaseCalculator
   def calculate
     Rails.logger.tagged("Balance::ForwardCalculator") do
-      calculate_balances
+      start_cash_balance = derive_cash_balance_on_date_from_total(
+        total_balance: account.opening_anchor_balance,
+        date: account.opening_anchor_date
+      )
+      start_non_cash_balance = account.opening_anchor_balance - start_cash_balance
+
+      calc_start_date.upto(calc_end_date).map do |date|
+        valuation = sync_cache.get_reconciliation_valuation(date)
+
+        if valuation
+          end_cash_balance = derive_cash_balance_on_date_from_total(
+            total_balance: valuation.amount,
+            date: date
+          )
+          end_non_cash_balance = valuation.amount - end_cash_balance
+        else
+          end_cash_balance = derive_end_cash_balance(start_cash_balance: start_cash_balance, date: date)
+          end_non_cash_balance = derive_end_non_cash_balance(start_non_cash_balance: start_non_cash_balance, date: date)
+        end
+
+        output_balance = build_balance(
+          date: date,
+          cash_balance: end_cash_balance,
+          non_cash_balance: end_non_cash_balance
+        )
+
+        # Set values for the next iteration
+        start_cash_balance = end_cash_balance
+        start_non_cash_balance = end_non_cash_balance
+
+        output_balance
+      end
     end
   end
 
   private
-    def calculate_balances
-      current_cash_balance = 0
-      next_cash_balance = nil
-
-      @balances = []
-
-      account.start_date.upto(Date.current).each do |date|
-        entries = sync_cache.get_entries(date)
-        holdings = sync_cache.get_holdings(date)
-        holdings_value = holdings.sum(&:amount)
-        valuation = sync_cache.get_valuation(date)
-
-        next_cash_balance = if valuation
-          valuation.amount - holdings_value
-        else
-          calculate_next_balance(current_cash_balance, entries, direction: :forward)
-        end
-
-        @balances << build_balance(date, next_cash_balance, holdings_value)
-
-        current_cash_balance = next_cash_balance
-      end
-
-      @balances
+    def calc_start_date
+      account.opening_anchor_date
     end
 
-    def sync_cache
-      @sync_cache ||= Balance::SyncCache.new(account)
+    def calc_end_date
+      [ account.entries.order(:date).last&.date, account.holdings.order(:date).last&.date ].compact.max || Date.current
     end
 
-    def build_balance(date, cash_balance, holdings_value)
-      Balance.new(
-        account_id: account.id,
-        date: date,
-        balance: holdings_value + cash_balance,
-        cash_balance: cash_balance,
-        currency: account.currency
-      )
+    # Negative entries amount on an "asset" account means, "account value has increased"
+    # Negative entries amount on a "liability" account means, "account debt has decreased"
+    # Positive entries amount on an "asset" account means, "account value has decreased"
+    # Positive entries amount on a "liability" account means, "account debt has increased"
+    def signed_entry_flows(entries)
+      entry_flows = entries.sum(&:amount)
+      account.asset? ? -entry_flows : entry_flows
     end
 
-    def calculate_next_balance(prior_balance, transactions, direction: :forward)
-      flows = transactions.sum(&:amount)
-      negated = direction == :forward ? account.asset? : account.liability?
-      flows *= -1 if negated
-      prior_balance + flows
+    # Derives cash balance, starting from the start-of-day, applying entries in forward to get the end-of-day balance
+    def derive_end_cash_balance(start_cash_balance:, date:)
+      derive_cash_balance(start_cash_balance, date)
+    end
+
+    # Derives non-cash balance, starting from the start-of-day, applying entries in forward to get the end-of-day balance
+    def derive_end_non_cash_balance(start_non_cash_balance:, date:)
+      derive_non_cash_balance(start_non_cash_balance, date, direction: :forward)
     end
 end
