@@ -229,7 +229,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
         # AAPL holdings
         { date: Date.current, ticker: "AAPL", qty: 5, price: 100, amount: 500 },
         { date: 1.day.ago.to_date, ticker: "AAPL", qty: 5, price: 100, amount: 500 },
-        # MSFT holdings without trade history - we assume it has existed since beginning
+        # MSFT holdings without trade history - Balance calculator doesn't care how the holdings were created. It just reads them and assumes they are accurate.
         { date: Date.current, ticker: "MSFT", qty: 5, price: 100, amount: 500 },
         { date: 1.day.ago.to_date, ticker: "MSFT", qty: 5, price: 100, amount: 500 },
         { date: 2.days.ago.to_date, ticker: "MSFT", qty: 5, price: 100, amount: 500 }
@@ -241,9 +241,9 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
     assert_calculated_ledger_balances(
       calculated_data: calculated,
       expected_balances: [
-        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 19500 } ], # Before AAPL trade: $19.5k cash + $500 MSFT
+        [ Date.current, { balance: 20000, cash_balance: 19000 } ],      # Current: $19k cash + $1k holdings ($500 MSFT, $500 AAPL)
         [ 1.day.ago.to_date, { balance: 20000, cash_balance: 19000 } ], # After AAPL trade: $19k cash + $1k holdings
-        [ Date.current, { balance: 20000, cash_balance: 19000 } ]      # Current: $19k cash + $1k holdings
+        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 19500 } ] # Before AAPL trade: $19.5k cash + $500 MSFT
       ]
     )
   end

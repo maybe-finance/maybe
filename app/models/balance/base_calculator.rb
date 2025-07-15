@@ -19,7 +19,58 @@ class Balance::BaseCalculator
       holdings.sum(&:amount)
     end
 
-    def build_balance(date, cash_balance, non_cash_balance)
+    def derive_cash_balance_on_date_from_total(total_balance:, date:)
+      if account.balance_type == :investment
+        total_balance - holdings_value_for_date(date)
+      elsif account.balance_type == :cash
+        total_balance
+      else
+        0
+      end
+    end
+
+    def derive_cash_balance(cash_balance, date)
+      entries = sync_cache.get_entries(date)
+
+      if account.balance_type == :non_cash
+        0
+      else
+        cash_balance + signed_entry_flows(entries)
+      end
+    end
+
+    def derive_non_cash_balance(non_cash_balance, date, direction: :forward)
+      entries = sync_cache.get_entries(date)
+      # Loans are a special case (loan payment reducing principal, which is non-cash)
+      if account.balance_type == :non_cash && account.accountable_type == "Loan"
+        non_cash_balance + signed_entry_flows(entries)
+      elsif account.balance_type == :investment
+        # For reverse calculations, we need the previous day's holdings
+        target_date = direction == :forward ? date : date.prev_day
+        holdings_value_for_date(target_date)
+      else
+        non_cash_balance
+      end
+    end
+
+    def signed_entry_flows(entries)
+      raise NotImplementedError, "Directional calculators must implement this method"
+    end
+
+    def balance_type
+      case account.accountable_type
+      when "Depository", "CreditCard"
+        :cash
+      when "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability"
+        :non_cash
+      when "Investment", "Crypto"
+        :investment
+      else
+        raise "Unknown account type: #{account.accountable_type}"
+      end
+    end
+
+    def build_balance(date:, cash_balance:, non_cash_balance:)
       Balance.new(
         account_id: account.id,
         date: date,
@@ -27,62 +78,5 @@ class Balance::BaseCalculator
         cash_balance: cash_balance,
         currency: account.currency
       )
-    end
-
-    # Negative entries amount on an "asset" account means, "account value has increased"
-    # Negative entries amount on a "liability" account means, "account debt has decreased"
-    # Positive entries amount on an "asset" account means, "account value has decreased"
-    # Positive entries amount on a "liability" account means, "account debt has increased"
-    def signed_entry_flows(entries, direction: :forward)
-      entry_flows = entries.sum(&:amount)
-      negated = direction == :forward ? account.asset? : account.liability?
-      entry_flows *= -1 if negated
-      entry_flows
-    end
-
-    # "Cash balance" is the "liquid" component of balance (i.e. "cash in bank" or "brokerage cash" in investment accounts)
-    # "Non-cash balance" is the "non-liquid" component of balance (i.e. "holdings" in investment accounts, "asset value" in property accounts)
-    def transform_balance_components(balance_components, entries, direction: :forward)
-      cash_balance = balance_components[:cash_balance]
-      non_cash_balance = balance_components[:non_cash_balance]
-
-      if cash_only_account?
-        {
-          cash_balance: cash_balance + signed_entry_flows(entries, direction: direction),
-          non_cash_balance: non_cash_balance # no change
-        }
-      elsif non_cash_account?
-        {
-          cash_balance: cash_balance, # no change
-          non_cash_balance: non_cash_balance + signed_entry_flows(entries, direction: direction)
-        }
-      else # mixed_account?
-        {
-          cash_balance: cash_balance + signed_entry_flows(entries, direction: direction),
-          non_cash_balance: non_cash_balance
-        }
-      end
-    end
-
-    def calculate_next_balance(prior_balance, entries, direction: :forward)
-      flows = entries.sum(&:amount)
-      negated = direction == :forward ? account.asset? : account.liability?
-      flows *= -1 if negated
-      prior_balance + flows
-    end
-
-    # Accounts where entire balance is cash (transactions affect cash balance)
-    def cash_only_account?
-      account.accountable_type.in?([ "Depository", "CreditCard" ])
-    end
-
-    # Accounts where entire balance is non-cash (transactions don't affect balance)
-    def non_cash_account?
-      account.accountable_type.in?([ "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability" ])
-    end
-
-    # Mixed accounts that have both cash and non-cash components
-    def mixed_account?
-      account.accountable_type.in?([ "Investment", "Crypto" ])
     end
 end
