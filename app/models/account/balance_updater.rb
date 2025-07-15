@@ -1,10 +1,11 @@
 class Account::BalanceUpdater
-  def initialize(account, balance:, currency: nil, date: Date.current, notes: nil)
+  def initialize(account, balance:, currency: nil, date: Date.current, notes: nil, existing_valuation_id: nil)
     @account = account
     @balance = balance.to_d
     @currency = currency
     @date = date.to_date
     @notes = notes
+    @existing_valuation_id = existing_valuation_id
   end
 
   def update
@@ -17,10 +18,15 @@ class Account::BalanceUpdater
         account.save!
       end
 
-      valuation_entry = account.entries.valuations.find_or_initialize_by(date: date) do |entry|
-        entry.entryable = Valuation.new(kind: "reconciliation")
+      valuation_entry = if existing_valuation_id
+        account.entries.find(existing_valuation_id)
+      else
+        account.entries.valuations.find_or_initialize_by(date: date) do |entry|
+          entry.entryable = Valuation.new(kind: "reconciliation")
+        end
       end
 
+      valuation_entry.date = date
       valuation_entry.amount = balance
       valuation_entry.currency = currency if currency.present?
       valuation_entry.name = Valuation.build_reconciliation_name(account.accountable_type)
@@ -37,7 +43,7 @@ class Account::BalanceUpdater
   end
 
   private
-    attr_reader :account, :balance, :currency, :date, :notes
+    attr_reader :account, :balance, :currency, :date, :notes, :existing_valuation_id
 
     Result = Struct.new(:success?, :updated?, :error_message)
 

@@ -1,6 +1,19 @@
 <%= render DialogComponent.new do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <% dialog.with_body do %>
-    <%= render "form", entry: @entry, error_message: @error_message %>
+    <%= styled_form_with model: @entry, url: confirm_create_valuations_path, class: "space-y-4" do |form| %>
+      <%= form.hidden_field :account_id %>
+
+      <% if @error_message.present? %>
+        <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+      <% end %>
+
+      <div class="space-y-3">
+        <%= form.date_field :date, label: true, required: true, value: Date.current, min: Entry.min_supported_date, max: Date.current %>
+        <%= form.money_field :amount, label: t(".amount"), required: true, disable_currency: true %>
+      </div>
+
+      <%= form.submit t(".submit") %>
+    <% end %>
   <% end %>
 <% end %>

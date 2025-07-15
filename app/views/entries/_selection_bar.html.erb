@@ -6,7 +6,7 @@
   </div>
 
   <div class="flex items-center gap-1 text-secondary">
-    <%= form_with url: transactions_bulk_deletion_path, data: { turbo_confirm: true, turbo_frame: "_top" } do %>
+    <%= form_with url: transactions_bulk_deletion_path, data: { turbo_confirm: CustomConfirm.for_resource_deletion("entry").to_data_attribute, turbo_frame: "_top" } do %>
       <button type="button" data-bulk-select-scope-param="bulk_delete" data-action="bulk-select#submitBulkRequest" class="p-1.5 group hover:bg-inverse flex items-center justify-center rounded-md" title="Delete">
         <%= icon "trash-2", class: "group-hover:text-inverse" %>
       </button>

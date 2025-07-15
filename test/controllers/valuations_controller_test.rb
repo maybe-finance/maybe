@@ -15,7 +15,6 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
       post valuations_url, params: {
         entry: {
           amount: account.balance + 100,
-          currency: "USD",
           date: Date.current.to_s,
           account_id: account.id
         }
@@ -37,7 +36,6 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
       patch valuation_url(@entry), params: {
         entry: {
           amount: 20000,
-          currency: "USD",
           date: Date.current
         }
       }

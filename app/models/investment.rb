@@ -28,4 +28,19 @@ class Investment < ApplicationRecord
       "line-chart"
     end
   end
+
+  def holdings_value_for_date(date)
+    # Find the most recent holding for each security on or before the given date
+    # Using a subquery to get the max date for each security
+    account.holdings
+      .where(currency: account.currency)
+      .where("date <= ?", date)
+      .where("(security_id, date) IN (
+        SELECT security_id, MAX(date) as max_date
+        FROM holdings
+        WHERE account_id = ? AND date <= ?
+        GROUP BY security_id
+      )", account.id, date)
+      .sum(:amount)
+  end
 end

@@ -1,15 +1,24 @@
 class ValuationsController < ApplicationController
   include EntryableResource, StreamExtensions
 
+  def confirm_create
+    @account = Current.family.accounts.find(params.dig(:entry, :account_id))
+    @entry = @account.entries.build(entry_params.merge(currency: @account.currency))
+
+    render :confirm_create
+  end
+
+  def confirm_update
+    @entry = Current.family.entries.find(params[:id])
+    @account = @entry.account
+    @entry.assign_attributes(entry_params.merge(currency: @account.currency))
+
+    render :confirm_update
+  end
+
   def create
     account = Current.family.accounts.find(params.dig(:entry, :account_id))
-
-    result = account.update_balance(
-      balance: entry_params[:amount],
-      date: entry_params[:date],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
-    )
+    result = perform_balance_update(account, entry_params.merge(currency: account.currency))
 
     if result.success?
       @success_message = result.updated? ? "Balance updated" : "No changes made. Account is already up to date."
@@ -25,12 +34,7 @@ class ValuationsController < ApplicationController
   end
 
   def update
-    result = @entry.account.update_balance(
-      date: @entry.date,
-      balance: entry_params[:amount],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
-    )
+    result = perform_balance_update(@entry.account, entry_params.merge(currency: @entry.currency, existing_valuation_id: @entry.id))
 
     if result.success?
       @entry.reload
@@ -58,5 +62,15 @@ class ValuationsController < ApplicationController
     def entry_params
       params.require(:entry)
             .permit(:date, :amount, :currency, :notes)
+    end
+
+    def perform_balance_update(account, params)
+      account.update_balance(
+        balance: params[:amount],
+        date: params[:date],
+        currency: params[:currency],
+        notes: params[:notes],
+        existing_valuation_id: params[:existing_valuation_id]
+      )
     end
 end
