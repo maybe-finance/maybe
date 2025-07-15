@@ -1,0 +1,20 @@
+<%= render DialogComponent.new do |dialog| %>
+  <% dialog.with_header(title: "Confirm new balance") %>
+  <% dialog.with_body do %>
+    <%= styled_form_with model: @entry, url: valuations_path, class: "space-y-4", data: { turbo: false } do |form| %>
+      <%= form.hidden_field :account_id %>
+      <%= form.hidden_field :date %>
+      <%= form.hidden_field :amount %>
+      <%= form.hidden_field :currency %>
+      <%= form.hidden_field :notes %>
+
+      <%= render "confirmation_contents", 
+          account: @account, 
+          entry: @entry, 
+          action_verb: "set", 
+          is_update: false %>
+
+      <%= form.submit "Confirm" %>
+    <% end %>
+  <% end %>
+<% end %>

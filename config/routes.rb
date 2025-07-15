@@ -110,7 +110,10 @@ Rails.application.routes.draw do
 
   resources :holdings, only: %i[index new show destroy]
   resources :trades, only: %i[show new create update destroy]
-  resources :valuations, only: %i[show new create update destroy]
+  resources :valuations, only: %i[show new create update destroy] do
+    post :confirm_create, on: :collection
+    post :confirm_update, on: :member
+  end
 
   namespace :transactions do
     resource :bulk_deletion, only: :create

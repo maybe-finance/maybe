@@ -115,8 +115,8 @@ class Account < ApplicationRecord
   end
 
 
-  def update_balance(balance:, date: Date.current, currency: nil, notes: nil)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:).update
+  def update_balance(balance:, date: Date.current, currency: nil, notes: nil, existing_valuation_id: nil)
+    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:, existing_valuation_id:).update
   end
 
   def start_date
