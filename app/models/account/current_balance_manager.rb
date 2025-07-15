@@ -11,8 +11,8 @@ class Account::CurrentBalanceManager
     current_anchor_valuation.present?
   end
 
-  # The fallback here is not ideal. We should not be relying on `account.balance` as it is a "cached/derived" value, set
-  # by the balance calculators. Our system should always make sure there is a current anchor, and that it is up to date.
+  # Our system should always make sure there is a current anchor, and that it is up to date.
+  # The fallback is provided for backwards compatibility, but should not be relied on since account.balance is a "cached/derived" value.
   def current_balance
     if current_anchor_valuation
       current_anchor_valuation.entry.amount
