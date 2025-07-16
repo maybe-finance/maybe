@@ -31,21 +31,61 @@ class Account::CurrentBalanceManager
   end
 
   def set_current_balance(balance)
-    # A current balance anchor implies there is an external data source that will keep it updated. Since manual accounts
-    # are tracked by the user, a current balance anchor is not appropriate.
-    raise InvalidOperation, "Manual accounts cannot set current balance anchor. Set opening balance or use a reconciliation instead." if account.manual?
-
-    if current_anchor_valuation
-      changes_made = update_current_anchor(balance)
-      Result.new(success?: true, changes_made?: changes_made, error: nil)
+    if account.linked?
+      set_current_balance_for_linked_account(balance)
     else
-      create_current_anchor(balance)
-      Result.new(success?: true, changes_made?: true, error: nil)
+      set_current_balance_for_manual_account(balance)
     end
   end
 
   private
     attr_reader :account
+
+    # Manual accounts do not manage the `current_anchor` valuation (otherwise, user would need to continually update it, which is bad UX)
+    # Instead, we use a combination of "auto-update strategies" to set the current balance according to the user's intent.
+    #
+    # The "auto-update strategies" are:
+    # 1. Value tracking - If the account has a reconciliation already, we assume they are tracking the account value primarily with reconciliations, so we append a new one
+    # 2. Transaction adjustment - If the account doesn't have recons, we assume user is tracking with transactions, so we adjust the opening balance with a delta until it
+    #                             gets us to the desired balance. This ensures we don't append unnecessary reconciliations to the account, which "reset" the value from that
+    #                             date forward (not user's intent).
+    #
+    # For more documentation on these auto-update strategies, see the test cases.
+    def set_current_balance_for_manual_account(balance)
+      # If we're dealing with a cash account that has no reconciliations, use "Transaction adjustment" strategy (update opening balance to "back in" to the desired current balance)
+      if account.balance_type == :cash && account.valuations.reconciliation.empty?
+        adjust_opening_balance_with_delta(new_balance: balance, old_balance: account.balance)
+      else
+        existing_reconciliation = account.entries.valuations.find_by(date: Date.current)
+
+        if existing_reconciliation
+          account.update_reconciliation(existing_reconciliation, balance: balance, date: Date.current)
+        else
+          account.create_reconciliation(balance: balance, date: Date.current)
+        end
+      end
+    end
+
+    def adjust_opening_balance_with_delta(new_balance:, old_balance:)
+      delta = new_balance - old_balance
+
+      account.set_opening_anchor_balance(
+        balance: account.opening_anchor_balance + delta,
+      )
+    end
+
+    # Linked accounts manage "current balance" via the special `current_anchor` valuation.
+    # This is NOT a user-facing feature, and is primarily used in "processors" while syncing
+    # linked account data (e.g. via Plaid)
+    def set_current_balance_for_linked_account(balance)
+      if current_anchor_valuation
+        changes_made = update_current_anchor(balance)
+        Result.new(success?: true, changes_made?: changes_made, error: nil)
+      else
+        create_current_anchor(balance)
+        Result.new(success?: true, changes_made?: true, error: nil)
+      end
+    end
 
     def current_anchor_valuation
       @current_anchor_valuation ||= account.valuations.current_anchor.includes(:entry).first
