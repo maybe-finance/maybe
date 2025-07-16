@@ -41,6 +41,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
 
     assert_equal 2, account.valuations.count
     assert_equal 1400, today_valuation.amount
+
+    assert_equal 1400, account.balance
   end
 
   test "all manual non cash accounts append reconciliations for current balance updates" do
@@ -64,6 +66,7 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
       today_valuation = account.entries.valuations.find_by(date: Date.current)
 
       assert_equal 1400, today_valuation.amount
+      assert_equal 1400, account.balance
     end
   end
 
@@ -79,50 +82,90 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
   # If we ever build a UI that gives user options, this test expectation may require some updates, but for now this
   # is the least surprising outcome.
   test "when no reconciliations exist on cash accounts, adjust opening balance with delta until it gets us to the desired balance" do
-    [ Depository, CreditCard ].each do |account_type|
-      account = @family.accounts.create!(
-        name: "Test",
-        balance: 900, # the balance after opening valuation + transaction have "synced" (1000 - 100 = 900)
-        cash_balance: 900,
-        currency: "USD",
-        accountable: account_type.new
-      )
+    account = @family.accounts.create!(
+      name: "Test",
+      balance: 900, # the balance after opening valuation + transaction have "synced" (1000 - 100 = 900)
+      cash_balance: 900,
+      currency: "USD",
+      accountable: Depository.new
+    )
 
-      account.entries.create!(
-        date: 1.year.ago.to_date,
-        name: "Test opening valuation",
-        amount: 1000,
-        currency: "USD",
-        entryable: Valuation.new(kind: "opening_anchor")
-      )
+    account.entries.create!(
+      date: 1.year.ago.to_date,
+      name: "Test opening valuation",
+      amount: 1000,
+      currency: "USD",
+      entryable: Valuation.new(kind: "opening_anchor")
+    )
 
-      account.entries.create!(
-        date: 10.days.ago.to_date,
-        name: "Test expense transaction",
-        amount: 100,
-        currency: "USD",
-        entryable: Transaction.new
-      )
+    account.entries.create!(
+      date: 10.days.ago.to_date,
+      name: "Test expense transaction",
+      amount: 100,
+      currency: "USD",
+      entryable: Transaction.new
+    )
 
-      # What we're asserting here:
-      # 1. User creates the account with an opening balance of 1000
-      # 2. User creates a transaction of 100, which then reduces the balance to 900 (the current balance value on account above)
-      # 3. User requests "current balance update" back to 1000, which was their intention
-      # 4. We adjust the opening balance by the delta (100) to 1100, which is the new opening balance, so that the transaction
-      #    of 100 reduces it down to 1000, which is the current balance they intended.
-      assert_equal 1, account.valuations.count
-      assert_equal 1, account.transactions.count
+    # What we're asserting here:
+    # 1. User creates the account with an opening balance of 1000
+    # 2. User creates a transaction of 100, which then reduces the balance to 900 (the current balance value on account above)
+    # 3. User requests "current balance update" back to 1000, which was their intention
+    # 4. We adjust the opening balance by the delta (100) to 1100, which is the new opening balance, so that the transaction
+    #    of 100 reduces it down to 1000, which is the current balance they intended.
+    assert_equal 1, account.valuations.count
+    assert_equal 1, account.transactions.count
 
-      # No new valuation is appended; we're just adjusting the opening valuation anchor
-      assert_no_difference "account.entries.count" do
-        manager = Account::CurrentBalanceManager.new(account)
-        manager.set_current_balance(1000)
-      end
-
-      opening_valuation = account.valuations.find_by(kind: "opening_anchor")
-
-      assert_equal 1100, opening_valuation.entry.amount
+    # No new valuation is appended; we're just adjusting the opening valuation anchor
+    assert_no_difference "account.entries.count" do
+      manager = Account::CurrentBalanceManager.new(account)
+      manager.set_current_balance(1000)
     end
+
+    opening_valuation = account.valuations.find_by(kind: "opening_anchor")
+
+    assert_equal 1100, opening_valuation.entry.amount
+    assert_equal 1000, account.balance
+  end
+
+  # (SEE ABOVE TEST FOR MORE DETAILED EXPLANATION)
+  # Same assertions as the test above, but Credit Card accounts are liabilities, which means expenses increase balance; not decrease
+  test "when no reconciliations exist on credit card accounts, adjust opening balance with delta until it gets us to the desired balance" do
+    account = @family.accounts.create!(
+      name: "Test",
+      balance: 1100, # the balance after opening valuation + transaction have "synced" (1000 + 100 = 1100) (expenses increase balance)
+      cash_balance: 1100,
+      currency: "USD",
+      accountable: CreditCard.new
+    )
+
+    account.entries.create!(
+      date: 1.year.ago.to_date,
+      name: "Test opening valuation",
+      amount: 1000,
+      currency: "USD",
+      entryable: Valuation.new(kind: "opening_anchor")
+    )
+
+    account.entries.create!(
+      date: 10.days.ago.to_date,
+      name: "Test expense transaction",
+      amount: 100,
+      currency: "USD",
+      entryable: Transaction.new
+    )
+
+    assert_equal 1, account.valuations.count
+    assert_equal 1, account.transactions.count
+
+    assert_no_difference "account.entries.count" do
+      manager = Account::CurrentBalanceManager.new(account)
+      manager.set_current_balance(1000)
+    end
+
+    opening_valuation = account.valuations.find_by(kind: "opening_anchor")
+
+    assert_equal 900, opening_valuation.entry.amount
+    assert_equal 1000, account.balance
   end
 
   # -------------------------------------------------------------------------------------------------
@@ -154,6 +197,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
     assert_equal 1000, entry.amount
     assert_equal Date.current, entry.date
     assert_equal "Current balance", entry.name  # Depository type returns "Current balance"
+
+    assert_equal 1000, @linked_account.balance
   end
 
   test "updates existing anchor for linked account" do
@@ -183,6 +228,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
       assert_equal 2000, current_anchor.entry.amount
       assert_equal Date.current, current_anchor.entry.date # Should be updated to current date
     end
+
+    assert_equal 2000, @linked_account.balance
   end
 
   test "when no changes made, returns success with no changes made" do
@@ -198,6 +245,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
     assert result.success?
     assert_not result.changes_made?
     assert_nil result.error
+
+    assert_equal 1000, @linked_account.balance
   end
 
   test "updates only amount when balance changes" do
@@ -218,6 +267,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
     current_anchor.reload
     assert_equal 1500, current_anchor.entry.amount
     assert_equal original_date, current_anchor.entry.date # Date should remain the same if on same day
+
+    assert_equal 1500, @linked_account.balance
   end
 
   test "updates date when called on different day" do
@@ -240,6 +291,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
       assert_equal original_amount, current_anchor.entry.amount
       assert_equal Date.current, current_anchor.entry.date # Should be updated to new current date
     end
+
+    assert_equal 1000, @linked_account.balance
   end
 
   test "current_balance returns balance from current anchor" do
@@ -256,6 +309,8 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
 
     # Should return the updated balance
     assert_equal 2500, manager.current_balance
+
+    assert_equal 2500, @linked_account.balance
   end
 
   test "current_balance falls back to account balance when no anchor exists" do
@@ -263,5 +318,7 @@ class Account::CurrentBalanceManagerTest < ActiveSupport::TestCase
 
     # When no current anchor exists, should fall back to account.balance
     assert_equal @linked_account.balance, manager.current_balance
+
+    assert_equal @linked_account.balance, @linked_account.balance
   end
 end

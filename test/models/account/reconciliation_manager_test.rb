@@ -88,7 +88,7 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
     end
   end
 
-  test "dry run does not persist or sync account" do
+  test "dry run does not persist account" do
     @account.balances.create!(date: Date.current, balance: 1000, cash_balance: 500, currency: @account.currency)
 
     assert_no_difference "Valuation.count" do
@@ -96,7 +96,6 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
     end
 
     assert_difference "Valuation.count", 1 do
-      @account.expects(:sync_later).once
       @manager.reconcile_balance(balance: 1200, date: Date.current)
     end
   end

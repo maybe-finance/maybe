@@ -10,7 +10,9 @@ module Account::Anchorable
   end
 
   def set_opening_anchor_balance(**opts)
-    opening_balance_manager.set_opening_balance(**opts)
+    result = opening_balance_manager.set_opening_balance(**opts)
+    sync_later if result.success?
+    result
   end
 
   def opening_anchor_date
@@ -25,8 +27,10 @@ module Account::Anchorable
     opening_balance_manager.has_opening_anchor?
   end
 
-  def set_current_anchor_balance(balance)
-    current_balance_manager.set_current_balance(balance)
+  def set_current_balance(balance)
+    result = current_balance_manager.set_current_balance(balance)
+    sync_later if result.success?
+    result
   end
 
   def current_anchor_balance

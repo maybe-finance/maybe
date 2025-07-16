@@ -114,11 +114,6 @@ class Account < ApplicationRecord
             .order(amount: :desc)
   end
 
-
-  def update_balance(balance:, date: Date.current, currency: nil, notes: nil, existing_valuation_id: nil)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:, existing_valuation_id:).update
-  end
-
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day

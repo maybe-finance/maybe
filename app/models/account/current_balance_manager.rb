@@ -32,14 +32,29 @@ class Account::CurrentBalanceManager
 
   def set_current_balance(balance)
     if account.linked?
-      set_current_balance_for_linked_account(balance)
+      result = set_current_balance_for_linked_account(balance)
     else
-      set_current_balance_for_manual_account(balance)
+      result = set_current_balance_for_manual_account(balance)
     end
+
+    # Update cache field so changes appear immediately to the user
+    account.update!(balance: balance)
+
+    result
+  rescue => e
+    Result.new(success?: false, changes_made?: false, error: e.message)
   end
 
   private
     attr_reader :account
+
+    def opening_balance_manager
+      @opening_balance_manager ||= Account::OpeningBalanceManager.new(account)
+    end
+
+    def reconciliation_manager
+      @reconciliation_manager ||= Account::ReconciliationManager.new(account)
+    end
 
     # Manual accounts do not manage the `current_anchor` valuation (otherwise, user would need to continually update it, which is bad UX)
     # Instead, we use a combination of "auto-update strategies" to set the current balance according to the user's intent.
@@ -58,20 +73,20 @@ class Account::CurrentBalanceManager
       else
         existing_reconciliation = account.entries.valuations.find_by(date: Date.current)
 
-        if existing_reconciliation
-          account.update_reconciliation(existing_reconciliation, balance: balance, date: Date.current)
-        else
-          account.create_reconciliation(balance: balance, date: Date.current)
-        end
+        result = reconciliation_manager.reconcile_balance(balance: balance, date: Date.current, existing_valuation_entry: existing_reconciliation)
+
+        # Normalize to expected result format
+        Result.new(success?: result.success?, changes_made?: true, error: result.error_message)
       end
     end
 
     def adjust_opening_balance_with_delta(new_balance:, old_balance:)
       delta = new_balance - old_balance
 
-      account.set_opening_anchor_balance(
-        balance: account.opening_anchor_balance + delta,
-      )
+      result = opening_balance_manager.set_opening_balance(balance: account.opening_anchor_balance + delta)
+
+      # Normalize to expected result format
+      Result.new(success?: result.success?, changes_made?: true, error: result.error)
     end
 
     # Linked accounts manage "current balance" via the special `current_anchor` valuation.

@@ -12,7 +12,6 @@ class Account::ReconciliationManager
 
     unless dry_run
       prepared_valuation.save!
-      account.sync_later
     end
 
     ReconciliationResult.new(

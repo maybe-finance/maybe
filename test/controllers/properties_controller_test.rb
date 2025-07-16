@@ -71,10 +71,6 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   test "updates balances tab" do
     original_balance = @account.balance
 
-    # Mock the update_balance method to return a successful result
-    Account::BalanceUpdater::Result.any_instance.stubs(:success?).returns(true)
-    Account::BalanceUpdater::Result.any_instance.stubs(:updated?).returns(true)
-
     patch update_balances_property_path(@account), params: {
       account: {
         balance: 600000,
@@ -116,9 +112,7 @@ class PropertiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "balances update handles validation errors" do
-    # Mock update_balance to return a failure result
-    Account::BalanceUpdater::Result.any_instance.stubs(:success?).returns(false)
-    Account::BalanceUpdater::Result.any_instance.stubs(:error_message).returns("Invalid balance")
+    Account.any_instance.stubs(:set_current_balance).returns(OpenStruct.new(success?: false, error_message: "Invalid balance"))
 
     patch update_balances_property_path(@account), params: {
       account: {
