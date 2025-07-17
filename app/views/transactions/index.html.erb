@@ -79,11 +79,13 @@
           </div>
         <% end %>
 
-        <div class="space-y-6">
-          <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
-            <%= render entries %>
-          <% end %>
-        </div>
+        <% cache ["transactions", @transactions.map(&:cache_key), @search.cache_key_base, @focused_record&.cache_key, Current.family.entries_cache_version] do %>
+          <div class="space-y-6">
+            <%= entries_by_date(@transactions.map(&:entry), totals: true) do |entries| %>
+              <%= render entries %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     <% else %>
       <%= render "entries/empty" %>
