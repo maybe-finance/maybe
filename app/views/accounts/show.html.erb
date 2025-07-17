@@ -1,0 +1,25 @@
+<%= turbo_stream_from @account %>
+
+<%= turbo_frame_tag dom_id(@account, :container) do %>
+  <%= tag.div class: "space-y-4 pb-32" do %>
+    <% if header.present? %>
+      <%= header %>
+    <% else %>
+      <%= render "accounts/show/header", account: account %>
+    <% end %>
+
+    <% if chart.present? %>
+      <%= chart %>
+    <% else %>
+      <%= render "accounts/show/chart", account: account, chart_view: chart_view %>
+    <% end %>
+
+    <div class="min-h-[800px]" data-testid="account-details">
+      <% if tabs.present? %>
+        <%= tabs %>
+      <% else %>
+        <%= render "accounts/show/activity", account: account %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

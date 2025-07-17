@@ -107,7 +107,7 @@
                         <%= transaction.entry.date.strftime("%b %d") %>
                       </p>
                       <%= link_to transaction.entry.name,
-                                  transactions_path(focused_record_id: transaction.id),
+                                  transactions_path,
                                   class: "text-primary hover:underline",
                                   data: { turbo_frame: :_top } %>
                     </div>

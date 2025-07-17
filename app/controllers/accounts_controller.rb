@@ -9,6 +9,14 @@ class AccountsController < ApplicationController
     render layout: "settings"
   end
 
+  def show
+    @chart_view = params[:chart_view] || "balance"
+    @q = params.fetch(:q, {}).permit(:search)
+    entries = @account.entries.search(@q).reverse_chronological
+
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10")
+  end
+
   def sync
     unless @account.syncing?
       @account.sync_later

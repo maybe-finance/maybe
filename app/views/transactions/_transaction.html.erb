@@ -4,10 +4,7 @@
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(transaction) do %>
-    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 lg:p-4
-                <%= @focused_record == entry || @focused_record == transaction ?
-                    "border border-gray-900 rounded-lg" : "" %>
-                <%= entry.excluded ? "opacity-50 text-gray-400" : "" %>">
+    <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 lg:p-4 <%= entry.excluded ? "opacity-50 text-gray-400" : "" %>">
 
       <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == "global" ? "lg:col-span-8" : "lg:col-span-6" %>">
         <%= check_box_tag dom_id(entry, "selection"),
@@ -81,7 +78,7 @@
                     </span>
                   <% else %>
                     <%= link_to entry.account.name,
-                        account_path(entry.account, tab: "transactions", focused_record_id: entry.id),
+                        account_path(entry.account, tab: "transactions"),
                         data: { turbo_frame: "_top" },
                         class: "hover:underline" %>
                   <% end %>
