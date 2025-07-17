@@ -5,3 +5,11 @@ one:
   budgeted_spending: 5000
   expected_income: 7000 
   currency: USD
+
+previous:
+  family: dylan_family
+  start_date: <%= (Date.current - 1.month).beginning_of_month %>
+  end_date: <%= (Date.current - 1.month).end_of_month %>
+  budgeted_spending: 4500
+  expected_income: 6500
+  currency: USD 

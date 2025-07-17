@@ -48,14 +48,27 @@
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-medium">Categories</h2>
 
-        <% if @budget.initialized? %>
-          <%= render LinkComponent.new(
-            text: "Edit",
-            variant: "secondary",
-            icon: "settings-2",
-            href: budget_budget_categories_path(@budget)
-          ) %>
-        <% end %>
+        <div class="flex items-center gap-2">
+          <% if @budget.previous_budget_param %>
+            <%= render ButtonComponent.new(
+              text: "Copy last month",
+              variant: "secondary",
+              icon: "copy",
+              href: copy_previous_budget_path(@budget),
+              method: :post,
+              confirm: CustomConfirm.new(title: "Copy last month's budget?", btn_text: "Copy")
+            ) %>
+          <% end %>
+
+          <% if @budget.initialized? %>
+            <%= render LinkComponent.new(
+              text: "Edit",
+              variant: "secondary",
+              icon: "settings-2",
+              href: budget_budget_categories_path(@budget)
+            ) %>
+          <% end %>
+        </div>
       </div>
 
       <div class="bg-container-inset rounded-xl p-1">

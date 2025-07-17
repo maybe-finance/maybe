@@ -1,0 +1,23 @@
+urrent_food_and_drink:
+  budget: one
+  category: food_and_drink
+  budgeted_spending: 2000
+  currency: USD
+
+current_income:
+  budget: one
+  category: income
+  budgeted_spending: 3000
+  currency: USD
+
+previous_food_and_drink:
+  budget: previous
+  category: food_and_drink
+  budgeted_spending: 1500
+  currency: USD
+
+previous_income:
+  budget: previous
+  category: income
+  budgeted_spending: 2500
+  currency: USD

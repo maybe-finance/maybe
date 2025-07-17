@@ -1650,13 +1650,13 @@ amd:
   delimiter: ","
   default_format: "%n %u"
   default_precision: 2
-ang:
-  name: Netherlands Antillean Gulden
+xcg:
+  name: Caribbean Guilder
   priority: 100
-  iso_code: ANG
+  iso_code: XCG
   iso_numeric: "532"
-  html_code: "&#x0192;"
-  symbol: ƒ
+  html_code: ""
+  symbol: Cg
   minor_unit: Cent
   minor_unit_conversion: 100
   smallest_denomination: 1
