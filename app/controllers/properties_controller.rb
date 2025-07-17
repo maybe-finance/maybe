@@ -37,10 +37,10 @@ class PropertiesController < ApplicationController
   end
 
   def update_balances
-    result = @account.update_balance(balance: balance_params[:balance], currency: balance_params[:currency])
+    result = @account.set_current_balance(balance_params[:balance].to_d)
 
     if result.success?
-      @success_message = result.updated? ? "Balance updated successfully." : "No changes made. Account is already up to date."
+      @success_message = "Balance updated successfully."
 
       if @account.active?
         render :balances

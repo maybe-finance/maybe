@@ -114,11 +114,6 @@ class Account < ApplicationRecord
             .order(amount: :desc)
   end
 
-
-  def update_balance(balance:, date: Date.current, currency: nil, notes: nil, existing_valuation_id: nil)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:, existing_valuation_id:).update
-  end
-
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day
@@ -145,5 +140,24 @@ class Account < ApplicationRecord
   # Get long version of the subtype label
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
+  end
+
+  # The balance type determines which "component" of balance is being tracked.
+  # This is primarily used for balance related calculations and updates.
+  #
+  # "Cash" = "Liquid"
+  # "Non-cash" = "Illiquid"
+  # "Investment" = A mix of both, including brokerage cash (liquid) and holdings (illiquid)
+  def balance_type
+    case accountable_type
+    when "Depository", "CreditCard"
+      :cash
+    when "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability"
+      :non_cash
+    when "Investment", "Crypto"
+      :investment
+    else
+      raise "Unknown account type: #{accountable_type}"
+    end
   end
 end

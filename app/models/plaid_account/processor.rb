@@ -57,7 +57,7 @@ class PlaidAccount::Processor
         # to properly track the holdings vs. cash breakdown, but for now we're only tracking
         # the total balance in the current anchor. The cash_balance field on the account model
         # is still being used for the breakdown.
-        account.set_current_anchor_balance(balance_calculator.balance)
+        account.set_current_balance(balance_calculator.balance)
       end
     end
 

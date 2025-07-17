@@ -20,9 +20,9 @@ class Balance::BaseCalculator
     end
 
     def derive_cash_balance_on_date_from_total(total_balance:, date:)
-      if balance_type == :investment
+      if account.balance_type == :investment
         total_balance - holdings_value_for_date(date)
-      elsif balance_type == :cash
+      elsif account.balance_type == :cash
         total_balance
       else
         0
@@ -32,7 +32,7 @@ class Balance::BaseCalculator
     def derive_cash_balance(cash_balance, date)
       entries = sync_cache.get_entries(date)
 
-      if balance_type == :non_cash
+      if account.balance_type == :non_cash
         0
       else
         cash_balance + signed_entry_flows(entries)
@@ -42,9 +42,9 @@ class Balance::BaseCalculator
     def derive_non_cash_balance(non_cash_balance, date, direction: :forward)
       entries = sync_cache.get_entries(date)
       # Loans are a special case (loan payment reducing principal, which is non-cash)
-      if balance_type == :non_cash && account.accountable_type == "Loan"
+      if account.balance_type == :non_cash && account.accountable_type == "Loan"
         non_cash_balance + signed_entry_flows(entries)
-      elsif balance_type == :investment
+      elsif account.balance_type == :investment
         # For reverse calculations, we need the previous day's holdings
         target_date = direction == :forward ? date : date.prev_day
         holdings_value_for_date(target_date)
@@ -55,19 +55,6 @@ class Balance::BaseCalculator
 
     def signed_entry_flows(entries)
       raise NotImplementedError, "Directional calculators must implement this method"
-    end
-
-    def balance_type
-      case account.accountable_type
-      when "Depository", "CreditCard"
-        :cash
-      when "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability"
-        :non_cash
-      when "Investment", "Crypto"
-        :investment
-      else
-        raise "Unknown account type: #{account.accountable_type}"
-      end
     end
 
     def build_balance(date:, cash_balance:, non_cash_balance:)
