@@ -16,6 +16,8 @@ class AccountsController < ApplicationController
     entries = @account.entries.search(@q).reverse_chronological
 
     @pagy, @entries = pagy(entries, limit: params[:per_page] || "10")
+
+    @activity_feed_data = Account::ActivityFeedData.new(@account, @entries)
   end
 
   def sync

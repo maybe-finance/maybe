@@ -1,0 +1,78 @@
+<%= tag.div id: id, data: { bulk_select_target: "group" }, class: "bg-container-inset rounded-xl p-1 w-full" do %>
+  <details open class="group">
+    <summary>
+      <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-secondary">
+        <div class="flex pl-0.5 items-center gap-4">
+          <%= check_box_tag "#{date}_entries_selection",
+                          class: ["checkbox checkbox--light", "hidden": entries.size == 0],
+                          id: "selection_entry_#{date}",
+                          data: { action: "bulk-select#toggleGroupSelection" } %>
+
+          <p class="uppercase space-x-1.5">
+            <%= tag.span I18n.l(date, format: :long) %>
+            <span>&middot;</span>
+            <%= tag.span entries.size %>
+          </p>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <%= helpers.icon "chevron-down", class: "group-open:rotate-180" %>
+        </div>
+      </div>
+    </summary>
+
+    <div class="p-4 space-y-3">
+      <dl class="flex gap-4 items-center text-sm text-primary">
+        <dt>Start of day balance</dt>
+        <hr class="grow border-dashed border-secondary" />
+        <dd class="font-medium"><%= start_balance_money.format %></dd>
+      </dl>
+
+      <% if account.balance_type == :investment %>
+        <dl class="flex gap-4 items-center text-sm text-primary">
+          <dt>Cash &#916;</dt>
+          <hr class="grow border-dashed border-secondary" />
+          <dd class="font-medium"><%= transaction_totals_money.format %></dd>
+        </dl>
+
+        <dl class="flex gap-4 items-center text-sm text-primary">
+          <dt>Holdings &#916;</dt>
+          <hr class="grow border-dashed border-secondary" />
+          <dd class="font-medium"><%= holding_change_money.format %></dd>
+        </dl>
+      <% else %>
+        <dl class="flex gap-4 items-center text-sm text-primary">
+          <dt>Transaction totals</dt>
+          <hr class="grow border-dashed border-secondary" />
+          <dd class="font-medium"><%= transaction_totals_money.format %></dd>
+        </dl>
+      <% end %>
+
+      <dl class="flex gap-4 items-center text-sm text-primary">
+        <dt>End of day balance</dt>
+        <hr class="grow border-dashed border-secondary" />
+        <dd><%= end_balance_before_adjustments_money.format %></dd>
+      </dl>
+
+      <div class="pl-4 space-y-3">
+        <dl class="flex gap-4 items-center text-sm text-primary">
+          <dt>Value adjustments &#916; </dt>
+          <hr class="grow border-dashed border-secondary" />
+          <dd class="font-medium"><%= adjustments_money.format %></dd>
+        </dl>
+
+        <dl class="flex gap-4 items-center text-sm text-primary">
+          <dt>Closing balance (incl. adjustments)</dt>
+          <hr class="grow border-dashed border-primary" />
+          <dd class="font-bold"><%= end_balance_money.format %></dd>
+        </dl>
+      </div>
+    </div>
+  </details>
+
+  <div class="bg-container shadow-border-xs rounded-lg">
+    <% entries.each do |entry| %>
+      <%= render entry, view_ctx: "account" %>
+    <% end %>
+  </div>
+<% end %>
