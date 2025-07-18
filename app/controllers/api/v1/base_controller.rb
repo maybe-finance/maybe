@@ -98,7 +98,7 @@ class Api::V1::BaseController < ApplicationController
       @current_user = @api_key.user
       @api_key.update_last_used!
       @authentication_method = :api_key
-      @rate_limiter = ApiRateLimiter.new(@api_key)
+      @rate_limiter = ApiRateLimiter.limit(@api_key)
       setup_current_context_for_api
       true
     end
