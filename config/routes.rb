@@ -164,9 +164,9 @@ Rails.application.routes.draw do
     route_for "edit_#{model.accountable_name}", model, options
   end
 
-  resources :depositories, except: [ :index, :show ]
-  resources :investments, except: [ :index, :show ]
-  resources :properties, except: [ :index, :show ] do
+  resources :depositories, only: %i[new create edit update]
+  resources :investments, only: %i[new create edit update]
+  resources :properties, only: %i[new create edit update] do
     member do
       get :balances
       patch :update_balances
@@ -175,12 +175,12 @@ Rails.application.routes.draw do
       patch :update_address
     end
   end
-  resources :vehicles, except: [ :index, :show ]
-  resources :credit_cards, except: [ :index, :show ]
-  resources :loans, except: [ :index, :show ]
-  resources :cryptos, except: [ :index, :show ]
-  resources :other_assets, except: [ :index, :show ]
-  resources :other_liabilities, except: [ :index, :show ]
+  resources :vehicles, only: %i[new create edit update]
+  resources :credit_cards, only: %i[new create edit update]
+  resources :loans, only: %i[new create edit update]
+  resources :cryptos, only: %i[new create edit update]
+  resources :other_assets, only: %i[new create edit update]
+  resources :other_liabilities, only: %i[new create edit update]
 
   resources :securities, only: :index
 
