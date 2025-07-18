@@ -28,47 +28,47 @@
     <div class="p-4 space-y-3">
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>Start of day balance</dt>
-        <hr class="grow border-dashed border-secondary" />
+        <hr class="grow border-dashed border-secondary">
         <dd class="font-bold"><%= start_balance_money.format %></dd>
       </dl>
 
       <% if account.balance_type == :investment %>
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Cash &#916;</dt>
-          <hr class="grow border-dashed border-secondary" />
+          <hr class="grow border-dashed border-secondary">
           <dd><%= transaction_totals_money.format %></dd>
         </dl>
 
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Holdings &#916;</dt>
-          <hr class="grow border-dashed border-secondary" />
+          <hr class="grow border-dashed border-secondary">
           <dd><%= holding_change_money.format %></dd>
         </dl>
       <% else %>
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Transaction totals</dt>
-          <hr class="grow border-dashed border-secondary" />
+          <hr class="grow border-dashed border-secondary">
           <dd><%= transaction_totals_money.format %></dd>
         </dl>
       <% end %>
 
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>End of day balance</dt>
-        <hr class="grow border-dashed border-secondary" />
+        <hr class="grow border-dashed border-secondary">
         <dd class="font-medium"><%= end_balance_before_adjustments_money.format %></dd>
       </dl>
 
-      <hr class="border border-primary" />
+      <hr class="border border-primary">
 
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>Value adjustments &#916; </dt>
-        <hr class="grow border-dashed border-secondary" />
-        <dd ><%= adjustments_money.format %></dd>
+        <hr class="grow border-dashed border-secondary">
+        <dd><%= adjustments_money.format %></dd>
       </dl>
 
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>Closing balance (incl. adjustments)</dt>
-        <hr class="grow border-dashed border-primary" />
+        <hr class="grow border-dashed border-primary">
         <dd class="font-bold"><%= end_balance_money.format %></dd>
       </dl>
     </div>

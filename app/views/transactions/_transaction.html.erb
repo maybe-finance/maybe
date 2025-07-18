@@ -97,7 +97,7 @@
         <%= content_tag :p,
             transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>
-      </div> 
+      </div>
     </div>
   <% end %>
 <% end %>

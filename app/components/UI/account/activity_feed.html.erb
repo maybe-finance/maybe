@@ -79,7 +79,7 @@
             <% grouped_entries.each do |date, entries| %>
               <%= render UI::Account::EntriesDateGroup.new(
                     account: account,
-                    date: date, 
+                    date: date,
                     entries: entries,
                     balance_trend: balance_trend_for_date(date),
                     transfers: transfers_for_date(date)
