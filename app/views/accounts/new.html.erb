@@ -25,7 +25,7 @@
       <%= button_to imports_path(import: { type: "AccountImport" }),
               data: { turbo_frame: :_top },
             class: "flex items-center gap-4 w-full text-center focus:outline-hidden hover:bg-surface-hover focus:bg-surface-hover fg-primary border border-transparent block px-2 rounded-lg p-2" do %>
-        <%= render FilledIconComponent.new(
+        <%= render DS::FilledIcon.new(
           icon: "download",
           hex_color: "#F79009",
         ) %>

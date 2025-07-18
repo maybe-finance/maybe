@@ -1,4 +1,4 @@
-class Tabs::NavComponent < ViewComponent::Base
+class DS::Tabs::Nav < DesignSystemComponent
   erb_template <<~ERB
     <%= tag.nav class: classes do %>
       <% btns.each do |btn| %>
@@ -12,7 +12,7 @@ class Tabs::NavComponent < ViewComponent::Base
       :button, label, id: id,
       type: "button",
       class: class_names(btn_classes, id == active_tab ? active_btn_classes : inactive_btn_classes, classes),
-      data: { id: id, action: "tabs#show", tabs_target: "navBtn" },
+      data: { id: id, action: "DS--tabs#show", DS__tabs_target: "navBtn" },
       &block
     )
   end

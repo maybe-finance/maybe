@@ -1,4 +1,4 @@
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <% dialog.with_header(title: t(".delete_category"), subtitle: t(".explanation", category_name: @category.name)) %>
 
   <% dialog.with_body do %>
@@ -14,14 +14,14 @@
                             { prompt: t(".replacement_category_prompt"), label: t(".category"), container_class: "mb-4" },
                             data: { deletion_target: "replacementField", action: "deletion#chooseSubmitButton" } %>
 
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         variant: "destructive",
         text: t(".delete_and_leave_uncategorized", category_name: @category.name),
         full_width: true,
         data: { deletion_target: "destructiveSubmitButton" }
       ) %>
 
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         text: "Delete and reassign",
         data: { deletion_target: "safeSubmitButton" },
         hidden: true,

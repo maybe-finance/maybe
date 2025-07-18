@@ -1,13 +1,13 @@
 <div class="h-[300px] lg:h-[340px] bg-container shadow-border-xs rounded-xl py-4 flex flex-col items-center justify-center">
   <div class="space-y-3 text-center flex flex-col items-center">
-    <%= render FilledIconComponent.new(
+    <%= render DS::FilledIcon.new(
       variant: :container,
       icon: "layers",
     ) %>
 
     <p class="text-sm font-medium text-primary">No accounts yet</p>
     <p class="text-secondary text-sm">Add accounts to display net worth data</p>
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: "Add account",
       icon: "plus",
       href: new_account_path,

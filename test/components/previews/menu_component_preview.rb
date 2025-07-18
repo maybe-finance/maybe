@@ -1,19 +1,19 @@
 class MenuComponentPreview < ViewComponent::Preview
   def icon
-    render MenuComponent.new(variant: "icon") do |menu|
+    render DS::Menu.new(variant: "icon") do |menu|
       menu_contents(menu)
     end
   end
 
   def button
-    render MenuComponent.new(variant: "button") do |menu|
+    render DS::Menu.new(variant: "button") do |menu|
       menu.with_button(text: "Open menu", variant: "secondary")
       menu_contents(menu)
     end
   end
 
   def avatar
-    render MenuComponent.new(variant: "avatar") do |menu|
+    render DS::Menu.new(variant: "avatar") do |menu|
       menu_contents(menu)
     end
   end

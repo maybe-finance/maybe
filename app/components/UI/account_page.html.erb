@@ -8,7 +8,7 @@
 
     <div class="min-h-[800px]" data-testid="account-details">
       <% if tabs.count > 1 %>
-        <%= render TabsComponent.new(active_tab: active_tab, url_param_key: "tab") do |tabs_container| %>
+        <%= render DS::Tabs.new(active_tab: active_tab, url_param_key: "tab") do |tabs_container| %>
           <% tabs_container.with_nav(classes: "max-w-fit") do |nav| %>
             <% tabs.each do |tab| %>
               <% nav.with_btn(id: tab, label: tab.to_s.humanize, classes: "px-6") %>

@@ -1,4 +1,4 @@
-class Tabs::PanelComponent < ViewComponent::Base
+class DS::Tabs::Panel < DesignSystemComponent
   attr_reader :tab_id
 
   def initialize(tab_id:)

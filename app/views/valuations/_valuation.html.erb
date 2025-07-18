@@ -14,7 +14,7 @@
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
         <div class="flex items-center gap-3">
-          <%= render FilledIconComponent.new(icon: icon, size: "sm", hex_color: color, rounded: true) %>
+          <%= render DS::FilledIcon.new(icon: icon, size: "sm", hex_color: color, rounded: true) %>
 
           <div class="truncate text-primary">
             <%= link_to entry.name,

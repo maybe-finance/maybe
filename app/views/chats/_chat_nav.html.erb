@@ -4,7 +4,7 @@
   <% path = chat.new_record? ? chats_path : chats_path(previous_chat_id: chat.id) %>
 
   <div class="flex items-center gap-2 grow">
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       id: "chat-nav-back",
       variant: "icon",
       icon: "menu",
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
+  <%= render DS::Menu.new(icon_vertical: true) do |menu| %>
     <% menu.with_item(variant: "link", text: "Start new chat", href: new_chat_path, icon: "plus") %>
 
     <% unless chat.new_record? %>

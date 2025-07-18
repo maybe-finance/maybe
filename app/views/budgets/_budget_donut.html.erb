@@ -12,7 +12,7 @@
           <%= format_money(budget.actual_spending_money) %>
         </div>
 
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "of #{budget.budgeted_spending_money.format}",
           variant: "secondary",
           icon: "pencil",
@@ -25,7 +25,7 @@
           <span><%= format_money Money.new(0, budget.currency || budget.family.currency) %></span>
         </div>
 
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "New budget",
           size: "sm",
           icon: "plus",
@@ -46,7 +46,7 @@
             <%= format_money(bc.actual_spending_money) %>
           </p>
 
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: "of #{bc.budgeted_spending_money.format(precision: 0)}",
             variant: "secondary",
             icon: "pencil",

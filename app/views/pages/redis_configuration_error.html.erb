@@ -26,7 +26,7 @@
 
         <!-- Primary CTA -->
         <div class="text-center space-y-4">
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: "View Setup Guide",
             href: "https://github.com/maybe-finance/maybe/blob/main/docs/hosting/docker.md",
             variant: "primary",
@@ -44,7 +44,7 @@
       <div class="pt-6 border-t border-primary">
         <div class="text-center space-y-3">
           <p class="text-sm text-muted">Once you've configured Redis, refresh this page to continue.</p>
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             text: "Refresh Page",
             variant: "secondary",
             icon: "refresh-cw",

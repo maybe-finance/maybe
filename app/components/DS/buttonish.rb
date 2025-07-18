@@ -1,4 +1,4 @@
-class ButtonishComponent < ViewComponent::Base
+class DS::Buttonish < DesignSystemComponent
   VARIANTS = {
     primary: {
       container_classes: "text-inverse bg-inverse hover:bg-inverse-hover disabled:bg-gray-500 theme-dark:disabled:bg-gray-400",
@@ -71,7 +71,7 @@ class ButtonishComponent < ViewComponent::Base
   end
 
   def call
-    raise NotImplementedError, "ButtonishComponent is an abstract class and cannot be instantiated directly."
+    raise NotImplementedError, "Buttonish is an abstract class and cannot be instantiated directly."
   end
 
   def container_classes(override_classes = nil)

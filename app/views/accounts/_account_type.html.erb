@@ -2,7 +2,7 @@
 
 <%= link_to new_polymorphic_path(accountable, step: "method_select", return_to: params[:return_to]),
             class: "flex items-center gap-4 w-full text-center focus:outline-hidden hover:bg-surface-hover focus:bg-surface-hover fg-primary border border-transparent block px-2 rounded-lg p-2" do %>
-  <%= render FilledIconComponent.new(
+  <%= render DS::FilledIcon.new(
     icon: accountable.icon,
     hex_color: accountable.color,
   ) %>

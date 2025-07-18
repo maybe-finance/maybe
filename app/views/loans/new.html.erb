@@ -5,7 +5,7 @@
              show_eu_link: @show_eu_link,
              accountable_type: "Loan" %>
 <% else %>
-  <%= render DialogComponent.new do |dialog| %>
+  <%= render DS::Dialog.new do |dialog| %>
     <% dialog.with_header(title: t(".title")) %>
     <% dialog.with_body do %>
       <%= render "loans/form", account: @account, url: loans_path %>

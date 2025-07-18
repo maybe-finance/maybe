@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-class MenuComponent < ViewComponent::Base
+class DS::Menu < DesignSystemComponent
   attr_reader :variant, :avatar_url, :initials, :placement, :offset, :icon_vertical, :no_padding, :testid
 
   renders_one :button, ->(**button_options, &block) do
-    options_with_target = button_options.merge(data: { menu_target: "button" })
+    options_with_target = button_options.merge(data: { DS__menu_target: "button" })
 
     if block
       content_tag(:button, **options_with_target, &block)
     else
-      ButtonComponent.new(**options_with_target)
+      DS::Button.new(**options_with_target)
     end
   end
 
@@ -19,7 +19,7 @@ class MenuComponent < ViewComponent::Base
 
   renders_one :custom_content
 
-  renders_many :items, MenuItemComponent
+  renders_many :items, DS::MenuItem
 
   VARIANTS = %i[icon button avatar].freeze
 

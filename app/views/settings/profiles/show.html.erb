@@ -19,7 +19,7 @@
       </div>
 
       <div class="flex justify-end mt-4">
-        <%= render ButtonComponent.new(text: t(".save"), class: "md:w-auto w-full justify-center") %>
+        <%= render DS::Button.new(text: t(".save"), class: "md:w-auto w-full justify-center") %>
       </div>
     </div>
   <% end %>
@@ -51,7 +51,7 @@
           </div>
           <% if Current.user.admin? && user != Current.user %>
             <div class="ml-auto">
-              <%= render ButtonComponent.new(
+              <%= render DS::Button.new(
                 variant: "icon",
                 icon: "x",
                 href: settings_profile_path(user_id: user),
@@ -98,7 +98,7 @@
               <% end %>
 
               <% if Current.user.admin? %>
-                <%= render ButtonComponent.new(
+                <%= render DS::Button.new(
                   variant: "icon",
                   icon: "x",
                   href: invitation_path(invitation),
@@ -131,7 +131,7 @@
           <p class="text-secondary text-sm"><%= t(".reset_account_warning") %></p>
         </div>
 
-        <%= render ButtonComponent.new(
+        <%= render DS::Button.new(
           text: t(".reset_account"),
           variant: "destructive",
           href: reset_user_path(@user),
@@ -152,7 +152,7 @@
         <p class="text-secondary text-sm"><%= t(".delete_account_warning") %></p>
       </div>
 
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         text: t(".delete_account"),
         variant: "destructive",
         href: user_path(@user),

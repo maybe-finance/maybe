@@ -1,4 +1,4 @@
-class MenuItemComponent < ViewComponent::Base
+class DS::MenuItem < DesignSystemComponent
   VARIANTS = %i[link button divider].freeze
 
   attr_reader :variant, :text, :icon, :href, :method, :destructive, :confirm, :frame, :opts

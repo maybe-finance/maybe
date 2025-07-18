@@ -50,8 +50,8 @@
       </ul>
 
     <div class="flex items-center gap-2">
-      <%= render ButtonComponent.new(text: "Add condition", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addCondition" }) %>
-      <%= render ButtonComponent.new(text: "Add condition group", icon: "copy-plus", variant: "ghost", type: "button", data: { action: "rules#addConditionGroup" }) %>
+      <%= render DS::Button.new(text: "Add condition", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addCondition" }) %>
+      <%= render DS::Button.new(text: "Add condition group", icon: "copy-plus", variant: "ghost", type: "button", data: { action: "rules#addConditionGroup" }) %>
     </div>
   </section>
 
@@ -74,7 +74,7 @@
         <% end %>
       </ul>
 
-    <%= render ButtonComponent.new(text: "Add action", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addAction" }) %>
+    <%= render DS::Button.new(text: "Add action", icon: "plus", variant: "ghost", type: "button", data: { action: "rules#addAction" }) %>
   </section>
 
   <section class="space-y-4">

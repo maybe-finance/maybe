@@ -1,4 +1,4 @@
-class AlertComponent < ViewComponent::Base
+class DS::Alert < DesignSystemComponent
   def initialize(message:, variant: :info)
     @message = message
     @variant = variant

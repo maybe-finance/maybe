@@ -1,6 +1,6 @@
 <%# locals: (form:) %>
 
-<%= render TabsComponent.new(
+<%= render DS::Tabs.new(
   variant: :unstyled,
   active_tab: get_default_transaction_search_filter[:key],
   active_btn_classes: "bg-surface text-primary",
@@ -28,7 +28,7 @@
       <div class="flex justify-between items-center gap-2 bg-container p-3 shrink-0">
         <div>
           <% if @q.present? %>
-            <%= render LinkComponent.new(
+            <%= render DS::Link.new(
             text: t(".clear_filters"),
             variant: "ghost",
             href: transactions_path(clear_filters: true),
@@ -37,8 +37,8 @@
         </div>
 
         <div>
-          <%= render ButtonComponent.new(text: t(".cancel"), type: "button", variant: "ghost", data: { action: "menu#close" }) %>
-          <%= render ButtonComponent.new(text: t(".apply")) %>
+          <%= render DS::Button.new(text: t(".cancel"), type: "button", variant: "ghost", data: { action: "DS--menu#close" }) %>
+          <%= render DS::Button.new(text: t(".apply")) %>
         </div>
       </div>
     </div>

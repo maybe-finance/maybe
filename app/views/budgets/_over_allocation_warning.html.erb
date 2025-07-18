@@ -4,7 +4,7 @@
   <%= icon "alert-triangle", size: "lg", color: "destructive" %>
   <p class="text-secondary text-sm text-center">You have over-allocated your budget.  Please fix your allocations.</p>
 
-  <%= render LinkComponent.new(
+  <%= render DS::Link.new(
     text: "Fix allocations",
     variant: "secondary",
     size: "sm",

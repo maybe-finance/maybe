@@ -37,7 +37,7 @@
       <% if params[:display].present? %>
         <%= hidden_field_tag :display, params[:display], id: nil %>
       <% end %>
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         text: t("doorkeeper.authorizations.buttons.authorize"),
         variant: :primary,
         size: :lg,
@@ -59,7 +59,7 @@
       <% if params[:display].present? %>
         <%= hidden_field_tag :display, params[:display], id: nil %>
       <% end %>
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         text: t("doorkeeper.authorizations.buttons.deny"),
         variant: :outline,
         size: :lg,

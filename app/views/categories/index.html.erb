@@ -2,7 +2,7 @@
   <h1 class="text-primary text-xl font-medium"><%= t(".categories") %></h1>
 
   <div class="flex items-center gap-2">
-    <%= render MenuComponent.new do |menu| %>
+    <%= render DS::Menu.new do |menu| %>
       <% menu.with_item(
           variant: "button",
           text: "Delete all",
@@ -12,7 +12,7 @@
           confirm: CustomConfirm.for_resource_deletion("all categories", high_severity: true)) %>
     <% end %>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: t(".new"),
       variant: "primary",
       icon: "plus",
@@ -38,12 +38,12 @@
       <div class="text-center flex flex-col items-center max-w-[500px]">
         <p class="text-sm text-secondary mb-4"><%= t(".empty") %></p>
         <div class="flex items-center gap-2">
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             text: t(".bootstrap"),
             href: bootstrap_categories_path,
           ) %>
 
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: t(".new"),
             variant: "outline",
             icon: "plus",

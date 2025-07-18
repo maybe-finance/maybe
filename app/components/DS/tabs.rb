@@ -1,6 +1,6 @@
-class TabsComponent < ViewComponent::Base
+class DS::Tabs < DesignSystemComponent
   renders_one :nav, ->(classes: nil) do
-    Tabs::NavComponent.new(
+    DS::Tabs::Nav.new(
       active_tab: active_tab,
       active_btn_classes: active_btn_classes,
       inactive_btn_classes: inactive_btn_classes,
@@ -13,7 +13,7 @@ class TabsComponent < ViewComponent::Base
     content_tag(
       :div,
       class: ("hidden" unless tab_id == active_tab),
-      data: { id: tab_id, tabs_target: "panel" },
+      data: { id: tab_id, DS__tabs_target: "panel" },
       &block
     )
   end

@@ -34,7 +34,7 @@ nav_sections = [
 
 <div class="space-y-4">
   <div class="hidden lg:flex items-center gap-2 p-1.5">
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: "Back",
       icon: "chevron-left",
       href: previous_path,
@@ -71,7 +71,7 @@ nav_sections = [
   <nav class="space-y-4 overflow-y-auto md:hidden" id="mobile-settings-nav" data-controller="preserve-scroll scroll-on-connect">
     <ul class="flex space-y-1">
       <li>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Back",
           icon: "chevron-left",
           href: previous_path,

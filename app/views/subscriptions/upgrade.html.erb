@@ -3,14 +3,14 @@
     <h1 class="sr-only">Upgrade</h1>
 
     <div class="flex justify-end gap-2">
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         text: "Account Settings",
         icon: "settings",
         variant: "ghost",
         href: settings_profile_path,
       ) %>
 
-      <%= render ButtonComponent.new(
+      <%= render DS::Button.new(
         text: "Sign out",
         icon: "log-out",
         icon_position: :right,
@@ -45,7 +45,7 @@
       </div>
 
       <div class="text-center space-y-2">
-        <%= render ButtonComponent.new(
+        <%= render DS::Button.new(
           text: "Subscribe and unlock Maybe",
           variant: "primary",
           full_width: true
