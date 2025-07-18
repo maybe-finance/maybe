@@ -19,7 +19,7 @@ class UI::AccountPage < ApplicationComponent
   end
 
   def active_tab
-    tabs.find { |tab| tab == @active_tab } || tabs.first
+    tabs.find { |tab| tab == @active_tab&.to_sym } || tabs.first
   end
 
   def tabs
