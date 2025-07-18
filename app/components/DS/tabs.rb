@@ -13,7 +13,7 @@ class DS::Tabs < DesignSystemComponent
     content_tag(
       :div,
       class: ("hidden" unless tab_id == active_tab),
-      data: { id: tab_id, tabs_target: "panel" },
+      data: { id: tab_id, DS__tabs_target: "panel" },
       &block
     )
   end

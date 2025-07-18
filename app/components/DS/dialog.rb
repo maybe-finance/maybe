@@ -3,7 +3,7 @@ class DS::Dialog < DesignSystemComponent
     content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do
       title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do
         title = content_tag(:h2, title, class: class_names("font-medium text-primary", drawer? ? "text-lg" : "")) if title
-        close_icon = render DS::Button.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
+        close_icon = render DS::Button.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "DS--dialog#close" }) unless hide_close_icon
         safe_join([ title, close_icon ].compact)
       end
 
@@ -19,7 +19,7 @@ class DS::Dialog < DesignSystemComponent
 
   renders_many :actions, ->(cancel_action: false, **button_opts) do
     merged_opts = if cancel_action
-      button_opts.merge(type: "button", data: { action: "modal#close" })
+      button_opts.merge(type: "button", data: { action: "DS--dialog#close" })
     else
       button_opts
     end
@@ -99,11 +99,11 @@ class DS::Dialog < DesignSystemComponent
     merged_opts = opts.dup
     data = merged_opts.delete(:data) || {}
 
-    data[:controller] = [ "dialog", "hotkey", data[:controller] ].compact.join(" ")
-    data[:dialog_auto_open_value] = auto_open
-    data[:dialog_reload_on_close_value] = reload_on_close
-    data[:action] = [ "mousedown->dialog#clickOutside", data[:action] ].compact.join(" ")
-    data[:hotkey] = "esc:dialog#close"
+    data[:controller] = [ "DS--dialog", "hotkey", data[:controller] ].compact.join(" ")
+    data[:DS__dialog_auto_open_value] = auto_open
+    data[:DS__dialog_reload_on_close_value] = reload_on_close
+    data[:action] = [ "mousedown->DS--dialog#clickOutside", data[:action] ].compact.join(" ")
+    data[:hotkey] = "esc:DS--dialog#close"
     merged_opts[:data] = data
 
     merged_opts
