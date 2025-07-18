@@ -38,16 +38,6 @@
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.amount.negative?] %>
       </div>
-
-      <div class="col-span-2 justify-self-end">
-        <% if balance_trend&.trend %>
-          <div class="flex items-center gap-2">
-            <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-primary" %>
-          </div>
-        <% else %>
-          <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
-        <% end %>
-      </div>
     </div>
   <% end %>
 <% end %>

@@ -6,11 +6,17 @@ class Account::ActivityFeedData
 
   def initialize(account, entries)
     @account = account
-    @entries = entries
+    @entries = entries.to_a
   end
 
   # We read balances so we can show "start of day" -> "end of day" balances for each entry date group in the feed
   def balances
+    @balances ||= begin
+      min_date = entries.min_by(&:date).date.prev_day
+      max_date = entries.max_by(&:date).date
+
+      account.balances.where(date: min_date..max_date, currency: account.currency).order(:date)
+    end
   end
 
 

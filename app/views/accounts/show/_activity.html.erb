@@ -76,11 +76,9 @@
 
         <div>
           <div class="space-y-4">
-            <% calculator = Balance::TrendCalculator.new(@account.balances) %>
-
             <%= entries_by_date(@entries) do |entries| %>
               <% entries.each_with_index do |entry, index| %>
-                <%= render entry, balance_trend: index == 0 ? calculator.trend_for(entry.date) : nil, view_ctx: "account" %>
+                <%= render entry, view_ctx: "account" %>
               <% end %>
             <% end %>
           </div>
