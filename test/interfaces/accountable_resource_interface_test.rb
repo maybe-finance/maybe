@@ -14,5 +14,4 @@ module AccountableResourceInterfaceTest
     get edit_account_url(@account)
     assert_response :success
   end
-
 end
