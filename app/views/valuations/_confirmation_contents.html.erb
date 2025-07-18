@@ -2,8 +2,8 @@
 
 <div class="space-y-4 text-sm text-secondary">
   <% if account.investment? %>
-    <% holdings_value = reconciliation_dry_run.new_balance - reconciliation_dry_run.new_cash_balance %>
-    <% brokerage_cash = reconciliation_dry_run.new_cash_balance %>
+    <% brokerage_cash = reconciliation_dry_run.new_cash_balance || 0 %>
+    <% holdings_value = reconciliation_dry_run.new_balance - brokerage_cash %>
 
     <p>This will <%= action_verb %> the account value on <span class="font-medium text-primary"><%= entry.date.strftime("%B %d, %Y") %></span> to:</p>
 

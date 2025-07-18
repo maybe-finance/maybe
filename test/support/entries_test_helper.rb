@@ -15,33 +15,6 @@ module EntriesTestHelper
     Entry.create! entry_defaults.merge(entry_attributes)
   end
 
-  def create_opening_anchor_valuation(account:, balance:, date:)
-    create_valuation(
-      account: account,
-      kind: "opening_anchor",
-      amount: balance,
-      date: date
-    )
-  end
-
-  def create_reconciliation_valuation(account:, balance:, date:)
-    create_valuation(
-      account: account,
-      kind: "reconciliation",
-      amount: balance,
-      date: date
-    )
-  end
-
-  def create_current_anchor_valuation(account:, balance:, date: Date.current)
-    create_valuation(
-      account: account,
-      kind: "current_anchor",
-      amount: balance,
-      date: date
-    )
-  end
-
   def create_valuation(attributes = {})
     entry_attributes = attributes.except(:kind)
     valuation_attributes = attributes.slice(:kind)
@@ -76,5 +49,34 @@ module EntriesTestHelper
       amount: qty * trade_price,
       currency: currency,
       entryable: trade
+  end
+
+  def create_transfer(from_account:, to_account:, amount:, date: Date.current, currency: "USD")
+    outflow_transaction = Transaction.create!(kind: "funds_movement")
+    inflow_transaction = Transaction.create!(kind: "funds_movement")
+
+    transfer = Transfer.create!(
+      outflow_transaction: outflow_transaction,
+      inflow_transaction: inflow_transaction
+    )
+
+    # Create entries for both accounts
+    from_account.entries.create!(
+      name: "Transfer to #{to_account.name}",
+      date: date,
+      amount: -amount.abs,
+      currency: currency,
+      entryable: outflow_transaction
+    )
+
+    to_account.entries.create!(
+      name: "Transfer from #{from_account.name}",
+      date: date,
+      amount: amount.abs,
+      currency: currency,
+      entryable: inflow_transaction
+    )
+
+    transfer
   end
 end

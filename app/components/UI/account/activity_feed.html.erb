@@ -1,10 +1,9 @@
-<%# locals: (account:) %>
-
 <%= turbo_frame_tag dom_id(account, "entries") do %>
   <div class="bg-container p-5 shadow-border-xs rounded-xl">
     <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
       <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
-      <% unless @account.plaid_account_id.present? %>
+
+      <% if account.manual? %>
         <%= render DS::Menu.new(variant: "button") do |menu| %>
           <% menu.with_button(text: "New", variant: "secondary", icon: "plus") %>
 
@@ -12,16 +11,15 @@
               variant: "link",
               text: "New balance",
               icon: "circle-dollar-sign",
-              href: new_valuation_path(account_id: @account.id),
+              href: new_valuation_path(account_id: account.id),
               data: { turbo_frame: :modal }) %>
 
-          <% unless @account.crypto? %>
-            <% href = @account.investment? ? new_trade_path(account_id: @account.id) : new_transaction_path(account_id: @account.id) %>
+          <% unless account.crypto? %>
             <% menu.with_item(
                 variant: "link",
                 text: "New transaction",
                 icon: "credit-card",
-                href: href,
+                href: account.investment? ? new_trade_path(account_id: account.id) : new_transaction_path(account_id: account.id),
                 data: { turbo_frame: :modal }) %>
           <% end %>
         <% end %>
@@ -37,11 +35,13 @@
         <div class="flex gap-2 mb-4">
           <div class="grow">
             <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
-              <%= icon("search") %>
-              <%= hidden_field_tag :account_id, @account.id %>
+              <%= helpers.icon("search") %>
+
+              <%= hidden_field_tag :account_id, account.id %>
+
               <%= form.search_field :search,
                             placeholder: "Search entries by name",
-                            value: @q[:search],
+                            value: search,
                             class: "form-field__input placeholder:text-sm placeholder:text-secondary",
                             "data-auto-submit-form-target": "auto" %>
             </div>
@@ -50,14 +50,14 @@
       <% end %>
     </div>
 
-    <% if @entries.empty? %>
-      <p class="text-secondary text-sm p-4"><%= t(".no_entries") %></p>
+    <% if activity_dates.empty? %>
+      <p class="text-secondary text-sm p-4">No entries yet</p>
     <% else %>
-      <%= tag.div id: dom_id(@account, "entries_bulk_select"),
+      <%= tag.div id: dom_id(account, "entries_bulk_select"),
                 data: {
                   controller: "bulk-select",
-                  bulk_select_singular_label_value: t(".entry"),
-                  bulk_select_plural_label_value: t(".entries")
+                  bulk_select_singular_label_value: "entry",
+                  bulk_select_plural_label_value: "entries"
                 } do %>
         <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
           <%= render "entries/selection_bar" %>
@@ -68,23 +68,24 @@
             <%= check_box_tag "selection_entry",
                               class: "checkbox checkbox--light",
                               data: { action: "bulk-select#togglePageSelection" } %>
-            <p><%= t(".date") %></p>
+            <p>Date</p>
           </div>
-          <%= tag.p t(".amount"), class: "col-span-2 justify-self-end" %>
-          <%= tag.p t(".balance"), class: "col-span-2 justify-self-end" %>
+
+          <%= tag.p "Amount", class: "col-span-4 justify-self-end" %>
         </div>
 
         <div>
           <div class="space-y-4">
-            <%= entries_by_date(@entries) do |entries| %>
-              <% entries.each_with_index do |entry, index| %>
-                <%= render entry, view_ctx: "account" %>
-              <% end %>
+            <% activity_dates.each do |activity_date_data| %>
+              <%= render UI::Account::ActivityDate.new(
+                    account: account,
+                    data: activity_date_data
+                  ) %>
             <% end %>
           </div>
 
           <div class="p-4 bg-container rounded-bl-lg rounded-br-lg">
-            <%= render "shared/pagination", pagy: @pagy %>
+            <%= render "shared/pagination", pagy: pagy %>
           </div>
         </div>
       <% end %>

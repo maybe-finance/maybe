@@ -1,0 +1,9 @@
+<span data-controller="DS--tooltip" data-DS--tooltip-placement-value="<%= placement %>" data-DS--tooltip-offset-value="<%= offset %>" data-DS--tooltip-cross-axis-value="<%= cross_axis %>" class="inline-flex">
+  <%= helpers.icon icon_name, size: size, color: color %>
+
+  <div role="tooltip" data-DS--tooltip-target="tooltip" class="hidden absolute z-50 bg-gray-700 text-sm px-1.5 py-1 rounded-md">
+    <div class="fg-inverse font-normal max-w-[200px]">
+      <%= tooltip_content %>
+    </div>
+  </div>
+</span>

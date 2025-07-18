@@ -6,7 +6,7 @@
   <%= turbo_frame_tag dom_id(transaction) do %>
     <div class="grid grid-cols-12 items-center text-primary text-sm font-medium p-4 lg:p-4 <%= entry.excluded ? "opacity-50 text-gray-400" : "" %>">
 
-      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8 <%= view_ctx == "global" ? "lg:col-span-8" : "lg:col-span-6" %>">
+      <div class="pr-4 lg:pr-10 flex items-center gap-3 lg:gap-4 col-span-8">
         <%= check_box_tag dom_id(entry, "selection"),
             disabled: transaction.transfer.present?,
             class: "checkbox checkbox--light",
@@ -93,22 +93,11 @@
         <%= render "transactions/transaction_category", transaction: transaction %>
       </div>
 
-      <div class="col-span-4 lg:col-span-2 ml-auto text-right">
+      <div class="col-span-2 ml-auto text-right">
         <%= content_tag :p,
             transaction.transfer? && view_ctx == "global" ? "+/- #{format_money(entry.amount_money.abs)}" : format_money(-entry.amount_money),
             class: ["text-green-600": entry.amount.negative?] %>
       </div>
-
-      <% if view_ctx != "global" %>
-        <div class="col-span-2 justify-self-end hidden lg:block">
-          <% if balance_trend&.trend %>
-            <%= tag.p format_money(balance_trend.trend.current),
-                class: "font-medium text-sm text-primary" %>
-          <% else %>
-            <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
-          <% end %>
-        </div>
-      <% end %>
     </div>
   <% end %>
 <% end %>

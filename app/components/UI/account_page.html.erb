@@ -1,6 +1,6 @@
 <%= turbo_stream_from account %>
 
-<%= turbo_frame_tag dom_id(account, :container) do %>
+<%= turbo_frame_tag id do %>
   <%= tag.div class: "space-y-4 pb-32" do %>
     <%= render "accounts/show/header", account: account, title: title, subtitle: subtitle %>
 
@@ -17,12 +17,12 @@
 
           <% tabs.each do |tab| %>
             <% tabs_container.with_panel(tab_id: tab) do %>
-              <%= render tab_partial_name(tab), account: account %>
+              <%= tab_content_for(tab) %>
             <% end %>
           <% end %>
         <% end %>
       <% else %>
-        <%= render tab_partial_name(tabs.first), account: account %>
+        <%= tab_content_for(tabs.first) %>
       <% end %>
     </div>
   <% end %>
