@@ -2,7 +2,7 @@
   <div class="text-center flex flex-col items-center max-w-[300px] gap-4">
     <p class="text-primary mb-1 font-medium text-sm"><%= t(".message") %></p>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: t(".new"),
       variant: "primary",
       href: new_import_path,

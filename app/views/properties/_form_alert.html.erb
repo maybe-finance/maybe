@@ -1,7 +1,7 @@
 <%# locals: (notice: nil, error: nil) %>
 
 <% if notice.present? %>
-  <%= render AlertComponent.new(message: notice, variant: :success) %>
+  <%= render DS::Alert.new(message: notice, variant: :success) %>
 <% elsif error.present? %>
-  <%= render AlertComponent.new(message: error, variant: :error) %>
+  <%= render DS::Alert.new(message: error, variant: :error) %>
 <% end %>

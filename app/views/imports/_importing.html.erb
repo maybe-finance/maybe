@@ -12,8 +12,8 @@
     </div>
 
     <div class="space-y-2 flex flex-col">
-      <%= render LinkComponent.new(text: "Check status", href: import_path(import), variant: "primary", full_width: true) %>
-      <%= render LinkComponent.new(text: "Back to dashboard", href: root_path, variant: "secondary", full_width: true) %>
+      <%= render DS::Link.new(text: "Check status", href: import_path(import), variant: "primary", full_width: true) %>
+      <%= render DS::Link.new(text: "Back to dashboard", href: root_path, variant: "secondary", full_width: true) %>
     </div>
   </div>
 </div>

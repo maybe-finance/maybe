@@ -1,4 +1,4 @@
-<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+<%= render DS::Dialog.new(variant: "drawer") do |dialog| %>
   <% dialog.with_header do %>
     <%= render "transactions/header", entry: @entry %>
   <% end %>
@@ -141,7 +141,7 @@
             <p class="text-secondary">Transfers and payments are special types of transactions that indicate money movement between 2 accounts.</p>
           </div>
 
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: "Open matcher",
             icon: "arrow-left-right",
             variant: "outline",
@@ -157,7 +157,7 @@
             <p class="text-secondary"><%= t(".delete_subtitle") %></p>
           </div>
 
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             text: t(".delete"),
             variant: "outline-destructive",
             href: entry_path(@entry),

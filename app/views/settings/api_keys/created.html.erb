@@ -4,7 +4,7 @@
   <div class="space-y-4">
     <div class="p-3 shadow-border-xs bg-container rounded-lg">
       <div class="flex items-start gap-3">
-        <%= render FilledIconComponent.new(
+        <%= render DS::FilledIcon.new(
           icon: "check-circle",
           rounded: true,
           size: "lg",
@@ -24,7 +24,7 @@
       <div class="bg-container rounded-lg p-3 border border-primary" data-controller="clipboard">
         <div class="flex items-center justify-between gap-3">
           <code id="api-key-display" class="font-mono text-sm text-primary break-all" data-clipboard-target="source"><%= @api_key.plain_key %></code>
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             text: "Copy API Key",
             variant: "ghost",
             icon: "copy",
@@ -84,7 +84,7 @@
     </div>
 
     <div class="flex justify-end pt-4 border-t border-primary">
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         text: "Continue to API Key Settings",
         href: settings_api_key_path,
         variant: "primary"

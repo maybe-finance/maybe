@@ -11,7 +11,7 @@
       <p class="text-sm text-secondary">Please try again or contact support.</p>
     </div>
 
-    <%= render ButtonComponent.new(
+    <%= render DS::Button.new(
       text: "Try again",
       full_width: true,
       href: revert_import_path(import)

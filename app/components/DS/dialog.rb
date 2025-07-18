@@ -1,9 +1,9 @@
-class DialogComponent < ViewComponent::Base
+class DS::Dialog < DesignSystemComponent
   renders_one :header, ->(title: nil, subtitle: nil, hide_close_icon: false, **opts, &block) do
     content_tag(:header, class: "px-4 flex flex-col gap-2", **opts) do
       title_div = content_tag(:div, class: "flex items-center justify-between gap-2") do
         title = content_tag(:h2, title, class: class_names("font-medium text-primary", drawer? ? "text-lg" : "")) if title
-        close_icon = render ButtonComponent.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
+        close_icon = render DS::Button.new(variant: "icon", class: "ml-auto", icon: "x", tabindex: "-1", data: { action: "dialog#close" }) unless hide_close_icon
         safe_join([ title, close_icon ].compact)
       end
 
@@ -24,11 +24,11 @@ class DialogComponent < ViewComponent::Base
       button_opts
     end
 
-    render ButtonComponent.new(**merged_opts)
+    render DS::Button.new(**merged_opts)
   end
 
   renders_many :sections, ->(title:, **disclosure_opts, &block) do
-    render DisclosureComponent.new(title: title, align: :right, **disclosure_opts) do
+    render DS::Disclosure.new(title: title, align: :right, **disclosure_opts) do
       block.call
     end
   end

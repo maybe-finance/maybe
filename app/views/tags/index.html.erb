@@ -2,7 +2,7 @@
   <h1 class="text-primary text-xl font-medium"><%= t(".tags") %></h1>
 
 <div class="flex items-center gap-2">
-  <%= render MenuComponent.new do |menu| %>
+  <%= render DS::Menu.new do |menu| %>
     <% menu.with_item(
           variant: "button",
           text: "Delete all",
@@ -12,7 +12,7 @@
           confirm: CustomConfirm.for_resource_deletion("all tags", high_severity: true)) %>
   <% end %>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: t(".new"),
       variant: "primary",
       href: new_tag_path,
@@ -44,7 +44,7 @@
       <div class="text-center flex flex-col items-center max-w-[300px]">
         <p class="text-primary mb-1 font-medium text-sm"><%= t(".empty") %></p>
 
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: t(".new"),
           icon: "plus",
           href: new_tag_path,

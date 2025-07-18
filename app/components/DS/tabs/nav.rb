@@ -1,4 +1,4 @@
-class Tabs::NavComponent < ViewComponent::Base
+class DS::Tabs::Nav < DesignSystemComponent
   erb_template <<~ERB
     <%= tag.nav class: classes do %>
       <% btns.each do |btn| %>

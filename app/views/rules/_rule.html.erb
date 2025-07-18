@@ -60,7 +60,7 @@
     <%= styled_form_with model: rule, data: { controller: "auto-submit-form" } do |f| %>
       <%= f.toggle :active, { data: { auto_submit_form_target: "auto" } } %>
     <% end %>
-    <%= render MenuComponent.new do |menu| %>
+    <%= render DS::Menu.new do |menu| %>
       <% menu.with_item(variant: "link", text: "Edit", href: edit_rule_path(rule), icon: "pencil", data: { turbo_frame: "modal" }) %>
       <% menu.with_item(variant: "link", text: "Re-apply rule", href: confirm_rule_path(rule), icon: "refresh-cw", data: { turbo_frame: "modal" }) %>
       <% menu.with_item(

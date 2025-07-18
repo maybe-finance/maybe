@@ -8,7 +8,7 @@
     </p>
   </div>
   <div class="justify-self-end">
-    <%= render MenuComponent.new do |menu| %>
+    <%= render DS::Menu.new do |menu| %>
       <% menu.with_item(variant: "link", text: t(".edit"), href: edit_tag_path(tag), icon: "pencil", data: { turbo_frame: "modal" }) %>
 
       <% if tag.transactions.any? %>

@@ -1,4 +1,4 @@
-class FilledIconComponent < ViewComponent::Base
+class DS::FilledIcon < DesignSystemComponent
   attr_reader :icon, :text, :hex_color, :size, :rounded, :variant
 
   VARIANTS = %i[default text surface container inverse].freeze

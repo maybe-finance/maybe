@@ -12,7 +12,7 @@
   </div>
 
   <div class="justify-self-end">
-    <%= render MenuComponent.new do |menu| %>
+    <%= render DS::Menu.new do |menu| %>
       <% menu.with_item(variant: "link", text: t(".edit"), icon: "pencil", href: edit_category_path(category), data: { turbo_frame: :modal }) %>
 
       <% if category.transactions.any? %>

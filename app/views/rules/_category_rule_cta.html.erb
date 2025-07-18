@@ -13,9 +13,9 @@
     <%= f.hidden_field :rule_prompt_dismissed_at, value: Time.current %>
 
     <%= tag.div class:"flex gap-2 justify-end" do %>
-      <%= render ButtonComponent.new(text: "Dismiss", variant: "secondary") %>
+      <%= render DS::Button.new(text: "Dismiss", variant: "secondary") %>
       <% rule_href = new_rule_path(resource_type: "transaction", action_type: "set_transaction_category", action_value: cta[:category_id]) %>
-      <%= render LinkComponent.new(text: "Create rule", variant: "primary", href: rule_href, frame: :modal) %>
+      <%= render DS::Link.new(text: "Create rule", variant: "primary", href: rule_href, frame: :modal) %>
     <% end %>
   <% end %>
 <% end %>

@@ -1,6 +1,6 @@
-class TabsComponent < ViewComponent::Base
+class DS::Tabs < DesignSystemComponent
   renders_one :nav, ->(classes: nil) do
-    Tabs::NavComponent.new(
+    DS::Tabs::Nav.new(
       active_tab: active_tab,
       active_btn_classes: active_btn_classes,
       inactive_btn_classes: inactive_btn_classes,

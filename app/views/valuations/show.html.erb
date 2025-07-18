@@ -1,6 +1,6 @@
 <% entry, account = @entry, @entry.account %>
 
-<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+<%= render DS::Dialog.new(variant: "drawer") do |dialog| %>
   <% dialog.with_header do %>
     <%= render "valuations/header", entry: @entry %>
   <% end %>
@@ -8,7 +8,7 @@
   <% dialog.with_body do %>
     <% if @error_message.present? %>
       <div class="mb-4">
-        <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+        <%= render DS::Alert.new(message: @error_message, variant: :error) %>
       </div>
     <% end %>
 
@@ -28,7 +28,7 @@
                 disable_currency: true %>
 
           <div class="flex justify-end">
-            <%= render ButtonComponent.new(
+            <%= render DS::Button.new(
               text: "Update value",
               variant: :primary,
               type: "submit"

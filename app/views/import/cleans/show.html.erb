@@ -17,7 +17,7 @@
         <p class="text-success text-sm">Your data has been cleaned</p>
       </div>
 
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         text: "Next step",
         variant: "primary",
         href: import_confirm_path(@import),

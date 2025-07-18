@@ -21,7 +21,7 @@ module ApplicationHelper
     if custom
       inline_svg_tag("#{key}.svg", class: icon_classes, **opts)
     elsif as_button
-      render ButtonComponent.new(variant: "icon", class: extra_classes, icon: key, size: size, type: "button", **opts)
+      render DS::Button.new(variant: "icon", class: extra_classes, icon: key, size: size, type: "button", **opts)
     else
       lucide_icon(key, class: icon_classes, **opts)
     end

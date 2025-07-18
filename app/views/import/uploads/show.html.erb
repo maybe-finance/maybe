@@ -11,7 +11,7 @@
       <p class="text-secondary text-sm"><%= t(".description") %></p>
     </div>
 
-    <%= render TabsComponent.new(active_tab: params[:tab] || "csv-upload", url_param_key: "tab", testid: "import-tabs") do |tabs| %>
+    <%= render DS::Tabs.new(active_tab: params[:tab] || "csv-upload", url_param_key: "tab", testid: "import-tabs") do |tabs| %>
       <% tabs.with_nav do |nav| %>
         <% nav.with_btn(id: "csv-upload", label: "Upload CSV") %>
         <% nav.with_btn(id: "csv-paste", label: "Copy & Paste") %>

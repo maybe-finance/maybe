@@ -21,7 +21,7 @@
 
       <div class="mt-4 md:mt-0">
         <% if Current.user.otp_required? %>
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             text: t(".disable_mfa"),
             variant: "secondary",
             href: disable_mfa_path,
@@ -34,7 +34,7 @@
             )
           ) %>
         <% else %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: t(".enable_mfa"),
             variant: "primary",
             href: new_mfa_path

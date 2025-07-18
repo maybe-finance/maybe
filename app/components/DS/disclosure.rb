@@ -1,4 +1,4 @@
-class DisclosureComponent < ViewComponent::Base
+class DS::Disclosure < DesignSystemComponent
   renders_one :summary_content
 
   attr_reader :title, :align, :open, :opts

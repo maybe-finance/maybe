@@ -1,11 +1,11 @@
 <%# locals: (title:, back_path: nil) %>
 
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <div class="flex flex-col relative" data-controller="list-keyboard-navigation">
     <div class="border-b border-tertiary md:border-alpha-black-25 px-4 pb-4 text-gray-800 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <% if back_path %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
           variant: "icon",
           icon: "arrow-left",
           href: back_path,

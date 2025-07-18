@@ -48,7 +48,7 @@
 
       <div class="flex items-center gap-2">
         <% if plaid_item.requires_update? %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: t(".update"),
             icon: "refresh-cw",
             variant: "secondary",
@@ -63,7 +63,7 @@
           ) %>
         <% end %>
 
-        <%= render MenuComponent.new do |menu| %>
+        <%= render DS::Menu.new do |menu| %>
           <% menu.with_item(
             variant: "button",
             text: t(".delete"),

@@ -11,7 +11,7 @@
     </p>
   </div>
 
-  <%= render MenuComponent.new(icon_vertical: true) do |menu| %>
+  <%= render DS::Menu.new(icon_vertical: true) do |menu| %>
     <% menu.with_item(
       variant: "link",
       text: "Edit chat title",

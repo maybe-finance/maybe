@@ -12,5 +12,5 @@
 <% elsif account.logo.attached? %>
   <%= image_tag account.logo, class: "shrink-0 rounded-full #{size_classes[size]}" %>
 <% else %>
-  <%= render FilledIconComponent.new(variant: :text, hex_color: color || account.accountable.color, text: account.name, size: size, rounded: true) %>
+  <%= render DS::FilledIcon.new(variant: :text, hex_color: color || account.accountable.color, text: account.name, size: size, rounded: true) %>
 <% end %>
