@@ -4,7 +4,7 @@ module AccountableResource
   included do
     include Periodable
 
-    before_action :set_account, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_account, only: [ :show, :edit, :update ]
     before_action :set_link_options, only: :new
   end
 
@@ -61,16 +61,7 @@ module AccountableResource
     end
 
     @account.lock_saved_attributes!
-    redirect_back_or_to @account, notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
-  end
-
-  def destroy
-    if @account.linked?
-      redirect_to account_path(@account), alert: "Cannot delete a linked account"
-    else
-      @account.destroy_later
-      redirect_to accounts_path, notice: t("accounts.destroy.success", type: accountable_type.name.underscore.humanize)
-    end
+    redirect_back_or_to account_path(@account), notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
   end
 
   private

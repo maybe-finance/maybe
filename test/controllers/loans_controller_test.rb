@@ -46,7 +46,7 @@ class LoansControllerTest < ActionDispatch::IntegrationTest
 
   test "updates with loan details" do
     assert_no_difference [ "Account.count", "Loan.count" ] do
-      patch account_path(@account), params: {
+      patch loan_path(@account), params: {
         account: {
           name: "Updated Loan",
           balance: 45000,

@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[sync chart sparkline toggle_active]
+  before_action :set_account, only: %i[sync sparkline toggle_active show destroy]
   include Periodable
 
   def index
@@ -25,11 +25,6 @@ class AccountsController < ApplicationController
     redirect_to account_path(@account)
   end
 
-  def chart
-    @chart_view = params[:chart_view] || "balance"
-    render layout: "application"
-  end
-
   def sparkline
     etag_key = @account.family.build_cache_key("#{@account.id}_sparkline", invalidate_on_data_updates: true)
 
@@ -48,6 +43,15 @@ class AccountsController < ApplicationController
       @account.enable!
     end
     redirect_to accounts_path
+  end
+
+  def destroy
+    if @account.linked?
+      redirect_to account_path(@account), alert: "Cannot delete a linked account"
+    else
+      @account.destroy_later
+      redirect_to accounts_path, notice: "Account scheduled for deletion"
+    end
   end
 
   private
