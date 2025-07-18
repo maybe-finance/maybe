@@ -12,7 +12,7 @@ class Account::ActivityFeedData
   def trend_for_date(date)
     start_balance = start_balance_for_date(date)
     end_balance = end_balance_for_date(date)
-    
+
     Trend.new(
       current: end_balance.balance_money,
       previous: start_balance.balance_money

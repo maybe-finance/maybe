@@ -1,5 +1,5 @@
 <%= tag.div id: id, data: { bulk_select_target: "group" }, class: "bg-container-inset rounded-xl p-1 w-full" do %>
-  <details open class="group">
+  <details class="group">
     <summary>
       <div class="py-2 px-4 flex items-center justify-between font-medium text-xs text-secondary">
         <div class="flex pl-0.5 items-center gap-4">
@@ -16,9 +16,9 @@
         </div>
 
         <div class="flex items-center gap-4">
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-2">
             <span class="font-medium"><%= balance_trend.current.format %></span>
-            <%= render DS::Tooltip.new(text: "The end of day balance, after all transactions and adjustments") %>
+            <%= render DS::Tooltip.new(text: "The end of day balance, after all transactions and adjustments", placement: "left", size: "sm") %>
           </div>
           <%= helpers.icon "chevron-down", class: "group-open:rotate-180" %>
         </div>
@@ -29,48 +29,48 @@
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>Start of day balance</dt>
         <hr class="grow border-dashed border-secondary" />
-        <dd class="font-medium"><%= start_balance_money.format %></dd>
+        <dd class="font-bold"><%= start_balance_money.format %></dd>
       </dl>
 
       <% if account.balance_type == :investment %>
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Cash &#916;</dt>
           <hr class="grow border-dashed border-secondary" />
-          <dd class="font-medium"><%= transaction_totals_money.format %></dd>
+          <dd><%= transaction_totals_money.format %></dd>
         </dl>
 
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Holdings &#916;</dt>
           <hr class="grow border-dashed border-secondary" />
-          <dd class="font-medium"><%= holding_change_money.format %></dd>
+          <dd><%= holding_change_money.format %></dd>
         </dl>
       <% else %>
         <dl class="flex gap-4 items-center text-sm text-primary">
           <dt>Transaction totals</dt>
           <hr class="grow border-dashed border-secondary" />
-          <dd class="font-medium"><%= transaction_totals_money.format %></dd>
+          <dd><%= transaction_totals_money.format %></dd>
         </dl>
       <% end %>
 
       <dl class="flex gap-4 items-center text-sm text-primary">
         <dt>End of day balance</dt>
         <hr class="grow border-dashed border-secondary" />
-        <dd><%= end_balance_before_adjustments_money.format %></dd>
+        <dd class="font-medium"><%= end_balance_before_adjustments_money.format %></dd>
       </dl>
 
-      <div class="pl-4 space-y-3">
-        <dl class="flex gap-4 items-center text-sm text-primary">
-          <dt>Value adjustments &#916; </dt>
-          <hr class="grow border-dashed border-secondary" />
-          <dd class="font-medium"><%= adjustments_money.format %></dd>
-        </dl>
+      <hr class="border border-primary" />
 
-        <dl class="flex gap-4 items-center text-sm text-primary">
-          <dt>Closing balance (incl. adjustments)</dt>
-          <hr class="grow border-dashed border-primary" />
-          <dd class="font-bold"><%= end_balance_money.format %></dd>
-        </dl>
-      </div>
+      <dl class="flex gap-4 items-center text-sm text-primary">
+        <dt>Value adjustments &#916; </dt>
+        <hr class="grow border-dashed border-secondary" />
+        <dd ><%= adjustments_money.format %></dd>
+      </dl>
+
+      <dl class="flex gap-4 items-center text-sm text-primary">
+        <dt>Closing balance (incl. adjustments)</dt>
+        <hr class="grow border-dashed border-primary" />
+        <dd class="font-bold"><%= end_balance_money.format %></dd>
+      </dl>
     </div>
   </details>
 

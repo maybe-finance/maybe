@@ -37,20 +37,21 @@ export default class extends Controller {
   }
 
   show = () => {
-    this.tooltipTarget.style.display = "block";
+    this.tooltipTarget.classList.remove("hidden");
     this.startAutoUpdate();
     this.update();
   };
 
   hide = () => {
-    this.tooltipTarget.style.display = "none";
+    this.tooltipTarget.classList.add("hidden");
     this.stopAutoUpdate();
   };
 
   startAutoUpdate() {
     if (!this._cleanup) {
+      const reference = this.element.querySelector("[data-icon]");
       this._cleanup = autoUpdate(
-        this.element.firstElementChild, // Use the icon as the reference element
+        reference || this.element,
         this.tooltipTarget,
         this.boundUpdate
       );
@@ -65,7 +66,8 @@ export default class extends Controller {
   }
 
   update() {
-    computePosition(this.element.firstElementChild, this.tooltipTarget, {
+    const reference = this.element.querySelector("[data-icon]");
+    computePosition(reference || this.element, this.tooltipTarget, {
       placement: this.placementValue,
       middleware: [
         offset({
