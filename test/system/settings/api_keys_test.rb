@@ -124,17 +124,14 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
     # Click the revoke button to open the modal
     click_button "Revoke Key"
 
-    # Wait for the modal to appear and click Confirm
-    # The dialog might take a moment to appear
-    sleep 0.5
-
+    # Wait for the dialog and then confirm
+    assert_selector "#confirm-dialog", visible: true
     within "#confirm-dialog" do
-      assert_text "Are you sure you want to revoke this API key?"
       click_button "Confirm"
     end
-
-    # Wait for the page to update after revoke
-    sleep 0.5
+    
+    # Wait for redirect after revoke
+    assert_no_selector "#confirm-dialog"
 
     assert_text "Create Your API Key"
     assert_text "Get programmatic access to your Maybe data"
