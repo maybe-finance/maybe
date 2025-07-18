@@ -50,7 +50,7 @@
       <% end %>
     </div>
 
-    <% if grouped_entries.empty? %>
+    <% if activity_dates.empty? %>
       <p class="text-secondary text-sm p-4">No entries yet</p>
     <% else %>
       <%= tag.div id: dom_id(account, "entries_bulk_select"),
@@ -76,13 +76,10 @@
 
         <div>
           <div class="space-y-4">
-            <% grouped_entries.each do |date, entries| %>
-              <%= render UI::Account::EntriesDateGroup.new(
+            <% activity_dates.each do |activity_date_data| %>
+              <%= render UI::Account::ActivityDate.new(
                     account: account,
-                    date: date,
-                    entries: entries,
-                    balance_trend: balance_trend_for_date(date),
-                    transfers: transfers_for_date(date)
+                    data: activity_date_data
                   ) %>
             <% end %>
           </div>

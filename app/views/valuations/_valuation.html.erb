@@ -1,9 +1,9 @@
-<%# locals: (entry:, balance_trend: nil, **) %>
+<%# locals: (entry:, **) %>
 
 <% valuation = entry.entryable %>
 
-<% color = balance_trend&.trend&.color || "#D444F1" %>
-<% icon = balance_trend&.trend&.icon || "plus" %>
+<% color = valuation.opening_anchor? ? "#D444F1" : "var(--color-gray)" %>
+<% icon = valuation.opening_anchor? ? "plus" : "minus" %>
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(valuation) do %>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="col-span-4 justify-self-end">
-        <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-primary" %>
+        <%= tag.p format_money(entry.amount_money), class: "font-bold text-sm text-primary" %>
       </div>
     </div>
   <% end %>

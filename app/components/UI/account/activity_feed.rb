@@ -24,16 +24,8 @@ class UI::Account::ActivityFeed < ApplicationComponent
     )
   end
 
-  def grouped_entries
-    feed_data.entries.group_by(&:date).sort.reverse
-  end
-
-  def balance_trend_for_date(date)
-    feed_data.trend_for_date(date)
-  end
-
-  def transfers_for_date(date)
-    feed_data.transfers_for_date(date)
+  def activity_dates
+    feed_data.entries_by_date
   end
 
   private
