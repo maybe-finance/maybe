@@ -129,7 +129,7 @@ class Settings::ApiKeysTest < ApplicationSystemTestCase
     within "#confirm-dialog" do
       click_button "Confirm"
     end
-    
+
     # Wait for redirect after revoke
     assert_no_selector "#confirm-dialog"
 

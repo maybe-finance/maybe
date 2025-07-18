@@ -117,7 +117,7 @@ class TransactionsTest < ApplicationSystemTestCase
     end
 
     assert_text "No entries found"
-    
+
     # Wait for Turbo to finish updating the DOM
     sleep 0.5
 
@@ -129,7 +129,7 @@ class TransactionsTest < ApplicationSystemTestCase
     # Remove all filters by clicking their X buttons
     # Get all the filter buttons at once to avoid stale elements
     filter_count = page.all("ul#transaction-search-filters li button").count
-    
+
     # Click each one with a small delay to let Turbo update
     filter_count.times do
       page.all("ul#transaction-search-filters li button").first.click
