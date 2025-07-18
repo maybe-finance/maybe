@@ -1,6 +1,6 @@
 <%= link_to "Back to rules", rules_path %>
 
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <% dialog.with_header(title: "New #{@rule.resource_type} rule") %>
   <% dialog.with_body do %>
     <%= render "rules/form", rule: @rule %>

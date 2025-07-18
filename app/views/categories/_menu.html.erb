@@ -1,6 +1,6 @@
 <%# locals: (transaction:) %>
 
-<%= render MenuComponent.new(variant: "button") do |menu| %>
+<%= render DS::Menu.new(variant: "button") do |menu| %>
   <% menu.with_button do %>
     <% render partial: "categories/badge", locals: { category: transaction.category } %>
   <% end %>

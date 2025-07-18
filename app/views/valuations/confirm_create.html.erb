@@ -1,4 +1,4 @@
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <% dialog.with_header(title: "Confirm new balance") %>
   <% dialog.with_body do %>
     <%= styled_form_with model: @entry, url: valuations_path, class: "space-y-4" do |form| %>

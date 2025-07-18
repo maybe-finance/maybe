@@ -1,6 +1,6 @@
 # An extension to `link_to` helper.  All options are passed through to the `link_to` helper with some additional
 # options available.
-class LinkComponent < ButtonishComponent
+class DS::Link < DS::Buttonish
   attr_reader :frame
 
   VARIANTS = VARIANTS.reverse_merge(

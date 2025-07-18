@@ -23,7 +23,7 @@
                   class: "w-6 h-6 rounded-full",
                   loading: "lazy" %>
             <% else %>
-              <%= render FilledIconComponent.new(
+              <%= render DS::FilledIcon.new(
                 variant: :text,
                 text: entry.name,
                 size: "sm",

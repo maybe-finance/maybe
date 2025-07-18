@@ -41,7 +41,7 @@
       <% end %>
 
       <% if account.draft? %>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Complete setup",
           href: edit_account_path(account, return_to: return_to),
           variant: :outline,
@@ -49,7 +49,7 @@
         ) %>
       <% elsif account.active? || account.disabled? %>
         <%= form_with model: account, url: toggle_active_account_path(account), method: :patch, data: { turbo_frame: "_top", controller: "auto-submit-form" } do |f| %>
-          <%= render ToggleComponent.new(
+          <%= render DS::Toggle.new(
             id: "account_#{account.id}_active",
             name: "active",
             checked: account.active?,

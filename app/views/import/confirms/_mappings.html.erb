@@ -11,7 +11,7 @@
           <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-red-100 border border-red-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".no_accounts"), class: "text-sm" %>
 
-            <%= render LinkComponent.new(
+            <%= render DS::Link.new(
               text: "Create account",
               variant: "primary",
               href: new_account_path(return_to: import_confirm_path(import)),
@@ -25,7 +25,7 @@
         <div class="overflow-x-auto">
           <div class="flex items-center justify-between p-4 gap-4 text-secondary bg-yellow-100 border border-yellow-200 rounded-lg w-[650px] min-w-0 mx-auto">
             <%= tag.p t(".unassigned_account"), class: "text-sm" %>
-            <%= render LinkComponent.new(
+            <%= render DS::Link.new(
               text: t(".create_account"),
               variant: "primary",
               href: new_account_path(return_to: import_confirm_path(import)),
@@ -59,7 +59,7 @@
     </div>
 
     <div class="flex justify-center w-full">
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         text: "Next",
         variant: "primary",
         href: is_last_step ? import_path(import) : url_for(step: step_idx + 2),

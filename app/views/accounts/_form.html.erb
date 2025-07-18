@@ -1,7 +1,7 @@
 <%# locals: (account:, url:) %>
 
 <% if @error_message.present? %>
-  <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+  <%= render DS::Alert.new(message: @error_message, variant: :error) %>
 <% end %>
 
 <%= styled_form_with model: account, url: url, scope: :account, data: { turbo: false }, class: "flex flex-col gap-4 justify-between grow text-primary" do |form| %>

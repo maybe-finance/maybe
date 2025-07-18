@@ -12,7 +12,7 @@
         <% if budget_category.category.lucide_icon %>
           <%= icon(budget_category.category.lucide_icon, color: "current") %>
         <% else %>
-          <%= render FilledIconComponent.new(
+          <%= render DS::FilledIcon.new(
             variant: :text,
             hex_color: budget_category.category.color,
             text: budget_category.category.name,

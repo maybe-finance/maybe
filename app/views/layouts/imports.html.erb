@@ -1,7 +1,7 @@
 <%= render "layouts/shared/htmldoc" do %>
   <div class="flex flex-col h-full bg-container">
     <header class="flex items-center justify-between p-8">
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         variant: "icon",
         icon: "arrow-left",
         href: content_for(:previous_path) || imports_path
@@ -11,7 +11,7 @@
         <%= yield :header_nav %>
       </nav>
 
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         variant: "icon",
         icon: "x",
         href: imports_path

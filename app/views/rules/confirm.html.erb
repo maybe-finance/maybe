@@ -1,4 +1,4 @@
-<%= render DialogComponent.new(reload_on_close: true) do |dialog| %>
+<%= render DS::Dialog.new(reload_on_close: true) do |dialog| %>
   <%
     title = if @rule.name.present?
               "Confirm changes to \"#{@rule.name}\""
@@ -15,7 +15,7 @@
       that meet the specified rule criteria.  Please confirm if you wish to proceed with this change.
     </p>
 
-    <%= render ButtonComponent.new(
+    <%= render DS::Button.new(
       text: "Confirm changes",
       href: apply_rule_path(@rule),
       method: :post,

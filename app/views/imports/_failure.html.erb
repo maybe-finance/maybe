@@ -11,6 +11,6 @@
       <p class="text-sm text-secondary">Please check that your file format, for any errors and that all required fields are filled, then come back and try again.</p>
     </div>
 
-    <%= render ButtonComponent.new(text: "Try again", href: publish_import_path(import), full_width: true) %>
+    <%= render DS::Button.new(text: "Try again", href: publish_import_path(import), full_width: true) %>
   </div>
 </div>

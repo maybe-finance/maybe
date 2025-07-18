@@ -36,7 +36,7 @@
     <% end %>
   </div>
 
-  <%= render MenuComponent.new do |menu| %>
+  <%= render DS::Menu.new do |menu| %>
     <% menu.with_item(variant: "link", text: t(".view"), href: import_path(import), icon: "eye") %>
 
     <% if import.complete? || import.revert_failed? %>

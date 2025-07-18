@@ -1,11 +1,11 @@
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <% dialog.with_body do %>
     <%= styled_form_with model: @entry, url: confirm_create_valuations_path, class: "space-y-4" do |form| %>
       <%= form.hidden_field :account_id %>
 
       <% if @error_message.present? %>
-        <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+        <%= render DS::Alert.new(message: @error_message, variant: :error) %>
       <% end %>
 
       <div class="space-y-3">

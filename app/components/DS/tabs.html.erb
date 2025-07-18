@@ -1,0 +1,18 @@
+<%= tag.div data: {
+  controller: "DS--tabs",
+  testid: testid,
+  DS__tabs_session_key_value: session_key,
+  DS__tabs_url_param_key_value: url_param_key,
+  DS__tabs_nav_btn_active_class: active_btn_classes,
+  DS__tabs_nav_btn_inactive_class: inactive_btn_classes
+} do %>
+  <% if unstyled? %>
+    <%= content %>
+  <% else %>
+    <%= nav %>
+
+    <% panels.each do |panel| %>
+      <%= panel %>
+    <% end %>
+  <% end %>
+<% end %>

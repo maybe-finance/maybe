@@ -30,20 +30,20 @@
 
     <div class="w-full">
       <% if Current.family.can_start_trial? %>
-        <%= render ButtonComponent.new(
+        <%= render DS::Button.new(
         text: "Try Maybe for 14 days",
         href: subscription_path,
         full_width: true,
         data: { turbo: false }
       ) %>
       <% elsif Current.family.trialing? %>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Continue trial",
           href: root_path,
           full_width: true,
         ) %>
       <% else %>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Upgrade",
           href: upgrade_subscription_path,
           full_width: true,
@@ -57,9 +57,9 @@
 
     <div class="flex gap-3">
       <div class="rounded-xl p-1 bg-gray-400/20 theme-dark:bg-gray-500/20 flex flex-col justify-between items-center text-secondary">
-        <%= render FilledIconComponent.new(icon: "unlock-keyhole", variant: :inverse) %>
-        <%= render FilledIconComponent.new(icon: "bell", variant: :inverse) %>
-        <%= render FilledIconComponent.new(icon: "credit-card", variant: :inverse) %>
+        <%= render DS::FilledIcon.new(icon: "unlock-keyhole", variant: :inverse) %>
+        <%= render DS::FilledIcon.new(icon: "bell", variant: :inverse) %>
+        <%= render DS::FilledIcon.new(icon: "credit-card", variant: :inverse) %>
       </div>
 
       <div class="space-y-12">
@@ -86,22 +86,22 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-6 text-secondary">
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "landmark", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "landmark", variant: :surface) %>
         <p class="text-sm text-primary text-center">More than 10,000 institutions to connect to</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "layers", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "layers", variant: :surface) %>
         <p class="text-sm text-primary text-center">Connect unlimited accounts and account types</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "line-chart", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "line-chart", variant: :surface) %>
         <p class="text-sm text-primary text-center">Performance and investment returns across portfolio</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "credit-card", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "credit-card", variant: :surface) %>
         <p class="text-sm text-primary text-center">Comprehensive transaction tracking experience</p>
       </div>
 
@@ -111,22 +111,22 @@
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "keyboard", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "keyboard", variant: :surface) %>
         <p class="text-sm text-primary text-center">Manual account tracking that works well</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "globe-2", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "globe-2", variant: :surface) %>
         <p class="text-sm text-primary text-center">Multiple currencies and near global coverage</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "ship", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "ship", variant: :surface) %>
         <p class="text-sm text-primary text-center">Early access to newly released features</p>
       </div>
 
       <div class="flex flex-col gap-4 items-center">
-        <%= render FilledIconComponent.new(icon: "messages-square", variant: :surface) %>
+        <%= render DS::FilledIcon.new(icon: "messages-square", variant: :surface) %>
         <p class="text-sm text-primary text-center">Priority human support from team</p>
       </div>
     </div>

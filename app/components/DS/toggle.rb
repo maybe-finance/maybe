@@ -1,4 +1,4 @@
-class ToggleComponent < ViewComponent::Base
+class DS::Toggle < DesignSystemComponent
   attr_reader :id, :name, :checked, :disabled, :checked_value, :unchecked_value, :opts
 
   def initialize(id:, name: nil, checked: false, disabled: false, checked_value: "1", unchecked_value: "0", **opts)

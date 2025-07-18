@@ -3,7 +3,7 @@
     <%= tag.p t(".no_accounts"), class: "text-primary mb-1 font-medium" %>
     <%= tag.p t(".empty_message"), class: "text-secondary mb-4" %>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: t(".new_account"),
       href: new_account_path,
       frame: :modal

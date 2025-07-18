@@ -2,7 +2,7 @@
   <h1 class="text-primary text-xl font-medium">Rules</h1>
   <div class="flex items-center gap-2">
     <% if @rules.any? %>
-      <%= render MenuComponent.new do |menu| %>
+      <%= render DS::Menu.new do |menu| %>
         <% menu.with_item(
           variant: "button",
           text: "Delete all rules",
@@ -12,7 +12,7 @@
           confirm: CustomConfirm.for_resource_deletion("all rules", high_severity: true)) %>
       <% end %>
     <% end %>
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       text: "New rule",
       variant: "primary",
       href: new_rule_path(resource_type: "transaction"),
@@ -48,7 +48,7 @@
                       data: { auto_submit_form_target: "auto", autosubmit_trigger_event: "change" } %>
             <%= form.hidden_field :direction, value: @direction %>
           <% end %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             href: rules_path(direction: @direction == "asc" ? "desc" : "asc", sort_by: @sort_by),
             variant: "icon",
             icon: "arrow-up-down",
@@ -69,7 +69,7 @@
         <p class="text-sm text-primary font-medium mb-1">No rules yet</p>
         <p class="text-sm text-secondary mb-4">Set up rules to perform actions to your transactions and other data on every account sync.</p>
         <div class="flex items-center gap-2">
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: "New rule",
             variant: "primary",
             href: new_rule_path(resource_type: "transaction"),
