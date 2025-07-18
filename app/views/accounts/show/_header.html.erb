@@ -1,36 +1,30 @@
-<%# locals: (account:, title: nil, subtitle: nil) %>
+<%# locals: (account:, title:, subtitle: nil) %>
 
 <header class="space-y-4">
   <div class="flex items-center gap-4">
-    <% content = yield %>
+    <div class="flex items-center gap-3 overflow-hidden">
+      <%= render "accounts/logo", account: account %>
 
-    <% if content.present? %>
-      <%= content %>
-    <% else %>
-      <div class="flex items-center gap-3 overflow-hidden">
-        <%= render "accounts/logo", account: account %>
-
-        <div class="flex items-center gap-2">
-          <div class="truncate">
-            <div class="flex items-center gap-3">
-              <h2 class="font-medium text-xl truncate <%= "animate-pulse" if account.syncing? %>"><%= title || account.name %></h2>
-              <% if account.draft? %>
-                <%= render LinkComponent.new(
+      <div class="flex items-center gap-2">
+        <div class="truncate">
+          <div class="flex items-center gap-3">
+            <h2 class="font-medium text-xl truncate <%= "animate-pulse" if account.syncing? %>"><%= title %></h2>
+            <% if account.draft? %>
+              <%= render LinkComponent.new(
                   text: "Complete setup",
                   href: edit_account_path(account),
                   variant: :outline,
                   size: :sm,
                   frame: :modal
                 ) %>
-              <% end %>
-            </div>
-            <% if subtitle.present? %>
-              <p class="text-sm text-secondary"><%= subtitle %></p>
             <% end %>
           </div>
+          <% if subtitle.present? %>
+            <p class="text-sm text-secondary"><%= subtitle %></p>
+          <% end %>
         </div>
       </div>
-    <% end %>
+    </div>
 
     <div class="flex items-center gap-1 ml-auto">
       <% if Rails.env.development? || self_hosted? %>

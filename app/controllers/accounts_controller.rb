@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[sync chart sparkline toggle_active]
+  before_action :set_account, only: %i[sync sparkline toggle_active show destroy]
   include Periodable
 
   def index
@@ -9,17 +9,21 @@ class AccountsController < ApplicationController
     render layout: "settings"
   end
 
+  def show
+    @chart_view = params[:chart_view] || "balance"
+    @tab = params[:tab]
+    @q = params.fetch(:q, {}).permit(:search)
+    entries = @account.entries.search(@q).reverse_chronological
+
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10")
+  end
+
   def sync
     unless @account.syncing?
       @account.sync_later
     end
 
     redirect_to account_path(@account)
-  end
-
-  def chart
-    @chart_view = params[:chart_view] || "balance"
-    render layout: "application"
   end
 
   def sparkline
@@ -40,6 +44,15 @@ class AccountsController < ApplicationController
       @account.enable!
     end
     redirect_to accounts_path
+  end
+
+  def destroy
+    if @account.linked?
+      redirect_to account_path(@account), alert: "Cannot delete a linked account"
+    else
+      @account.destroy_later
+      redirect_to accounts_path, notice: "Account scheduled for deletion"
+    end
   end
 
   private

@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  include ScrollFocusable, EntryableResource
+  include EntryableResource
 
   before_action :store_params!, only: :index
 
@@ -21,12 +21,7 @@ class TransactionsController < ApplicationController
                          :transfer_as_inflow, :transfer_as_outflow
                        )
 
-    @pagy, @transactions = pagy(base_scope, limit: per_page, params: ->(p) { p.except(:focused_record_id) })
-
-    # No performance penalty by default. Only runs queries if the record is set.
-    if params[:focused_record_id].present?
-      set_focused_record(base_scope, params[:focused_record_id], default_per_page: per_page)
-    end
+    @pagy, @transactions = pagy(base_scope, limit: per_page)
   end
 
   def clear_filter
