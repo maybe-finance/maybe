@@ -16,6 +16,10 @@
         </div>
 
         <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1">
+            <span class="font-medium"><%= balance_trend.current.format %></span>
+            <%= render DS::Tooltip.new(text: "The end of day balance, after all transactions and adjustments") %>
+          </div>
           <%= helpers.icon "chevron-down", class: "group-open:rotate-180" %>
         </div>
       </div>
