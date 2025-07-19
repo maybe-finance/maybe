@@ -1,0 +1,21 @@
+# app/apps/investment_analytics/views/investment_analytics/dashboards/index.html.erb
+
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Investment Analytics Dashboard</h1>
+
+  <div class="mb-6">
+    <%= render partial: 'shared/account_selector', locals: { accounts: current_user.accounts, selected_account: @account } %>
+  </div>
+
+  <div id="portfolio-summary-<%= @account.id %>" class="mb-8">
+    <%= render partial: 'investment_analytics/dashboards/portfolio_summary', locals: { account: @account, metrics: @metrics, portfolio_data: @portfolio_data } %>
+  </div>
+
+  <div id="dividend-forecast-<%= @account.id %>" class="mb-8">
+    <%= render partial: 'investment_analytics/dashboards/dividend_forecast', locals: { account: @account, dividend_analysis: @dividend_analysis } %>
+  </div>
+
+  <%# Turbo Frames for dynamic updates when account changes %>
+  <turbo-frame id="portfolio-summary-<%= @account.id %>" src="<%= portfolio_summary_investment_analytics_dashboards_path(account_id: @account.id) %>"></turbo-frame>
+  <turbo-frame id="dividend-forecast-<%= @account.id %>" src="<%= dividend_forecast_investment_analytics_dashboards_path(account_id: @account.id) %>"></turbo-frame>
+</div>

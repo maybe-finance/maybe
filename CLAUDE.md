@@ -1,273 +1,89 @@
-# CLAUDE.md
+# Investment Analytics App for Maybe
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This document outlines how to enable and use the optional "Investment Analytics" app within the Maybe project. This app provides Euclid-style portfolio analysis and uses the Financial Modeling Prep (FMP) API for market data.
 
-## Common Development Commands
+## Features
 
-### Development Server
-- `bin/dev` - Start development server (Rails, Sidekiq, Tailwind CSS watcher)
-- `bin/rails server` - Start Rails server only
-- `bin/rails console` - Open Rails console
+*   **Portfolio Analysis:** Calculates total value, cost basis, gain/loss, and day-over-day change for your investment holdings.
+*   **Dividend Forecasting:** Provides insights into potential annual dividend income and overall portfolio dividend yield.
+*   **FMP Integration:** Fetches real-time and historical market data (quotes, historical prices, dividends) from the Financial Modeling Prep API.
+*   **Background Sync:** Automatically synchronizes market data for your holdings.
+*   **Hotwire UI:** Integrates seamlessly into Maybe's UI using Turbo Frames and ViewComponents.
 
-### Testing
-- `bin/rails test` - Run all tests
-- `bin/rails test:db` - Run tests with database reset
-- `bin/rails test:system` - Run system tests only (use sparingly - they take longer)
-- `bin/rails test test/models/account_test.rb` - Run specific test file
-- `bin/rails test test/models/account_test.rb:42` - Run specific test at line
+## Installation and Setup
 
-### Linting & Formatting
-- `bin/rubocop` - Run Ruby linter
-- `npm run lint` - Check JavaScript/TypeScript code
-- `npm run lint:fix` - Fix JavaScript/TypeScript issues
-- `npm run format` - Format JavaScript/TypeScript code
-- `bin/brakeman` - Run security analysis
+### 1. Enable the App
 
-### Database
-- `bin/rails db:prepare` - Create and migrate database
-- `bin/rails db:migrate` - Run pending migrations
-- `bin/rails db:rollback` - Rollback last migration
-- `bin/rails db:seed` - Load seed data
+To enable the Investment Analytics app, set the `ENABLE_INVESTMENT_ANALYTICS_APP` environment variable to `true` in your `.env` file:
 
-### Setup
-- `bin/setup` - Initial project setup (installs dependencies, prepares database)
-
-## Pre-Pull Request CI Workflow
-
-ALWAYS run these commands before opening a pull request:
-
-1. **Tests** (Required):
-   - `bin/rails test` - Run all tests (always required)
-   - `bin/rails test:system` - Run system tests (only when applicable, they take longer)
-
-2. **Linting** (Required):
-   - `bin/rubocop -f github -a` - Ruby linting with auto-correct
-   - `bundle exec erb_lint ./app/**/*.erb -a` - ERB linting with auto-correct
-
-3. **Security** (Required):
-   - `bin/brakeman --no-pager` - Security analysis
-
-Only proceed with pull request creation if ALL checks pass.
-
-## General Development Rules
-
-### Authentication Context
-- Use `Current.user` for the current user. Do NOT use `current_user`.
-- Use `Current.family` for the current family. Do NOT use `current_family`.
-
-### Development Guidelines
-- Prior to generating any code, carefully read the project conventions and guidelines
-- Ignore i18n methods and files. Hardcode strings in English for now to optimize speed of development
-- Do not run `rails server` in your responses
-- Do not run `touch tmp/restart.txt`
-- Do not run `rails credentials`
-- Do not automatically run migrations
-
-## High-Level Architecture
-
-### Application Modes
-The Maybe app runs in two distinct modes:
-- **Managed**: The Maybe team operates and manages servers for users (Rails.application.config.app_mode = "managed")
-- **Self Hosted**: Users host the Maybe app on their own infrastructure, typically through Docker Compose (Rails.application.config.app_mode = "self_hosted")
-
-### Core Domain Model
-The application is built around financial data management with these key relationships:
-- **User** → has many **Accounts** → has many **Transactions**
-- **Account** types: checking, savings, credit cards, investments, crypto, loans, properties
-- **Transaction** → belongs to **Category**, can have **Tags** and **Rules**
-- **Investment accounts** → have **Holdings** → track **Securities** via **Trades**
-
-### API Architecture
-The application provides both internal and external APIs:
-- Internal API: Controllers serve JSON via Turbo for SPA-like interactions
-- External API: `/api/v1/` namespace with Doorkeeper OAuth and API key authentication
-- API responses use Jbuilder templates for JSON rendering
-- Rate limiting via Rack Attack with configurable limits per API key
-
-### Sync & Import System
-Two primary data ingestion methods:
-1. **Plaid Integration**: Real-time bank account syncing
-   - `PlaidItem` manages connections
-   - `Sync` tracks sync operations
-   - Background jobs handle data updates
-2. **CSV Import**: Manual data import with mapping
-   - `Import` manages import sessions
-   - Supports transaction and balance imports
-   - Custom field mapping with transformation rules
-
-### Background Processing
-Sidekiq handles asynchronous tasks:
-- Account syncing (`SyncAccountsJob`)
-- Import processing (`ImportDataJob`)
-- AI chat responses (`CreateChatResponseJob`)
-- Scheduled maintenance via sidekiq-cron
-
-### Frontend Architecture
-- **Hotwire Stack**: Turbo + Stimulus for reactive UI without heavy JavaScript
-- **ViewComponents**: Reusable UI components in `app/components/`
-- **Stimulus Controllers**: Handle interactivity, organized alongside components
-- **Charts**: D3.js for financial visualizations (time series, donut, sankey)
-- **Styling**: Tailwind CSS v4.x with custom design system
-  - Design system defined in `app/assets/tailwind/maybe-design-system.css`
-  - Always use functional tokens (e.g., `text-primary` not `text-white`)
-  - Prefer semantic HTML elements over JS components
-  - Use `icon` helper for icons, never `lucide_icon` directly
-
-### Multi-Currency Support
-- All monetary values stored in base currency (user's primary currency)
-- Exchange rates fetched from Synth API
-- `Money` objects handle currency conversion and formatting
-- Historical exchange rates for accurate reporting
-
-### Security & Authentication
-- Session-based auth for web users
-- API authentication via:
-  - OAuth2 (Doorkeeper) for third-party apps
-  - API keys with JWT tokens for direct API access
-- Scoped permissions system for API access
-- Strong parameters and CSRF protection throughout
-
-### Testing Philosophy
-- Comprehensive test coverage using Rails' built-in Minitest
-- Fixtures for test data (avoid FactoryBot)
-- Keep fixtures minimal (2-3 per model for base cases)
-- VCR for external API testing
-- System tests for critical user flows (use sparingly)
-- Test helpers in `test/support/` for common scenarios
-- Only test critical code paths that significantly increase confidence
-- Write tests as you go, when required
-
-### Performance Considerations
-- Database queries optimized with proper indexes
-- N+1 queries prevented via includes/joins
-- Background jobs for heavy operations
-- Caching strategies for expensive calculations
-- Turbo Frames for partial page updates
-
-### Development Workflow
-- Feature branches merged to `main`
-- Docker support for consistent environments
-- Environment variables via `.env` files
-- Lookbook for component development (`/lookbook`)
-- Letter Opener for email preview in development
-
-## Project Conventions
-
-### Convention 1: Minimize Dependencies
-- Push Rails to its limits before adding new dependencies
-- Strong technical/business reason required for new dependencies
-- Favor old and reliable over new and flashy
-
-### Convention 2: Skinny Controllers, Fat Models
-- Business logic in `app/models/` folder, avoid `app/services/`
-- Use Rails concerns and POROs for organization
-- Models should answer questions about themselves: `account.balance_series` not `AccountSeries.new(account).call`
-
-### Convention 3: Hotwire-First Frontend
-- **Native HTML preferred over JS components**
-  - Use `<dialog>` for modals, `<details><summary>` for disclosures
-- **Leverage Turbo frames** for page sections over client-side solutions
-- **Query params for state** over localStorage/sessions
-- **Server-side formatting** for currencies, numbers, dates
-- **Always use `icon` helper** in `application_helper.rb`, NEVER `lucide_icon` directly
-
-### Convention 4: Optimize for Simplicity
-- Prioritize good OOP domain design over performance
-- Focus performance only on critical/global areas (avoid N+1 queries, mindful of global layouts)
-
-### Convention 5: Database vs ActiveRecord Validations
-- Simple validations (null checks, unique indexes) in DB
-- ActiveRecord validations for convenience in forms (prefer client-side when possible)
-- Complex validations and business logic in ActiveRecord
-
-## TailwindCSS Design System
-
-### Design System Rules
-- **Always reference `app/assets/tailwind/maybe-design-system.css`** for primitives and tokens
-- **Use functional tokens** defined in design system:
-  - `text-primary` instead of `text-white`
-  - `bg-container` instead of `bg-white`
-  - `border border-primary` instead of `border border-gray-200`
-- **NEVER create new styles** in design system files without permission
-- **Always generate semantic HTML**
-
-## Component Architecture
-
-### ViewComponent vs Partials Decision Making
-
-**Use ViewComponents when:**
-- Element has complex logic or styling patterns
-- Element will be reused across multiple views/contexts
-- Element needs structured styling with variants/sizes
-- Element requires interactive behavior or Stimulus controllers
-- Element has configurable slots or complex APIs
-- Element needs accessibility features or ARIA support
-
-**Use Partials when:**
-- Element is primarily static HTML with minimal logic
-- Element is used in only one or few specific contexts
-- Element is simple template content
-- Element doesn't need variants, sizes, or complex configuration
-- Element is more about content organization than reusable functionality
-
-**Component Guidelines:**
-- Prefer components over partials when available
-- Keep domain logic OUT of view templates
-- Logic belongs in component files, not template files
-
-### Stimulus Controller Guidelines
-
-**Declarative Actions (Required):**
-```erb
-<!-- GOOD: Declarative - HTML declares what happens -->
-<div data-controller="toggle">
-  <button data-action="click->toggle#toggle" data-toggle-target="button">Show</button>
-  <div data-toggle-target="content" class="hidden">Hello World!</div>
-</div>
+```dotenv
+ENABLE_INVESTMENT_ANALYTICS_APP=true
 ```
 
-**Controller Best Practices:**
-- Keep controllers lightweight and simple (< 7 targets)
-- Use private methods and expose clear public API
-- Single responsibility or highly related responsibilities
-- Component controllers stay in component directory, global controllers in `app/javascript/controllers/`
-- Pass data via `data-*-value` attributes, not inline JavaScript
+### 2. Set FMP API Key
 
-## Testing Philosophy
+The app requires an API key from [Financial Modeling Prep (FMP)](https://financialmodelingprep.com/). Once you have your API key, add it to your `.env` file:
 
-### General Testing Rules
-- **ALWAYS use Minitest + fixtures** (NEVER RSpec or factories)
-- Keep fixtures minimal (2-3 per model for base cases)
-- Create edge cases on-the-fly within test context
-- Use Rails helpers for large fixture creation needs
-
-### Test Quality Guidelines
-- **Write minimal, effective tests** - system tests sparingly
-- **Only test critical and important code paths**
-- **Test boundaries correctly:**
-  - Commands: test they were called with correct params
-  - Queries: test output
-  - Don't test implementation details of other classes
-
-### Testing Examples
-
-```ruby
-# GOOD - Testing critical domain business logic
-test "syncs balances" do
-  Holding::Syncer.any_instance.expects(:sync_holdings).returns([]).once
-  assert_difference "@account.balances.count", 2 do
-    Balance::Syncer.new(@account, strategy: :forward).sync_balances
-  end
-end
-
-# BAD - Testing ActiveRecord functionality
-test "saves balance" do 
-  balance_record = Balance.new(balance: 100, currency: "USD")
-  assert balance_record.save
-end
+```dotenv
+FMP_API_KEY=YOUR_FMP_API_KEY_HERE
 ```
 
-### Stubs and Mocks
-- Use `mocha` gem
-- Prefer `OpenStruct` for mock instances
-- Only mock what's necessary
+**Note:** Without a valid FMP API key, the market data fetching and dividend analysis features will not function.
+
+### 3. Rebuild and Restart Docker Compose
+
+After modifying your `.env` file, you need to rebuild your Docker image and restart your Docker Compose services to pick up the new environment variables:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+### 4. Run Initial Data Sync
+
+To populate your database with initial market data, run the `InvestmentAnalytics::SyncJob`:
+
+```bash
+docker compose run --rm web bundle exec rails investment_analytics:sync
+```
+
+This command will fetch historical prices and dividend data for all active accounts with holdings. You can also run this job for a specific account by passing the `account_id`:
+
+```bash
+docker compose run --rm web bundle exec rails investment_analytics:sync[ACCOUNT_ID]
+```
+
+### 5. Access the Dashboard
+
+Once the services are running and data has been synced, you can access the Investment Analytics dashboard by navigating to the following URL in your browser (assuming Maybe is running on port 3003):
+
+```
+http://localhost:3003/investment_analytics/dashboards
+```
+
+## Usage
+
+*   **Dashboard:** The main dashboard provides an overview of your portfolio's market value, cost basis, and gain/loss.
+*   **Account Selector:** Use the account selector to view analytics for different investment accounts.
+*   **Dividend Forecast:** The dividend forecast section provides an estimated annual dividend income and yield for your holdings.
+
+## Extending and Customizing
+
+*   **Data Models:** The app uses Maybe's existing `Account`, `Holding`, `Price`, and `ExchangeRate` models. If you need to store additional data specific to investment analytics, consider extending these models or creating new ones within the `InvestmentAnalytics` namespace (`app/apps/investment_analytics/models`).
+*   **FMP Provider:** The `InvestmentAnalytics::FmpProvider` can be extended or replaced if you wish to use a different market data source.
+*   **Metrics:** The `MetricCalculator` and `DividendAnalyzer` can be modified to include more sophisticated metrics or forecasting models.
+*   **UI Components:** New ViewComponents can be created within `app/apps/investment_analytics/app/components/investment_analytics/` to build out more complex UI elements.
+
+## Running Tests
+
+To run the tests for the Investment Analytics app:
+
+```bash
+bin/rspec spec/services/investment_analytics/
+bin/rspec spec/jobs/investment_analytics/
+bin/rspec spec/controllers/investment_analytics/
+```
+
+## License
+
+This app is contributed to the Maybe project and is subject to the [AGPL license](https://github.com/maybe-finance/maybe/blob/main/LICENSE) of the main project.

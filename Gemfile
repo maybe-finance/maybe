@@ -59,6 +59,7 @@ gem "rack-attack", "~> 6.6"
 gem "faraday"
 gem "faraday-retry"
 gem "faraday-multipart"
+gem "httparty" # Added for FmpProvider
 gem "inline_svg"
 gem "octokit"
 gem "pagy"

@@ -1,0 +1,44 @@
+# app/apps/investment_analytics/views/investment_analytics/dashboards/_dividend_forecast.html.erb
+
+<div class="bg-white shadow rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Dividend Forecast for <%= account.name %></h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div>
+      <p class="text-gray-500 text-sm">Total Annual Dividend Income</p>
+      <p class="text-2xl font-bold"><%= format_money(dividend_analysis[:total_annual_dividend_income]) %></p>
+    </div>
+    <div>
+      <p class="text-gray-500 text-sm">Overall Portfolio Dividend Yield</p>
+      <p class="text-2xl font-bold"><%= number_to_percentage(dividend_analysis[:overall_portfolio_yield], precision: 2) %></p>
+    </div>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-3">Individual Holding Dividends</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Annual Income</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dividend Yield</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% if dividend_analysis[:dividend_forecast].present? %>
+          <% dividend_analysis[:dividend_forecast].each do |forecast| %>
+            <tr>
+              <td class="px-4 py-2 whitespace-nowrap"><%= forecast[:symbol] %></td>
+              <td class="px-4 py-2 whitespace-nowrap"><%= format_money(forecast[:annual_income]) %></td>
+              <td class="px-4 py-2 whitespace-nowrap"><%= number_to_percentage(forecast[:dividend_yield], precision: 2) %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="3" class="px-4 py-2 text-center text-gray-500">No dividend data available for these holdings.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

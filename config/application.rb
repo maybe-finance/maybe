@@ -6,6 +6,9 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load the InvestmentAnalytics app module
+require_relative '../app/apps/investment_analytics/investment_analytics'
+
 module Maybe
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -15,6 +18,9 @@ module Maybe
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
+
+    # Add app/apps to autoload paths for modular applications
+    config.autoload_paths << Rails.root.join('app', 'apps')
 
     # Configuration for the application, engines, and railties goes here.
     #

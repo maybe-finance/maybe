@@ -1,0 +1,27 @@
+# app/apps/investment_analytics/app/components/investment_analytics/account_selector_component.html.erb
+
+<div class="flex items-center space-x-2">
+  <label for="account-select" class="text-gray-700">Select Account:</label>
+  <select id="account-select" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          data-controller="account-selector"
+          data-action="change->account-selector#selectAccount">
+    <% accounts.each do |account| %>
+      <option value="<%= account.id %>" <%= 'selected' if account == selected_account %>><%= account.name %></option>
+    <% end %>
+  </select>
+</div>
+
+<script type="module">
+  // Stimulus controller for account selection
+  import { Controller } from "@hotwired/stimulus"
+
+  export default class extends Controller {
+    static targets = [ "accountSelect" ]
+
+    selectAccount(event) {
+      const accountId = event.target.value;
+      const url = `/investment_analytics/dashboards?account_id=${accountId}`;
+      Turbo.visit(url);
+    }
+  }
+</script>

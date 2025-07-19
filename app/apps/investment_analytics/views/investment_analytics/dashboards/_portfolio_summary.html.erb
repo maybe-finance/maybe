@@ -1,0 +1,51 @@
+# app/apps/investment_analytics/views/investment_analytics/dashboards/_portfolio_summary.html.erb
+
+<div class="bg-white shadow rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Portfolio Summary for <%= account.name %></h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div>
+      <p class="text-gray-500 text-sm">Total Market Value</p>
+      <p class="text-2xl font-bold"><%= format_money(metrics[:total_market_value]) %></p>
+    </div>
+    <div>
+      <p class="text-gray-500 text-sm">Total Cost Basis</p>
+      <p class="text-2xl font-bold"><%= format_money(metrics[:total_cost_basis]) %></p>
+    </div>
+    <div>
+      <p class="text-gray-500 text-sm">Total Gain/Loss</p>
+      <p class="text-2xl font-bold <%= metrics[:total_gain_loss]&.positive? ? 'text-green-600' : 'text-red-600' %>">
+        <%= format_money(metrics[:total_gain_loss]) %>
+      </p>
+    </div>
+    <%# Add more metrics as needed %>
+  </div>
+
+  <h3 class="text-lg font-semibold mt-6 mb-3">Holdings</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shares</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Price</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Value</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sector</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% portfolio_data[:holdings].each do |holding| %>
+          <tr>
+            <td class="px-4 py-2 whitespace-nowrap"><%= holding[:symbol] %></td>
+            <td class="px-4 py-2 whitespace-nowrap"><%= holding[:name] %></td>
+            <td class="px-4 py-2 whitespace-nowrap"><%= holding[:shares] %></td>
+            <td class="px-4 py-2 whitespace-nowrap"><%= format_money(holding[:current_price], holding[:currency]) %></td>
+            <td class="px-4 py-2 whitespace-nowrap"><%= format_money(holding[:current_value], account.currency) %></td>
+            <td class="px-4 py-2 whitespace-nowrap"><%= holding[:sector] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

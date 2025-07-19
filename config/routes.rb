@@ -262,6 +262,15 @@ Rails.application.routes.draw do
   get "privacy", to: redirect("https://maybefinance.com/privacy")
   get "terms", to: redirect("https://maybefinance.com/tos")
 
+  namespace :investment_analytics do
+    resources :dashboards, only: [:index] do
+      collection do
+        get :portfolio_summary
+        get :dividend_forecast
+      end
+    end
+  end
+
   # Defines the root path route ("/")
   root "pages#dashboard"
 end
