@@ -1,7 +1,7 @@
 <%= turbo_frame_tag dom_id(account, "entries") do %>
   <div class="bg-container p-5 shadow-border-xs rounded-xl">
     <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
-      <%= tag.h2 t(".title"), class: "font-medium text-lg" %>
+      <%= tag.h2 "Activity", class: "font-medium text-lg" %>
 
       <% if account.manual? %>
         <%= render DS::Menu.new(variant: "button") do |menu| %>
