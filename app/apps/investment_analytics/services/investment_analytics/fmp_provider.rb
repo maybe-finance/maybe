@@ -1,8 +1,8 @@
 # app/apps/investment_analytics/services/investment_analytics/fmp_provider.rb
 
 module InvestmentAnalytics
-  class FmpProvider
-    include Provider::Base
+  require Rails.root.join("app", "models", "provider")
+  class FmpProvider < ::Provider
 
     BASE_URL = "https://financialmodelingprep.com/api/v3"
 

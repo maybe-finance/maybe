@@ -2,6 +2,8 @@
 
 # Ensure the InvestmentAnalytics module is loaded
 require_relative '../../app/apps/investment_analytics/investment_analytics'
+require Rails.root.join('app', 'models', 'provider')
+require Rails.root.join('app', 'models', 'provider', 'registry')
 
 # Ensure the FmpProvider class is loaded
 require_relative '../../app/apps/investment_analytics/services/investment_analytics/fmp_provider'

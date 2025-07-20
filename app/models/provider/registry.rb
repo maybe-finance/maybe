@@ -8,8 +8,15 @@ class Provider::Registry
   validates :concept, inclusion: { in: CONCEPTS }
 
   class << self
+    @@additional_providers = {}
+
     def for_concept(concept)
       new(concept.to_sym)
+    end
+
+    def register_provider(name, provider_class)
+      @@additional_providers[name.to_sym] = provider_class
+      define_singleton_method(name) { provider_class.new }
     end
 
     def get_provider(name)
@@ -98,7 +105,7 @@ class Provider::Registry
       when :llm
         %i[openai]
       else
-        %i[synth plaid_us plaid_eu github openai]
+        %i[synth plaid_us plaid_eu github openai] + self.class.class_variable_get(:@@additional_providers).keys
       end
     end
 end
