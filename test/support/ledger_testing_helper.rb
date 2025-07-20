@@ -12,6 +12,8 @@ module LedgerTestingHelper
     created_account = families(:empty).accounts.create!(
       name: "Test Account",
       accountable: account_type.new,
+      balance: 0, # Doesn't matter, ledger derives this
+      cash_balance: 0, # Doesn't matter, ledger derives this
       **account_attrs
     )
 
@@ -170,25 +172,62 @@ module LedgerTestingHelper
         end
 
         # Flow assertions
-        if flows.any?
-          assert_equal flows[:cash_inflows], calculated_balance.cash_inflows.to_d,
-            "Cash inflows mismatch for #{date}" if flows.key?(:cash_inflows)
+        # If flows passed is 0, we assert all columns are 0
+        if flows.is_a?(Integer) && flows == 0
+          assert_equal 0, calculated_balance.cash_inflows.to_d,
+            "Cash inflows mismatch for #{date}"
 
-          assert_equal flows[:cash_outflows], calculated_balance.cash_outflows.to_d,
-            "Cash outflows mismatch for #{date}" if flows.key?(:cash_outflows)
+          assert_equal 0, calculated_balance.cash_outflows.to_d,
+            "Cash outflows mismatch for #{date}"
 
-          assert_equal flows[:non_cash_inflows], calculated_balance.non_cash_inflows.to_d,
-            "Non-cash inflows mismatch for #{date}" if flows.key?(:non_cash_inflows)
+          assert_equal 0, calculated_balance.non_cash_inflows.to_d,
+            "Non-cash inflows mismatch for #{date}"
 
-          assert_equal flows[:non_cash_outflows], calculated_balance.non_cash_outflows.to_d,
-            "Non-cash outflows mismatch for #{date}" if flows.key?(:non_cash_outflows)
+          assert_equal 0, calculated_balance.non_cash_outflows.to_d,
+            "Non-cash outflows mismatch for #{date}"
 
-          assert_equal flows[:net_market_flows], calculated_balance.net_market_flows.to_d,
-            "Net market flows mismatch for #{date}" if flows.key?(:net_market_flows)
+          assert_equal 0, calculated_balance.net_market_flows.to_d,
+            "Net market flows mismatch for #{date}"
+        elsif flows.is_a?(Hash) && flows.any?
+          # Cash flows - must be asserted together
+          if flows.key?(:cash_inflows) || flows.key?(:cash_outflows)
+            assert flows.key?(:cash_inflows) && flows.key?(:cash_outflows),
+              "Cash inflows and outflows must be asserted together for #{date}"
+
+            assert_equal flows[:cash_inflows], calculated_balance.cash_inflows.to_d,
+              "Cash inflows mismatch for #{date}"
+
+            assert_equal flows[:cash_outflows], calculated_balance.cash_outflows.to_d,
+              "Cash outflows mismatch for #{date}"
+          end
+
+          # Non-cash flows - must be asserted together
+          if flows.key?(:non_cash_inflows) || flows.key?(:non_cash_outflows)
+            assert flows.key?(:non_cash_inflows) && flows.key?(:non_cash_outflows),
+              "Non-cash inflows and outflows must be asserted together for #{date}"
+
+            assert_equal flows[:non_cash_inflows], calculated_balance.non_cash_inflows.to_d,
+              "Non-cash inflows mismatch for #{date}"
+
+            assert_equal flows[:non_cash_outflows], calculated_balance.non_cash_outflows.to_d,
+              "Non-cash outflows mismatch for #{date}"
+          end
+
+          # Market flows - can be asserted independently
+          if flows.key?(:net_market_flows)
+            assert_equal flows[:net_market_flows], calculated_balance.net_market_flows.to_d,
+              "Net market flows mismatch for #{date}"
+          end
         end
 
         # Adjustment assertions
-        if adjustments.any?
+        if adjustments.is_a?(Integer) && adjustments == 0
+          assert_equal 0, calculated_balance.cash_adjustments.to_d,
+            "Cash adjustments mismatch for #{date}"
+
+          assert_equal 0, calculated_balance.non_cash_adjustments.to_d,
+            "Non-cash adjustments mismatch for #{date}"
+        elsif adjustments.is_a?(Hash) && adjustments.any?
           assert_equal adjustments[:cash_adjustments], calculated_balance.cash_adjustments.to_d,
             "Cash adjustments mismatch for #{date}" if adjustments.key?(:cash_adjustments)
 
