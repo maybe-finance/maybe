@@ -154,4 +154,19 @@ namespace :data_migration do
     puts "    Processed: #{accounts_processed} accounts"
     puts "    Opening anchors set: #{opening_anchors_set}"
   end
+
+  desc "Migrate balance components"
+  # 2025-07-20: Migrate balance components to support event-sourced ledger model.
+  # This task:
+  #   1. Sets the flows_factor for each account based on the account's classification
+  #   2. Sets the start_cash_balance, start_non_cash_balance, and start_balance for each balance
+  #   3. Sets the cash_inflows, cash_outflows, non_cash_inflows, non_cash_outflows, net_market_flows, cash_adjustments, and non_cash_adjustments for each balance
+  #   4. Sets the end_cash_balance, end_non_cash_balance, and end_balance for each balance
+  task migrate_balance_components: :environment do
+    puts "==> Migrating balance components..."
+
+    BalanceComponentMigrator.run
+
+    puts "✅  Balance component migration complete."
+  end
 end
