@@ -1,6 +1,5 @@
 class Account < ApplicationRecord
-  include Syncable, Monetizable, Chartable, Linkable, Enrichable
-  include AASM
+  include AASM, Syncable, Monetizable, Chartable, Linkable, Enrichable, Anchorable, Reconcileable
 
   validates :name, :balance, :currency, presence: true
 
@@ -59,26 +58,14 @@ class Account < ApplicationRecord
     def create_and_sync(attributes)
       attributes[:accountable_attributes] ||= {} # Ensure accountable is created, even if empty
       account = new(attributes.merge(cash_balance: attributes[:balance]))
-      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d || 0
+      initial_balance = attributes.dig(:accountable_attributes, :initial_balance)&.to_d
 
       transaction do
-        # Create 2 valuations for new accounts to establish a value history for users to see
-        account.entries.build(
-          name: "Current Balance",
-          date: Date.current,
-          amount: account.balance,
-          currency: account.currency,
-          entryable: Valuation.new
-        )
-        account.entries.build(
-          name: "Initial Balance",
-          date: 1.day.ago.to_date,
-          amount: initial_balance,
-          currency: account.currency,
-          entryable: Valuation.new
-        )
-
         account.save!
+
+        manager = Account::OpeningBalanceManager.new(account)
+        result = manager.set_opening_balance(balance: initial_balance || account.balance)
+        raise result.error if result.error
       end
 
       account.sync_later
@@ -127,11 +114,6 @@ class Account < ApplicationRecord
             .order(amount: :desc)
   end
 
-
-  def update_balance(balance:, date: Date.current, currency: nil, notes: nil)
-    Account::BalanceUpdater.new(self, balance:, currency:, date:, notes:).update
-  end
-
   def start_date
     first_entry_date = entries.minimum(:date) || Date.current
     first_entry_date - 1.day
@@ -158,5 +140,24 @@ class Account < ApplicationRecord
   # Get long version of the subtype label
   def long_subtype_label
     accountable_class.long_subtype_label_for(subtype) || accountable_class.display_name
+  end
+
+  # The balance type determines which "component" of balance is being tracked.
+  # This is primarily used for balance related calculations and updates.
+  #
+  # "Cash" = "Liquid"
+  # "Non-cash" = "Illiquid"
+  # "Investment" = A mix of both, including brokerage cash (liquid) and holdings (illiquid)
+  def balance_type
+    case accountable_type
+    when "Depository", "CreditCard"
+      :cash
+    when "Property", "Vehicle", "OtherAsset", "Loan", "OtherLiability"
+      :non_cash
+    when "Investment", "Crypto"
+      :investment
+    else
+      raise "Unknown account type: #{accountable_type}"
+    end
   end
 end

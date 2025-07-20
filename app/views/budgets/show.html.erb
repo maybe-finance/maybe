@@ -18,7 +18,7 @@
       <div>
 
         <% if @budget.initialized? && @budget.available_to_allocate.positive? %>
-          <%= render TabsComponent.new(active_tab: params[:tab].presence || "budgeted") do |tabs| %>
+          <%= render DS::Tabs.new(active_tab: params[:tab].presence || "budgeted") do |tabs| %>
             <% tabs.with_nav do |nav| %>
               <% nav.with_btn(id: "budgeted", label: "Budgeted") %>
               <% nav.with_btn(id: "actuals", label: "Actual") %>
@@ -49,7 +49,7 @@
         <h2 class="text-lg font-medium">Categories</h2>
 
         <% if @budget.initialized? %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             text: "Edit",
             variant: "secondary",
             icon: "settings-2",

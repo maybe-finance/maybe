@@ -38,7 +38,7 @@
         <% param_key = Budget.date_to_param(date) %>
 
         <% if Budget.budget_date_valid?(date, family: family) %>
-          <%= render LinkComponent.new(
+          <%= render DS::Link.new(
             variant: "ghost",
             text: month_name,
             href: budget_path(param_key),

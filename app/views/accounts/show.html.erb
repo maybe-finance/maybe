@@ -1,0 +1,8 @@
+<%= render UI::AccountPage.new(
+      account: @account,
+      chart_view: @chart_view,
+      chart_period: @period,
+      active_tab: @tab
+    ) do |account_page| %>
+  <%= account_page.with_activity_feed(feed_data: @activity_feed_data, pagy: @pagy, search: @q[:search]) %>
+<% end %>

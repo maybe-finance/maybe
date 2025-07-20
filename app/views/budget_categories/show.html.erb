@@ -1,4 +1,4 @@
-<%= render DialogComponent.new(variant: :drawer) do |dialog| %>
+<%= render DS::Dialog.new(variant: :drawer) do |dialog| %>
   <% dialog.with_header do %>
     <div>
       <p class="text-sm text-secondary">Category</p>
@@ -107,7 +107,7 @@
                         <%= transaction.entry.date.strftime("%b %d") %>
                       </p>
                       <%= link_to transaction.entry.name,
-                                  transactions_path(focused_record_id: transaction.id),
+                                  transactions_path,
                                   class: "text-primary hover:underline",
                                   data: { turbo_frame: :_top } %>
                     </div>
@@ -119,7 +119,7 @@
               <% end %>
             </ul>
 
-            <%= render LinkComponent.new(
+            <%= render DS::Link.new(
               text: "View all category transactions",
               variant: "outline",
               full_width: true,

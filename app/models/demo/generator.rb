@@ -1174,42 +1174,42 @@ class Demo::Generator
 
       # Property valuations (these accounts are valued, not transaction-driven)
       @home.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor"),
         amount: 350_000,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@home.accountable_type),
         currency: "USD",
         date: Date.current
       )
 
       # Vehicle valuations (these depreciate over time)
       @honda_accord.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor"),
         amount: 18_000,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@honda_accord.accountable_type),
         currency: "USD",
         date: Date.current
       )
 
       @tesla_model3.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "current_anchor"),
         amount: 4_500,
-        name: "Current Market Value",
+        name: Valuation.build_current_anchor_name(@tesla_model3.accountable_type),
         currency: "USD",
         date: Date.current
       )
 
       @jewelry.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "reconciliation"),
         amount: 2000,
-        name: "Current Market Value",
+        name: Valuation.build_reconciliation_name(@jewelry.accountable_type),
         currency: "USD",
         date: 90.days.ago.to_date
       )
 
       @personal_loc.entries.create!(
-        entryable: Valuation.new,
+        entryable: Valuation.new(kind: "reconciliation"),
         amount: 800,
-        name: "Owed",
+        name: Valuation.build_reconciliation_name(@personal_loc.accountable_type),
         currency: "USD",
         date: 120.days.ago.to_date
       )

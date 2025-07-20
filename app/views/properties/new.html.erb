@@ -1,4 +1,4 @@
-<%= render DialogComponent.new do |dialog| %>
+<%= render DS::Dialog.new do |dialog| %>
   <% dialog.with_header(title: "Enter property manually") %>
   <% dialog.with_body do %>
     <div class="flex gap-4">
@@ -15,7 +15,7 @@
 
           <!-- Create button -->
           <div class="flex justify-end mt-4">
-            <%= render ButtonComponent.new(
+            <%= render DS::Button.new(
               text: "Next",
               variant: "primary",
             ) %>

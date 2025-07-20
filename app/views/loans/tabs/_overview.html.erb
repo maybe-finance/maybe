@@ -1,0 +1,54 @@
+<%# locals: (account:) %>
+
+<div class="grid grid-cols-3 gap-2">
+  <%= summary_card title: t(".original_principal") do %>
+    <%= format_money account.loan.original_balance %>
+  <% end %>
+
+  <%= summary_card title: t(".remaining_principal") do %>
+    <%= format_money account.balance_money %>
+  <% end %>
+
+  <%= summary_card title: t(".interest_rate") do %>
+    <% if account.loan.interest_rate.present? %>
+      <%= number_to_percentage(account.loan.interest_rate, precision: 3) %>
+    <% else %>
+      <%= t(".unknown") %>
+    <% end %>
+  <% end %>
+
+  <%= summary_card title: t(".monthly_payment") do %>
+    <% if account.loan.rate_type.present? && account.loan.rate_type != 'fixed' %>
+      <%= t(".not_applicable") %>
+    <% elsif account.loan.rate_type == 'fixed' && account.loan.monthly_payment.present? %>
+      <%= format_money(account.loan.monthly_payment) %>
+    <% else %>
+      <%= t(".unknown") %>
+    <% end %>
+  <% end %>
+
+  <%= summary_card title: t(".term") do %>
+    <% if account.loan.term_months.present? %>
+      <% if account.loan.term_months < 12 %>
+        <%= pluralize(account.loan.term_months, "month") %>
+      <% else %>
+        <%= pluralize(account.loan.term_months / 12, "year") %>
+      <% end %>
+    <% else %>
+      <%= t(".unknown") %>
+    <% end %>
+  <% end %>
+
+  <%= summary_card title: t(".type") do %>
+    <%= account.loan.rate_type&.titleize || t(".unknown") %>
+  <% end %>
+</div>
+
+<div class="flex justify-center py-8">
+  <%= render DS::Link.new(
+    text: "Edit loan details",
+    variant: "ghost",
+    href: edit_loan_path(account),
+    frame: :modal
+  ) %>
+</div>

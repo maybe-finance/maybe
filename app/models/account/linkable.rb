@@ -15,4 +15,5 @@ module Account::Linkable
   def unlinked?
     !linked?
   end
+  alias_method :manual?, :unlinked?
 end

@@ -2,7 +2,7 @@ class ToggleComponentPreview < ViewComponent::Preview
   # @param disabled toggle
   def default(disabled: false)
     render(
-      ToggleComponent.new(
+      DS::Toggle.new(
         id: "toggle-component-id",
         name: "toggle-component-name",
         checked: false,

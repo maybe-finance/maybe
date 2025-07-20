@@ -1,9 +1,9 @@
-<%# locals: (entry:, balance_trend: nil, **) %>
+<%# locals: (entry:, **) %>
 
 <% valuation = entry.entryable %>
 
-<% color = balance_trend&.trend&.color || "#D444F1" %>
-<% icon = balance_trend&.trend&.icon || "plus" %>
+<% color = valuation.opening_anchor? ? "#D444F1" : "var(--color-gray)" %>
+<% icon = valuation.opening_anchor? ? "plus" : "minus" %>
 
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(valuation) do %>
@@ -14,7 +14,7 @@
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
         <div class="flex items-center gap-3">
-          <%= render FilledIconComponent.new(icon: icon, size: "sm", hex_color: color, rounded: true) %>
+          <%= render DS::FilledIcon.new(icon: icon, size: "sm", hex_color: color, rounded: true) %>
 
           <div class="truncate text-primary">
             <%= link_to entry.name,
@@ -26,7 +26,7 @@
       </div>
 
       <div class="col-span-4 justify-self-end">
-        <%= tag.p format_money(entry.amount_money), class: "font-medium text-sm text-primary" %>
+        <%= tag.p format_money(entry.amount_money), class: "font-bold text-sm text-primary" %>
       </div>
     </div>
   <% end %>

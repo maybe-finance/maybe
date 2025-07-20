@@ -1,0 +1,58 @@
+<div id="<%= dom_id(account, :chart) %>" class="bg-container shadow-border-xs rounded-xl space-y-2">
+  <div class="flex justify-between flex-col-reverse lg:flex-row gap-2 px-4 pt-4 mb-2">
+    <div class="space-y-2 w-full">
+      <div class="flex items-center gap-1">
+        <%= tag.p title, class: "text-sm font-medium text-secondary" %>
+
+        <% if account.investment? %>
+          <%= render "investments/value_tooltip", balance: account.balance_money, holdings: holdings_value_money, cash: account.cash_balance_money %>
+        <% end %>
+      </div>
+      <div class="flex flex-row gap-2 items-baseline">
+        <%= tag.p view_balance_money.format, class: "text-primary text-3xl font-medium truncate" %>
+
+        <% if converted_balance_money %>
+          <%= tag.p converted_balance_money.format, class: "text-sm font-medium text-secondary" %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form_with url: account_path(account), method: :get, data: { controller: "auto-submit-form" } do |form| %>
+      <div class="flex items-center gap-2">
+        <% if account.investment? %>
+          <%= form.select :chart_view,
+            [["Total value", "balance"], ["Holdings", "holdings_balance"], ["Cash", "cash_balance"]],
+            { selected: view },
+            class: "bg-container border border-secondary rounded-lg text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0",
+            data: { "auto-submit-form-target": "auto" } %>
+        <% end %>
+
+        <%= form.select :period,
+                    Period.as_options,
+                    { selected: period.key },
+                    data: { "auto-submit-form-target": "auto" },
+                    class: "bg-container border border-secondary rounded-lg px-3 py-2 text-sm pr-7 cursor-pointer text-primary focus:outline-hidden focus:ring-0" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag dom_id(@account, :chart_details) do %>
+    <div class="px-4">
+      <%= render partial: "shared/trend_change", locals: { trend: trend, comparison_label: period.comparison_label } %>
+    </div>
+
+    <div class="h-64 pb-4">
+      <% if series.any? %>
+        <div
+        id="lineChart"
+        class="w-full h-full"
+        data-controller="time-series-chart"
+        data-time-series-chart-data-value="<%= series.to_json %>"></div>
+      <% else %>
+        <div class="w-full h-full flex items-center justify-center">
+          <p class="text-secondary text-sm">No data available</p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

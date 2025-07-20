@@ -5,14 +5,14 @@
 <%= turbo_frame_tag dom_id(entry) do %>
   <%= turbo_frame_tag dom_id(trade) do %>
     <div class="grid grid-cols-12 items-center <%= entry.excluded ? "text-gray-400 bg-gray-25" : "text-primary" %> text-sm font-medium p-4">
-      <div class="col-span-6 flex items-center gap-4">
+      <div class="col-span-8 flex items-center gap-4">
         <%= check_box_tag dom_id(entry, "selection"),
                         class: "checkbox checkbox--light",
                         data: { id: entry.id, "bulk-select-target": "row", action: "bulk-select#toggleRowSelection" } %>
 
         <div class="max-w-full">
           <%= tag.div class: ["flex items-center gap-2"] do %>
-            <%= render FilledIconComponent.new(
+            <%= render DS::FilledIcon.new(
               variant: :text,
               text: entry.name,
               size: "sm",
@@ -37,16 +37,6 @@
         <%= content_tag :p,
                     format_money(-entry.amount_money),
                     class: ["text-green-600": entry.amount.negative?] %>
-      </div>
-
-      <div class="col-span-2 justify-self-end">
-        <% if balance_trend&.trend %>
-          <div class="flex items-center gap-2">
-            <%= tag.p format_money(balance_trend.trend.current), class: "font-medium text-sm text-primary" %>
-          </div>
-        <% else %>
-          <%= tag.p "--", class: "font-medium text-sm text-gray-400" %>
-        <% end %>
       </div>
     </div>
   <% end %>

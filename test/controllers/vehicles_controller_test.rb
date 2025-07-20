@@ -11,8 +11,8 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
   test "creates with vehicle details" do
     assert_difference -> { Account.count } => 1,
       -> { Vehicle.count } => 1,
-      -> { Valuation.count } => 2,
-      -> { Entry.count } => 2 do
+      -> { Valuation.count } => 1,
+      -> { Entry.count } => 1 do
       post vehicles_path, params: {
         account: {
           name: "Vehicle",
@@ -45,7 +45,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
 
   test "updates with vehicle details" do
     assert_no_difference [ "Account.count", "Vehicle.count" ] do
-      patch account_path(@account), params: {
+      patch vehicle_path(@account), params: {
         account: {
           name: "Updated Vehicle",
           balance: 28000,
@@ -64,7 +64,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to @account
+    assert_redirected_to account_path(@account)
     assert_equal "Vehicle account updated", flash[:notice]
     assert_enqueued_with(job: SyncJob)
   end

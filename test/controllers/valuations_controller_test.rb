@@ -8,14 +8,13 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     @entry = entries(:valuation)
   end
 
-  test "creates entry with basic attributes" do
+  test "can create reconciliation" do
     account = accounts(:investment)
 
     assert_difference [ "Entry.count", "Valuation.count" ], 1 do
       post valuations_url, params: {
         entry: {
           amount: account.balance + 100,
-          currency: "USD",
           date: Date.current.to_s,
           account_id: account.id
         }
@@ -23,7 +22,7 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     created_entry = Entry.order(created_at: :desc).first
-    assert_equal "Manual account value update", created_entry.name
+    assert_equal "Manual value update", created_entry.name
     assert_equal Date.current, created_entry.date
     assert_equal account.balance + 100, created_entry.amount_money.to_f
 
@@ -36,9 +35,9 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference [ "Entry.count", "Valuation.count" ] do
       patch valuation_url(@entry), params: {
         entry: {
-          amount: 20000,
-          currency: "USD",
-          date: Date.current
+          amount: 22000,
+          date: Date.current,
+          notes: "Test notes"
         }
       }
     end
@@ -46,5 +45,9 @@ class ValuationsControllerTest < ActionDispatch::IntegrationTest
     assert_enqueued_with job: SyncJob
 
     assert_redirected_to account_url(@entry.account)
+
+    @entry.reload
+    assert_equal 22000, @entry.amount
+    assert_equal "Test notes", @entry.notes
   end
 end

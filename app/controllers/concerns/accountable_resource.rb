@@ -2,9 +2,9 @@ module AccountableResource
   extend ActiveSupport::Concern
 
   included do
-    include ScrollFocusable, Periodable
+    include Periodable
 
-    before_action :set_account, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_account, only: [ :show, :edit, :update ]
     before_action :set_link_options, only: :new
   end
 
@@ -27,9 +27,7 @@ module AccountableResource
     @q = params.fetch(:q, {}).permit(:search)
     entries = @account.entries.search(@q).reverse_chronological
 
-    set_focused_record(entries, params[:focused_record_id])
-
-    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10", params: ->(params) { params.except(:focused_record_id) })
+    @pagy, @entries = pagy(entries, limit: params[:per_page] || "10")
   end
 
   def edit
@@ -45,12 +43,13 @@ module AccountableResource
   def update
     # Handle balance update if provided
     if account_params[:balance].present?
-      result = @account.update_balance(balance: account_params[:balance], currency: account_params[:currency])
+      result = @account.set_current_balance(account_params[:balance].to_d)
       unless result.success?
         @error_message = result.error_message
         render :edit, status: :unprocessable_entity
         return
       end
+      @account.sync_later
     end
 
     # Update remaining account attributes
@@ -62,16 +61,7 @@ module AccountableResource
     end
 
     @account.lock_saved_attributes!
-    redirect_back_or_to @account, notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
-  end
-
-  def destroy
-    if @account.linked?
-      redirect_to account_path(@account), alert: "Cannot delete a linked account"
-    else
-      @account.destroy_later
-      redirect_to accounts_path, notice: t("accounts.destroy.success", type: accountable_type.name.underscore.humanize)
-    end
+    redirect_back_or_to account_path(@account), notice: t("accounts.update.success", type: accountable_type.name.underscore.humanize)
   end
 
   private

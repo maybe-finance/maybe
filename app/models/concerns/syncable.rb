@@ -47,7 +47,7 @@ module Syncable
   end
 
   def sync_error
-    latest_sync&.error
+    latest_sync&.error || latest_sync&.children&.map(&:error)&.compact&.first
   end
 
   def last_synced_at

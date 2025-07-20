@@ -50,7 +50,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     checked = object ? object.send(method) : options[:checked]
 
     @template.render(
-      ToggleComponent.new(
+      DS::Toggle.new(
         id: field_id,
         name: field_name,
         checked: checked,
@@ -67,7 +67,7 @@ class StyledFormBuilder < ActionView::Helpers::FormBuilder
     value ||= submit_default_value
 
     @template.render(
-      ButtonComponent.new(
+      DS::Button.new(
         text: value,
         data: (options[:data] || {}).merge({ turbo_submits_with: "Submitting..." }),
         full_width: true

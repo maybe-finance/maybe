@@ -1,0 +1,18 @@
+<%= render DS::Dialog.new do |dialog| %>
+  <% dialog.with_header(title: "Update balance") %>
+  <% dialog.with_body do %>
+    <%= styled_form_with model: @entry, url: valuation_path(@entry), method: :patch, class: "space-y-4", data: { turbo_frame: :_top } do |form| %>
+      <%= form.hidden_field :date %>
+      <%= form.hidden_field :amount %>
+
+      <%= render "confirmation_contents",
+          reconciliation_dry_run: @reconciliation_dry_run,
+          account: @account,
+          entry: @entry,
+          action_verb: "update",
+          is_update: true %>
+
+      <%= form.submit "Update" %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -60,7 +60,7 @@
         </ul>
 
         <div class="pl-2 mt-auto mx-auto flex flex-col gap-2">
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
             variant: "icon",
             icon: "message-circle-question",
             data: { action: "intercom#show" }
@@ -93,7 +93,7 @@
                   <p class="text-sm text-secondary"><%= Current.family.days_left_in_trial %> days remaining</p>
                 </div>
 
-                <%= render LinkComponent.new(
+                <%= render DS::Link.new(
                   text: "Upgrade",
                   href: upgrade_subscription_path,
                 ) %>

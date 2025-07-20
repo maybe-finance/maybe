@@ -1,71 +1,79 @@
-class Balance::ReverseCalculator
-  attr_reader :account
-
-  def initialize(account)
-    @account = account
-  end
-
+class Balance::ReverseCalculator < Balance::BaseCalculator
   def calculate
     Rails.logger.tagged("Balance::ReverseCalculator") do
-      calculate_balances
+      # Since it's a reverse sync, we're starting with the "end of day" balance components and
+      # calculating backwards to derive the "start of day" balance components.
+      end_cash_balance = derive_cash_balance_on_date_from_total(
+        total_balance: account.current_anchor_balance,
+        date: account.current_anchor_date
+      )
+      end_non_cash_balance = account.current_anchor_balance - end_cash_balance
+
+      # Calculates in reverse-chronological order (End of day -> Start of day)
+      account.current_anchor_date.downto(account.opening_anchor_date).map do |date|
+        if use_opening_anchor_for_date?(date)
+          end_cash_balance = derive_cash_balance_on_date_from_total(
+            total_balance: account.opening_anchor_balance,
+            date: date
+          )
+          end_non_cash_balance = account.opening_anchor_balance - end_cash_balance
+
+          start_cash_balance = end_cash_balance
+          start_non_cash_balance = end_non_cash_balance
+
+          build_balance(
+            date: date,
+            cash_balance: end_cash_balance,
+            non_cash_balance: end_non_cash_balance
+          )
+        else
+          start_cash_balance = derive_start_cash_balance(end_cash_balance: end_cash_balance, date: date)
+          start_non_cash_balance = derive_start_non_cash_balance(end_non_cash_balance: end_non_cash_balance, date: date)
+
+          # Even though we've just calculated "start" balances, we set today equal to end of day, then use those
+          # in our next iteration (slightly confusing, but just the nature of a "reverse" sync)
+          output_balance = build_balance(
+            date: date,
+            cash_balance: end_cash_balance,
+            non_cash_balance: end_non_cash_balance
+          )
+
+          end_cash_balance = start_cash_balance
+          end_non_cash_balance = start_non_cash_balance
+
+          output_balance
+        end
+      end
     end
   end
 
   private
-    def calculate_balances
-      current_cash_balance = account.cash_balance
-      previous_cash_balance = nil
 
-      @balances = []
-
-      Date.current.downto(account.start_date).map do |date|
-        entries = sync_cache.get_entries(date)
-        holdings = sync_cache.get_holdings(date)
-        holdings_value = holdings.sum(&:amount)
-        valuation = sync_cache.get_valuation(date)
-
-        previous_cash_balance = if valuation
-          valuation.amount - holdings_value
-        else
-          calculate_next_balance(current_cash_balance, entries, direction: :reverse)
-        end
-
-        if valuation.present?
-          @balances << build_balance(date, previous_cash_balance, holdings_value)
-        else
-          # If date is today, we don't distinguish cash vs. total since provider's are inconsistent with treatment
-          # of the cash component.  Instead, just set the balance equal to the "total value" reported by the provider
-          if date == Date.current
-            @balances << build_balance(date, account.cash_balance, account.balance - account.cash_balance)
-          else
-            @balances << build_balance(date, current_cash_balance, holdings_value)
-          end
-        end
-
-        current_cash_balance = previous_cash_balance
-      end
-
-      @balances
+    # Negative entries amount on an "asset" account means, "account value has increased"
+    # Negative entries amount on a "liability" account means, "account debt has decreased"
+    # Positive entries amount on an "asset" account means, "account value has decreased"
+    # Positive entries amount on a "liability" account means, "account debt has increased"
+    def signed_entry_flows(entries)
+      entry_flows = entries.sum(&:amount)
+      account.asset? ? entry_flows : -entry_flows
     end
 
-    def sync_cache
-      @sync_cache ||= Balance::SyncCache.new(account)
+    # Reverse syncs are a bit different than forward syncs because we do not allow "reconciliation" valuations
+    # to be used at all. This is primarily to keep the code and the UI easy to understand. For a more detailed
+    # explanation, see the test suite.
+    def use_opening_anchor_for_date?(date)
+      account.has_opening_anchor? && date == account.opening_anchor_date
     end
 
-    def build_balance(date, cash_balance, holdings_value)
-      Balance.new(
-        account_id: account.id,
-        date: date,
-        balance: holdings_value + cash_balance,
-        cash_balance: cash_balance,
-        currency: account.currency
-      )
+    # Alias method, for algorithmic clarity
+    # Derives cash balance, starting from the end-of-day, applying entries in reverse to get the start-of-day balance
+    def derive_start_cash_balance(end_cash_balance:, date:)
+      derive_cash_balance(end_cash_balance, date)
     end
 
-    def calculate_next_balance(prior_balance, transactions, direction: :forward)
-      flows = transactions.sum(&:amount)
-      negated = direction == :forward ? account.asset? : account.liability?
-      flows *= -1 if negated
-      prior_balance + flows
+    # Alias method, for algorithmic clarity
+    # Derives non-cash balance, starting from the end-of-day, applying entries in reverse to get the start-of-day balance
+    def derive_start_non_cash_balance(end_non_cash_balance:, date:)
+      derive_non_cash_balance(end_non_cash_balance, date, direction: :reverse)
     end
 end

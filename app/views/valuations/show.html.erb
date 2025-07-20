@@ -1,6 +1,6 @@
 <% entry, account = @entry, @entry.account %>
 
-<%= render DialogComponent.new(variant: "drawer") do |dialog| %>
+<%= render DS::Dialog.new(variant: "drawer") do |dialog| %>
   <% dialog.with_header do %>
     <%= render "valuations/header", entry: @entry %>
   <% end %>
@@ -8,25 +8,32 @@
   <% dialog.with_body do %>
     <% if @error_message.present? %>
       <div class="mb-4">
-        <%= render AlertComponent.new(message: @error_message, variant: :error) %>
+        <%= render DS::Alert.new(message: @error_message, variant: :error) %>
       </div>
     <% end %>
 
     <% dialog.with_section(title: t(".overview"), open: true) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
-              url: entry_path(entry),
-              class: "space-y-2",
-              data: { controller: "auto-submit-form" } do |f| %>
+              url: confirm_update_valuation_path(entry),
+              method: :post,
+              data: { turbo_frame: :modal },
+              class: "space-y-4" do |f| %>
           <%= f.date_field :date,
                 label: t(".date_label"),
-                max: Date.current,
-                "data-auto-submit-form-target": "auto" %>
+                max: Date.current %>
 
           <%= f.money_field :amount,
-                label: t(".amount"),
-                auto_submit: true,
+                label: "Account value on date",
                 disable_currency: true %>
+
+          <div class="flex justify-end">
+            <%= render DS::Button.new(
+              text: "Update value",
+              variant: :primary,
+              type: "submit"
+            ) %>
+          </div>
         <% end %>
       </div>
     <% end %>
@@ -34,9 +41,10 @@
     <% dialog.with_section(title: t(".details")) do %>
       <div class="pb-4">
         <%= styled_form_with model: entry,
-              url: entry_path(entry),
+              url: valuation_path(entry),
+              method: :patch,
               class: "space-y-2",
-              data: { controller: "auto-submit-form" } do |f| %>
+              data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } do |f| %>
           <%= f.text_area :notes,
                 label: t(".note_label"),
                 placeholder: t(".note_placeholder"),
@@ -59,7 +67,7 @@
                 entry_path(entry),
                 method: :delete,
                 class: "rounded-lg px-3 py-2 text-red-500 text-sm font-medium border border-secondary",
-                data: { turbo_confirm: true, turbo_frame: "_top" } %>
+                data: { turbo_confirm: CustomConfirm.for_resource_deletion("value update").to_data_attribute, turbo_frame: "_top" } %>
         </div>
       </div>
     <% end %>

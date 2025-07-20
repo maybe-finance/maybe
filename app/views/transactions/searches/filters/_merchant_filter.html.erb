@@ -16,7 +16,7 @@
                            merchant.name,
                            nil %>
         <%= form.label :merchants, value: merchant.name, class: "text-sm text-primary flex items-center gap-2" do %>
-          <%= render FilledIconComponent.new(
+          <%= render DS::FilledIcon.new(
             variant: :text,
             hex_color: merchant.color,
             text: merchant.name,

@@ -1,7 +1,7 @@
 <div class="flex items-center justify-between">
   <h1 class="text-xl font-medium text-primary"><%= t(".title") %></h1>
 
-  <%= render LinkComponent.new(
+  <%= render DS::Link.new(
     text: "New import",
     href: new_import_path,
     icon: "plus",

@@ -98,7 +98,7 @@ class AccountsTest < ApplicationSystemTestCase
   private
 
     def open_new_account_modal
-      within "[data-controller='tabs']" do
+      within "[data-controller='DS--tabs']" do
         click_button "All"
         click_link "New account"
       end

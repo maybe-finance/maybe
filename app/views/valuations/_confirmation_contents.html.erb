@@ -1,0 +1,51 @@
+<%# locals: (account:, entry:, reconciliation_dry_run:, is_update:, action_verb:) %>
+
+<div class="space-y-4 text-sm text-secondary">
+  <% if account.investment? %>
+    <% brokerage_cash = reconciliation_dry_run.new_cash_balance || 0 %>
+    <% holdings_value = reconciliation_dry_run.new_balance - brokerage_cash %>
+
+    <p>This will <%= action_verb %> the account value on <span class="font-medium text-primary"><%= entry.date.strftime("%B %d, %Y") %></span> to:</p>
+
+    <div class="bg-container rounded-lg p-4 space-y-2 border border-primary">
+      <div class="flex justify-between">
+        <span>Total account value</span>
+        <span class="font-medium text-primary"><%= Money.new(reconciliation_dry_run.new_balance, account.currency).format %></span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span>Holdings value</span>
+        <span><%= Money.new(holdings_value, account.currency).format %></span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span>Brokerage cash</span>
+        <span class="<%= brokerage_cash.negative? ? "text-red-500" : "text-green-500" %>"><%= Money.new(brokerage_cash, account.currency).format %></span>
+      </div>
+    </div>
+  <% else %>
+    <p><%= action_verb.capitalize %>
+      <% if account.depository? %>
+        account balance
+      <% elsif account.credit_card? %>
+        credit card balance
+      <% elsif account.loan? %>
+        loan balance
+      <% elsif account.property? %>
+        property value
+      <% elsif account.vehicle? %>
+        vehicle value
+      <% elsif account.crypto? %>
+        crypto balance
+      <% elsif account.other_asset? %>
+        asset value
+      <% elsif account.other_liability? %>
+        liability balance
+      <% else %>
+        balance
+      <% end %>
+      on <span class="font-medium text-primary"><%= entry.date.strftime("%B %d, %Y") %></span> to
+      <span class="font-medium text-primary"><%= entry.amount_money.format %></span>.
+    </p>
+  <% end %>
+
+  <p>All future transactions and balances will be recalculated based on this <%= is_update ? "change" : "update" %>.</p>
+</div>

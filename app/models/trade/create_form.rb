@@ -29,13 +29,11 @@ class Trade::CreateForm
     end
 
     def create_trade
-      prefix = type == "sell" ? "Sell " : "Buy "
-      trade_name = prefix + "#{qty.to_i.abs} shares of #{security.ticker}"
       signed_qty = type == "sell" ? -qty.to_d : qty.to_d
       signed_amount = signed_qty * price.to_d
 
       trade_entry = account.entries.new(
-        name: trade_name,
+        name: Trade.build_name(type, qty, security.ticker),
         date: date,
         amount: signed_amount,
         currency: currency,

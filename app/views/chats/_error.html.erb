@@ -10,7 +10,7 @@
   <div class="flex items-center justify-between gap-2">
     <p class="text-xs text-red-500">Failed to generate response.  Please try again.</p>
 
-    <%= render ButtonComponent.new(
+    <%= render DS::Button.new(
       text: "Retry",
       href: retry_chat_path(chat),
     ) %>

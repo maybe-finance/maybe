@@ -1,0 +1,19 @@
+<%= render DS::Dialog.new do |dialog| %>
+  <% dialog.with_header(title: "Confirm new balance") %>
+  <% dialog.with_body do %>
+    <%= styled_form_with model: @entry, url: valuations_path, class: "space-y-4" do |form| %>
+      <%= form.hidden_field :account_id %>
+      <%= form.hidden_field :date %>
+      <%= form.hidden_field :amount %>
+
+      <%= render "confirmation_contents",
+          reconciliation_dry_run: @reconciliation_dry_run,
+          account: @account,
+          entry: @entry,
+          action_verb: "set",
+          is_update: false %>
+
+      <%= form.submit "Confirm" %>
+    <% end %>
+  <% end %>
+<% end %>

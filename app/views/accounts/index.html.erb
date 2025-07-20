@@ -2,7 +2,7 @@
   <h1 class="text-xl"><%= t(".accounts") %></h1>
   <div class="flex items-center gap-5">
     <div class="flex items-center gap-2">
-      <%= render LinkComponent.new(
+      <%= render DS::Link.new(
         text: "New account",
         href: new_account_path(return_to: accounts_path),
         variant: "primary",

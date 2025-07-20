@@ -1,0 +1,94 @@
+<%= turbo_frame_tag dom_id(account, "entries") do %>
+  <div class="bg-container p-5 shadow-border-xs rounded-xl">
+    <div class="flex items-center justify-between mb-4" data-testid="activity-menu">
+      <%= tag.h2 "Activity", class: "font-medium text-lg" %>
+
+      <% if account.manual? %>
+        <%= render DS::Menu.new(variant: "button") do |menu| %>
+          <% menu.with_button(text: "New", variant: "secondary", icon: "plus") %>
+
+          <% menu.with_item(
+              variant: "link",
+              text: "New balance",
+              icon: "circle-dollar-sign",
+              href: new_valuation_path(account_id: account.id),
+              data: { turbo_frame: :modal }) %>
+
+          <% unless account.crypto? %>
+            <% menu.with_item(
+                variant: "link",
+                text: "New transaction",
+                icon: "credit-card",
+                href: account.investment? ? new_trade_path(account_id: account.id) : new_transaction_path(account_id: account.id),
+                data: { turbo_frame: :modal }) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form_with url: account_path(account),
+              id: "entries-search",
+              scope: :q,
+              method: :get,
+              data: { controller: "auto-submit-form" } do |form| %>
+        <div class="flex gap-2 mb-4">
+          <div class="grow">
+            <div class="flex items-center px-3 py-2 gap-2 border border-secondary rounded-lg focus-within:ring-gray-100 focus-within:border-gray-900">
+              <%= helpers.icon("search") %>
+
+              <%= hidden_field_tag :account_id, account.id %>
+
+              <%= form.search_field :search,
+                            placeholder: "Search entries by name",
+                            value: search,
+                            class: "form-field__input placeholder:text-sm placeholder:text-secondary",
+                            "data-auto-submit-form-target": "auto" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% if activity_dates.empty? %>
+      <p class="text-secondary text-sm p-4">No entries yet</p>
+    <% else %>
+      <%= tag.div id: dom_id(account, "entries_bulk_select"),
+                data: {
+                  controller: "bulk-select",
+                  bulk_select_singular_label_value: "entry",
+                  bulk_select_plural_label_value: "entries"
+                } do %>
+        <div id="entry-selection-bar" data-bulk-select-target="selectionBar" class="flex justify-center hidden">
+          <%= render "entries/selection_bar" %>
+        </div>
+
+        <div class="grid bg-container-inset rounded-xl grid-cols-12 items-center uppercase text-xs font-medium text-secondary px-5 py-3 mb-4">
+          <div class="pl-0.5 col-span-8 flex items-center gap-4">
+            <%= check_box_tag "selection_entry",
+                              class: "checkbox checkbox--light",
+                              data: { action: "bulk-select#togglePageSelection" } %>
+            <p>Date</p>
+          </div>
+
+          <%= tag.p "Amount", class: "col-span-4 justify-self-end" %>
+        </div>
+
+        <div>
+          <div class="space-y-4">
+            <% activity_dates.each do |activity_date_data| %>
+              <%= render UI::Account::ActivityDate.new(
+                    account: account,
+                    data: activity_date_data
+                  ) %>
+            <% end %>
+          </div>
+
+          <div class="p-4 bg-container rounded-bl-lg rounded-br-lg">
+            <%= render "shared/pagination", pagy: pagy %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

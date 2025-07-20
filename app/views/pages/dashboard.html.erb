@@ -5,7 +5,7 @@
       <p class="text-sm lg:text-base text-secondary">Here's what's happening with your finances</p>
     </div>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
       icon: "plus",
       text: "New",
       href: new_account_path,
@@ -13,7 +13,7 @@
       class: "hidden lg:inline-flex"
     ) %>
 
-    <%= render LinkComponent.new(
+    <%= render DS::Link.new(
         variant: "icon-inverse",
         icon: "plus",
         href: new_account_path,

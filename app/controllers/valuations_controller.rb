@@ -1,22 +1,46 @@
 class ValuationsController < ApplicationController
   include EntryableResource, StreamExtensions
 
+  def confirm_create
+    @account = Current.family.accounts.find(params.dig(:entry, :account_id))
+    @entry = @account.entries.build(entry_params.merge(currency: @account.currency))
+
+    @reconciliation_dry_run = @entry.account.create_reconciliation(
+      balance: entry_params[:amount],
+      date: entry_params[:date],
+      dry_run: true
+    )
+
+    render :confirm_create
+  end
+
+  def confirm_update
+    @entry = Current.family.entries.find(params[:id])
+    @account = @entry.account
+    @entry.assign_attributes(entry_params.merge(currency: @account.currency))
+
+    @reconciliation_dry_run = @entry.account.update_reconciliation(
+      @entry,
+      balance: entry_params[:amount],
+      date: entry_params[:date],
+      dry_run: true
+    )
+
+    render :confirm_update
+  end
+
   def create
     account = Current.family.accounts.find(params.dig(:entry, :account_id))
 
-    result = account.update_balance(
+    result = account.create_reconciliation(
       balance: entry_params[:amount],
       date: entry_params[:date],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
     )
 
     if result.success?
-      @success_message = result.updated? ? "Balance updated" : "No changes made. Account is already up to date."
-
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(account), notice: @success_message }
-        format.turbo_stream { stream_redirect_back_or_to(account_path(account), notice: @success_message) }
+        format.html { redirect_back_or_to account_path(account), notice: "Account updated" }
+        format.turbo_stream { stream_redirect_back_or_to(account_path(account), notice: "Account updated") }
       end
     else
       @error_message = result.error_message
@@ -25,18 +49,22 @@ class ValuationsController < ApplicationController
   end
 
   def update
-    result = @entry.account.update_balance(
-      date: @entry.date,
-      balance: entry_params[:amount],
-      currency: entry_params[:currency],
-      notes: entry_params[:notes]
-    )
+    # Notes updating is independent of reconciliation, just a simple CRUD operation
+    @entry.update!(notes: entry_params[:notes]) if entry_params[:notes].present?
 
-    if result.success?
+    if entry_params[:date].present? && entry_params[:amount].present?
+      result = @entry.account.update_reconciliation(
+        @entry,
+        balance: entry_params[:amount],
+        date: entry_params[:date],
+      )
+    end
+
+    if result.nil? || result.success?
       @entry.reload
 
       respond_to do |format|
-        format.html { redirect_back_or_to account_path(@entry.account), notice: result.updated? ? "Balance updated" : "No changes made. Account is already up to date." }
+        format.html { redirect_back_or_to account_path(@entry.account), notice: "Entry updated" }
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace(
@@ -56,7 +84,6 @@ class ValuationsController < ApplicationController
 
   private
     def entry_params
-      params.require(:entry)
-            .permit(:date, :amount, :currency, :notes)
+      params.require(:entry).permit(:date, :amount, :notes)
     end
 end

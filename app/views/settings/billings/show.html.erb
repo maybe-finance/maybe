@@ -4,7 +4,7 @@
   <div class="space-y-4">
     <div class="p-3 shadow-border-xs bg-container rounded-lg flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <%= render FilledIconComponent.new(
+        <%= render DS::FilledIcon.new(
           icon: "gem",
           rounded: true,
           size: "lg"
@@ -34,7 +34,7 @@
       </div>
 
       <% if @family.has_active_subscription? %>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Manage",
           icon: "external-link",
           variant: "primary",
@@ -43,7 +43,7 @@
           rel: "noopener"
         ) %>
       <% else %>
-        <%= render LinkComponent.new(
+        <%= render DS::Link.new(
           text: "Choose plan",
           variant: "primary",
           icon: "plus",

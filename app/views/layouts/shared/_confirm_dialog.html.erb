@@ -1,6 +1,6 @@
 <%# This dialog is used as an override to the browser's confirm API when submitting forms with data-turbo-confirm %>
 <%# See confirm_dialog_controller.js and _htmldoc.html.erb  %>
-<%= render DialogComponent.new(id: "confirm-dialog", auto_open: false, data: { controller: "confirm-dialog" }, width: "sm", disable_frame: true) do |dialog| %>
+<%= render DS::Dialog.new(id: "confirm-dialog", auto_open: false, data: { controller: "confirm-dialog" }, width: "sm", disable_frame: true) do |dialog| %>
   <% dialog.with_body do %>
     <form method="dialog" class="space-y-4">
       <div class="space-y-2">
@@ -14,7 +14,7 @@
 
       <div>
         <% ["primary", "outline-destructive", "destructive"].each do |variant| %>
-          <%= render ButtonComponent.new(
+          <%= render DS::Button.new(
           text: "Confirm",
           variant: variant,
           autofocus: true,
