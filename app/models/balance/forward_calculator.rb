@@ -24,7 +24,9 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
         output_balance = build_balance(
           date: date,
           cash_balance: end_cash_balance,
-          non_cash_balance: end_non_cash_balance
+          non_cash_balance: end_non_cash_balance,
+          start_cash_balance: start_cash_balance,
+          start_non_cash_balance: start_non_cash_balance
         )
 
         # Set values for the next iteration

@@ -24,7 +24,9 @@ class Balance::ReverseCalculator < Balance::BaseCalculator
           build_balance(
             date: date,
             cash_balance: end_cash_balance,
-            non_cash_balance: end_non_cash_balance
+            non_cash_balance: end_non_cash_balance,
+            start_cash_balance: start_cash_balance,
+            start_non_cash_balance: start_non_cash_balance
           )
         else
           start_cash_balance = derive_start_cash_balance(end_cash_balance: end_cash_balance, date: date)
@@ -35,7 +37,9 @@ class Balance::ReverseCalculator < Balance::BaseCalculator
           output_balance = build_balance(
             date: date,
             cash_balance: end_cash_balance,
-            non_cash_balance: end_non_cash_balance
+            non_cash_balance: end_non_cash_balance,
+            start_cash_balance: start_cash_balance,
+            start_non_cash_balance: start_non_cash_balance
           )
 
           end_cash_balance = start_cash_balance

@@ -57,12 +57,14 @@ class Balance::BaseCalculator
       raise NotImplementedError, "Directional calculators must implement this method"
     end
 
-    def build_balance(date:, cash_balance:, non_cash_balance:)
+    def build_balance(date:, cash_balance:, non_cash_balance:, start_cash_balance: nil, start_non_cash_balance: nil)
       Balance.new(
         account_id: account.id,
         date: date,
         balance: non_cash_balance + cash_balance,
         cash_balance: cash_balance,
+        start_cash_balance: start_cash_balance || 0,
+        start_non_cash_balance: start_non_cash_balance || 0,
         currency: account.currency
       )
     end

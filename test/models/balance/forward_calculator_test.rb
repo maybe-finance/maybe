@@ -21,8 +21,12 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ Date.current, { balance: 0, cash_balance: 0 } ]
+      expected_data: [
+        {
+          date: Date.current,
+          legacy_balances: { balance: 0, cash_balance: 0 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 0, end_non_cash: 0, end: 0 }
+        }
       ]
     )
   end
@@ -41,9 +45,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     # Since we start at 0, this transaction (inflow) simply increases balance from 0 -> 1000
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 3.days.ago.to_date, { balance: 0, cash_balance: 0 } ],
-        [ 2.days.ago.to_date, { balance: 1000, cash_balance: 1000 } ]
+      expected_data: [
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 0, cash_balance: 0 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 0, end_non_cash: 0, end: 0 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 1000, cash_balance: 1000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 1000, end_non_cash: 0, end: 1000 }
+        }
       ]
     )
   end
@@ -62,9 +74,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
     # First valuation sets balance to 18000, then transaction increases balance to 19000
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 3.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ],
-        [ 2.days.ago.to_date, { balance: 19000, cash_balance: 19000 } ]
+      expected_data: [
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 18000, cash_balance: 18000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 18000, end_non_cash: 0, end: 18000 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 19000, cash_balance: 19000 },
+          balances: { start: 18000, start_cash: 18000, start_non_cash: 0, end_cash: 19000, end_non_cash: 0, end: 19000 }
+        }
       ]
     )
   end
@@ -83,9 +103,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
       assert_calculated_ledger_balances(
         calculated_data: calculated,
-        expected_balances: [
-          [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-          [ 2.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ]
+        expected_data: [
+          {
+            date: 3.days.ago.to_date,
+            legacy_balances: { balance: 17000, cash_balance: 17000 },
+            balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+          },
+          {
+            date: 2.days.ago.to_date,
+            legacy_balances: { balance: 18000, cash_balance: 18000 },
+            balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 18000, end_non_cash: 0, end: 18000 }
+          }
         ]
       )
     end
@@ -105,9 +133,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
       assert_calculated_ledger_balances(
         calculated_data: calculated,
-        expected_balances: [
-          [ 3.days.ago.to_date, { balance: 17000, cash_balance: 0.0 } ],
-          [ 2.days.ago.to_date, { balance: 18000, cash_balance: 0.0 } ]
+        expected_data: [
+          {
+            date: 3.days.ago.to_date,
+            legacy_balances: { balance: 17000, cash_balance: 0.0 },
+            balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 0, end_non_cash: 17000, end: 17000 }
+          },
+          {
+            date: 2.days.ago.to_date,
+            legacy_balances: { balance: 18000, cash_balance: 0.0 },
+            balances: { start: 17000, start_cash: 0, start_non_cash: 17000, end_cash: 0, end_non_cash: 18000, end: 18000 }
+          }
         ]
       )
     end
@@ -127,9 +163,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-        [ 2.days.ago.to_date, { balance: 18000, cash_balance: 18000 } ]
+      expected_data: [
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 17000, cash_balance: 17000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 18000, cash_balance: 18000 },
+          balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 18000, end_non_cash: 0, end: 18000 }
+        }
       ]
     )
   end
@@ -152,11 +196,27 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 5.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
-        [ 4.days.ago.to_date, { balance: 20500, cash_balance: 20500 } ],
-        [ 3.days.ago.to_date, { balance: 20500, cash_balance: 20500 } ],
-        [ 2.days.ago.to_date, { balance: 20400, cash_balance: 20400 } ]
+      expected_data: [
+        {
+          date: 5.days.ago.to_date,
+          legacy_balances: { balance: 20000, cash_balance: 20000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 }
+        },
+        {
+          date: 4.days.ago.to_date,
+          legacy_balances: { balance: 20500, cash_balance: 20500 },
+          balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 20500, end_non_cash: 0, end: 20500 }
+        },
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 20500, cash_balance: 20500 },
+          balances: { start: 20500, start_cash: 20500, start_non_cash: 0, end_cash: 20500, end_non_cash: 0, end: 20500 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 20400, cash_balance: 20400 },
+          balances: { start: 20500, start_cash: 20500, start_non_cash: 0, end_cash: 20400, end_non_cash: 0, end: 20400 }
+        }
       ]
     )
   end
@@ -176,11 +236,27 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 5.days.ago.to_date, { balance: 1000, cash_balance: 1000 } ],
-        [ 4.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
-        [ 3.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
-        [ 2.days.ago.to_date, { balance: 600, cash_balance: 600 } ]
+      expected_data: [
+        {
+          date: 5.days.ago.to_date,
+          legacy_balances: { balance: 1000, cash_balance: 1000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 1000, end_non_cash: 0, end: 1000 }
+        },
+        {
+          date: 4.days.ago.to_date,
+          legacy_balances: { balance: 500, cash_balance: 500 },
+          balances: { start: 1000, start_cash: 1000, start_non_cash: 0, end_cash: 500, end_non_cash: 0, end: 500 }
+        },
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 500, cash_balance: 500 },
+          balances: { start: 500, start_cash: 500, start_non_cash: 0, end_cash: 500, end_non_cash: 0, end: 500 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 600, cash_balance: 600 },
+          balances: { start: 500, start_cash: 500, start_non_cash: 0, end_cash: 600, end_non_cash: 0, end: 600 }
+        }
       ]
     )
   end
@@ -203,17 +279,57 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 10.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
-        [ 9.days.ago.to_date, { balance: 20000, cash_balance: 20000 } ],
-        [ 8.days.ago.to_date, { balance: 25000, cash_balance: 25000 } ],
-        [ 7.days.ago.to_date, { balance: 25000, cash_balance: 25000 } ],
-        [ 6.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-        [ 5.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-        [ 4.days.ago.to_date, { balance: 17500, cash_balance: 17500 } ],
-        [ 3.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-        [ 2.days.ago.to_date, { balance: 17000, cash_balance: 17000 } ],
-        [ 1.day.ago.to_date, { balance: 16900, cash_balance: 16900 } ]
+      expected_data: [
+        {
+          date: 10.days.ago.to_date,
+          legacy_balances: { balance: 20000, cash_balance: 20000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 }
+        },
+        {
+          date: 9.days.ago.to_date,
+          legacy_balances: { balance: 20000, cash_balance: 20000 },
+          balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 }
+        },
+        {
+          date: 8.days.ago.to_date,
+          legacy_balances: { balance: 25000, cash_balance: 25000 },
+          balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 25000, end_non_cash: 0, end: 25000 }
+        },
+        {
+          date: 7.days.ago.to_date,
+          legacy_balances: { balance: 25000, cash_balance: 25000 },
+          balances: { start: 25000, start_cash: 25000, start_non_cash: 0, end_cash: 25000, end_non_cash: 0, end: 25000 }
+        },
+        {
+          date: 6.days.ago.to_date,
+          legacy_balances: { balance: 17000, cash_balance: 17000 },
+          balances: { start: 25000, start_cash: 25000, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+        },
+        {
+          date: 5.days.ago.to_date,
+          legacy_balances: { balance: 17000, cash_balance: 17000 },
+          balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+        },
+        {
+          date: 4.days.ago.to_date,
+          legacy_balances: { balance: 17500, cash_balance: 17500 },
+          balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 17500, end_non_cash: 0, end: 17500 }
+        },
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 17000, cash_balance: 17000 },
+          balances: { start: 17500, start_cash: 17500, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 17000, cash_balance: 17000 },
+          balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 17000, end_non_cash: 0, end: 17000 }
+        },
+        {
+          date: 1.day.ago.to_date,
+          legacy_balances: { balance: 16900, cash_balance: 16900 },
+          balances: { start: 17000, start_cash: 17000, start_non_cash: 0, end_cash: 16900, end_non_cash: 0, end: 16900 }
+        }
       ]
     )
   end
@@ -237,11 +353,27 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 4.days.ago.to_date, { balance: 100, cash_balance: 100 } ],
-        [ 3.days.ago.to_date, { balance: 200, cash_balance: 200 } ],
-        [ 2.days.ago.to_date, { balance: 500, cash_balance: 500 } ],
-        [ 1.day.ago.to_date, { balance: 1100, cash_balance: 1100 } ]
+      expected_data: [
+        {
+          date: 4.days.ago.to_date,
+          legacy_balances: { balance: 100, cash_balance: 100 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 100, end_non_cash: 0, end: 100 }
+        },
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 200, cash_balance: 200 },
+          balances: { start: 100, start_cash: 100, start_non_cash: 0, end_cash: 200, end_non_cash: 0, end: 200 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 500, cash_balance: 500 },
+          balances: { start: 200, start_cash: 200, start_non_cash: 0, end_cash: 500, end_non_cash: 0, end: 500 }
+        },
+        {
+          date: 1.day.ago.to_date,
+          legacy_balances: { balance: 1100, cash_balance: 1100 },
+          balances: { start: 500, start_cash: 500, start_non_cash: 0, end_cash: 1100, end_non_cash: 0, end: 1100 }
+        }
       ]
     )
   end
@@ -263,9 +395,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 2.days.ago.to_date, { balance: 20000, cash_balance: 0 } ],
-        [ 1.day.ago.to_date, { balance: 18000, cash_balance: 0 } ]
+      expected_data: [
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 20000, cash_balance: 0 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 0, end_non_cash: 20000, end: 20000 }
+        },
+        {
+          date: 1.day.ago.to_date,
+          legacy_balances: { balance: 18000, cash_balance: 0 },
+          balances: { start: 20000, start_cash: 0, start_non_cash: 20000, end_cash: 0, end_non_cash: 18000, end: 18000 }
+        }
       ]
     )
   end
@@ -286,9 +426,17 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
       assert_calculated_ledger_balances(
         calculated_data: calculated,
-        expected_balances: [
-          [ 3.days.ago.to_date, { balance: 500000, cash_balance: 0 } ],
-          [ 2.days.ago.to_date, { balance: 500000, cash_balance: 0 } ]
+        expected_data: [
+          {
+            date: 3.days.ago.to_date,
+            legacy_balances: { balance: 500000, cash_balance: 0 },
+            balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 0, end_non_cash: 500000, end: 500000 }
+          },
+          {
+            date: 2.days.ago.to_date,
+            legacy_balances: { balance: 500000, cash_balance: 0 },
+            balances: { start: 500000, start_cash: 0, start_non_cash: 500000, end_cash: 0, end_non_cash: 500000, end: 500000 }
+          }
         ]
       )
     end
@@ -324,11 +472,27 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
 
     assert_calculated_ledger_balances(
       calculated_data: calculated,
-      expected_balances: [
-        [ 3.days.ago.to_date, { balance: 5000, cash_balance: 5000 } ],
-        [ 2.days.ago.to_date, { balance: 5000, cash_balance: 5000 } ],
-        [ 1.day.ago.to_date, { balance: 5000, cash_balance: 4000 } ],
-        [ Date.current, { balance: 5000, cash_balance: 4000 } ]
+      expected_data: [
+        {
+          date: 3.days.ago.to_date,
+          legacy_balances: { balance: 5000, cash_balance: 5000 },
+          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 5000, end_non_cash: 0, end: 5000 }
+        },
+        {
+          date: 2.days.ago.to_date,
+          legacy_balances: { balance: 5000, cash_balance: 5000 },
+          balances: { start: 5000, start_cash: 5000, start_non_cash: 0, end_cash: 5000, end_non_cash: 0, end: 5000 }
+        },
+        {
+          date: 1.day.ago.to_date,
+          legacy_balances: { balance: 5000, cash_balance: 4000 },
+          balances: { start: 5000, start_cash: 5000, start_non_cash: 0, end_cash: 4000, end_non_cash: 1000, end: 5000 }
+        },
+        {
+          date: Date.current,
+          legacy_balances: { balance: 5000, cash_balance: 4000 },
+          balances: { start: 5000, start_cash: 4000, start_non_cash: 1000, end_cash: 4000, end_non_cash: 1000, end: 5000 }
+        }
       ]
     )
   end
