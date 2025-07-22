@@ -1,0 +1,27 @@
+---
+tr:
+  onboardings:
+    header:
+      sign_out: Çıkış yap
+    preferences:
+      currency: Para birimi
+      date_format: Tarih formatı
+      example: Örnek hesap
+      locale: Dil
+      preview: Tercihlere göre verilerin nasıl görüneceğini önizleyin.
+      submit: Tamamla
+      subtitle: Tercihlerinizi yapılandıralım.
+      title: Tercihlerinizi yapılandırın
+    profile:
+      country: Ülke
+      first_name: Ad
+      household_name: Hane Adı
+      last_name: Soyad
+      profile_image: Profil Resmi
+      submit: Devam et
+      subtitle: Profilinizi tamamlayalım.
+      title: Temel bilgileri ayarlayalım
+    show:
+      message: Burada olduğunuz için çok heyecanlıyız. Sonraki adımda profilinizi tamamlamak için size birkaç soru soracağız ve ardından her şeyi ayarlayacağız.
+      setup: Hesabı ayarla
+      title: Maybe ile Tanışın 

@@ -1,0 +1,13 @@
+---
+tr:
+  activemodel:
+    errors:
+      models:
+        trend:
+          attributes:
+            current:
+              must_be_of_the_same_type_as_previous: Öncekiyle aynı türde olmalı
+              must_be_of_type_money_numeric_or_nil: Money, Sayısal veya boş (nil) olmalı
+            previous:
+              must_be_of_the_same_type_as_current: Şimdikiyle aynı türde olmalı
+              must_be_of_type_money_numeric_or_nil: Money, Sayısal veya boş (nil) olmalı

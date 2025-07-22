@@ -1,0 +1,21 @@
+---
+tr:
+  activerecord:
+    attributes:
+      account:
+        balance: Bakiye
+        currency: Para Birimi
+        family: Aile
+        family_id: Aile
+        name: Ad
+        subtype: Alt Tür
+    models:
+      account: Hesap
+      account/credit: Kredi Kartı
+      account/depository: Banka Hesabı
+      account/investment: Yatırım
+      account/loan: Kredi
+      account/other_asset: Diğer Varlık
+      account/other_liability: Diğer Yükümlülük
+      account/property: Gayrimenkul
+      account/vehicle: Araç

@@ -1,0 +1,15 @@
+---
+tr:
+  impersonation_sessions:
+    approve:
+      success: İstek onaylandı
+    complete:
+      success: Oturum tamamlandı
+    create:
+      success: İstek kullanıcıya gönderildi. Onay bekleniyor.
+    join:
+      success: Oturuma katıldınız
+    leave:
+      success: Oturumdan ayrıldınız
+    reject:
+      success: İstek reddedildi 

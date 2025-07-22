@@ -1,0 +1,32 @@
+---
+tr:
+  properties:
+    edit:
+      edit: "%{account} düzenle"
+    form:
+      address_line1: Sokak adresi
+      address_line1_placeholder: 123 Ana Cadde
+      area: Yaşam alanı
+      area_placeholder: '2000'
+      area_unit: Ölçü birimi
+      country: Ülke
+      country_placeholder: US
+      locality: Şehir
+      locality_placeholder: San Francisco
+      none: Yok
+      postal_code: Posta kodu
+      postal_code_placeholder: '94105'
+      region: Eyalet/İl
+      region_placeholder: CA
+      subtype_prompt: Mülk türü seçin
+      year_built: İnşa yılı
+      year_built_placeholder: '2000'
+    new:
+      title: Mülk bilgilerini girin
+    overview:
+      living_area: Yaşam Alanı
+      market_value: Piyasa Değeri
+      purchase_price: Satın Alma Fiyatı
+      trend: Eğilim
+      unknown: Bilinmiyor
+      year_built: İnşa Yılı 

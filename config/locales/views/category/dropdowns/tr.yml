@@ -1,0 +1,11 @@
+---
+tr:
+  category:
+    dropdowns:
+      row:
+        delete: Kategoriyi sil
+        edit: Kategoriyi düzenle
+      show:
+        clear: Kategoriyi temizle
+        no_categories: Hiç kategori bulunamadı
+        search_placeholder: Ara

@@ -1,0 +1,17 @@
+---
+tr:
+  investments:
+    edit:
+      edit: "%{account} hesabını düzenle"
+    form:
+      none: Yok
+      subtype_prompt: Yatırım türünü seçin
+    new:
+      title: Hesap bakiyesini girin
+    show:
+      chart_title: Toplam değer
+    value_tooltip:
+      cash: Nakit
+      holdings: Varlıklar
+      total: Portföy bakiyesi
+      total_value_tooltip: Toplam portföy bakiyesi, aracı kurum nakiti (işlem için kullanılabilir) ve varlıklarınızın güncel piyasa değerinin toplamıdır.

@@ -1,0 +1,14 @@
+---
+tr:
+  shared:
+    confirm_modal:
+      accept: Onayla
+      body_html: "<p>Bu kararı geri alamayacaksınız</p>"
+      cancel: İptal
+      title: Emin misiniz?
+    money_field:
+      label: Tutar
+    syncing_notice:
+      syncing: Hesap verileri senkronize ediliyor...
+    trend_change:
+      no_change: "değişiklik yok" 

@@ -1,0 +1,9 @@
+---
+tr:
+  activerecord:
+    errors:
+      models:
+        entry:
+          attributes:
+            base:
+              invalid_sell_quantity: "%{ticker} için %{sell_qty} adet hisse satılamaz çünkü elinizde sadece %{current_qty} adet hisse var"

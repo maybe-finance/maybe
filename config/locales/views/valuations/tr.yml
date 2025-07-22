@@ -1,0 +1,30 @@
+---
+tr:
+  valuations:
+    form:
+      amount: Tutar
+      submit: Bakiye güncellemesi ekle
+    header:
+      balance: Bakiye
+    index:
+      change: Değişim
+      date: Tarih
+      new_entry: Yeni giriş
+      no_valuations: Bu hesap için henüz değerleme yok
+      valuations: Değer
+      value: Değer
+    new:
+      title: Yeni bakiye
+    show:
+      amount: Tutar
+      date_label: Tarih
+      delete: Sil
+      delete_subtitle: Bu işlem geri alınamaz
+      delete_title: Girişi Sil
+      details: Detaylar
+      name_label: İsim
+      name_placeholder: Bu giriş için bir isim girin
+      note_label: Notlar
+      note_placeholder: Bu girişle ilgili ek detaylar ekleyin
+      overview: Genel Bakış
+      settings: Ayarlar 

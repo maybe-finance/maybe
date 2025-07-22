@@ -1,0 +1,19 @@
+---
+tr:
+  invitations:
+    create:
+      failure: Davetiye gönderilemedi
+      success: Davetiye başarıyla gönderildi
+    destroy:
+      failure: Davetiye kaldırılırken bir sorun oluştu.
+      not_authorized: Davetiyeleri yönetme yetkiniz yok.
+      success: Davetiye başarıyla kaldırıldı.
+    new:
+      email_label: E-posta Adresi
+      email_placeholder: E-posta adresi girin
+      role_admin: Yönetici
+      role_label: Rol
+      role_member: Üye
+      submit: Davet Gönder
+      subtitle: Maybe'de aile hesabınıza katılmaları için bir davetiye gönderin
+      title: Birini Davet Et

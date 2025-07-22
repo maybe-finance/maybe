@@ -1,0 +1,23 @@
+---
+tr:
+  tags:
+    create:
+      created: Etiket oluşturuldu
+      error: 'Etiket oluşturulurken hata: %{error}'
+    destroy:
+      deleted: Etiket silindi
+    edit:
+      edit: Etiketi düzenle
+    form:
+      placeholder: Etiket adı
+    index:
+      empty: Henüz hiç etiket yok
+      new: Yeni etiket
+      tags: Etiketler
+    new:
+      new: Yeni etiket
+    tag:
+      delete: Sil
+      edit: Düzenle
+    update:
+      updated: Etiket güncellendi 

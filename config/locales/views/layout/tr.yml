@@ -1,0 +1,13 @@
+---
+tr:
+  layouts:
+    auth:
+      existing_account: Zaten bir hesabınız var mı?
+      no_account: Maybe'ye yeni misiniz?
+      sign_in: Giriş yap
+      sign_up: Hesap oluştur
+      your_account: Hesabınız
+    shared:
+      footer:
+        privacy_policy: Gizlilik Politikası
+        terms_of_service: Hizmet Şartları 

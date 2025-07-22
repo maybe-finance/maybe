@@ -1,0 +1,9 @@
+---
+tr:
+  email_confirmation_mailer:
+    confirmation_email:
+      body: Yakın zamanda e-posta adresinizi değiştirmek için bir talepte bulundunuz. Bu değişikliği onaylamak için aşağıdaki butona tıklayın.
+      cta: E-posta değişikliğini onayla
+      expiry_notice: Bu bağlantı %{hours} saat içinde geçerliliğini yitirecek.
+      greeting: Merhaba!
+      subject: 'Maybe: E-posta değişikliğinizi onaylayın' 

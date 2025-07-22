@@ -1,0 +1,25 @@
+---
+tr:
+  credit_cards:
+    edit:
+      edit: "%{account} kartını düzenle"
+    form:
+      annual_fee: Yıllık ücret
+      annual_fee_placeholder: '99'
+      apr: Yıllık faiz oranı (APR)
+      apr_placeholder: '15.99'
+      available_credit: Kullanılabilir kredi
+      available_credit_placeholder: '10000'
+      expiration_date: Son kullanma tarihi
+      minimum_payment: Asgari ödeme
+      minimum_payment_placeholder: '100'
+    new:
+      title: Kredi kartı bilgilerini girin
+    overview:
+      amount_owed: Borç Tutarı
+      annual_fee: Yıllık Ücret
+      apr: Yıllık Faiz Oranı (APR)
+      available_credit: Kullanılabilir Kredi
+      expiration_date: Son Kullanma Tarihi
+      minimum_payment: Asgari Ödeme
+      unknown: Bilinmiyor 

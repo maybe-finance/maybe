@@ -1,0 +1,8 @@
+---
+tr:
+  invitation_mailer:
+    invite_email:
+      accept_button: Daveti Kabul Et
+      body: "%{inviter}, sizi %{family} ailesine Maybe üzerinden katılmaya davet etti!"
+      expiry_notice: Bu davet %{days} gün içinde geçerliliğini yitirecek
+      greeting: Maybe'ye Hoş Geldiniz!
