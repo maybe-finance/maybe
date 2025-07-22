@@ -142,51 +142,85 @@ module LedgerTestingHelper
 
         # Legacy balance assertions
         if legacy_balances.any?
-          assert_equal legacy_balances[:balance], calculated_balance.balance.to_d,
+          assert_equal legacy_balances[:balance], calculated_balance.balance,
             "Balance mismatch for #{date}"
 
-          assert_equal legacy_balances[:cash_balance], calculated_balance.cash_balance.to_d,
+          assert_equal legacy_balances[:cash_balance], calculated_balance.cash_balance,
             "Cash balance mismatch for #{date}"
         end
 
         # Balance assertions
         if balances.any?
-          assert_equal balances[:start_cash], calculated_balance.start_cash_balance.to_d,
+          assert_equal balances[:start_cash], calculated_balance.start_cash_balance,
             "Start cash balance mismatch for #{date}" if balances.key?(:start_cash)
 
-          assert_equal balances[:start_non_cash], calculated_balance.start_non_cash_balance.to_d,
+          assert_equal balances[:start_non_cash], calculated_balance.start_non_cash_balance,
             "Start non-cash balance mismatch for #{date}" if balances.key?(:start_non_cash)
 
-          assert_equal balances[:end_cash], calculated_balance.end_cash_balance.to_d,
-            "End cash balance mismatch for #{date}" if balances.key?(:end_cash)
+          # Calculate end_cash_balance using the formula from the migration
+          if balances.key?(:end_cash)
+            # Determine flows_factor based on account classification
+            flows_factor = calculated_balance.account.classification == "asset" ? 1 : -1
+            expected_end_cash = calculated_balance.start_cash_balance +
+                               ((calculated_balance.cash_inflows - calculated_balance.cash_outflows) * flows_factor) +
+                               calculated_balance.cash_adjustments
+            assert_equal balances[:end_cash], expected_end_cash,
+              "End cash balance mismatch for #{date}"
+          end
 
-          assert_equal balances[:end_non_cash], calculated_balance.end_non_cash_balance.to_d,
-            "End non-cash balance mismatch for #{date}" if balances.key?(:end_non_cash)
+          # Calculate end_non_cash_balance using the formula from the migration
+          if balances.key?(:end_non_cash)
+            # Determine flows_factor based on account classification
+            flows_factor = calculated_balance.account.classification == "asset" ? 1 : -1
+            expected_end_non_cash = calculated_balance.start_non_cash_balance +
+                                   ((calculated_balance.non_cash_inflows - calculated_balance.non_cash_outflows) * flows_factor) +
+                                   calculated_balance.net_market_flows +
+                                   calculated_balance.non_cash_adjustments
+            assert_equal balances[:end_non_cash], expected_end_non_cash,
+              "End non-cash balance mismatch for #{date}"
+          end
 
-          # Generated column assertions
-          assert_equal balances[:start], calculated_balance.start_balance.to_d,
-            "Start balance mismatch for #{date}" if balances.key?(:start)
+          # Calculate start_balance using the formula from the migration
+          if balances.key?(:start)
+            expected_start = calculated_balance.start_cash_balance + calculated_balance.start_non_cash_balance
+            assert_equal balances[:start], expected_start,
+              "Start balance mismatch for #{date}"
+          end
 
-          assert_equal balances[:end], calculated_balance.end_balance.to_d,
-            "End balance mismatch for #{date}" if balances.key?(:end)
+          # Calculate end_balance using the formula from the migration since we're not persisting balances,
+          # and generated columns are not available until the record is persisted
+          if balances.key?(:end)
+            # Determine flows_factor based on account classification
+            flows_factor = calculated_balance.account.classification == "asset" ? 1 : -1
+            expected_end_cash_component = calculated_balance.start_cash_balance +
+                                         ((calculated_balance.cash_inflows - calculated_balance.cash_outflows) * flows_factor) +
+                                         calculated_balance.cash_adjustments
+            expected_end_non_cash_component = calculated_balance.start_non_cash_balance +
+                                             ((calculated_balance.non_cash_inflows - calculated_balance.non_cash_outflows) * flows_factor) +
+                                             calculated_balance.net_market_flows +
+                                             calculated_balance.non_cash_adjustments
+            expected_end = expected_end_cash_component + expected_end_non_cash_component
+            assert_equal balances[:end], expected_end,
+              "End balance mismatch for #{date}"
+          end
         end
 
         # Flow assertions
         # If flows passed is 0, we assert all columns are 0
         if flows.is_a?(Integer) && flows == 0
-          assert_equal 0, calculated_balance.cash_inflows.to_d,
+          assert_equal 0, calculated_balance.cash_inflows,
             "Cash inflows mismatch for #{date}"
 
-          assert_equal 0, calculated_balance.cash_outflows.to_d,
+          assert_equal 0, calculated_balance.cash_outflows,
             "Cash outflows mismatch for #{date}"
 
-          assert_equal 0, calculated_balance.non_cash_inflows.to_d,
+          assert_equal 0, calculated_balance.non_cash_inflows,
             "Non-cash inflows mismatch for #{date}"
 
-          assert_equal 0, calculated_balance.non_cash_outflows.to_d,
+          assert_equal 0, calculated_balance.non_cash_outflows,
             "Non-cash outflows mismatch for #{date}"
 
-          assert_equal 0, calculated_balance.net_market_flows.to_d,
+          assert_equal 0, calculated_balance.net_market_flows,
             "Net market flows mismatch for #{date}"
         elsif flows.is_a?(Hash) && flows.any?
           # Cash flows - must be asserted together
@@ -194,10 +228,10 @@ module LedgerTestingHelper
             assert flows.key?(:cash_inflows) && flows.key?(:cash_outflows),
               "Cash inflows and outflows must be asserted together for #{date}"
 
-            assert_equal flows[:cash_inflows], calculated_balance.cash_inflows.to_d,
+            assert_equal flows[:cash_inflows], calculated_balance.cash_inflows,
               "Cash inflows mismatch for #{date}"
 
-            assert_equal flows[:cash_outflows], calculated_balance.cash_outflows.to_d,
+            assert_equal flows[:cash_outflows], calculated_balance.cash_outflows,
               "Cash outflows mismatch for #{date}"
           end
 
@@ -206,41 +240,52 @@ module LedgerTestingHelper
             assert flows.key?(:non_cash_inflows) && flows.key?(:non_cash_outflows),
               "Non-cash inflows and outflows must be asserted together for #{date}"
 
-            assert_equal flows[:non_cash_inflows], calculated_balance.non_cash_inflows.to_d,
+            assert_equal flows[:non_cash_inflows], calculated_balance.non_cash_inflows,
               "Non-cash inflows mismatch for #{date}"
 
-            assert_equal flows[:non_cash_outflows], calculated_balance.non_cash_outflows.to_d,
+            assert_equal flows[:non_cash_outflows], calculated_balance.non_cash_outflows,
               "Non-cash outflows mismatch for #{date}"
           end
 
           # Market flows - can be asserted independently
           if flows.key?(:net_market_flows)
-            assert_equal flows[:net_market_flows], calculated_balance.net_market_flows.to_d,
+            assert_equal flows[:net_market_flows], calculated_balance.net_market_flows,
               "Net market flows mismatch for #{date}"
           end
         end
 
         # Adjustment assertions
         if adjustments.is_a?(Integer) && adjustments == 0
-          assert_equal 0, calculated_balance.cash_adjustments.to_d,
+          assert_equal 0, calculated_balance.cash_adjustments,
             "Cash adjustments mismatch for #{date}"
 
-          assert_equal 0, calculated_balance.non_cash_adjustments.to_d,
+          assert_equal 0, calculated_balance.non_cash_adjustments,
             "Non-cash adjustments mismatch for #{date}"
         elsif adjustments.is_a?(Hash) && adjustments.any?
-          assert_equal adjustments[:cash_adjustments], calculated_balance.cash_adjustments.to_d,
+          assert_equal adjustments[:cash_adjustments], calculated_balance.cash_adjustments,
             "Cash adjustments mismatch for #{date}" if adjustments.key?(:cash_adjustments)
 
-          assert_equal adjustments[:non_cash_adjustments], calculated_balance.non_cash_adjustments.to_d,
+          assert_equal adjustments[:non_cash_adjustments], calculated_balance.non_cash_adjustments,
             "Non-cash adjustments mismatch for #{date}" if adjustments.key?(:non_cash_adjustments)
         end
 
         # Temporary assertions during migration (remove after migration complete)
         # TODO: Remove these assertions after migration is complete
-        assert_equal calculated_balance.cash_balance.to_d, calculated_balance.end_cash_balance.to_d,
+        # Since we're not persisting balances, we calculate the end values
+        flows_factor = calculated_balance.account.classification == "asset" ? 1 : -1
+        expected_end_cash = calculated_balance.start_cash_balance +
+                           ((calculated_balance.cash_inflows - calculated_balance.cash_outflows) * flows_factor) +
+                           calculated_balance.cash_adjustments
+        expected_end_balance = expected_end_cash +
+                              calculated_balance.start_non_cash_balance +
+                              ((calculated_balance.non_cash_inflows - calculated_balance.non_cash_outflows) * flows_factor) +
+                              calculated_balance.net_market_flows +
+                              calculated_balance.non_cash_adjustments
+
+        assert_equal calculated_balance.cash_balance, expected_end_cash,
           "Temporary assertion failed: end_cash_balance should equal cash_balance for #{date}"
 
-        assert_equal calculated_balance.balance.to_d, calculated_balance.end_balance.to_d,
+        assert_equal calculated_balance.balance, expected_end_balance,
           "Temporary assertion failed: end_balance should equal balance for #{date}"
       else
         assert_nil calculated_balance, "Unexpected balance calculated for #{date}"

@@ -278,7 +278,7 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
           date: 4.days.ago.to_date,
           legacy_balances: { balance: 500, cash_balance: 500 },
           balances: { start: 1000, start_cash: 1000, start_non_cash: 0, end_cash: 500, end_non_cash: 0, end: 500 },
-          flows: { cash_inflows: 0, cash_outflows: 500 },
+          flows: { cash_inflows: 500, cash_outflows: 0 },
           adjustments: 0
         },
         {
@@ -525,8 +525,8 @@ class Balance::ForwardCalculatorTest < ActiveSupport::TestCase
         },
         {
           date: Date.current,
-          legacy_balances: { balance: 5000, cash_balance: 4000 },
-          balances: { start: 5000, start_cash: 4000, start_non_cash: 1000, end_cash: 4000, end_non_cash: 1000, end: 5000 },
+          legacy_balances: { balance: 5100, cash_balance: 4000 },
+          balances: { start: 5000, start_cash: 4000, start_non_cash: 1000, end_cash: 4000, end_non_cash: 1100, end: 5100 },
           flows: { net_market_flows: 100 }, # Holdings value increased by 100, despite no change in portfolio quantities
           adjustments: 0
         }
