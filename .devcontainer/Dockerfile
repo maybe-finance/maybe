@@ -14,6 +14,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   libyaml-0-2 \
   openssh-client \
   postgresql-client \
+  libvips-dev \
   vim
 
 RUN gem install bundler
