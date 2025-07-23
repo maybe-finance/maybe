@@ -133,8 +133,13 @@ class Budget < ApplicationRecord
     # Continuous gray segment for empty budgets
     return [ { color: "var(--budget-unallocated-fill)", amount: 1, id: unused_segment_id } ] unless allocations_valid?
 
-    segments = budget_categories.map do |bc|
-      { color: bc.category.color, amount: budget_category_actual_spending(bc), id: bc.id }
+    # Pre-compute category totals to avoid repeated lookups in the loop
+    category_totals_by_id = expense_totals.category_totals.index_by { |ct| ct.category.id }
+
+    # Use includes to prevent N+1 queries on category association
+    segments = budget_categories.includes(:category).map do |bc|
+      actual_spending = category_totals_by_id[bc.category.id]&.total || 0
+      { color: bc.category.color, amount: actual_spending, id: bc.id }
     end
 
     if available_to_spend.positive?
@@ -187,7 +192,8 @@ class Budget < ApplicationRecord
   # Budget allocations: How much user has budgeted for all parent categories combined
   # =============================================================================
   def allocated_spending
-    budget_categories.reject { |bc| bc.subcategory? }.sum(&:budgeted_spending)
+    # Use includes to prevent N+1 queries when checking subcategory?
+    budget_categories.includes(:category).reject { |bc| bc.subcategory? }.sum(&:budgeted_spending)
   end
 
   def allocated_percent
