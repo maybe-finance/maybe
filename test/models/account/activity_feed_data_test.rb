@@ -14,7 +14,7 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     setup_test_data
   end
 
-  test "calculates balance trend with complete balance history" do
+  test "returns balance for date with complete balance history" do
     entries = @checking.entries.includes(:entryable).to_a
     feed_data = Account::ActivityFeedData.new(@checking, entries)
 
@@ -22,14 +22,11 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     day2_activity = find_activity_for_date(activities, @test_period_start + 1.day)
 
     assert_not_nil day2_activity
-    trend = day2_activity.balance_trend
-    assert_equal 1100, trend.current.amount.to_i  # End of day 2
-    assert_equal 1000, trend.previous.amount.to_i  # End of day 1
-    assert_equal 100, trend.value.amount.to_i
-    assert_equal "up", trend.direction.to_s
+    assert_not_nil day2_activity.balance
+    assert_equal 1100, day2_activity.balance.end_balance  # End of day 2
   end
 
-  test "calculates balance trend for first day with zero starting balance" do
+  test "returns balance for first day" do
     entries = @checking.entries.includes(:entryable).to_a
     feed_data = Account::ActivityFeedData.new(@checking, entries)
 
@@ -37,49 +34,24 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     day1_activity = find_activity_for_date(activities, @test_period_start)
 
     assert_not_nil day1_activity
-    trend = day1_activity.balance_trend
-    assert_equal 1000, trend.current.amount.to_i  # End of first day
-    assert_equal 0, trend.previous.amount.to_i  # Fallback to 0
-    assert_equal 1000, trend.value.amount.to_i
+    assert_not_nil day1_activity.balance
+    assert_equal 1000, day1_activity.balance.end_balance  # End of first day
   end
 
-  test "uses last observed balance when intermediate balances are missing" do
-    @checking.balances.where(date: [ @test_period_start + 1.day, @test_period_start + 3.days ]).destroy_all
-
-    entries = @checking.entries.includes(:entryable).to_a
-    feed_data = Account::ActivityFeedData.new(@checking, entries)
-
-    activities = feed_data.entries_by_date
-
-    # When day 2 balance is missing, both start and end use day 1 balance
-    day2_activity = find_activity_for_date(activities, @test_period_start + 1.day)
-    assert_not_nil day2_activity
-    trend = day2_activity.balance_trend
-    assert_equal 1000, trend.current.amount.to_i  # LOCF from day 1
-    assert_equal 1000, trend.previous.amount.to_i  # LOCF from day 1
-    assert_equal 0, trend.value.amount.to_i
-    assert_equal "flat", trend.direction.to_s
-  end
-
-  test "returns zero balance when no balance history exists" do
+  test "returns nil balance when no balance exists for date" do
     @checking.balances.destroy_all
 
     entries = @checking.entries.includes(:entryable).to_a
     feed_data = Account::ActivityFeedData.new(@checking, entries)
 
     activities = feed_data.entries_by_date
-    # Use first day which has a transaction
     day1_activity = find_activity_for_date(activities, @test_period_start)
 
     assert_not_nil day1_activity
-    trend = day1_activity.balance_trend
-    assert_equal 0, trend.current.amount.to_i  # Fallback to 0
-    assert_equal 0, trend.previous.amount.to_i  # Fallback to 0
-    assert_equal 0, trend.value.amount.to_i
-    assert_equal "flat", trend.direction.to_s
+    assert_nil day1_activity.balance
   end
 
-  test "calculates cash and holdings trends for investment accounts" do
+  test "returns cash and holdings data for investment accounts" do
     entries = @investment.entries.includes(:entryable).to_a
     feed_data = Account::ActivityFeedData.new(@investment, entries)
 
@@ -87,20 +59,12 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     day3_activity = find_activity_for_date(activities, @test_period_start + 2.days)
 
     assert_not_nil day3_activity
+    assert_not_nil day3_activity.balance
 
-    # Cash trend for day 3 (after foreign currency transaction)
-    cash_trend = day3_activity.cash_balance_trend
-    assert_equal 400, cash_trend.current.amount.to_i  # End of day 3 cash balance
-    assert_equal 500, cash_trend.previous.amount.to_i  # End of day 2 cash balance
-    assert_equal(-100, cash_trend.value.amount.to_i)
-    assert_equal "down", cash_trend.direction.to_s
-
-    # Holdings trend for day 3 (after trade)
-    holdings_trend = day3_activity.holdings_value_trend
-    assert_equal 1500, holdings_trend.current.amount.to_i  # Total balance - cash balance
-    assert_equal 0, holdings_trend.previous.amount.to_i  # No holdings before trade
-    assert_equal 1500, holdings_trend.value.amount.to_i
-    assert_equal "up", holdings_trend.direction.to_s
+    # Balance should have the new schema fields
+    assert_equal 400, day3_activity.balance.end_cash_balance  # End of day 3 cash balance
+    assert_equal 1500, day3_activity.balance.end_non_cash_balance  # Holdings value
+    assert_equal 1900, day3_activity.balance.end_balance  # Total balance
   end
 
   test "identifies transfers for a specific date" do
@@ -134,30 +98,46 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     activities.each do |activity|
       assert_respond_to activity, :date
       assert_respond_to activity, :entries
-      assert_respond_to activity, :balance_trend
-      assert_respond_to activity, :cash_balance_trend
-      assert_respond_to activity, :holdings_value_trend
+      assert_respond_to activity, :balance
       assert_respond_to activity, :transfers
     end
   end
 
-  test "handles valuations correctly by summing entry changes" do
+  test "handles valuations correctly with new balance schema" do
     # Create account with known balances
     account = @family.accounts.create!(name: "Test Investment", accountable: Investment.new, currency: "USD", balance: 0)
 
     # Day 1: Starting balance
     account.balances.create!(
       date: @test_period_start,
-      balance: 7321.56,
-      cash_balance: 1000,
+      balance: 7321.56,  # Keep old field for now
+      cash_balance: 1000,  # Keep old field for now
+      start_cash_balance: 0,
+      start_non_cash_balance: 0,
+      cash_inflows: 1000,
+      cash_outflows: 0,
+      non_cash_inflows: 6321.56,
+      non_cash_outflows: 0,
+      net_market_flows: 0,
+      cash_adjustments: 0,
+      non_cash_adjustments: 0,
       currency: "USD"
     )
 
     # Day 2: Add transactions, trades and a valuation
     account.balances.create!(
       date: @test_period_start + 1.day,
-      balance: 8500,  # Valuation sets this
-      cash_balance: 1070,  # Cash increased by transactions
+      balance: 8500,  # Keep old field for now
+      cash_balance: 1070,  # Keep old field for now
+      start_cash_balance: 1000,
+      start_non_cash_balance: 6321.56,
+      cash_inflows: 70,
+      cash_outflows: 0,
+      non_cash_inflows: 750,
+      non_cash_outflows: 0,
+      net_market_flows: 0,
+      cash_adjustments: 0,
+      non_cash_adjustments: 358.44,
       currency: "USD"
     )
 
@@ -198,73 +178,12 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     day2_activity = find_activity_for_date(activities, @test_period_start + 1.day)
 
     assert_not_nil day2_activity
+    assert_not_nil day2_activity.balance
 
-    # Cash change should be $70 (50 + 20 from transactions only, not trades)
-    assert_equal 70, day2_activity.cash_balance_trend.value.amount.to_i
-
-    # Holdings change should be 750 (from the trade)
-    assert_equal 750, day2_activity.holdings_value_trend.value.amount.to_i
-
-    # Total balance change
-    assert_in_delta 1178.44, day2_activity.balance_trend.value.amount.to_f, 0.01
-  end
-
-  test "normalizes multi-currency entries on valuation days" do
-    # Create EUR account
-    eur_account = @family.accounts.create!(name: "EUR Investment", accountable: Investment.new, currency: "EUR", balance: 0)
-
-    # Day 1: Starting balance
-    eur_account.balances.create!(
-      date: @test_period_start,
-      balance: 1000,
-      cash_balance: 500,
-      currency: "EUR"
-    )
-
-    # Day 2: Multi-currency transactions and valuation
-    eur_account.balances.create!(
-      date: @test_period_start + 1.day,
-      balance: 2000,
-      cash_balance: 600,
-      currency: "EUR"
-    )
-
-    # Create USD transaction (should be converted to EUR)
-    create_transaction(
-      account: eur_account,
-      date: @test_period_start + 1.day,
-      amount: -100,
-      currency: "USD",
-      name: "USD Payment"
-    )
-
-    # Create exchange rate: 1 USD = 0.9 EUR
-    ExchangeRate.create!(
-      date: @test_period_start + 1.day,
-      from_currency: "USD",
-      to_currency: "EUR",
-      rate: 0.9
-    )
-
-    # Create valuation
-    create_valuation(
-      account: eur_account,
-      date: @test_period_start + 1.day,
-      amount: 2000
-    )
-
-    entries = eur_account.entries.includes(:entryable).to_a
-    feed_data = Account::ActivityFeedData.new(eur_account, entries)
-
-    activities = feed_data.entries_by_date
-    day2_activity = find_activity_for_date(activities, @test_period_start + 1.day)
-
-    assert_not_nil day2_activity
-
-    # Cash change should be 90 EUR (100 USD * 0.9)
-    # The transaction is -100 USD, which becomes +100 when inverted, then 100 * 0.9 = 90 EUR
-    assert_equal 90, day2_activity.cash_balance_trend.value.amount.to_i
-    assert_equal "EUR", day2_activity.cash_balance_trend.value.currency.iso_code
+    # Check new balance fields
+    assert_equal 1070, day2_activity.balance.end_cash_balance
+    assert_equal 7430, day2_activity.balance.end_non_cash_balance
+    assert_equal 8500, day2_activity.balance.end_balance
   end
 
   private
@@ -273,12 +192,25 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
     end
 
     def setup_test_data
-      # Create daily balances for checking account
+      # Create daily balances for checking account with new schema
       5.times do |i|
         date = @test_period_start + i.days
+        prev_balance = i > 0 ? 1000 + ((i - 1) * 100) : 0
+
         @checking.balances.create!(
           date: date,
-          balance: 1000 + (i * 100),
+          balance: 1000 + (i * 100),  # Keep old field for now
+          cash_balance: 1000 + (i * 100),  # Keep old field for now
+          start_balance: prev_balance,
+          start_cash_balance: prev_balance,
+          start_non_cash_balance: 0,
+          cash_inflows: i == 0 ? 1000 : 100,
+          cash_outflows: 0,
+          non_cash_inflows: 0,
+          non_cash_outflows: 0,
+          net_market_flows: 0,
+          cash_adjustments: 0,
+          non_cash_adjustments: 0,
           currency: "USD"
         )
       end
@@ -286,20 +218,50 @@ class Account::ActivityFeedDataTest < ActiveSupport::TestCase
       # Create daily balances for investment account with cash_balance
       @investment.balances.create!(
         date: @test_period_start,
-        balance: 500,
-        cash_balance: 500,
+        balance: 500,  # Keep old field for now
+        cash_balance: 500,  # Keep old field for now
+        start_balance: 0,
+        start_cash_balance: 0,
+        start_non_cash_balance: 0,
+        cash_inflows: 500,
+        cash_outflows: 0,
+        non_cash_inflows: 0,
+        non_cash_outflows: 0,
+        net_market_flows: 0,
+        cash_adjustments: 0,
+        non_cash_adjustments: 0,
         currency: "USD"
       )
       @investment.balances.create!(
         date: @test_period_start + 1.day,
-        balance: 500,
-        cash_balance: 500,
+        balance: 500,  # Keep old field for now
+        cash_balance: 500,  # Keep old field for now
+        start_balance: 500,
+        start_cash_balance: 500,
+        start_non_cash_balance: 0,
+        cash_inflows: 0,
+        cash_outflows: 0,
+        non_cash_inflows: 0,
+        non_cash_outflows: 0,
+        net_market_flows: 0,
+        cash_adjustments: 0,
+        non_cash_adjustments: 0,
         currency: "USD"
       )
       @investment.balances.create!(
         date: @test_period_start + 2.days,
-        balance: 1900,  # 1500 holdings + 400 cash
-        cash_balance: 400,  # After -100 EUR transaction
+        balance: 1900,  # Keep old field for now
+        cash_balance: 400,  # Keep old field for now
+        start_balance: 500,
+        start_cash_balance: 500,
+        start_non_cash_balance: 0,
+        cash_inflows: 0,
+        cash_outflows: 100,
+        non_cash_inflows: 1500,
+        non_cash_outflows: 0,
+        net_market_flows: 0,
+        cash_adjustments: 0,
+        non_cash_adjustments: 0,
         currency: "USD"
       )
 

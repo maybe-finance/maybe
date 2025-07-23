@@ -28,9 +28,20 @@ class Balance::Materializer
     end
 
     def update_account_info
-      calculated_balance = @balances.sort_by(&:date).last&.balance || 0
-      calculated_holdings_value = @holdings.select { |h| h.date == Date.current }.sum(&:amount) || 0
-      calculated_cash_balance = calculated_balance - calculated_holdings_value
+      # Query fresh balance from DB to get generated column values
+      current_balance = account.balances
+        .where(currency: account.currency)
+        .order(date: :desc)
+        .first
+
+      if current_balance
+        calculated_balance = current_balance.end_balance
+        calculated_cash_balance = current_balance.end_cash_balance
+      else
+        # Fallback if no balance exists
+        calculated_balance = 0
+        calculated_cash_balance = 0
+      end
 
       Rails.logger.info("Balance update: cash=#{calculated_cash_balance}, total=#{calculated_balance}")
 
@@ -48,14 +59,23 @@ class Balance::Materializer
       current_time = Time.now
       account.balances.upsert_all(
         @balances.map { |b| b.attributes
-               .slice("date", "balance", "cash_balance", "currency")
+               .slice("date", "balance", "cash_balance", "currency",
+                      "start_cash_balance", "start_non_cash_balance",
+                      "cash_inflows", "cash_outflows",
+                      "non_cash_inflows", "non_cash_outflows",
+                      "net_market_flows",
+                      "cash_adjustments", "non_cash_adjustments",
+                      "flows_factor")
                .merge("updated_at" => current_time) },
         unique_by: %i[account_id date currency]
       )
     end
 
     def purge_stale_balances
-      deleted_count = account.balances.delete_by("date < ?", account.start_date)
+      sorted_balances = @balances.sort_by(&:date)
+      oldest_calculated_balance_date = sorted_balances.first&.date
+      newest_calculated_balance_date = sorted_balances.last&.date
+      deleted_count = account.balances.delete_by("date < ? OR date > ?", oldest_calculated_balance_date, newest_calculated_balance_date)
       Rails.logger.info("Purged #{deleted_count} stale balances") if deleted_count > 0
     end
 

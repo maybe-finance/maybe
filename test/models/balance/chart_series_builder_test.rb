@@ -1,6 +1,8 @@
 require "test_helper"
 
 class Balance::ChartSeriesBuilderTest < ActiveSupport::TestCase
+  include BalanceTestHelper
+
   setup do
   end
 
@@ -9,9 +11,9 @@ class Balance::ChartSeriesBuilderTest < ActiveSupport::TestCase
     account.balances.destroy_all
 
     # With gaps
-    account.balances.create!(date: 3.days.ago.to_date, balance: 1000, currency: "USD")
-    account.balances.create!(date: 1.day.ago.to_date, balance: 1100, currency: "USD")
-    account.balances.create!(date: Date.current, balance: 1200, currency: "USD")
+    create_balance(account: account, date: 3.days.ago.to_date, balance: 1000)
+    create_balance(account: account, date: 1.day.ago.to_date, balance: 1100)
+    create_balance(account: account, date: Date.current, balance: 1200)
 
     builder = Balance::ChartSeriesBuilder.new(
       account_ids: [ account.id ],
@@ -38,9 +40,9 @@ class Balance::ChartSeriesBuilderTest < ActiveSupport::TestCase
     account = accounts(:depository)
     account.balances.destroy_all
 
-    account.balances.create!(date: 2.days.ago.to_date, balance: 1000, currency: "USD")
-    account.balances.create!(date: 1.day.ago.to_date, balance: 1100, currency: "USD")
-    account.balances.create!(date: Date.current, balance: 1200, currency: "USD")
+    create_balance(account: account, date: 2.days.ago.to_date, balance: 1000)
+    create_balance(account: account, date: 1.day.ago.to_date, balance: 1100)
+    create_balance(account: account, date: Date.current, balance: 1200)
 
     builder = Balance::ChartSeriesBuilder.new(
       account_ids: [ account.id ],
@@ -68,13 +70,13 @@ class Balance::ChartSeriesBuilderTest < ActiveSupport::TestCase
 
     Balance.destroy_all
 
-    asset_account.balances.create!(date: 3.days.ago.to_date, balance: 500, currency: "USD")
-    asset_account.balances.create!(date: 1.day.ago.to_date, balance: 1000, currency: "USD")
-    asset_account.balances.create!(date: Date.current, balance: 1000, currency: "USD")
+    create_balance(account: asset_account, date: 3.days.ago.to_date, balance: 500)
+    create_balance(account: asset_account, date: 1.day.ago.to_date, balance: 1000)
+    create_balance(account: asset_account, date: Date.current, balance: 1000)
 
-    liability_account.balances.create!(date: 3.days.ago.to_date, balance: 200, currency: "USD")
-    liability_account.balances.create!(date: 2.days.ago.to_date, balance: 200, currency: "USD")
-    liability_account.balances.create!(date: Date.current, balance: 100, currency: "USD")
+    create_balance(account: liability_account, date: 3.days.ago.to_date, balance: 200)
+    create_balance(account: liability_account, date: 2.days.ago.to_date, balance: 200)
+    create_balance(account: liability_account, date: Date.current, balance: 100)
 
     builder = Balance::ChartSeriesBuilder.new(
       account_ids: [ asset_account.id, liability_account.id ],
@@ -98,8 +100,8 @@ class Balance::ChartSeriesBuilderTest < ActiveSupport::TestCase
     account = accounts(:credit_card)
     account.balances.destroy_all
 
-    account.balances.create!(date: 1.day.ago.to_date, balance: 1000, currency: "USD")
-    account.balances.create!(date: Date.current, balance: 500, currency: "USD")
+    create_balance(account: account, date: 1.day.ago.to_date, balance: 1000)
+    create_balance(account: account, date: Date.current, balance: 500)
 
     builder = Balance::ChartSeriesBuilder.new(
       account_ids: [ account.id ],
