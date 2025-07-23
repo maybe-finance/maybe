@@ -1,0 +1,22 @@
+<div class="space-y-3">
+  <% reconciliation_items.each_with_index do |item, index| %>
+    <% if item[:style] == :subtotal %>
+      <hr class="border border-primary">
+    <% end %>
+
+    <dl class="flex gap-4 items-center text-sm text-primary">
+      <dt class="flex items-center gap-2">
+        <%= item[:label] %>
+        <%= render DS::Tooltip.new(text: item[:tooltip], placement: "left", size: "sm") %>
+      </dt>
+      <hr class="grow border-dashed <%= item[:style] == :final ? "border-primary" : "border-secondary" %>">
+      <dd class="<%= item[:style] == :start || item[:style] == :final ? "font-bold" : item[:style] == :subtotal ? "font-medium" : "" %>">
+        <%= item[:value].format %>
+      </dd>
+    </dl>
+
+    <% if item[:style] == :adjustment %>
+      <hr class="border border-primary">
+    <% end %>
+  <% end %>
+</div>

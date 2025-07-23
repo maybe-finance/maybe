@@ -17,7 +17,7 @@
 
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
-            <span class="font-medium"><%= balance_trend.current.format %></span>
+            <span class="font-medium"><%= end_balance_money.format %></span>
             <%= render DS::Tooltip.new(text: "The end of day balance, after all transactions and adjustments", placement: "left", size: "sm") %>
           </div>
           <%= helpers.icon "chevron-down", class: "group-open:rotate-180" %>
@@ -25,73 +25,12 @@
       </div>
     </summary>
 
-    <div class="p-4 space-y-3">
-      <dl class="flex gap-4 items-center text-sm text-primary">
-        <dt class="flex items-center gap-2">
-          Start of day balance
-          <%= render DS::Tooltip.new(text: "The account balance at the beginning of this day, before any transactions or value changes", placement: "left", size: "sm") %>
-        </dt>
-        <hr class="grow border-dashed border-secondary">
-        <dd class="font-bold"><%= start_balance_money.format %></dd>
-      </dl>
-
-      <% if account.balance_type == :investment %>
-        <dl class="flex gap-4 items-center text-sm text-primary">
-          <dt class="flex items-center gap-2">
-            &#916; Cash
-            <%= render DS::Tooltip.new(text: "Net change in cash from deposits, withdrawals, and other cash transactions during the day", placement: "left", size: "sm") %>
-          </dt>
-          <hr class="grow border-dashed border-secondary">
-          <dd><%= cash_change_money.format %></dd>
-        </dl>
-
-        <dl class="flex gap-4 items-center text-sm text-primary">
-          <dt class="flex items-center gap-2">
-            &#916; Holdings
-            <%= render DS::Tooltip.new(text: "Net change in investment holdings value from buying, selling, or market price movements", placement: "left", size: "sm") %>
-          </dt>
-          <hr class="grow border-dashed border-secondary">
-          <dd><%= holdings_change_money.format %></dd>
-        </dl>
+    <div class="p-4">
+      <% if balance %>
+        <%= render UI::Account::BalanceReconciliation.new(balance: balance, account: account) %>
       <% else %>
-        <dl class="flex gap-4 items-center text-sm text-primary">
-          <dt class="flex items-center gap-2">
-            &#916; Cash
-            <%= render DS::Tooltip.new(text: "Net change in cash balance from all transactions during the day", placement: "left", size: "sm") %>
-          </dt>
-          <hr class="grow border-dashed border-secondary">
-          <dd><%= cash_change_money.format %></dd>
-        </dl>
+        <p class="text-sm text-secondary">No balance data available for this date</p>
       <% end %>
-
-      <dl class="flex gap-4 items-center text-sm text-primary">
-        <dt class="flex items-center gap-2">
-          End of day balance
-          <%= render DS::Tooltip.new(text: "The calculated balance after all transactions but before any manual adjustments or reconciliations", placement: "left", size: "sm") %>
-        </dt>
-        <hr class="grow border-dashed border-secondary">
-        <dd class="font-medium"><%= end_balance_before_adjustments_money.format %></dd>
-      </dl>
-
-      <hr class="border border-primary">
-
-      <dl class="flex gap-4 items-center text-sm text-primary">
-        <dt class="flex items-center gap-2">
-          &#916; Value adjustments
-          <%= render DS::Tooltip.new(text: "Adjustments are either manual reconciliations made by the user or adjustments due to market price changes throughout the day", placement: "left", size: "sm") %>
-        </dt>
-        <hr class="grow border-dashed border-secondary">
-        <dd><%= adjustments_money.format %></dd>
-      </dl>
-
-      <dl class="flex gap-4 items-center text-sm text-primary">
-        <dt class="flex items-center gap-2">
-          Closing balance
-          <%= render DS::Tooltip.new(text: "The final account balance for the day, after all transactions and adjustments have been applied", placement: "left", size: "sm") %>
-        </dt>
-        <hr class="grow border-dashed border-primary">
-        <dd class="font-bold"><%= end_balance_money.format %></dd>
-      </dl>
     </div>
   </details>
 
