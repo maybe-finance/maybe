@@ -63,9 +63,14 @@ class UI::Account::BalanceReconciliation < ApplicationComponent
         { label: "Start balance", value: balance.start_balance_money, tooltip: "The total portfolio value at the beginning of this day", style: :start }
       ]
 
-      items << { label: "Cash flows", value: net_cash_flow, tooltip: "Deposits and withdrawals during the day", style: :flow } if net_cash_flow != 0
-      items << { label: "Trading activity", value: net_non_cash_flow, tooltip: "Net change from buying and selling securities", style: :flow } if net_non_cash_flow != 0
-      items << { label: "Market changes", value: balance.net_market_flows_money, tooltip: "Value changes from market price movements", style: :flow } if balance.net_market_flows != 0
+      # Change in brokerage cash (includes deposits, withdrawals, and cash from trades)
+      items << { label: "Change in brokerage cash", value: net_cash_flow, tooltip: "Net change in cash from deposits, withdrawals, and trades", style: :flow }
+      
+      # Change in holdings from trading activity
+      items << { label: "Change in holdings (buys/sells)", value: net_non_cash_flow, tooltip: "Impact on holdings from buying and selling securities", style: :flow }
+      
+      # Market price changes
+      items << { label: "Change in holdings (market price activity)", value: balance.net_market_flows_money, tooltip: "Change in holdings value from market price movements", style: :flow }
 
       if has_adjustments?
         items << { label: "End balance", value: end_balance_before_adjustments, tooltip: "The calculated balance after all activity", style: :subtotal }

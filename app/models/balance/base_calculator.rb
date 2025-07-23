@@ -29,16 +29,16 @@ class Balance::BaseCalculator
       end
     end
 
-    def cash_adjustments_for_date(start_cash, net_cash_flows, valuation)
-      return 0 unless valuation && account.balance_type != :non_cash
+    def cash_adjustments_for_date(start_cash, end_cash, net_cash_flows)
+      return 0 unless account.balance_type != :non_cash
 
-      valuation.amount - start_cash - net_cash_flows
+      end_cash - start_cash - net_cash_flows
     end
 
-    def non_cash_adjustments_for_date(start_non_cash, non_cash_flows, valuation)
-      return 0 unless valuation && account.balance_type == :non_cash
+    def non_cash_adjustments_for_date(start_non_cash, end_non_cash, non_cash_flows)
+      return 0 unless account.balance_type == :non_cash
 
-      valuation.amount - start_non_cash - non_cash_flows
+      end_non_cash - start_non_cash - non_cash_flows
     end
 
     # If holdings value goes from $100 -> $200 (change_holdings_value is $100)
