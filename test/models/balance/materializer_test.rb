@@ -2,6 +2,7 @@ require "test_helper"
 
 class Balance::MaterializerTest < ActiveSupport::TestCase
   include EntriesTestHelper
+  include BalanceTestHelper
 
   setup do
     @account = families(:empty).accounts.create!(
@@ -15,8 +16,6 @@ class Balance::MaterializerTest < ActiveSupport::TestCase
 
   test "syncs balances" do
     Holding::Materializer.any_instance.expects(:materialize_holdings).returns([]).once
-
-    @account.expects(:start_date).returns(2.days.ago.to_date)
 
     expected_balances = [
       Balance.new(
@@ -62,29 +61,13 @@ class Balance::MaterializerTest < ActiveSupport::TestCase
     assert_balance_fields_persisted(expected_balances)
   end
 
-  test "purges stale balances and holdings" do
-    # Balance before start date is stale
-    @account.expects(:start_date).returns(2.days.ago.to_date).twice
+  test "purges stale balances outside calculated range" do
+    # Create existing balances that will be stale
+    stale_old = create_balance(account: @account, date: 5.days.ago.to_date, balance: 5000)
+    stale_future = create_balance(account: @account, date: 2.days.from_now.to_date, balance: 15000)
 
-    stale_balance = Balance.new(
-      date: 3.days.ago.to_date,
-      balance: 10000,
-      cash_balance: 10000,
-      currency: "USD",
-      start_cash_balance: 0,
-      start_non_cash_balance: 0,
-      cash_inflows: 0,
-      cash_outflows: 0,
-      non_cash_inflows: 0,
-      non_cash_outflows: 0,
-      net_market_flows: 0,
-      cash_adjustments: 10000,
-      non_cash_adjustments: 0,
-      flows_factor: 1
-    )
-
+    # Calculator will return balances for only these dates
     expected_balances = [
-      stale_balance,
       Balance.new(
         date: 2.days.ago.to_date,
         balance: 10000,
@@ -136,13 +119,19 @@ class Balance::MaterializerTest < ActiveSupport::TestCase
     ]
 
     Balance::ForwardCalculator.any_instance.expects(:calculate).returns(expected_balances)
+    Holding::Materializer.any_instance.expects(:materialize_holdings).returns([]).once
 
-    assert_difference "@account.balances.count", 3 do
+    # Should end up with 3 balances (stale ones deleted, new ones created)
+    assert_difference "@account.balances.count", 1 do
       Balance::Materializer.new(@account, strategy: :forward).materialize_balances
     end
 
-    # Only non-stale balances should be persisted and checked
-    assert_balance_fields_persisted(expected_balances.reject { |b| b.date < 2.days.ago.to_date })
+    # Verify stale balances were deleted
+    assert_nil @account.balances.find_by(id: stale_old.id)
+    assert_nil @account.balances.find_by(id: stale_future.id)
+
+    # Verify expected balances were persisted
+    assert_balance_fields_persisted(expected_balances)
   end
 
   private

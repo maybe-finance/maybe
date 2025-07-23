@@ -1,18 +1,15 @@
 require "test_helper"
 
 class Account::ReconciliationManagerTest < ActiveSupport::TestCase
+  include BalanceTestHelper
+
   setup do
     @account = accounts(:investment)
     @manager = Account::ReconciliationManager.new(@account)
   end
 
   test "new reconciliation" do
-    @account.balances.create!(
-      date: Date.current,
-      balance: 1000,
-      cash_balance: 500,
-      currency: @account.currency
-    )
+    create_balance(account: @account, date: Date.current, balance: 1000, cash_balance: 500)
 
     result = @manager.reconcile_balance(balance: 1200, date: Date.current)
 
@@ -24,7 +21,7 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
   end
 
   test "updates existing reconciliation without date change" do
-    @account.balances.create!(date: Date.current, balance: 1000, cash_balance: 500, currency: @account.currency)
+    create_balance(account: @account, date: Date.current, balance: 1000, cash_balance: 500)
 
     # Existing reconciliation entry
     existing_entry = @account.entries.create!(name: "Test", amount: 1000, date: Date.current, entryable: Valuation.new(kind: "reconciliation"), currency: @account.currency)
@@ -39,8 +36,8 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
   end
 
   test "updates existing reconciliation with date and amount change" do
-    @account.balances.create!(date: 5.days.ago, balance: 1000, cash_balance: 500, currency: @account.currency)
-    @account.balances.create!(date: Date.current, balance: 1200, cash_balance: 700, currency: @account.currency)
+    create_balance(account: @account, date: 5.days.ago, balance: 1000, cash_balance: 500)
+    create_balance(account: @account, date: Date.current, balance: 1200, cash_balance: 700)
 
     # Existing reconciliation entry (5 days ago)
     existing_entry = @account.entries.create!(name: "Test", amount: 1000, date: 5.days.ago, entryable: Valuation.new(kind: "reconciliation"), currency: @account.currency)
@@ -63,12 +60,7 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
   end
 
   test "handles date conflicts" do
-    @account.balances.create!(
-      date: Date.current,
-      balance: 1000,
-      cash_balance: 1000,
-      currency: @account.currency
-    )
+    create_balance(account: @account, date: Date.current, balance: 1000, cash_balance: 1000)
 
     # Existing reconciliation entry
     @account.entries.create!(
@@ -89,7 +81,7 @@ class Account::ReconciliationManagerTest < ActiveSupport::TestCase
   end
 
   test "dry run does not persist account" do
-    @account.balances.create!(date: Date.current, balance: 1000, cash_balance: 500, currency: @account.currency)
+    create_balance(account: @account, date: Date.current, balance: 1000, cash_balance: 500)
 
     assert_no_difference "Valuation.count" do
       @manager.reconcile_balance(balance: 1200, date: Date.current, dry_run: true)
