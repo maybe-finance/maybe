@@ -133,7 +133,8 @@ class Balance::BaseCalculator
         non_cash_outflows: args[:non_cash_outflows] || 0,
         cash_adjustments: args[:cash_adjustments] || 0,
         non_cash_adjustments: args[:non_cash_adjustments] || 0,
-        net_market_flows: args[:net_market_flows] || 0
+        net_market_flows: args[:net_market_flows] || 0,
+        flows_factor: account.classification == "asset" ? 1 : -1
       )
     end
 end

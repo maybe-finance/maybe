@@ -135,6 +135,11 @@ module LedgerTestingHelper
       if expected
         assert calculated_balance, "Expected balance for #{date} but none was calculated"
 
+        # Always assert flows_factor is correct based on account classification
+        expected_flows_factor = calculated_balance.account.classification == "asset" ? 1 : -1
+        assert_equal expected_flows_factor, calculated_balance.flows_factor,
+          "Flows factor mismatch for #{date}: expected #{expected_flows_factor} for #{calculated_balance.account.classification} account"
+
         legacy_balances = expected[:legacy_balances]
         balances = expected[:balances]
         flows = expected[:flows]
