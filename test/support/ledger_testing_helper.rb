@@ -12,8 +12,8 @@ module LedgerTestingHelper
     created_account = families(:empty).accounts.create!(
       name: "Test Account",
       accountable: account_type.new,
-      balance: 0, # Doesn't matter, ledger derives this
-      cash_balance: 0, # Doesn't matter, ledger derives this
+      balance: account[:balance] || 0, # Doesn't matter, ledger derives this
+      cash_balance: account[:cash_balance] || 0, # Doesn't matter, ledger derives this
       **account_attrs
     )
 

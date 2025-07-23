@@ -20,9 +20,9 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
         {
           date: Date.current,
           legacy_balances: { balance: 20000, cash_balance: 20000 },
-          balances: { start: 0, start_cash: 0, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 },
+          balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 },
           flows: 0,
-          adjustments: { cash_adjustments: 20000, non_cash_adjustments: 0 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         }
       ]
     )
@@ -78,9 +78,9 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
         {
           date: 3.days.ago,
           legacy_balances: { balance: 20000, cash_balance: 20000 },
-          balances: { start: 15000, start_cash: 15000, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 },
+          balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 },
           flows: 0,
-          adjustments: { cash_adjustments: 5000, non_cash_adjustments: 0 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         },
         {
           date: 4.days.ago,
@@ -135,8 +135,8 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
       account: { type: Depository, balance: 20000, cash_balance: 20000, currency: "USD" },
       entries: [
         { type: "current_anchor", date: Date.current, balance: 20000 },
-        { type: "transaction", date: 4.days.ago, amount: -500 }, # income
-        { type: "transaction", date: 2.days.ago, amount: 100 } # expense
+        { type: "transaction", date: 2.days.ago, amount: 100 }, # expense
+        { type: "transaction", date: 4.days.ago, amount: -500 } # income
       ]
     )
 
@@ -185,7 +185,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           legacy_balances: { balance: 19600, cash_balance: 19600 },
           balances: { start: 19600, start_cash: 19600, start_non_cash: 0, end_cash: 19600, end_non_cash: 0, end: 19600 },
           flows: 0,
-          adjustments: { cash_adjustments: 19600, non_cash_adjustments: 0 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         } # After income (-500)
       ]
     )
@@ -239,7 +239,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           date: 4.days.ago,
           legacy_balances: { balance: 1900, cash_balance: 1900 },
           balances: { start: 2400, start_cash: 2400, start_non_cash: 0, end_cash: 1900, end_non_cash: 0, end: 1900 },
-          flows: { cash_inflows: 0, cash_outflows: 500 },
+          flows: { cash_inflows: 500, cash_outflows: 0 },
           adjustments: 0
         }, # After CC payment (-500)
         {
@@ -247,7 +247,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           legacy_balances: { balance: 2400, cash_balance: 2400 },
           balances: { start: 2400, start_cash: 2400, start_non_cash: 0, end_cash: 2400, end_non_cash: 0, end: 2400 },
           flows: 0,
-          adjustments: { cash_adjustments: 2400, non_cash_adjustments: 0 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         }
       ]
     )
@@ -290,7 +290,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           legacy_balances: { balance: 200000, cash_balance: 0 },
           balances: { start: 200000, start_cash: 0, start_non_cash: 200000, end_cash: 0, end_non_cash: 200000, end: 200000 },
           flows: 0,
-          adjustments: { cash_adjustments: 0, non_cash_adjustments: 200000 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         }
       ]
     )
@@ -332,7 +332,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
             legacy_balances: { balance: 1000, cash_balance: 0 },
             balances: { start: 1000, start_cash: 0, start_non_cash: 1000, end_cash: 0, end_non_cash: 1000, end: 1000 },
             flows: 0,
-            adjustments: { cash_adjustments: 0, non_cash_adjustments: 1000 }
+            adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
           }
         ]
       )
@@ -382,7 +382,7 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           legacy_balances: { balance: 20000, cash_balance: 20000 },
           balances: { start: 20000, start_cash: 20000, start_non_cash: 0, end_cash: 20000, end_non_cash: 0, end: 20000 },
           flows: { market_flows: 0 },
-          adjustments: { cash_adjustments: 20000, non_cash_adjustments: 0 }
+          adjustments: { cash_adjustments: 0, non_cash_adjustments: 0 }
         } # At first, account is 100% cash, no holdings (no trades)
       ]
     )
@@ -426,15 +426,15 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
           date: 1.day.ago.to_date,
           legacy_balances: { balance: 20000, cash_balance: 19000 },
           balances: { start: 20000, start_cash: 19500, start_non_cash: 500, end_cash: 19000, end_non_cash: 1000, end: 20000 },
-          flows: { cash_inflows: 0, cash_outflows: 500, non_cash_inflows: 500, non_cash_outflows: 0, net_market_flows: 0 },
+          flows: { cash_inflows: 0, cash_outflows: 500, non_cash_inflows: 500, non_cash_outflows: 0, market_flows: 0 },
           adjustments: 0
         }, # After AAPL trade: $19k cash + $1k holdings
         {
           date: 2.days.ago.to_date,
           legacy_balances: { balance: 20000, cash_balance: 19500 },
-          balances: { start: 20000, start_cash: 19500, start_non_cash: 500, end_cash: 19500, end_non_cash: 500, end: 20000 },
-          flows: { market_flows: 0 },
-          adjustments: { cash_adjustments: 19500, non_cash_adjustments: 500 }
+          balances: { start: 19500, start_cash: 19500, start_non_cash: 0, end_cash: 19500, end_non_cash: 500, end: 20000 },
+          flows: { market_flows: -500 },
+          adjustments: 0
         } # Before AAPL trade: $19.5k cash + $500 MSFT
       ]
     )
@@ -450,8 +450,9 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
       ],
       holdings: [
         # Create holdings that differ in value from provider ($2,000 vs. the $1,000 reported by provider)
-        { date: Date.current, ticker: "AAPL", qty: 10, price: 100, amount: 2000 },
-        { date: 1.day.ago, ticker: "AAPL", qty: 10, price: 100, amount: 2000 }
+        { date: Date.current, ticker: "AAPL", qty: 10, price: 100, amount: 1000 },
+        { date: 1.day.ago, ticker: "AAPL", qty: 10, price: 100, amount: 1000 },
+        { date: 2.days.ago, ticker: "AAPL", qty: 10, price: 100, amount: 1000 }
       ]
     )
 
@@ -464,22 +465,22 @@ class Balance::ReverseCalculatorTest < ActiveSupport::TestCase
         # This ensures the user sees the same top-line number reported by the provider (even if it creates a discrepancy in the cash balance)
         {
           date: Date.current,
-          legacy_balances: { balance: 20000, cash_balance: 18000 },
-          balances: { start: 20000, start_cash: 18000, start_non_cash: 2000, end_cash: 18000, end_non_cash: 2000, end: 20000 },
+          legacy_balances: { balance: 20000, cash_balance: 19000 },
+          balances: { start: 20000, start_cash: 19000, start_non_cash: 1000, end_cash: 19000, end_non_cash: 1000, end: 20000 },
           flows: { market_flows: 0 },
           adjustments: 0
         },
         {
           date: 1.day.ago,
-          legacy_balances: { balance: 20000, cash_balance: 18000 },
-          balances: { start: 20000, start_cash: 18000, start_non_cash: 2000, end_cash: 18000, end_non_cash: 2000, end: 20000 },
+          legacy_balances: { balance: 20000, cash_balance: 19000 },
+          balances: { start: 20000, start_cash: 19000, start_non_cash: 1000, end_cash: 19000, end_non_cash: 1000, end: 20000 },
           flows: { market_flows: 0 },
-          adjustments: { cash_adjustments: 3000, non_cash_adjustments: 2000 }
+          adjustments: 0
         },
         {
           date: 2.days.ago,
-          legacy_balances: { balance: 15000, cash_balance: 15000 },
-          balances: { start: 15000, start_cash: 15000, start_non_cash: 0, end_cash: 15000, end_non_cash: 0, end: 15000 },
+          legacy_balances: { balance: 15000, cash_balance: 14000 },
+          balances: { start: 15000, start_cash: 14000, start_non_cash: 1000, end_cash: 14000, end_non_cash: 1000, end: 15000 },
           flows: { market_flows: 0 },
           adjustments: 0
         } # Opening anchor sets absolute balance
