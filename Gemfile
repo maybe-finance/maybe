@@ -53,6 +53,9 @@ gem "bcrypt", "~> 3.1"
 gem "jwt"
 gem "jbuilder"
 
+# Banco de Chile Uploads
+gem "spreadsheet"
+
 # OAuth & API Security
 gem "doorkeeper"
 gem "rack-attack", "~> 6.6"

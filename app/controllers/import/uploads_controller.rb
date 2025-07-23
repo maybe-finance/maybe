@@ -33,7 +33,9 @@ class Import::UploadsController < ApplicationController
     end
 
     def csv_str
-      @csv_str ||= upload_params[:csv_file]&.read || upload_params[:raw_file_str]
+      @csv_str ||= BancoChileParser.new(upload_params[:csv_file]).parse ||
+        upload_params[:csv_file]&.read ||
+        upload_params[:raw_file_str]
     end
 
     def csv_valid?(str)

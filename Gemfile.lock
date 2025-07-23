@@ -501,6 +501,7 @@ GEM
       sorbet-runtime (>= 0.5.10782)
     ruby-lsp-rails (0.4.6)
       ruby-lsp (>= 0.24.0, < 0.25.0)
+    ruby-ole (1.2.13.1)
     ruby-openai (8.1.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -552,6 +553,10 @@ GEM
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
     sorbet-runtime (0.5.12163)
+    spreadsheet (1.3.4)
+      bigdecimal
+      logger
+      ruby-ole
     stackprof (0.2.27)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
@@ -680,6 +685,7 @@ DEPENDENCIES
   sidekiq-cron
   simplecov
   skylight
+  spreadsheet
   stackprof
   stimulus-rails
   stripe
