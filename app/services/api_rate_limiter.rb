@@ -67,7 +67,17 @@ class ApiRateLimiter
 
   # Class method to get usage for an API key without incrementing
   def self.usage_for(api_key)
-    new(api_key).usage_info
+    limit(api_key).usage_info
+  end
+
+  def self.limit(api_key)
+    if Rails.application.config.app_mode.self_hosted?
+      # Use NoopApiRateLimiter for self-hosted mode
+      # This means no rate limiting is applied
+      NoopApiRateLimiter.new(api_key)
+    else
+      new(api_key)
+    end
   end
 
   private
