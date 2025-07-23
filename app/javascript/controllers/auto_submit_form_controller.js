@@ -5,21 +5,19 @@ export default class extends Controller {
   // will trigger a form submission when the configured event is triggered.
   static targets = ["auto"];
   static values = {
-    triggerEvent: { type: String, default: "input" },
+    triggerEvent: { type: String },
   };
 
   connect() {
     this.autoTargets.forEach((element) => {
-      const event =
-        element.dataset.autosubmitTriggerEvent || this.triggerEventValue;
+      const event = this.#getEventForElement(element);
       element.addEventListener(event, this.handleInput);
     });
   }
 
   disconnect() {
     this.autoTargets.forEach((element) => {
-      const event =
-        element.dataset.autosubmitTriggerEvent || this.triggerEventValue;
+      const event = this.#getEventForElement(element);
       element.removeEventListener(event, this.handleInput);
     });
   }
@@ -32,6 +30,48 @@ export default class extends Controller {
       this.element.requestSubmit();
     }, this.#debounceTimeout(target));
   };
+
+  #getEventForElement(element) {
+    // Check for explicitly set event first
+    if (element.dataset.autosubmitTriggerEvent) {
+      return element.dataset.autosubmitTriggerEvent;
+    }
+    
+    // Check form-level trigger event value
+    if (this.triggerEventValue) {
+      return this.triggerEventValue;
+    }
+
+    // Determine event based on input type
+    const type = element.type || element.tagName.toLowerCase();
+
+    switch (type) {
+      case "text":
+      case "email":
+      case "password":
+      case "search":
+      case "tel":
+      case "url":
+      case "number":
+      case "textarea":
+        return "blur";
+      case "select-one":
+      case "select-multiple":
+      case "checkbox":
+      case "radio":
+        return "change";
+      case "date":
+      case "datetime-local":
+      case "month":
+      case "time":
+      case "week":
+      case "color":
+      case "range":
+        return "change";
+      default:
+        return "blur";
+    }
+  }
 
   #debounceTimeout(element) {
     if (element.dataset.autosubmitDebounceTimeout) {

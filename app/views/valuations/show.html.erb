@@ -44,7 +44,7 @@
               url: valuation_path(entry),
               method: :patch,
               class: "space-y-2",
-              data: { controller: "auto-submit-form", auto_submit_form_trigger_event_value: "blur" } do |f| %>
+              data: { controller: "auto-submit-form" } do |f| %>
           <%= f.text_area :notes,
                 label: t(".note_label"),
                 placeholder: t(".note_placeholder"),
