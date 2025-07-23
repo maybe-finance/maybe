@@ -65,10 +65,10 @@ class UI::Account::BalanceReconciliation < ApplicationComponent
 
       # Change in brokerage cash (includes deposits, withdrawals, and cash from trades)
       items << { label: "Change in brokerage cash", value: net_cash_flow, tooltip: "Net change in cash from deposits, withdrawals, and trades", style: :flow }
-      
+
       # Change in holdings from trading activity
       items << { label: "Change in holdings (buys/sells)", value: net_non_cash_flow, tooltip: "Impact on holdings from buying and selling securities", style: :flow }
-      
+
       # Market price changes
       items << { label: "Change in holdings (market price activity)", value: balance.net_market_flows_money, tooltip: "Change in holdings value from market price movements", style: :flow }
 

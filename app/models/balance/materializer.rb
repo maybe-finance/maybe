@@ -50,7 +50,7 @@ class Balance::Materializer
         @balances.map { |b| b.attributes
                .slice("date", "balance", "cash_balance", "currency",
                       "start_cash_balance", "start_non_cash_balance",
-                      "cash_inflows", "cash_outflows", 
+                      "cash_inflows", "cash_outflows",
                       "non_cash_inflows", "non_cash_outflows",
                       "net_market_flows",
                       "cash_adjustments", "non_cash_adjustments",
