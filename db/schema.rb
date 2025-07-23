@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_19_121103) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -115,6 +115,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
+    t.decimal "start_cash_balance", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "start_non_cash_balance", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_inflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_outflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_inflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_outflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "net_market_flows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_adjustments", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_adjustments", precision: 19, scale: 4, default: "0.0", null: false
+    t.integer "flows_factor", default: 1, null: false
+    t.virtual "start_balance", type: :decimal, precision: 19, scale: 4, as: "(start_cash_balance + start_non_cash_balance)", stored: true
+    t.virtual "end_cash_balance", type: :decimal, precision: 19, scale: 4, as: "((start_cash_balance + ((cash_inflows - cash_outflows) * (flows_factor)::numeric)) + cash_adjustments)", stored: true
+    t.virtual "end_non_cash_balance", type: :decimal, precision: 19, scale: 4, as: "(((start_non_cash_balance + ((non_cash_inflows - non_cash_outflows) * (flows_factor)::numeric)) + net_market_flows) + non_cash_adjustments)", stored: true
+    t.virtual "end_balance", type: :decimal, precision: 19, scale: 4, as: "(((start_cash_balance + ((cash_inflows - cash_outflows) * (flows_factor)::numeric)) + cash_adjustments) + (((start_non_cash_balance + ((non_cash_inflows - non_cash_outflows) * (flows_factor)::numeric)) + net_market_flows) + non_cash_adjustments))", stored: true
     t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id", "date"], name: "index_balances_on_account_id_and_date", order: { date: :desc }
     t.index ["account_id"], name: "index_balances_on_account_id"

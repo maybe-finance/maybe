@@ -2,13 +2,13 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
   def calculate
     Rails.logger.tagged("Balance::ForwardCalculator") do
       start_cash_balance = derive_cash_balance_on_date_from_total(
-        total_balance: account.opening_anchor_balance,
+        total_balance: 0,
         date: account.opening_anchor_date
       )
-      start_non_cash_balance = account.opening_anchor_balance - start_cash_balance
+      start_non_cash_balance = 0
 
       calc_start_date.upto(calc_end_date).map do |date|
-        valuation = sync_cache.get_reconciliation_valuation(date)
+        valuation = sync_cache.get_valuation(date)
 
         if valuation
           end_cash_balance = derive_cash_balance_on_date_from_total(
@@ -21,10 +21,22 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
           end_non_cash_balance = derive_end_non_cash_balance(start_non_cash_balance: start_non_cash_balance, date: date)
         end
 
+        flows = flows_for_date(date)
+        market_value_change = market_value_change_on_date(date, flows)
+
         output_balance = build_balance(
           date: date,
+          balance: end_cash_balance + end_non_cash_balance,
           cash_balance: end_cash_balance,
-          non_cash_balance: end_non_cash_balance
+          start_cash_balance: start_cash_balance,
+          start_non_cash_balance: start_non_cash_balance,
+          cash_inflows: flows[:cash_inflows],
+          cash_outflows: flows[:cash_outflows],
+          non_cash_inflows: flows[:non_cash_inflows],
+          non_cash_outflows: flows[:non_cash_outflows],
+          cash_adjustments: cash_adjustments_for_date(start_cash_balance, flows[:cash_inflows] - flows[:cash_outflows], valuation),
+          non_cash_adjustments: non_cash_adjustments_for_date(start_non_cash_balance, flows[:non_cash_inflows] - flows[:non_cash_outflows], valuation),
+          net_market_flows: market_value_change
         )
 
         # Set values for the next iteration
