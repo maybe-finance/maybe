@@ -100,5 +100,5 @@ If you'd like multi-currency support, there are a few extra steps to follow.
 ## Copyright & license
 
 Maybe is distributed under
-an [AGPLv3 license](https://github.com/maybe-finance/maybe/blob/main/LICENSE). "
-Maybe" is a trademark of Maybe Finance, Inc.
+an [AGPLv3 license](https://github.com/maybe-finance/maybe/blob/main/LICENSE).
+"Maybe" is a trademark of Maybe Finance, Inc.
