@@ -1,5 +1,5 @@
 <%= wrapper_element do %>
-  <%= tag.dialog class: "w-full h-full bg-transparent theme-dark:backdrop:bg-alpha-black-900 backdrop:bg-overlay #{drawer? ? "lg:p-3" : "lg:p-1"}", **merged_opts do %>
+  <%= tag.dialog class: "w-full h-full bg-transparent theme-dark:backdrop:bg-alpha-black-900 backdrop:bg-overlay pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] #{drawer? ? "lg:p-3" : "lg:p-1"}", **merged_opts do %>
     <%= tag.div class: dialog_outer_classes do %>
       <%= tag.div class: dialog_inner_classes, data: { DS__dialog_target: "content" } do %>
         <div class="grow overflow-y-auto py-4 space-y-4 flex flex-col">
