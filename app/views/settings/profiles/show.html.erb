@@ -122,6 +122,27 @@
   </div>
 <% end %>
 
+<%= settings_section title: "Data Import/Export" do %>
+  <div class="space-y-4">
+    <div class="flex gap-4 items-center">
+      <%= render DS::Link.new(
+      text: "Import data",
+      icon: "import",
+      href: new_family_import_path,
+      variant: "secondary",
+      full_width: true
+    ) %>
+      <%= render DS::Link.new(
+      text: "Export data",
+      icon: "database",
+      href: new_family_export_path,
+      variant: "secondary",
+      full_width: true
+    ) %>
+    </div>
+  </div>
+<% end %>
+
 <%= settings_section title: t(".danger_zone_title") do %>
   <div class="space-y-4">
     <% if Current.user.admin? %>
