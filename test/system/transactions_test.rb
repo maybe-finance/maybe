@@ -34,6 +34,7 @@ class TransactionsTest < ApplicationSystemTestCase
 
     within "form#transactions-search" do
       fill_in "Search transactions ...", with: @transaction.name
+      find("#q_search").send_keys(:tab) # Trigger blur to submit form
     end
 
     assert_selector "#" + dom_id(@transaction), count: 1
