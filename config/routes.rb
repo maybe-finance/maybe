@@ -162,6 +162,10 @@ Rails.application.routes.draw do
       get :sparkline
       patch :toggle_active
     end
+
+    collection do
+      post :sync_all
+    end
   end
 
   # Convenience routes for polymorphic paths
