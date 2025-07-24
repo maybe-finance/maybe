@@ -1,0 +1,39 @@
+<%= turbo_frame_tag "family_exports",
+    data: exports.any? { |e| e.pending? || e.processing? } ? {
+      turbo_refresh_url: family_exports_path,
+      turbo_refresh_interval: 3000
+    } : {} do %>
+  <div class="mt-4 space-y-3 max-h-96 overflow-y-auto">
+    <% if exports.any? %>
+      <% exports.each do |export| %>
+        <div class="flex items-center justify-between bg-container p-4 rounded-lg border border-primary">
+          <div>
+            <p class="text-sm font-medium text-primary">Export from <%= export.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+            <p class="text-xs text-secondary"><%= export.filename %></p>
+          </div>
+
+          <% if export.processing? || export.pending? %>
+            <div class="flex items-center gap-2 text-secondary">
+              <div class="animate-spin h-4 w-4 border-2 border-secondary border-t-transparent rounded-full"></div>
+              <span class="text-sm">Exporting...</span>
+            </div>
+          <% elsif export.completed? %>
+            <%= link_to download_family_export_path(export),
+                class: "flex items-center gap-2 text-primary hover:text-primary-hover",
+                data: { turbo_frame: "_top" } do %>
+              <%= icon "download", class: "w-5 h-5" %>
+              <span class="text-sm font-medium">Download</span>
+            <% end %>
+          <% elsif export.failed? %>
+            <div class="flex items-center gap-2 text-destructive">
+              <%= icon "alert-circle", class: "w-4 h-4" %>
+              <span class="text-sm">Failed</span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-secondary text-center py-4">No exports yet</p>
+    <% end %>
+  </div>
+<% end %>

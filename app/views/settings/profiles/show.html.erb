@@ -122,6 +122,29 @@
   </div>
 <% end %>
 
+<% if Current.user.admin? %>
+  <%= settings_section title: "Data Import/Export" do %>
+    <div class="space-y-4">
+      <div class="flex gap-4 items-center">
+        <%= render DS::Link.new(
+          text: "Export data",
+          icon: "database",
+          href: new_family_export_path,
+          variant: "secondary",
+          full_width: true,
+          data: { turbo_frame: :modal }
+        ) %>
+      </div>
+
+      <%= turbo_frame_tag "family_exports", src: family_exports_path, loading: :lazy do %>
+        <div class="mt-4 text-center text-secondary">
+          <div class="animate-spin inline-block h-4 w-4 border-2 border-secondary border-t-transparent rounded-full"></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
 <%= settings_section title: t(".danger_zone_title") do %>
   <div class="space-y-4">
     <% if Current.user.admin? %>

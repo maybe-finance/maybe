@@ -672,6 +672,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   ruby-lsp-rails
   ruby-openai
+  rubyzip (~> 2.3)
   selenium-webdriver
   sentry-rails
   sentry-ruby
