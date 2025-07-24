@@ -1,0 +1,42 @@
+<%= render DS::Dialog.new do |dialog| %>
+  <% dialog.with_header(title: "Export your data", subtitle: "Download all your financial data") %>
+
+  <% dialog.with_body do %>
+    <div class="space-y-4">
+      <div class="bg-container-inset rounded-lg p-4 space-y-3">
+        <h3 class="font-medium text-primary">What's included:</h3>
+        <ul class="space-y-2 text-sm text-secondary">
+          <li class="flex items-start gap-2">
+            <%= icon "check", class: "shrink-0 mt-0.5 text-positive" %>
+            <span>All accounts and balances</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon "check", class: "shrink-0 mt-0.5 text-positive" %>
+            <span>Transaction history</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon "check", class: "shrink-0 mt-0.5 text-positive" %>
+            <span>Investment trades</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <%= icon "check", class: "shrink-0 mt-0.5 text-positive" %>
+            <span>Categories and tags</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-3">
+        <p class="text-sm text-amber-800">
+          <strong>Note:</strong> This export includes all of your data, but only some of the data can be imported back into Maybe via the CSV import feature. We support account, transaction (with category and tags), and trade imports. Other account data cannot be imported and is for your records only.
+        </p>
+      </div>
+
+      <%= form_with url: family_exports_path, method: :post, class: "space-y-4" do |form| %>
+        <div class="flex gap-3">
+          <%= link_to "Cancel", "#", class: "flex-1 text-center px-4 py-2 border border-primary rounded-lg hover:bg-surface-hover", data: { action: "click->modal#close" } %>
+          <%= form.submit "Export data", class: "flex-1 bg-inverse fg-inverse rounded-lg px-4 py-2 cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

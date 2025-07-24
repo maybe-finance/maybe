@@ -24,8 +24,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :family_exports, only: %i[new create]
-  resources :family_imports, only: %i[new create]
+  resources :family_exports, only: %i[new create index] do
+    member do
+      get :download
+    end
+  end
 
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
