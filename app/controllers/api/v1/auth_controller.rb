@@ -129,7 +129,7 @@ module Api
         access_token.revoke
 
         # Update device last seen
-        user = User.find(access_token.resource_owner_id)
+        user = current_user.users.find(access_token.resource_owner_id)
         device = user.mobile_devices.find_by(device_id: params[:device][:device_id])
         device&.update_last_seen!
 
