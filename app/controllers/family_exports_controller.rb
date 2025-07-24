@@ -1,8 +1,8 @@
 class FamilyExportsController < ApplicationController
   include StreamExtensions
-  
+
   before_action :require_admin
-  before_action :set_export, only: [:download]
+  before_action :set_export, only: [ :download ]
 
   def new
     # Modal view for initiating export
@@ -11,10 +11,10 @@ class FamilyExportsController < ApplicationController
   def create
     @export = Current.family.family_exports.create!
     FamilyDataExportJob.perform_later(@export)
-    
+
     respond_to do |format|
       format.html { redirect_to settings_profile_path, notice: "Export started. You'll be able to download it shortly." }
-      format.turbo_stream { 
+      format.turbo_stream {
         stream_redirect_to settings_profile_path, notice: "Export started. You'll be able to download it shortly."
       }
     end
@@ -24,7 +24,7 @@ class FamilyExportsController < ApplicationController
     @exports = Current.family.family_exports.ordered.limit(10)
     render layout: false # For turbo frame
   end
-  
+
   def download
     if @export.downloadable?
       redirect_to @export.export_file, allow_other_host: true
@@ -34,14 +34,14 @@ class FamilyExportsController < ApplicationController
   end
 
   private
-  
-  def set_export
-    @export = Current.family.family_exports.find(params[:id])
-  end
 
-  def require_admin
-    unless Current.user.admin?
-      redirect_to root_path, alert: "Access denied"
+    def set_export
+      @export = Current.family.family_exports.find(params[:id])
     end
-  end
+
+    def require_admin
+      unless Current.user.admin?
+        redirect_to root_path, alert: "Access denied"
+      end
+    end
 end
