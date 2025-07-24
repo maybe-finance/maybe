@@ -1,5 +1,20 @@
 <% content_for :page_header do %>
+  <% unless Current.family.self_hoster? %>
+    <div class="bg-gray-100 mb-4 rounded-xl p-4 flex gap-2 items-start">
+      <%= icon "triangle-alert", color: "warning" %>
+      <div class="text-sm space-y-2">
+        <p class="font-medium">We've made a tough decision to shut down the hosted version of Maybe. Here's what's happening next:</p>
+        <ul class="list-disc list-inside space-y-1 ml-2">
+          <li><%= link_to "Read why we're doing this here", "https://x.com/Shpigford/status/1947725345244709240", class: "underline" %></li>
+          <li>You will be refunded in full.</li>
+          <li>You have until July 31, 2025 to export your data. You can do that <%= link_to "here", settings_profile_path, class: "underline" %>.</li>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
   <div class="space-y-1 mb-6 flex gap-4 justify-between items-center lg:items-start">
+
     <div class="space-y-1">
       <h1 class="text-xl lg:text-3xl font-medium text-primary">Welcome back, <%= Current.user.first_name %></h1>
       <p class="text-sm lg:text-base text-secondary">Here's what's happening with your finances</p>
