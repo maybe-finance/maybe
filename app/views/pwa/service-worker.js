@@ -24,3 +24,48 @@
 //     })
 //   )
 // })
+
+
+// _____--------_____
+// Improve
+
+self.addEventListener("push", async (event) => {
+  if (!event.data) return
+
+  try {
+    const { title, options } = await event.data.json()
+    if (!title || !options) return
+
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    )
+  } catch (error) {
+    console.error(" Failed to Parse the Json:", error)
+  }
+})
+
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+
+  const targetPath = event.notification?.data?.path
+  if (!targetPath) return
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        const clientPath = new URL(client.url).pathname
+
+        if (clientPath === targetPath && "focus" in client) {
+          return client.focus()
+        }
+      }
+
+      // No matching tab found, open new one
+      if (clients.openWindow) {
+        return clients.openWindow(targetPath)
+      }
+    })
+  )
+})
+
