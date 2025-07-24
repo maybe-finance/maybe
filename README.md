@@ -1,26 +1,35 @@
 
 <img width="1190" alt="maybe_hero" src="https://github.com/user-attachments/assets/13fc5ef4-ce0f-4073-a163-9dbc3eb4c8e5" />
 
-# Maybe: The personal finance app for everyone
+# ~Maybe~Sure: The personal finance app for everyone
 
 <b>Get
-involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybefinance.com) • [Issues](https://github.com/maybe-finance/maybe/issues)</b>
+involved: [Discord](https://link.maybe.co/discord) • [Website](https://maybefinance.com) • [Issues](https://github.com/we-promise/sure/issues)</b>
 
 ## Backstory
 
-We spent the better part of 2021/2022 building a personal finance + wealth
-management app called, Maybe. Very full-featured, including an "Ask an Advisor"
-feature which connected users with an actual CFP/CFA to help them with their
-finances (all included in your subscription).
+The Maybe Finance team spent the better part of 2021/2022 building a personal
+finance + wealth management app called "Maybe". Very full-featured, including
+an "Ask an Advisor" feature which connected users with an actual CFP/CFA to
+help them with their finances (all included in your subscription).
 
-The business end of things didn't work out, and so we shut things down mid-2023.
+The business end of things didn't work out, and so they shut things down mid-2023.
 
-We spent the better part of $1,000,000 building the app (employees +
-contractors, data providers/services, infrastructure, etc.).
-
-We're now reviving the product as a fully open-source project. The goal is to
+Having spent the better part of $1,000,000 building the app (employees +
+contractors, data providers/services, infrastructure, etc.) they decided to
+revive the product as a fully open-source project. The goal was to
 let you run the app yourself, for free, and use it to manage your own finances
 and eventually offer a hosted version of the app for a small monthly fee.
+
+Which they did.  Offer a hosted version for a short while.
+
+That didn't work either (well, the "making it a sustainable B2C business" part
+didn't) so here we are hosting a community maintained fork hoping to keep the
+codebase alive and who knows what else will come next.
+
+Join us?
+
+[^^^ STOPPED EDITING HERE ^^^]
 
 ## Maybe Hosting
 
