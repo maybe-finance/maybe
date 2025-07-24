@@ -57,7 +57,7 @@
     </div>
   </div>
   <div class="flex items-center gap-4">
-    <%= styled_form_with model: rule, data: { controller: "auto-submit-form" } do |f| %>
+    <%= styled_form_with model: rule, namespace: "rule_#{rule.id}", data: { controller: "auto-submit-form" } do |f| %>
       <%= f.toggle :active, { data: { auto_submit_form_target: "auto" } } %>
     <% end %>
     <%= render DS::Menu.new do |menu| %>
