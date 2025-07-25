@@ -1,0 +1,15 @@
+---
+tr:
+  sessions:
+    create:
+      invalid_credentials: Geçersiz e-posta veya şifre.
+    destroy:
+      logout_successful: Başarıyla çıkış yaptınız.
+    new:
+      email: E-posta adresi
+      email_placeholder: ornek@eposta.com
+      forgot_password: Şifrenizi mi unuttunuz?
+      password: Şifre
+      submit: Giriş yap
+      title: Hesabınıza giriş yapın
+      password_placeholder: Şifrenizi girin 

@@ -1,0 +1,5 @@
+---
+tr:
+  invitation_mailer:
+    invite_email:
+      subject: "%{inviter} seni Maybe'de kendi ailesine katılmaya davet etti!"

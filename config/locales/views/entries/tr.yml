@@ -1,0 +1,14 @@
+---
+tr:
+  entries:
+    create:
+      success: Kayıt oluşturuldu
+    destroy:
+      success: Kayıt silindi
+    empty:
+      description: Bir kayıt eklemeyi, filtreleri düzenlemeyi veya aramanızı geliştirmeyi deneyin
+      title: Kayıt bulunamadı
+    loading:
+      loading: Kayıtlar yükleniyor...
+    update:
+      success: Kayıt güncellendi 

@@ -1,0 +1,25 @@
+---
+tr:
+  vehicles:
+    edit:
+      edit: "%{account} düzenle"
+    form:
+      make: Marka
+      make_placeholder: Toyota
+      mileage: Kilometre
+      mileage_placeholder: '15000'
+      mileage_unit: Birim
+      model: Model
+      model_placeholder: Camry
+      year: Yıl
+      year_placeholder: '2023'
+    new:
+      title: Araç bilgilerini girin
+    overview:
+      current_price: Güncel Fiyat
+      make_model: Marka & Model
+      mileage: Kilometre
+      purchase_price: Satın Alma Fiyatı
+      trend: Eğilim
+      unknown: Bilinmiyor
+      year: Yıl 

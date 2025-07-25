@@ -1,0 +1,7 @@
+---
+tr:
+  other_liabilities:
+    edit:
+      edit: "%{account} düzenle"
+    new:
+      title: Borç detaylarını gir 

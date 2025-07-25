@@ -1,0 +1,94 @@
+---
+tr:
+  settings:
+    billings:
+      show:
+        page_title: Faturalandırma
+        subscription_subtitle: Abonelik ve fatura bilgilerinizi güncelleyin
+        subscription_title: Aboneliği yönet
+    preferences:
+      show:
+        country: Ülke
+        currency: Para birimi
+        date_format: Tarih formatı
+        general_subtitle: Tercihlerinizi yapılandırın
+        general_title: Genel
+        default_period: Varsayılan Dönem
+        language: Dil
+        page_title: Tercihler
+        theme_dark: Koyu
+        theme_light: Açık
+        theme_subtitle: Uygulama için tercih edilen temayı seçin
+        theme_system: Sistem
+        theme_title: Tema
+        timezone: Zaman dilimi
+    profiles:
+      destroy:
+        cannot_remove_self: Kendinizi hesaptan çıkaramazsınız.
+        member_removal_failed: Üye kaldırılırken bir sorun oluştu.
+        member_removed: Üye başarıyla kaldırıldı.
+        not_authorized: Üyeleri kaldırmaya yetkiniz yok.
+      show:
+        confirm_delete:
+          body: Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+          title: Hesap silinsin mi?
+        confirm_reset:
+          body: Hesabınızı sıfırlamak istediğinizden emin misiniz? Bu işlem tüm hesaplarınızı, kategorilerinizi, satıcılarınızı, etiketlerinizi ve diğer verilerinizi silecektir. Bu işlem geri alınamaz.
+          title: Hesap sıfırlansın mı?
+        confirm_remove_invitation:
+          body: "%{email} için daveti kaldırmak istediğinizden emin misiniz?"
+          title: "Daveti Kaldır"
+        confirm_remove_member:
+          body: "%{name} kişisini hesabınızdan kaldırmak istediğinizden emin misiniz?"
+          title: "Üyeyi Kaldır"
+        danger_zone_title: Tehlikeli Alan
+        delete_account: Hesabı sil
+        delete_account_warning: Hesabınızı silmek tüm verilerinizi kalıcı olarak kaldırır ve geri alınamaz.
+        reset_account: Hesabı sıfırla
+        reset_account_warning: Hesabınızı sıfırlamak tüm hesaplarınızı, kategorilerinizi, satıcılarınızı, etiketlerinizi ve diğer verilerinizi silecek, ancak kullanıcı hesabınızı koruyacaktır.
+        email: E-posta
+        first_name: Ad
+        household_form_input_placeholder: Hane adı girin
+        household_form_label: Hane adı
+        household_subtitle: Aile üyelerini, partnerleri ve diğer kişileri davet edin. Davetliler hanenize giriş yapabilir ve paylaşılan hesaplarınıza erişebilir.
+        household_title: Hane
+        invitation_link: Davet bağlantısı
+        invite_member: Üye ekle
+        last_name: Soyad
+        page_title: Hesap
+        pending: Beklemede
+        profile_subtitle: Maybe'de nasıl göründüğünüzü özelleştirin
+        profile_title: Profil
+        remove_invitation: Daveti Kaldır
+        remove_member: Üyeyi Kaldır
+        save: Kaydet
+    securities:
+      show:
+        page_title: Menkul Kıymet
+    settings_nav:
+      accounts_label: Hesaplar
+      api_key_label: API Anahtarı
+      billing_label: Faturalandırma
+      categories_label: Kategoriler
+      feedback_label: Geri Bildirim
+      general_section_title: Genel
+      imports_label: İçe Aktarımlar
+      logout: Çıkış Yap
+      merchants_label: Satıcılar
+      other_section_title: Diğer
+      preferences_label: Tercihler
+      profile_label: Hesap
+      rules_label: Kurallar
+      security_label: Güvenlik
+      self_hosting_label: Kendi Sunucunda Barındırma
+      tags_label: Etiketler
+      transactions_section_title: İşlemler
+      whats_new_label: Yenilikler
+    settings_nav_link_large:
+      next: Sonraki
+      previous: Geri
+    user_avatar_field:
+      accepted_formats: JPG veya PNG. Maksimum 5MB.
+      choose: Fotoğraf yükle
+      choose_label: (isteğe bağlı)
+      change: Fotoğrafı değiştir

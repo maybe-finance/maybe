@@ -1,0 +1,7 @@
+---
+tr:
+  cryptos:
+    edit:
+      edit: "%{account} hesabını düzenle"
+    new:
+      title: Hesap bakiyesini gir

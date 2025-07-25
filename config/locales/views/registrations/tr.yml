@@ -1,0 +1,24 @@
+---
+tr:
+  helpers:
+    label:
+      user:
+        invite_code: Davet Kodu
+    submit:
+      user:
+        create: Devam Et
+  registrations:
+    create:
+      failure: Kayıt olurken bir sorun oluştu.
+      invalid_invite_code: Geçersiz davet kodu, lütfen tekrar deneyin.
+      success: Başarıyla kaydoldunuz.
+    new:
+      invitation_message: "%{inviter}, sizi %{role} olarak katılmaya davet etti"
+      join_family_title: "%{family} ailesine katıl"
+      role_admin: yönetici
+      role_member: üye
+      submit: Hesap oluştur
+      title: Hesabınızı oluşturun
+      welcome_body: Başlamak için yeni bir hesap oluşturmalısınız. Daha sonra uygulama içinde ek ayarları yapılandırabileceksiniz.
+      welcome_title: Self Hosted Maybe'ye Hoş Geldiniz!
+      password_placeholder: Şifrenizi girin 

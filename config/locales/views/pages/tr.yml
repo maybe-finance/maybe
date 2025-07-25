@@ -1,0 +1,13 @@
+---
+tr:
+  pages:
+    changelog:
+      title: Yenilikler
+    dashboard:
+      net_worth_chart:
+        data_not_available: Seçilen dönem için veri mevcut değil
+        title: Net Değer
+      no_account_empty_state:
+        new_account: Yeni hesap
+        no_account_subtitle: Henüz hiç hesap eklenmediği için gösterilecek veri yok. İlk hesaplarınızı ekleyerek gösterge paneli verilerini görmeye başlayın.
+        no_account_title: Henüz hesap yok 

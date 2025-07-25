@@ -1,0 +1,10 @@
+---
+tr:
+  depositories:
+    edit:
+      edit: "%{account} hesabını düzenle"
+    form:
+      none: Hiçbiri
+      subtype_prompt: Hesap türünü seçin
+    new:
+      title: Hesap bakiyesini girin

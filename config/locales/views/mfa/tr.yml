@@ -1,0 +1,34 @@
+---
+tr:
+  mfa:
+    backup_codes:
+      backup_codes_description: Her kod yalnızca bir kez kullanılabilir. Bu kodları güvenli ve emniyetli bir yerde saklayın.
+      backup_codes_title: Yedek Kodlarınız
+      continue: Güvenlik Ayarlarına Devam Et
+      description: Bu yedek kodları güvenli bir yerde saklayın - doğrulama uygulamanıza erişiminizi kaybederseniz bunlara ihtiyacınız olacak
+      page_title: Yedek Kodlar
+      title: Yedek Kodlarınızı Kaydedin
+    create:
+      invalid_code: Geçersiz doğrulama kodu. Lütfen tekrar deneyin.
+    disable:
+      success: İki faktörlü kimlik doğrulama devre dışı bırakıldı
+    new:
+      code_label: Doğrulama Kodu
+      code_placeholder: 6 haneli kodu girin
+      description: Hesabınızın güvenliğini iki faktörlü kimlik doğrulama ile artırın
+      page_title: İki Faktörlü Kimlik Doğrulama Kurulumu
+      scan_description: Bu QR kodunu taramak için Google Authenticator veya 1Password gibi bir doğrulama uygulaması kullanın
+      scan_title: 1. QR Kodunu Tara
+      secret_description: QR kodunu tarayamıyorsanız, bu gizli anahtarı doğrulama uygulamanıza manuel olarak girin
+      secret_title: Manuel Giriş Kodu
+      title: İki Faktörlü Kimlik Doğrulamayı Kur
+      verify_button: Doğrula ve 2FA'yı Etkinleştir
+      verify_description: Doğrulama uygulamanızdan 6 haneli kodu girin
+      verify_title: 2. Doğrulama Kodunu Girin
+    verify:
+      description: Devam etmek için doğrulama uygulamanızdan kodu girin
+      page_title: İki Faktörlü Kimlik Doğrulamayı Doğrula
+      title: İki Faktörlü Kimlik Doğrulama
+      verify_button: Doğrula
+    verify_code:
+      invalid_code: Geçersiz kimlik doğrulama kodu. Lütfen tekrar deneyin. 

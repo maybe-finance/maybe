@@ -1,0 +1,30 @@
+---
+tr:
+  transfers:
+    create:
+      success: Transfer başarıyla oluşturuldu
+    destroy:
+      success: Transfer kaldırıldı
+    form:
+      amount: Tutar
+      date: Tarih
+      expense: Gider
+      from: Kimden
+      income: Gelir
+      select_account: Hesap seçin
+      submit: Transfer oluştur
+      to: Kime
+      transfer: Transfer
+    new:
+      title: Yeni transfer
+    show:
+      delete: Transferi kaldır
+      delete_subtitle: Bu işlem transferi kaldırır. Altta yatan işlemler silinmeyecektir.
+      delete_title: Transfer kaldırılsın mı?
+      details: Detaylar
+      note_label: Notlar
+      note_placeholder: Bu transfere bir not ekleyin
+      overview: Genel Bakış
+      settings: Ayarlar
+    update:
+      success: Transfer güncellendi 

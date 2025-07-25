@@ -1,0 +1,13 @@
+---
+tr:
+  tag:
+    deletions:
+      create:
+        deleted: Etiket silindi
+      new:
+        delete_and_leave_uncategorized: "%{tag_name} etiketini sil"
+        delete_and_recategorize: "%{tag_name} etiketini sil ve yeni bir etiket ata"
+        delete_tag: Etiket silinsin mi?
+        explanation: "%{tag_name} işlemlerden ve diğer etiketlenebilir varlıklardan kaldırılacak. Onları etiketsiz bırakmak yerine aşağıdan yeni bir etiket de atayabilirsin."
+        replacement_tag_prompt: Etiket seç
+        tag: Etiket

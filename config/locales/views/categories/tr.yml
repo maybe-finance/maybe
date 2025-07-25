@@ -1,0 +1,34 @@
+---
+tr:
+  categories:
+    bootstrap:
+      success: Varsayılan kategoriler başarıyla oluşturuldu
+    category:
+      delete: Kategoriyi sil
+      edit: Kategoriyi düzenle
+    create:
+      success: Kategori başarıyla oluşturuldu
+    destroy:
+      success: Kategori başarıyla silindi
+    edit:
+      edit: Kategoriyi düzenle
+    form:
+      placeholder: Kategori adı
+    index:
+      bootstrap: Varsayılanları kullan (önerilir)
+      categories: Kategoriler
+      categories_expenses: Gider kategorileri
+      categories_incomes: Gelir kategorileri
+      empty: Hiç kategori bulunamadı
+      new: Yeni kategori
+    menu:
+      loading: Yükleniyor...
+    new:
+      new_category: Yeni kategori
+    update:
+      success: Kategori başarıyla güncellendi
+  category:
+    dropdowns:
+      show:
+        bootstrap: Varsayılan kategorileri oluştur
+        empty: Hiç kategori bulunamadı 

@@ -1,0 +1,11 @@
+---
+tr:
+  address:
+    attributes:
+      country: Ülke
+      line1: Adres Satırı 1
+      line2: Adres Satırı 2
+      locality: İlçe/Semt
+      postal_code: Posta Kodu
+      region: Bölge/İl
+    format: "%{line1} %{line2}, %{locality}, %{region} %{postal_code} %{country}" 

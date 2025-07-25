@@ -1,0 +1,10 @@
+---
+tr:
+  passwords:
+    edit:
+      password: Yeni Şifre
+      password_challenge: Mevcut Şifre
+      submit: Şifreyi Sıfırla
+      title: Şifreyi Güncelle
+    update:
+      success: Şifreniz sıfırlandı.

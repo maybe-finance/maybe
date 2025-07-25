@@ -1,0 +1,82 @@
+---
+tr:
+  transactions:
+    form:
+      account: Hesap
+      account_prompt: Bir Hesap Seçin
+      amount: Tutar
+      category: Kategori
+      category_prompt: Bir Kategori Seçin
+      date: Tarih
+      description: Açıklama
+      description_placeholder: İşlemi açıklayın
+      expense: Gider
+      income: Gelir
+      none: (yok)
+      note_label: Notlar
+      note_placeholder: Not girin
+      submit: İşlem ekle
+      tags_label: Etiketler
+      transfer: Transfer
+    new:
+      new_transaction: Yeni işlem
+    show:
+      account_label: Hesap
+      amount: Tutar
+      category_label: Kategori
+      date_label: Tarih
+      delete: Sil
+      delete_subtitle: Bu işlem kalıcı olarak silinir, geçmiş bakiyelerinizi etkiler ve geri alınamaz.
+      delete_title: İşlemi sil
+      details: Detaylar
+      merchant_label: Satıcı
+      name_label: İsim
+      nature: Tür
+      none: "(yok)"
+      note_label: Notlar
+      note_placeholder: Not girin
+      overview: Genel Bakış
+      settings: Ayarlar
+      tags_label: Etiketler
+      uncategorized: "(kategorilendirilmemiş)"
+    header:
+      edit_categories: Kategorileri düzenle
+      edit_imports: İçe aktarımları düzenle
+      edit_merchants: Satıcıları düzenle
+      edit_tags: Etiketleri düzenle
+      import: İçe aktar
+    index:
+      transaction: işlem
+      transactions: işlemler
+    searches:
+      filters:
+        amount_filter:
+          equal_to: Eşit
+          greater_than: Daha büyük
+          less_than: Daha küçük
+          placeholder: '0'
+        badge:
+          expense: Gider
+          income: Gelir
+          on_or_after: "%{date} veya sonrasında"
+          on_or_before: "%{date} veya öncesinde"
+          transfer: Transfer
+        type_filter:
+          expense: Gider
+          income: Gelir
+          transfer: Transfer
+      menu:
+        account_filter: Hesap
+        amount_filter: Tutar
+        apply: Uygula
+        cancel: İptal
+        category_filter: Kategori
+        clear_filters: Filtreleri temizle
+        date_filter: Tarih
+        merchant_filter: Satıcı
+        tag_filter: Etiket
+        type_filter: Tür
+      search:
+        equal_to: eşit
+        greater_than: daha büyük
+        less_than: daha küçük 
