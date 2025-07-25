@@ -1,6 +1,16 @@
 
 <img width="1190" alt="maybe_hero" src="https://github.com/user-attachments/assets/5ed08763-a9ee-42b2-a436-e05038fcf573" />
 
+<!-- Keep these links. Translations will automatically update with the README. -->
+[Deutsch](https://readme-i18n.com/de/maybe-finance/maybe) | 
+[Español](https://readme-i18n.com/es/maybe-finance/maybe) | 
+[français](https://readme-i18n.com/fr/maybe-finance/maybe) | 
+[日本語](https://readme-i18n.com/ja/maybe-finance/maybe) | 
+[한국어](https://readme-i18n.com/ko/maybe-finance/maybe) | 
+[Português](https://readme-i18n.com/pt/maybe-finance/maybe) | 
+[Русский](https://readme-i18n.com/ru/maybe-finance/maybe) | 
+[中文](https://readme-i18n.com/zh/maybe-finance/maybe)
+
 # Maybe: The personal finance app for everyone
 
 > [!IMPORTANT]
