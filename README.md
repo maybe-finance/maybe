@@ -5,7 +5,7 @@
 
 > [!IMPORTANT]
 > This repository is a community fork of the official (now abandoned) Maybe Finance one.  
-> You can read more about this in Their [final release](https://github.com/maybe-finance/maybe/releases/tag/v0.6.0) doc.
+> You can read more about this in their [final release](https://github.com/maybe-finance/maybe/releases/tag/v0.6.0) doc.
 
 ## Backstory
 
