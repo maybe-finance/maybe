@@ -88,7 +88,7 @@ class Import < ApplicationRecord
       entries.destroy_all
     end
 
-    family.sync
+    family.sync_later
 
     update! status: :pending
   rescue => error

@@ -8,7 +8,7 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
       start_non_cash_balance = account.opening_anchor_balance - start_cash_balance
 
       calc_start_date.upto(calc_end_date).map do |date|
-        valuation = sync_cache.get_reconciliation_valuation(date)
+        valuation = sync_cache.get_valuation(date)
 
         if valuation
           end_cash_balance = derive_cash_balance_on_date_from_total(
@@ -21,10 +21,25 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
           end_non_cash_balance = derive_end_non_cash_balance(start_non_cash_balance: start_non_cash_balance, date: date)
         end
 
+        flows = flows_for_date(date)
+        market_value_change = market_value_change_on_date(date, flows)
+
+        cash_adjustments = cash_adjustments_for_date(start_cash_balance, end_cash_balance, (flows[:cash_inflows] - flows[:cash_outflows]) * flows_factor)
+        non_cash_adjustments = non_cash_adjustments_for_date(start_non_cash_balance, end_non_cash_balance, (flows[:non_cash_inflows] - flows[:non_cash_outflows]) * flows_factor)
+
         output_balance = build_balance(
           date: date,
+          balance: end_cash_balance + end_non_cash_balance,
           cash_balance: end_cash_balance,
-          non_cash_balance: end_non_cash_balance
+          start_cash_balance: start_cash_balance,
+          start_non_cash_balance: start_non_cash_balance,
+          cash_inflows: flows[:cash_inflows],
+          cash_outflows: flows[:cash_outflows],
+          non_cash_inflows: flows[:non_cash_inflows],
+          non_cash_outflows: flows[:non_cash_outflows],
+          cash_adjustments: cash_adjustments,
+          non_cash_adjustments: non_cash_adjustments,
+          net_market_flows: market_value_change
         )
 
         # Set values for the next iteration
@@ -62,5 +77,9 @@ class Balance::ForwardCalculator < Balance::BaseCalculator
     # Derives non-cash balance, starting from the start-of-day, applying entries in forward to get the end-of-day balance
     def derive_end_non_cash_balance(start_non_cash_balance:, date:)
       derive_non_cash_balance(start_non_cash_balance, date, direction: :forward)
+    end
+
+    def flows_factor
+      account.asset? ? 1 : -1
     end
 end

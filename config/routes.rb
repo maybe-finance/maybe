@@ -24,6 +24,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :family_exports, only: %i[new create index] do
+    member do
+      get :download
+    end
+  end
+
   get "changelog", to: "pages#changelog"
   get "feedback", to: "pages#feedback"
 
@@ -155,6 +161,10 @@ Rails.application.routes.draw do
       post :sync
       get :sparkline
       patch :toggle_active
+    end
+
+    collection do
+      post :sync_all
     end
   end
 

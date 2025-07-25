@@ -9,6 +9,11 @@ class AccountsController < ApplicationController
     render layout: "settings"
   end
 
+  def sync_all
+    family.sync_later
+    redirect_to accounts_path, notice: "Syncing accounts..."
+  end
+
   def show
     @chart_view = params[:chart_view] || "balance"
     @tab = params[:tab]

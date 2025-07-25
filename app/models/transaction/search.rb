@@ -47,8 +47,8 @@ class Transaction::Search
       Rails.cache.fetch("transaction_search_totals/#{cache_key_base}") do
         result = transactions_scope
                   .select(
-                    "COALESCE(SUM(CASE WHEN entries.amount >= 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as expense_total",
-                    "COALESCE(SUM(CASE WHEN entries.amount < 0 THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as income_total",
+                    "COALESCE(SUM(CASE WHEN entries.amount >= 0 AND transactions.kind NOT IN ('funds_movement', 'cc_payment') THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as expense_total",
+                    "COALESCE(SUM(CASE WHEN entries.amount < 0 AND transactions.kind NOT IN ('funds_movement', 'cc_payment') THEN ABS(entries.amount * COALESCE(er.rate, 1)) ELSE 0 END), 0) as income_total",
                     "COUNT(entries.id) as transactions_count"
                   )
                   .joins(
@@ -61,8 +61,8 @@ class Transaction::Search
 
         Totals.new(
           count: result.transactions_count.to_i,
-          income_money: Money.new(result.income_total.to_i, family.currency),
-          expense_money: Money.new(result.expense_total.to_i, family.currency)
+          income_money: Money.new(result.income_total.round, family.currency),
+          expense_money: Money.new(result.expense_total.round, family.currency)
         )
       end
     end

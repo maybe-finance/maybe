@@ -82,8 +82,8 @@ class Account::ReconciliationManager
       balance_record = account.balances.find_by(date: date, currency: account.currency)
 
       {
-        cash_balance: balance_record&.cash_balance,
-        balance: balance_record&.balance
+        cash_balance: balance_record&.end_cash_balance,
+        balance: balance_record&.end_balance
       }
     end
 end

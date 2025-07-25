@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_24_115507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -115,6 +115,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "cash_balance", precision: 19, scale: 4, default: "0.0"
+    t.decimal "start_cash_balance", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "start_non_cash_balance", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_inflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_outflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_inflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_outflows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "net_market_flows", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "cash_adjustments", precision: 19, scale: 4, default: "0.0", null: false
+    t.decimal "non_cash_adjustments", precision: 19, scale: 4, default: "0.0", null: false
+    t.integer "flows_factor", default: 1, null: false
+    t.virtual "start_balance", type: :decimal, precision: 19, scale: 4, as: "(start_cash_balance + start_non_cash_balance)", stored: true
+    t.virtual "end_cash_balance", type: :decimal, precision: 19, scale: 4, as: "((start_cash_balance + ((cash_inflows - cash_outflows) * (flows_factor)::numeric)) + cash_adjustments)", stored: true
+    t.virtual "end_non_cash_balance", type: :decimal, precision: 19, scale: 4, as: "(((start_non_cash_balance + ((non_cash_inflows - non_cash_outflows) * (flows_factor)::numeric)) + net_market_flows) + non_cash_adjustments)", stored: true
+    t.virtual "end_balance", type: :decimal, precision: 19, scale: 4, as: "(((start_cash_balance + ((cash_inflows - cash_outflows) * (flows_factor)::numeric)) + cash_adjustments) + (((start_non_cash_balance + ((non_cash_inflows - non_cash_outflows) * (flows_factor)::numeric)) + net_market_flows) + non_cash_adjustments))", stored: true
     t.index ["account_id", "date", "currency"], name: "index_account_balances_on_account_id_date_currency_unique", unique: true
     t.index ["account_id", "date"], name: "index_balances_on_account_id_and_date", order: { date: :desc }
     t.index ["account_id"], name: "index_balances_on_account_id"
@@ -254,6 +268,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
     t.boolean "auto_sync_on_login", default: true, null: false
     t.datetime "latest_sync_activity_at", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "latest_sync_completed_at", default: -> { "CURRENT_TIMESTAMP" }
+  end
+
+  create_table "family_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "family_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_family_exports_on_family_id"
   end
 
   create_table "holdings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -816,6 +838,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_120146) do
   add_foreign_key "chats", "users"
   add_foreign_key "entries", "accounts"
   add_foreign_key "entries", "imports"
+  add_foreign_key "family_exports", "families"
   add_foreign_key "holdings", "accounts"
   add_foreign_key "holdings", "securities"
   add_foreign_key "impersonation_session_logs", "impersonation_sessions"
