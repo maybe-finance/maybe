@@ -3,6 +3,9 @@
 
 # ~Maybe~Sure: The personal finance app for everyone
 
+<b>Get
+involved: [Discord](https://discord.gg/36ZGBsxYEK) • [Website](https://web.archive.org/web/20250715182050/https://maybefinance.com/) • [Issues](https://github.com/we-promise/sure/issues)</b>
+
 > [!IMPORTANT]
 > This repository is a community fork of the official (now abandoned) Maybe Finance one.  
 > You can read more about this in their [final release](https://github.com/maybe-finance/maybe/releases/tag/v0.6.0) doc.
